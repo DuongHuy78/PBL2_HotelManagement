@@ -13,21 +13,21 @@ public:
     DatPhong(const DatPhong &);
     ~DatPhong();
 
-    void getMaDatPhong() const; 
-    void getMaPhong() const;
-    void getIDKhachHang() const;
-    void getNgayNhan() const;
-    void getNgayTra() const;
-    void getSoLuongKhach() const;
-    void getDonGia() const;
+    string getMaDatPhong() const; 
+    string getMaPhong() const;
+    string getIDKhachHang() const;
+    time_t getNgayNhan() const;
+    time_t getNgayTra() const;
+    int getSoLuongKhach() const;
+    int getDonGia() const;
 
-    string setMaDatPhong(string);
-    string setMaPhong(string);
-    string setIDKhachHang(string);
-    time_t setNgayNhan(time_t);
-    time_t setNgayTra(time_t);
-    int setSoLuongKhach(int);
-    int setDonGia(int);
+    void setMaDatPhong(string);
+    void setMaPhong(string);
+    void setIDKhachHang(string);
+    void setNgayNhan(time_t);
+    void setNgayTra(time_t);
+    void setSoLuongKhach(int);
+    void setDonGia(int);
 
     void xemThongTin();
 };

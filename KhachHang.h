@@ -11,15 +11,15 @@ public:
     KhachHang(const KhachHang&);
     ~KhachHang();
 
-    void getIDKhachHang() const;
-    void getHoTen() const;
-    void getNgaySinh() const;
-    void getSoDienThoai() const;
-    void getGioiTinh() const; 
+    string getIDKhachHang() const;
+    string getHoTen() const;
+    time_t getNgaySinh() const;
+    string getSoDienThoai() const;
+    bool getGioiTinh() const; 
 
-    string setIDKhachHang(string);
-    string setHoTen(string);
-    time_t setNgaySinh(time_t);
-    string setSoDienThoai(string);
-    bool setGioiTinh(bool); 
+    void setIDKhachHang(string);
+    void setHoTen(string);
+    void setNgaySinh(time_t);
+    void setSoDienThoai(string);
+    void setGioiTinh(bool); 
 };

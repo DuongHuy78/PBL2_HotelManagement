@@ -12,43 +12,43 @@ LoaiPhong::~LoaiPhong() {
 }
 
 
-void LoaiPhong::getLoaiPhong() const {
+int LoaiPhong::getLoaiPhong() const {
 
 }
 
-void LoaiPhong::getLoaiGiuong() const {
+int LoaiPhong::getLoaiGiuong() const {
 
 }
 
-void LoaiPhong::getGiaPhong() const {
+int LoaiPhong::getGiaPhong() const {
 
 }
 
-void LoaiPhong::getMoTaPhong() const {
+string LoaiPhong::getMoTaPhong() const {
 
 }
 
-void LoaiPhong::getSoLuongKhach() const {
+int LoaiPhong::getSoLuongKhach() const {
 
 }
 
 
-int LoaiPhong::setLoaiPhong(int) {
+void LoaiPhong::setLoaiPhong(int) {
 
 }
 
-int LoaiPhong::setLoaiGiuong(int) {
+void LoaiPhong::setLoaiGiuong(int) {
 
 }
 
-int LoaiPhong::setGiaPhong(int) {
+void LoaiPhong::setGiaPhong(int) {
 
 }
 
-string LoaiPhong::setMoTaPhong(string) {
+void LoaiPhong::setMoTaPhong(string) {
 
 }
 
-int LoaiPhong::setSoLuongKhach(int) {
+void LoaiPhong::setSoLuongKhach(int) {
 
 }

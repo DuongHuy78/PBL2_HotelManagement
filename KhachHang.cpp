@@ -11,43 +11,43 @@ KhachHang::~KhachHang() {
     
 }
 
-void KhachHang::getIDKhachHang() const {
+string KhachHang::getIDKhachHang() const {
 
 }
 
-void KhachHang::getHoTen() const {
+string KhachHang::getHoTen() const {
 
 }
 
-void KhachHang::getNgaySinh() const {
+time_t KhachHang::getNgaySinh() const {
 
 }
 
-void KhachHang::getSoDienThoai() const {
+string KhachHang::getSoDienThoai() const {
 
 }
 
-void KhachHang::getGioiTinh() const {
+bool KhachHang::getGioiTinh() const {
 
 } 
 
 
-string KhachHang::setIDKhachHang(string) {
+void KhachHang::setIDKhachHang(string) {
 
 }
 
-string KhachHang::setHoTen(string) {
+void KhachHang::setHoTen(string) {
 
 }
 
-time_t KhachHang::setNgaySinh(time_t) {
+void KhachHang::setNgaySinh(time_t) {
 
 }
 
-string KhachHang::setSoDienThoai(string) {
+void KhachHang::setSoDienThoai(string) {
 
 }
 
-bool KhachHang::setGioiTinh(bool) {
+void KhachHang::setGioiTinh(bool) {
 
 } 

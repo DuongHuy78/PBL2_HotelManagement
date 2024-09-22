@@ -11,15 +11,15 @@ public:
     LoaiPhong(const LoaiPhong&);
     ~LoaiPhong();
 
-    void getLoaiPhong() const;
-    void getLoaiGiuong() const;
-    void getGiaPhong() const;
-    void getMoTaPhong() const;
-    void getSoLuongKhach() const;
+    int getLoaiPhong() const;
+    int getLoaiGiuong() const;
+    int getGiaPhong() const;
+    string getMoTaPhong() const;
+    int getSoLuongKhach() const;
 
-    int setLoaiPhong(int);
-    int setLoaiGiuong(int);
-    int setGiaPhong(int);
-    string setMoTaPhong(string);
-    int setSoLuongKhach(int);
+    void setLoaiPhong(int);
+    void setLoaiGiuong(int);
+    void setGiaPhong(int);
+    void setMoTaPhong(string);
+    void setSoLuongKhach(int);
 };
