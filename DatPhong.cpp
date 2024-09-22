@@ -7,65 +7,60 @@ DatPhong::DatPhong(const DatPhong &) {
 
 }
 
-DatPhong::~DatPhong() {
-
-}
-
-
-void DatPhong::getMaDatPhong() const {
+string DatPhong::getMaDatPhong() const {
 
 } 
 
-void DatPhong::getMaPhong() const {
+string DatPhong::getMaPhong() const {
 
 }
 
-void DatPhong::getIDKhachHang() const {
+string DatPhong::getIDKhachHang() const {
 
 }
 
-void DatPhong::getNgayNhan() const {
+time_t DatPhong::getNgayNhan() const {
 
 }
 
-void DatPhong::getNgayTra() const {
+time_t DatPhong::getNgayTra() const {
 
 }
 
-void DatPhong::getSoLuongKhach() const {
+int DatPhong::getSoLuongKhach() const {
 
 }
 
-void DatPhong::getDonGia() const {
+int DatPhong::getDonGia() const {
 
 }
 
 
-string DatPhong::setMaDatPhong(string) {
+void DatPhong::setMaDatPhong(string) {
 
 }
 
-string DatPhong::setMaPhong(string) {
+void DatPhong::setMaPhong(string) {
 
 }
 
-string DatPhong::setIDKhachHang(string) {
+void DatPhong::setIDKhachHang(string) {
 
 }
 
-time_t DatPhong::setNgayNhan(time_t) {
+void DatPhong::setNgayNhan(time_t) {
 
 }
 
-time_t DatPhong::setNgayTra(time_t) {
+void DatPhong::setNgayTra(time_t) {
 
 }
 
-int DatPhong::setSoLuongKhach(int) {
+void DatPhong::setSoLuongKhach(int) {
 
 }
 
-int DatPhong::setDonGia(int) {
+void DatPhong::setDonGia(int) {
 
 }
 
