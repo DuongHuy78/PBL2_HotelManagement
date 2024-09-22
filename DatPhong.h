@@ -1,5 +1,5 @@
 #include <iostream>
-#include <time.h>
+#include <chrono>
 using namespace std;
 class DatPhong {
     string maDatPhong; // PK
