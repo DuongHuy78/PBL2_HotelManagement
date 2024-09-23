@@ -1,4 +1,4 @@
-#include "LoaiPhong.h"
+#include "./header/LoaiPhong.h"
 LoaiPhong::LoaiPhong(int, int, int, string, int) {
 
 }

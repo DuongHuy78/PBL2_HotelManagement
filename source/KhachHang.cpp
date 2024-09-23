@@ -1,4 +1,4 @@
-#include "KhachHang.h"
+#include "./header/KhachHang.h"
 KhachHang::KhachHang(string, string, time_t, bool) {
 
 }
