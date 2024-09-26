@@ -1,6 +1,8 @@
-#include <iostream>
-using namespace std;
-class KhachHang {
+#ifndef KHACHHANG_H
+#define KHACHHANG_H
+#include "NguoiDung.h"
+#include "Phong.h"
+class KhachHang:public NguoiDung {
     string IDKhachHang; // PK
     string hoTen;
     time_t ngaySinh;
@@ -22,4 +24,8 @@ public:
     void setNgaySinh(time_t);
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
+
+    void suaThongTin();
+    void work();
 };
+#endif

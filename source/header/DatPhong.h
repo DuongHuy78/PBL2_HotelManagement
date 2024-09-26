@@ -1,3 +1,5 @@
+#ifndef DATPHONG_H
+#define DATPHONG_H
 #include <iostream>
 using namespace std;
 class DatPhong {
@@ -31,3 +33,4 @@ public:
 
     void xemThongTin();
 };
+#endif

@@ -1,5 +1,5 @@
 #include "./header/Phong.h"
-Phong::Phong(string, string, bool) {
+Phong::Phong(string, string) {
 
 }
 
@@ -20,19 +20,11 @@ string Phong::getLoaiPhong() const {
 
 }
 
-bool Phong::getTrangThai() const {
-
-}
-
 
 void Phong::setMaPhong(string) {
 
 }
 
 void Phong::setLoaiPhong(string) {
-
-}
-
-void Phong::setTrangThai(bool) {
 
 }

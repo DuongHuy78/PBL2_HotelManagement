@@ -1,19 +1,19 @@
+#ifndef PHONG_H
+#define PHONG_H
 #include <iostream>
 using namespace std;
 class Phong {
-    string maPhong;
+    string maPhong; 
     string loaiPhong;
-    bool trangThai;
 public:
-    Phong(string, string, bool);
+    Phong(string, string);
     Phong(const Phong&);
     ~Phong();
 
     string getMaPhong() const;
     string getLoaiPhong() const;
-    bool getTrangThai() const;
 
     void setMaPhong(string);
     void setLoaiPhong(string);
-    void setTrangThai(bool);
 };
+#endif
