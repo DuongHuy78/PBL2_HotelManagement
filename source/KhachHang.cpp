@@ -51,3 +51,7 @@ void KhachHang::setSoDienThoai(string) {
 void KhachHang::setGioiTinh(bool) {
 
 } 
+
+void KhachHang::work() {
+    cout << "Khach Hang is working" << endl;
+}

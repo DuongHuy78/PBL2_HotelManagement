@@ -1,3 +1,5 @@
+#ifndef TAIKHOAN_H
+#define TAIKHOAN_H
 #include <iostream>
 using namespace std;
 class TaiKhoan {
@@ -17,3 +19,4 @@ public:
     void setPassword(string);
     void setID(string);
 };
+#endif
