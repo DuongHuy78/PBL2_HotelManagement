@@ -1,7 +1,9 @@
+#ifndef LOAIPHONG_H
+#define LOAIPHONG_H
 #include <iostream>
 using namespace std;
 class LoaiPhong {
-    int loaiPhong;
+    int loaiPhong;  // PK
     int loaiGiuong;
     int giaPhong;
     string moTaPhong;
@@ -23,3 +25,4 @@ public:
     void setMoTaPhong(string);
     void setSoLuongKhach(int);
 };
+#endif
