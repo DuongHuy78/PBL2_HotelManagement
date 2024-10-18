@@ -11,9 +11,8 @@ Phong::~Phong() {
 
 }
 
-
 string Phong::getMaPhong() const {
-
+    
 }
 
 string Phong::getLoaiPhong() const {

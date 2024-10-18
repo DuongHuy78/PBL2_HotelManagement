@@ -9,6 +9,7 @@ class LoaiPhong {
     string moTaPhong;
     int soLuongKhach;
 public:
+    LoaiPhong();
     LoaiPhong(int, int, int, string, int);
     LoaiPhong(const LoaiPhong&);
     ~LoaiPhong();
