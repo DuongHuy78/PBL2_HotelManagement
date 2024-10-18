@@ -1,0 +1,12 @@
+1|1|50|2000000|Sang trong va rong rai, tam nhin dep ra bien, yen tinh va binh yen, dich vu phong 24/7, internet toc do cao|4  
+1|1|50|2000000|Thiet ke co dien, hoan hao cho cac cap doi, tam nhin dep ra bien, dich vu phong 24/7, internet toc do cao|2  
+1|2|40|1500000|Tam nhin dep ra thanh pho, khong gian am cung, dich vu phong 24/7, internet toc do cao, truy cap phong gym|4  
+1|1|40|1500000|Yen tinh va binh yen, hoan hao cho cac cap doi, khong khi thu gian, bua sang mien phi|2  
+1|2|30|1200000|Phong cach va nho gon, tam nhin thanh pho, do an nhe mien phi|4  
+1|1|30|1200000|Phong cach va nho gon, hoan hao cho cac cap doi, do an nhe mien phi|2  
+2|2|50|1000000|Tien nghi hien dai, thoai mai va am cung, do an nhe mien phi|4  
+2|1|50|1000000|Thoai mai va am cung, khong gian rong rai, do an nhe mien phi|2  
+2|2|40|700000|Thoai mai va am cung, vi tri tuyet voi, Wi-Fi mien phi|4  
+2|1|40|700000|Hoan hao cho cac cap doi, sang sua va thoang mat, bua sang mien phi|2  
+2|2|30|500000|Trang tri toi gian, phong cach va nho gon, do an nhe mien phi|4  
+2|1|30|500000|Phong cach va nho gon, do an nhe mien phi, hoan hao cho cac cap doi|2  

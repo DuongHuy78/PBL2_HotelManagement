@@ -6,7 +6,7 @@ class Phong {
     string maPhong; 
     string loaiPhong;
 public:
-    Phong(string, string);
+    Phong(string, int, int);
     Phong(const Phong&);
     ~Phong();
 

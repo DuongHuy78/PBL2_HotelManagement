@@ -1,19 +1,24 @@
+#include <iostream>
 #include "./header/LoaiPhong.h"
-LoaiPhong::LoaiPhong(int, int, int, string, int) {
 
-}
+using namespace std;
 
-LoaiPhong::LoaiPhong(const LoaiPhong&) {
-
-}
+LoaiPhong::LoaiPhong(){}
 
 LoaiPhong::~LoaiPhong() {
 
 }
 
+LoaiPhong::LoaiPhong(int, int, int, string, int) {
+
+}   
+
+LoaiPhong::LoaiPhong(const LoaiPhong&) {
+
+}
 
 int LoaiPhong::getLoaiPhong() const {
-
+   
 }
 
 int LoaiPhong::getLoaiGiuong() const {
@@ -25,7 +30,7 @@ int LoaiPhong::getGiaPhong() const {
 }
 
 string LoaiPhong::getMoTaPhong() const {
-
+    
 }
 
 int LoaiPhong::getSoLuongKhach() const {
