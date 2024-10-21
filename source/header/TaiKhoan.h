@@ -7,6 +7,7 @@ class TaiKhoan {
     string password;
     string ID;
 public:
+    TaiKhoan();
     TaiKhoan(string, string, string);
     TaiKhoan(const TaiKhoan&);
     ~TaiKhoan();
