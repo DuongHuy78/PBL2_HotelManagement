@@ -2,14 +2,16 @@
 #define KHACHHANG_H
 #include "NguoiDung.h"
 #include "Phong.h"
+#include "QLKhachSan.h"
+
 class KhachHang:public NguoiDung {
-    string IDKhachHang; // PK
+    string IDKhachHang;
     string hoTen;
     time_t ngaySinh;
     string soDienThoai;
     bool gioiTinh; 
 public:
-    KhachHang(string, string, time_t, bool);
+    KhachHang(string, string, time_t, string, bool);
     KhachHang(const KhachHang&);
     ~KhachHang();
 
@@ -25,7 +27,9 @@ public:
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
 
+    void menuSuaThongTin();                             //menu sửa thông tin
     void suaThongTin();
-    void work();
+    void work();                            //in ra thông tin
+    void huyDatPhong(string);             //hủy đặt phòng
 };
 #endif

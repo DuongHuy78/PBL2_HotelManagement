@@ -1,5 +1,8 @@
 #ifndef QLKHACHSAN_H
 #define QLKHACHSAN_H
+#include <fstream>
+#include <sstream>
+#include <cctype>
 #include "DatPhong.h"
 #include "KhachHang.h"
 #include "LoaiPhong.h"
@@ -17,6 +20,7 @@ class QLKhachSan {
     QLDatPhong QLDP;
     QLLoaiPhong QLLP;
     QLPhong QLP;
+    
     int role;   // Neu role = -1, chua dang nhap
 public:
     QLKhachSan();
@@ -42,5 +46,6 @@ public:
     void dangXuat(string);
     void kiemTraTraPhong();
     void thongBao(string, string);
+    void chuanHoaTen(string &);
 };
 #endif

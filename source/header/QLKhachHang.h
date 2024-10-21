@@ -8,8 +8,8 @@ public:
     ~QLKhachHang();
 
     void themKhachHang(KhachHang);
-    void timKiemKhachHang(string); // Tim kiem theo id hay ten?
+    void timKiemKhachHang(string); // Tim kiem theo id và ten
     void suaThongTin(string);
-    void xoaKhachHang(KhachHang); // string?
+    void xoaKhachHang(KhachHang); // xóa khách hàng theo id và ten
 };
 #endif
