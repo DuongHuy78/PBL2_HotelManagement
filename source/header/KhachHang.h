@@ -9,6 +9,7 @@ class KhachHang:public NguoiDung {
     string soDienThoai;
     bool gioiTinh; 
 public:
+    KhachHang();
     KhachHang(string, string, time_t, bool);
     KhachHang(const KhachHang&);
     ~KhachHang();

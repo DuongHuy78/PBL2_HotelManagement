@@ -9,14 +9,8 @@ QLKhachSan::~QLKhachSan() {
 
 }
 
-
-bool QLKhachSan::canReadFile(string) {
-
-}
-
-
-void QLKhachSan::inputTaiKhoan(string) {
-
+void QLKhachSan::inputTaiKhoan(string path) {
+    
 }
 
 void QLKhachSan::inputKhachHang(string) {
@@ -56,20 +50,40 @@ void QLKhachSan::outputDatPhong(string) {
 
 }
 
-int QLKhachSan::getRoleById(string) {
-
-}
-
 void QLKhachSan::work() {
     NguoiDung *p;
-    while(true) {
+    while(role == UNDEFINED) {
         if(role == -1) p = dangNhap();
-        p->work();
+        if(p != NULL) p->work();
     }
 }
 
 NguoiDung *QLKhachSan::dangNhap() {
+    string username, password;
+    cout << "Nhap username: ";
+    cin >> username;
+    cout << "Nhap password: ";
+    cin >> password;
+    Node<TaiKhoan> *i = DSTKKH.head->next;
+    while(i != DSTKKH.head) {
+        if(i->data.getUsername() == username && i->data.getPassword() == password) {
+            role = KHACHHANG;
+            return QLKH.timKiemKhachHang(i->data.getID()); 
+        }
+        i = i->next;
+    }
 
+    if(username == TKNhanVien.getUsername() && password == TKNhanVien.getPassword()) {
+        role = NHANVIEN;
+        return &NV;
+    }
+
+    if(username == TKQuanLi.getUsername() && password == TKQuanLi.getPassword()) {
+        role = QUANLI;
+        return &QL;
+    }
+    cout << "Sai username hoac password" << endl;
+    return NULL;
 }
 
 void QLKhachSan::dangXuat(string) {

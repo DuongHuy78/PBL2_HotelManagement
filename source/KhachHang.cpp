@@ -1,4 +1,13 @@
 #include "./header/KhachHang.h"
+
+KhachHang::KhachHang() {
+    IDKhachHang = "";   
+    hoTen = "";
+    ngaySinh = 0;
+    soDienThoai = "";
+    gioiTinh = false;
+}
+
 KhachHang::KhachHang(string, string, time_t, bool) {
 
 }

@@ -5,6 +5,8 @@ using namespace std;
 class Phong {
     string maPhong; 
     string loaiPhong;
+    time_t ngayNhan = 0;
+    time_t ngayTra = 0;
 public:
     Phong(string, string);
     Phong(const Phong&);
