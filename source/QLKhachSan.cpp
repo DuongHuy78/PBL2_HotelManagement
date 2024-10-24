@@ -86,8 +86,8 @@ NguoiDung *QLKhachSan::dangNhap() {
     return NULL;
 }
 
-void QLKhachSan::dangXuat(string) {
-
+void QLKhachSan::dangXuat() {
+    role = UNDEFINED;
 }
 
 void QLKhachSan::kiemTraTraPhong() {

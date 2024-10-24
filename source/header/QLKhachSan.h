@@ -54,7 +54,7 @@ public:
 
     void work();
     NguoiDung *dangNhap();
-    void dangXuat(string);
+    void dangXuat();
     void kiemTraTraPhong();
     void thongBao(string, string);
 };
