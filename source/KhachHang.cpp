@@ -111,7 +111,7 @@ string KhachHang::nhapNgaySinh() {
         }
 
         if (check != 1) {
-            std::cout << "BAN NHAP SAI. VUI LONG NHAP LAI!!!\n";
+            std::cout << "Ban nhap sai, vui long nhap lai!\n";
             continue;
         }
 
@@ -194,8 +194,14 @@ string KhachHang::taoIDKhachHang() {        //tạo ID khách hàng bằng cách
     if(DSKH->prev == DSKH->head) {
         IDKhachHang = "100001";    //số đầu tên là chia đối tượng kh, nhân viên,...
     }
+    else if(DSKH->prev->data.getIDKhachHang() == "199999") {
+        return -1;      //đã đạt giới hạn số khách hàng
+    }
     else{
-        IDKhachHang = to_string(stoi(DSKH->prev->data.getIDKhachHang()) + 1);
+        string head = DSKH->prev->data.getIDKhachHang().substr(0, 1);   //lấy số đầu
+        string tail = DSKH->prev->data.getIDKhachHang().substr(1);      //lấy số sau
+        int num = stoi(tail) + 1;
+        IDKhachHang = head + to_string(num);
     }
     return IDKhachHang;
 }
