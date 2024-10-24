@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include <conio.h>
 #include "DatPhong.h"
 #include "KhachHang.h"
 #include "LoaiPhong.h"
@@ -14,19 +15,36 @@
 #include "QLPhong.h"
 #include "NhanVien.h"
 #include "QuanLi.h"
+#include "LinkedList.h"
+#include <iostream> 
+#include <fstream>
+
+#define MAX_NAME 50
 
 class QLKhachSan {
     QLKhachHang QLKH;
+    LinkedList<TaiKhoan> DSTKKH;
+
+    NhanVien NV;
+    TaiKhoan TKNhanVien;
+
+    QuanLi QL;
+    TaiKhoan TKQuanLi;
+    
     QLDatPhong QLDP;
     QLLoaiPhong QLLP;
     QLPhong QLP;
-    
-    int role;   // Neu role = -1, chua dang nhap
+
+    enum role_value {
+        UNDEFINED = -1,
+        KHACHHANG,
+        NHANVIEN,
+        QUANLI,
+    };       
+    role_value role = UNDEFINED;         
 public:
     QLKhachSan();
     ~QLKhachSan();
-
-    bool canReadFile(string);
 
     void inputTaiKhoan(string);
     void inputKhachHang(string);
@@ -40,12 +58,12 @@ public:
     void outputPhong(string);
     void outputDatPhong(string);
 
-    int getRoleById(string);
     void work();
     NguoiDung *dangNhap();
     void dangXuat(string);
     void kiemTraTraPhong();
     void thongBao(string, string);
     void chuanHoaTen(string &);
+    string Nhap(int ,int );
 };
 #endif

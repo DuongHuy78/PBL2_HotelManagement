@@ -11,6 +11,7 @@ class KhachHang:public NguoiDung {
     string soDienThoai;
     bool gioiTinh; 
 public:
+    KhachHang();
     KhachHang(string, string, time_t, string, bool);
     KhachHang(const KhachHang&);
     ~KhachHang();
@@ -26,10 +27,12 @@ public:
     void setNgaySinh(time_t);
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
+    string nhapNgaySinh();                  //nhập ngày sinh và kiểm tra
 
-    void menuSuaThongTin();                             //menu sửa thông tin
+    void menuSuaThongTin();                 //in menu sửa thông tin
     void suaThongTin();
     void work();                            //in ra thông tin
-    void huyDatPhong(string);             //hủy đặt phòng
+    string taoIDKhachHang();                //tạo ID khách hàng
+    void huyDatPhong(string);               //hủy đặt phòng
 };
 #endif

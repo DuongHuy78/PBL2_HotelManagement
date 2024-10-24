@@ -1,10 +1,10 @@
 #include "header/QLTaiKhoan.h"
 QLTaiKhoan::QLTaiKhoan() {
-    DSTK = new TaiKhoan[1]; 
+
 }  
 
 QLTaiKhoan::~QLTaiKhoan() {
-    delete[] DSTK;
+
 }
 
 void QLTaiKhoan::themTaiKhoan(TaiKhoan) {
