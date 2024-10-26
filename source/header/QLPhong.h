@@ -1,9 +1,9 @@
 #ifndef QLPHONG_H
 #define QLPHONG_H
 #include "Phong.h"
-
+#include "LinkedList.h"
 class QLPhong {
-    Phong *DSP; // danh sach phong
+    LinkedList<Phong> DSP; // Danh sach phong
 public:
     QLPhong();
     ~QLPhong();

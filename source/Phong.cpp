@@ -1,4 +1,8 @@
 #include "./header/Phong.h"
+Phong::Phong() {
+
+}
+
 Phong::Phong(string, string) {
 
 }

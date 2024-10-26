@@ -9,8 +9,9 @@ public:
     ~QLKhachHang();
 
     void themKhachHang(KhachHang);
-    KhachHang *timKiemKhachHang(string); // Tim kiem theo id
     void suaThongTin(string);
-    void xoaKhachHang(KhachHang); // string?
+    void xoaKhachHang(KhachHang); 
+
+    KhachHang *timKiemKhachHang(string); // Tim kiem theo ID
 };
 #endif

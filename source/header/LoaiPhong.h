@@ -1,15 +1,14 @@
 #ifndef LOAIPHONG_H
 #define LOAIPHONG_H
-#include <iostream>
-using namespace std;
+#include "Utils.h"
 class LoaiPhong {
-    int loaiPhong;  // PK
-    int loaiGiuong;
+    string IDLoaiPhong;  // PK
     int giaPhong;
     string moTaPhong;
     int soLuongKhach;
 public:
-    LoaiPhong(int, int, int, string, int);
+    LoaiPhong();
+    LoaiPhong(string, int, string, int);
     LoaiPhong(const LoaiPhong&);
     ~LoaiPhong();
 

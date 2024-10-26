@@ -1,7 +1,7 @@
 #ifndef KHACHHANG_H
 #define KHACHHANG_H
 #include "NguoiDung.h"
-#include "Phong.h"
+#include "Utils.h"
 class KhachHang:public NguoiDung {
     string IDKhachHang; // PK
     string hoTen;
@@ -10,7 +10,7 @@ class KhachHang:public NguoiDung {
     bool gioiTinh; 
 public:
     KhachHang();
-    KhachHang(string, string, time_t, bool);
+    KhachHang(string, string, time_t, string, bool);
     KhachHang(const KhachHang&);
     ~KhachHang();
 
@@ -26,7 +26,6 @@ public:
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
 
-    void suaThongTin();
     void work();
 };
 #endif

@@ -1,41 +1,21 @@
 #ifndef QLKHACHSAN_H
 #define QLKHACHSAN_H
-#include "DatPhong.h"
-#include "KhachHang.h"
-#include "LoaiPhong.h"
-#include "Phong.h"
-#include "TaiKhoan.h"
 #include "QLKhachHang.h"
+#include "NhanVien.h"
+#include "QuanLi.h"
 #include "QLDatPhong.h"
 #include "QLLoaiPhong.h"
 #include "QLPhong.h"
-#include "NhanVien.h"
-#include "QuanLi.h"
-#include "LinkedList.h"
-#include <iostream> 
-#include <fstream>
-
+#include "QLTaiKhoan.h"
 class QLKhachSan {
     QLKhachHang QLKH;
-    LinkedList<TaiKhoan> DSTKKH;
-
-    NhanVien NV;
-    TaiKhoan TKNhanVien;
-
-    QuanLi QL;
-    TaiKhoan TKQuanLi;
-    
+    QLTaiKhoan QLTK;
     QLDatPhong QLDP;
     QLLoaiPhong QLLP;
     QLPhong QLP;
-
-    enum role_value {
-        UNDEFINED = -1,
-        KHACHHANG,
-        NHANVIEN,
-        QUANLI,
-    };       
-    role_value role = UNDEFINED;         
+    role_value role = UNDEFINED;    
+    NhanVien nhanVien;
+    QuanLi quanLi;     
 public:
     QLKhachSan();
     ~QLKhachSan();
@@ -55,7 +35,5 @@ public:
     void work();
     NguoiDung *dangNhap();
     void dangXuat();
-    void kiemTraTraPhong();
-    void thongBao(string, string);
 };
 #endif

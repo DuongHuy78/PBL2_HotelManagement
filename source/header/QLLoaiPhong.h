@@ -1,9 +1,9 @@
 #ifndef QLLOAIPHONG_H
 #define QLLOAIPHONG_H
 #include "LoaiPhong.h"
-
+#include "LinkedList.h"
 class QLLoaiPhong {
-    LoaiPhong *DSLP; // danh sach loai phong
+    LinkedList<LoaiPhong> DSLP; // Danh sach loai phong
 public:
     QLLoaiPhong();
     ~QLLoaiPhong();

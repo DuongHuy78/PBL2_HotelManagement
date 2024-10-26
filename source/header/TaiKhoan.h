@@ -1,7 +1,7 @@
 #ifndef TAIKHOAN_H
 #define TAIKHOAN_H
-#include <iostream>
-using namespace std;
+#include "Utils.h"
+
 class TaiKhoan {
     string username;
     string password;
@@ -19,5 +19,7 @@ public:
     void setUsername(string);
     void setPassword(string);
     void setID(string);
+
+    role_value getRole() const;
 };
 #endif

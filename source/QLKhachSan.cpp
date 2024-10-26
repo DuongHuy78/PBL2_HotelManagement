@@ -10,7 +10,23 @@ QLKhachSan::~QLKhachSan() {
 }
 
 void QLKhachSan::inputTaiKhoan(string path) {
+    // Này phải viết hàm đọc dữ liệu từ file, nhưng mà không ai viết nên t thêm chay
+
+    TaiKhoan account("U-00001", "nguyennhatking", "12345678");
+    TaiKhoan account2("M-00001", "qlnguyennhatking", "12345678");
+    TaiKhoan account3("S-00001", "nvnguyennhatking", "12345678");
+
+    quanLi.setIDQuanLi("M-00001");
+
+    nhanVien.setIDNhanVien("S-00001");
+
+    time_t ngaySinh = Utils::stringToDate("2005-01-01");
+    KhachHang newUser("U-00001", "nguyen nhat hoang", ngaySinh, "0905123456", true);
+    this->QLKH.themKhachHang(newUser);
     
+    this->QLTK.themTaiKhoan(account);
+    this->QLTK.themTaiKhoan(account2);
+    this->QLTK.themTaiKhoan(account3);
 }
 
 void QLKhachSan::inputKhachHang(string) {
@@ -64,36 +80,25 @@ NguoiDung *QLKhachSan::dangNhap() {
     cin >> username;
     cout << "Nhap password: ";
     cin >> password;
-    Node<TaiKhoan> *i = DSTKKH.head->next;
-    while(i != DSTKKH.head) {
-        if(i->data.getUsername() == username && i->data.getPassword() == password) {
-            role = KHACHHANG;
-            return QLKH.timKiemKhachHang(i->data.getID()); 
+    string ID = QLTK.kiemTraTaiKhoan(username, password);
+    if(ID != "") {
+        cout << "Dang nhap thanh cong, dang lay thong tin ..." << endl;
+        if(ID == quanLi.getIDQuanLi()) {
+            role = QUANLI;
+            return &quanLi;
         }
-        i = i->next;
+        cout << "Khong phai quan li" << endl;
+        if(ID == nhanVien.getIDNhanVien()) {
+            role = NHANVIEN;
+            return &nhanVien;
+        }
+        cout << "Khong phai nhan vien" << endl;
+        role = KHACHHANG;
+        return QLKH.timKiemKhachHang(ID);
     }
-
-    if(username == TKNhanVien.getUsername() && password == TKNhanVien.getPassword()) {
-        role = NHANVIEN;
-        return &NV;
-    }
-
-    if(username == TKQuanLi.getUsername() && password == TKQuanLi.getPassword()) {
-        role = QUANLI;
-        return &QL;
-    }
-    cout << "Sai username hoac password" << endl;
     return NULL;
 }
 
 void QLKhachSan::dangXuat() {
     role = UNDEFINED;
-}
-
-void QLKhachSan::kiemTraTraPhong() {
-
-}
-
-void QLKhachSan::thongBao(string, string) {
-
 }

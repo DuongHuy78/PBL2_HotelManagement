@@ -4,13 +4,14 @@
 #include "Node.h"
 
 template <class T> class LinkedList {
-public:
     Node<T>* head;
+public:
     LinkedList();
     ~LinkedList();
     void add(T data);
     void remove(Node<T>* node);
     void display();
+    Node<T>* getHead();
 };
 
 template <class T> LinkedList<T>::LinkedList() {
@@ -50,6 +51,10 @@ template <class T> void LinkedList<T>::display() {
         cout << temp->data << endl; // nay thi phai dung da nang hoa toan tu nay!!
         temp = temp->next;
     }
+}
+
+template <class T> Node<T>* LinkedList<T>::getHead() {
+    return this->head;
 }
 
 #endif
