@@ -30,8 +30,6 @@ void QLTaiKhoan::suaThongTinTaiKhoan(string ID) {
 string QLTaiKhoan::kiemTraTaiKhoan(string username, string pass) {
     Node<TaiKhoan> *p = DSTK.getHead()->next;
     while(p != DSTK.getHead()) {
-        cout << p->data.getUsername() << " " << username << endl;
-        cout << p->data.getPassword() << " " << pass << endl;
         if(p->data.getUsername() == username 
         && p->data.getPassword() == pass) return p->data.getID();
         p = p->next;

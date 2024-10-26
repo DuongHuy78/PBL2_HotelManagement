@@ -10,7 +10,7 @@ public:
 
     void themKhachHang(KhachHang);
     void suaThongTin(string);
-    void xoaKhachHang(KhachHang); 
+    void xoaKhachHang(KhachHang *); 
 
     KhachHang *timKiemKhachHang(string); // Tim kiem theo ID
 };

@@ -8,8 +8,8 @@ QLKhachHang::~QLKhachHang() {
 }
 
 
-void QLKhachHang::themKhachHang(KhachHang) {
-
+void QLKhachHang::themKhachHang(KhachHang kh) {
+    DSKH.add(kh);
 }
 
 KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
@@ -18,12 +18,20 @@ KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
         if(p->data.getIDKhachHang() == ID) return &p->data;
         p = p->next;
     }
+    return NULL;
 }
 
 void QLKhachHang::suaThongTin(string) {
 
 }
 
-void QLKhachHang::xoaKhachHang(KhachHang) {
-
+void QLKhachHang::xoaKhachHang(KhachHang *kh) {
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    while(p != DSKH.getHead()) {
+        if(&p->data == kh) {
+            DSKH.remove(p);
+            return;
+        }
+        p = p->next;
+    }
 }

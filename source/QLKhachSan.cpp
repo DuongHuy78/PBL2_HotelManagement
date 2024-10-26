@@ -69,7 +69,7 @@ void QLKhachSan::outputDatPhong(string) {
 void QLKhachSan::work() {
     NguoiDung *p;
     while(role == UNDEFINED) {
-        if(role == -1) p = dangNhap();
+        p = dangNhap();
         if(p != NULL) p->work();
     }
 }
@@ -82,17 +82,14 @@ NguoiDung *QLKhachSan::dangNhap() {
     cin >> password;
     string ID = QLTK.kiemTraTaiKhoan(username, password);
     if(ID != "") {
-        cout << "Dang nhap thanh cong, dang lay thong tin ..." << endl;
         if(ID == quanLi.getIDQuanLi()) {
             role = QUANLI;
             return &quanLi;
         }
-        cout << "Khong phai quan li" << endl;
         if(ID == nhanVien.getIDNhanVien()) {
             role = NHANVIEN;
             return &nhanVien;
         }
-        cout << "Khong phai nhan vien" << endl;
         role = KHACHHANG;
         return QLKH.timKiemKhachHang(ID);
     }
