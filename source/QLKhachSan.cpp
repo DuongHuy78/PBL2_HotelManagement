@@ -9,8 +9,24 @@ QLKhachSan::~QLKhachSan() {
 
 }
 
-void QLKhachSan::inputTaiKhoan(string) {
+void QLKhachSan::inputTaiKhoan(string path) {
+    // Này phải viết hàm đọc dữ liệu từ file, nhưng mà không ai viết nên t thêm chay
 
+    TaiKhoan account("U-00001", "nguyennhatking", "12345678");
+    TaiKhoan account2("M-00001", "qlnguyennhatking", "12345678");
+    TaiKhoan account3("S-00001", "nvnguyennhatking", "12345678");
+
+    quanLi.setIDQuanLi("M-00001");
+
+    nhanVien.setIDNhanVien("S-00001");
+
+    time_t ngaySinh = Utils::stringToDate("2005-01-01");
+    KhachHang newUser("U-00001", "nguyen nhat hoang", ngaySinh, "0905123456", true);
+    this->QLKH.themKhachHang(newUser);
+    
+    this->QLTK.themTaiKhoan(account);
+    this->QLTK.themTaiKhoan(account2);
+    this->QLTK.themTaiKhoan(account3);
 }
 
 void QLKhachSan::inputKhachHang(string) {
@@ -53,7 +69,7 @@ void QLKhachSan::outputDatPhong(string) {
 void QLKhachSan::work() {
     NguoiDung *p;
     while(role == UNDEFINED) {
-        if(role == -1) p = dangNhap();
+        p = dangNhap();
         if(p != NULL) p->work();
     }
 }
@@ -64,73 +80,22 @@ NguoiDung *QLKhachSan::dangNhap() {
     cin >> username;
     cout << "Nhap password: ";
     cin >> password;
-    Node<TaiKhoan> *i = DSTKKH.head->next;
-    while(i != DSTKKH.head) {
-        if(i->data.getUsername() == username && i->data.getPassword() == password) {
-            role = KHACHHANG;
-            return QLKH.timKiemKhachHang(i->data.getID()); 
+    string ID = QLTK.kiemTraTaiKhoan(username, password);
+    if(ID != "") {
+        if(ID == quanLi.getIDQuanLi()) {
+            role = QUANLI;
+            return &quanLi;
         }
-        i = i->next;
+        if(ID == nhanVien.getIDNhanVien()) {
+            role = NHANVIEN;
+            return &nhanVien;
+        }
+        role = KHACHHANG;
+        return QLKH.timKiemKhachHang(ID);
     }
-
-    if(username == TKNhanVien.getUsername() && password == TKNhanVien.getPassword()) {
-        role = NHANVIEN;
-        return &NV;
-    }
-
-    if(username == TKQuanLi.getUsername() && password == TKQuanLi.getPassword()) {
-        role = QUANLI;
-        return &QL;
-    }
-    cout << "Sai username hoac password" << endl;
     return NULL;
 }
 
-void QLKhachSan::dangXuat(string) {
-
-}
-
-void QLKhachSan::kiemTraTraPhong() {
-
-}
-
-void QLKhachSan::thongBao(string, string) {
-
-}
-void QLKhachSan::chuanHoaTen(string &str) {
-    // Chuyển tất cả các ký tự thành chữ thường
-    for (char &c : str) {
-        c = tolower(c);
-    }
-    // Chuyển ký tự đầu tiên và ký tự sau dấu cách thành chữ hoa
-    for (size_t i = 0; i < str.size(); ++i) {
-        if (i == 0 || str[i-1] == ' ') {
-            str[i] = toupper(str[i]);
-        }
-    }
-}
-string QLKhachSan::nhap(int kytu, int sl) { 
-    //khi dùng sl phải tăng thêm 1 vì còn ký tự '\0'     
-    //kytu 1: Chỉ số; 2: Chữ và khoản trắng; 3: Cả 2
-    string temp = "";
-    int a = 0;
-    char ch;
-    if(kytu == 1 || kytu == 2 || kytu == 3) {
-        while (((ch = getch()) != '\r' && ch != '\n') || a <= 0) {
-            if(((kytu == 1 && isdigit(ch)) ||
-                (kytu == 2 && (isalpha(ch) || ch == ' ')) ||
-                (kytu == 3 && (isalpha(ch) || isdigit(ch)))) && a < sl-1) {
-                cout << ch;
-                temp += ch;
-                a++;
-            }
-            else if (ch == '\b' && a > 0) {
-                cout << "\b \b";
-                temp.pop_back();
-                a--;
-            }
-        }
-        cout << endl;
-    }
-    return temp;
+void QLKhachSan::dangXuat() {
+    role = UNDEFINED;
 }

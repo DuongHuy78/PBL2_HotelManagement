@@ -1,9 +1,6 @@
-#include <iostream>
-#include "./header/QLKhachSan.h"
-using namespace std;
-
+#include "header/QLKhachSan.h"
 int main() {
-    // g++ .\DatPhong.cpp .\KhachHang.cpp .\LoaiPhong.cpp .\NhanVien.cpp .\Phong.cpp .\QLKhachSan.cpp .\QuanLi.cpp .\main.cpp .\TaiKhoan.cpp .\QLDatPhong.cpp .\QLKhachHang.cpp .\QLLoaiPhong.cpp .\QLPhong.cpp
+    // g++ .\LoaiPhong.cpp .\QLLoaiPhong.cpp .\Phong.cpp .\QLPhong.cpp .\DatPhong.cpp .\QLDatPhong.cpp .\TaiKhoan.cpp .\QLTaiKhoan.cpp .\KhachHang.cpp .\QLKhachHang.cpp .\NhanVien.cpp .\QuanLi.cpp .\QLKhachSan.cpp .\main.cpp
     QLKhachSan db;
     db.inputTaiKhoan("data/TaiKhoan.txt");
     db.inputKhachHang("data/KhachHang.txt");

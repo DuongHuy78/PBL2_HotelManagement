@@ -1,5 +1,10 @@
 #include "./header/LoaiPhong.h"
-LoaiPhong::LoaiPhong(int, int, int, string, int) {
+
+LoaiPhong::LoaiPhong() {
+
+}
+
+LoaiPhong::LoaiPhong(string, int, string, int) {
 
 }
 

@@ -1,9 +1,17 @@
 #include "./header/DatPhong.h"
+DatPhong::DatPhong() {
+
+}
+
 DatPhong::DatPhong(string, string, string, time_t, time_t, int, int) {
 
 }
 
 DatPhong::DatPhong(const DatPhong &) {
+
+}
+
+DatPhong::~DatPhong() {
 
 }
 
