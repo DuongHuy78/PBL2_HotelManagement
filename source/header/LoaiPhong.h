@@ -2,27 +2,35 @@
 #define LOAIPHONG_H
 #include <iostream>
 using namespace std;
+
 class LoaiPhong {
-    int loaiPhong;  // PK
-    int loaiGiuong;
-    int giaPhong;
-    string moTaPhong;
-    int soLuongKhach;
-public:
-    LoaiPhong(int, int, int, string, int);
-    LoaiPhong(const LoaiPhong&);
-    ~LoaiPhong();
+    private: 
+        string loaiPhong;  // S,D,D2,T,F,F2
+        int loaiGiuong; // 1,2
+        int soLuongKhach; // hiểu là số lượng khách tối đa trong 1 phòng
+        int dienTich;
+        int giaPhong;
+        string moTaPhong;
+    
+    public:
+        LoaiPhong();
+        ~LoaiPhong();
+        LoaiPhong(string, int, int, int, int, string); // phong trong data
+        LoaiPhong(const LoaiPhong&);
 
-    int getLoaiPhong() const;
-    int getLoaiGiuong() const;
-    int getGiaPhong() const;
-    string getMoTaPhong() const;
-    int getSoLuongKhach() const;
+        string getLoaiPhong() const; // mã loại phòng
+        int getLoaiGiuong() const; // 1 hoặc 2
+        int getSoLuongKhach() const; 
+        int getGiaPhong() const;
+        int getDienTich() const;
+        string getMoTaPhong() const;
 
-    void setLoaiPhong(int);
-    void setLoaiGiuong(int);
-    void setGiaPhong(int);
-    void setMoTaPhong(string);
-    void setSoLuongKhach(int);
+        void NhapLoaiPhongMoi();
+        void setLoaiPhong(string);
+        void setLoaiGiuong(int);
+        void setSoLuongKhach(int);
+        void setDienTich(int);
+        void setGiaPhong(int);
+        void setMoTaPhong(string);
 };
 #endif
