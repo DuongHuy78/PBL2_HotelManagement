@@ -8,5 +8,11 @@ int main() {
     
     QLLoaiPhong P;
     P.AddRangeLoaiPhong("loaiphong.txt");
+    db.inputTaiKhoan("data/TaiKhoan.txt");
+    db.inputKhachHang("data/KhachHang.txt");
+    db.inputLoaiPhong("data/LoaiPhong.txt");
+    db.inputPhong("data/Phong.txt");
+    db.inputDatPhong("data/DatPhong.txt");
+    db.work();
     return 0;
 }

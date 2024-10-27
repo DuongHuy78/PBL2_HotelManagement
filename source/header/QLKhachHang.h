@@ -1,15 +1,16 @@
 #ifndef QLKHACHHANG_H
 #define QLKHACHHANG_H
 #include "KhachHang.h"
+#include "LinkedList.h"
 class QLKhachHang {
-    KhachHang *DSKH; // Danh sach khach hang
+    LinkedList<KhachHang> DSKH; // Danh sach khach hang
 public:
-    QLKhachHang();  // Tao danh sach
+    QLKhachHang();
     ~QLKhachHang();
 
     void themKhachHang(KhachHang);
-    void timKiemKhachHang(string); // Tim kiem theo id hay ten?
+    KhachHang *timKiemKhachHang(string); // Tim kiem theo id
     void suaThongTin(string);
-    void xoaKhachHang(KhachHang); // string?
+    void xoaKhachHang(KhachHang); // xóa khách hàng theo id và ten
 };
 #endif

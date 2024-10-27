@@ -2,7 +2,6 @@
 
 Phong::Phong()
 {
-
 }
 
 Phong::~Phong() 
