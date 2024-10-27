@@ -25,10 +25,10 @@ void QLPhong::AddRangePhong(string file)
             cout << line << endl;
             for(int i = 0; i < line.size(); i++)
             {
-                if(line[i] == '|')
+                if(line[i] == ';')
                 {
-                    str[c++] = r;
-                    r = " ";
+                    str[c++] = r;  // Lưu giá trị r vào str[c] và tăng c
+                    r = ""; // Reset r về chuỗi rỗng để chuẩn bị cho trường mới
                 }
                 else r += line[i];
             }
@@ -36,13 +36,13 @@ void QLPhong::AddRangePhong(string file)
             {
                 str[c++] = r;
             }       
-            Phong A(str[0],stoi(str[1]), stoi(str[2]));
+            Phong A(str[0], str[1]);
 
             (this->DSP).add(A);
         } // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
+   
     inputFile.close();
     return; 
-
 }
 
 void QLPhong::themPhong(Phong) {
