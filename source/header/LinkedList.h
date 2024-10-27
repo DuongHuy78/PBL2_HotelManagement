@@ -1,6 +1,5 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
-
 #include "Node.h"
 
 template <class T> class LinkedList {
@@ -11,7 +10,9 @@ public:
     void add(T data);
     void remove(Node<T>* node);
     void display();
-    Node<T>* getHead();
+    // Phương thức duyệt
+    Node<T>* begin(); // Trả về nút đầu
+    Node<T>* end();   // Trả về nullptr (điểm kết thúc)
 };
 
 template <class T> LinkedList<T>::LinkedList() {
@@ -52,9 +53,16 @@ template <class T> void LinkedList<T>::display() {
         temp = temp->next;
     }
 }
+// Phương thức duyệt
+template <class T>
+    Node<T>* LinkedList<T>::begin() 
+    {
+        return head->next; // Trả về nút đầu tiên (nếu có)
+    }
 
-template <class T> Node<T>* LinkedList<T>::getHead() {
-    return this->head;
-}
-
+template <class T>
+    Node<T>* LinkedList<T>::end() 
+    {
+    return nullptr; // Trả về nullptr cho điểm kết thúc
+    }
 #endif
