@@ -26,6 +26,12 @@ public:
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
 
+    void suaThongTin();
+    string nhapNgaySinh();
+    void menuSuaThongTin();
+    void huyDatPhong(string);
+    string taoIDKhachHang();
+    
     void work();
 };
 #endif

@@ -67,7 +67,129 @@ void KhachHang::setSoDienThoai(string soDienThoai) {
 void KhachHang::setGioiTinh(bool gioiTinh) {
     this->gioiTinh = gioiTinh;
 } 
+string KhachHang::nhapNgaySinh() {
+    string input;
+    int day, month, year;
+    int check;
+    int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  // Số ngày trong tháng
+
+    while (1) {  // Lặp lại nếu nhập sai
+        cout << "Nhap ngay thang nam sinh (dinh dang dd/mm/yyyy): ";
+        getline(cin, input);
+
+        // Tách chuỗi thành ngày, tháng, năm
+        stringstream ss(input);
+        string temp_day, temp_month, temp_year;
+
+        getline(ss, temp_day, '/');
+        getline(ss, temp_month, '/');
+        getline(ss, temp_year, '/');
+
+        // Chuyển chuỗi sang số nguyên
+        day = atoi(temp_day.c_str());
+        month = atoi(temp_month.c_str());
+        year = atoi(temp_year.c_str());
+
+        check = 1;
+
+        // Kiểm tra tháng và năm hợp lệ lớn 18 tuổi
+        // Khai báo biến tên là localTimeInfo
+        tm* localTimeInfo;
+        // Lấy thời gian hiện tại
+        time_t currentTime = time(nullptr);
+        localTimeInfo = localtime(&currentTime);
+        if (month <= 0 || month > 12 || year <= 1900 || year > localTimeInfo->tm_year + 1900 - 18) {
+            check = 0;
+        }
+        // Kiểm tra năm nhuận
+        if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+            if (month == 2 && (day > 29 || day <= 0)) {
+                check = 0;
+            }
+        } else {
+            // Kiểm tra ngày hợp lệ
+            if (day <= 0 || day > maxDaysInMonth[month - 1]) {
+                check = 0;
+            }
+        }
+
+        if (check != 1) {
+            std::cout << "Ban nhap sai, vui long nhap lai!\n";
+            continue;
+        }
+
+        return input;
+    }
+}
+
+void KhachHang::menuSuaThongTin(){        //in menu sửa thông tin
+    cout << "1. Sua ID Khach Hang" << endl;
+    cout << "2. Sua Ho Ten" << endl;
+    cout << "3. Sua Ngay Sinh" << endl;
+    cout << "4. Sua So Dien Thoai" << endl;
+    cout << "5. Sua Gioi Tinh" << endl;
+    cout << "6. Thoat" << endl;
+    cout << "Hay nhap lua chon: ";
+}
+void KhachHang::suaThongTin() {
+    int choice;          //lựa chọn
+    string temp;            //biến tạm
+    while (true) {
+        menuSuaThongTin();
+        choice = stoi(Utils::nhap(1, 2));         //chọn 2 vì 1 số và 1 ký tự '\0'
+        switch(choice) {
+            case 1:
+                cout << "Nhap ID Khach Hang moi: ";
+                temp = Utils::nhap(1, 10);           //id khách hàng có 9 ký tự
+                this->setIDKhachHang(temp);
+                system("clear");
+                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                break;
+            case 2:
+                cout << "Nhap ho ten moi: ";
+                temp = Utils::nhap(2, MAX_NAME+1);
+                this->setHoTen(temp);
+                system("clear");
+                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                break;
+            case 3:
+                temp = nhapNgaySinh();
+                system("clear");
+                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                break;
+            case 4:
+                cout << "Nhap So dien thoai moi: ";
+                temp = Utils::nhap(1, 11);           //số điện thoại có 10 ký tự
+                this->setSoDienThoai(temp);
+                system("clear");
+                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                break;
+            case 5:
+                cout << "Nhap gioi tinh moi (Nam nhap 0, Nu nhap 1): ";
+                temp = Utils::nhap(1, 2);           //giới tính có 1 ký tự
+                this->setGioiTinh(Utils::stringToInt(temp));
+                system("clear");
+                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                break;
+            case 6:
+                return;
+            default:
+                system("clear");
+                cout << "Lua chon khong hop le." << endl;
+                cout<< "Vui long chon lai!" << endl;
+                break;
+        }  
+    }
+}
 
 void KhachHang::work() {
-    cout << "Da dang nhap vao tai khoan khach hang" << endl;
+    cout << "ID Khach Hang: " << this->IDKhachHang << endl;
+    cout << "Ho Ten: " << this->hoTen << endl;
+    cout << "Ngay Sinh: " << this->ngaySinh << endl;
+    cout << "So Dien Thoai: " << this->soDienThoai << endl;
+    cout << "Gioi Tinh: " << this->gioiTinh << endl;
+}
+
+void KhachHang::huyDatPhong(string IDDatPhong) {
+    
 }

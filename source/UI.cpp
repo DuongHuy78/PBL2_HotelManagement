@@ -86,7 +86,7 @@ void draw_login() {
 }
 
 void login_button_clicked() {
-	NguoiDung *p = current_Data->kiemTraDangNhap(gnk_Current_Frame->textboxList[0].text, 
+	NguoiDung *p = current_Data->dangNhap(gnk_Current_Frame->textboxList[0].text, 
 		gnk_Current_Frame->textboxList[1].text);
 	if(p != NULL) {
 		p->work();

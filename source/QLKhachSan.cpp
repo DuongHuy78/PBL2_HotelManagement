@@ -70,7 +70,7 @@ void QLKhachSan::work() {
     gnk_Window_Loop();
 }
 
-NguoiDung *QLKhachSan::kiemTraDangNhap(string username, string password) {
+NguoiDung *QLKhachSan::dangNhap(string username, string password) {
     string ID = QLTK.kiemTraTaiKhoan(username, password);
     if(ID != "") {
         if(ID == quanLi.getIDQuanLi()) {

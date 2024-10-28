@@ -15,4 +15,4 @@ public:
     string kiemTraTaiKhoan(string, string);
     TaiKhoan *getTaiKhoanByID(string);
 };
-#endif // QLTAIKHOAN_H
+#endif

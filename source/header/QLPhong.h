@@ -7,7 +7,8 @@ class QLPhong {
 public:
     QLPhong();
     ~QLPhong();
-
+    // cân nhắc cái addrangephong ->QLKhachSan
+    void AddRangePhong(string); // đọc dữ liệu đầu vào và trả về danh sách phòng
     void themPhong(Phong);
     void xoaPhong(Phong);
     void suaThongTin(string);

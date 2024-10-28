@@ -34,7 +34,7 @@ public:
     void outputDatPhong(string);
 
     void work();
-    NguoiDung *kiemTraDangNhap(string, string);
+    NguoiDung *dangNhap(string, string);
     void dangXuat();
 };
 #endif

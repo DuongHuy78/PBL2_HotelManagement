@@ -1,12 +1,13 @@
 #ifndef PHONG_H
 #define PHONG_H
 #include "Utils.h"
+
 class Phong {
     string maPhong; 
     string loaiPhong; 
 public:
     Phong();
-    Phong(string, string);
+    Phong(string, string); // phòng theo data (mã phòng, loại phòng)
     Phong(const Phong&);
     ~Phong();
 

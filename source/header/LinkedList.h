@@ -1,6 +1,5 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
-
 #include "Node.h"
 
 template <class T> class LinkedList {
@@ -12,6 +11,9 @@ public:
     void remove(Node<T>* node);
     void display();
     Node<T>* getHead();
+    // Phương thức duyệt
+    Node<T>* begin();   // Trả về head->next
+    Node<T>* end();     // Trả về head
 };
 
 template <class T> LinkedList<T>::LinkedList() {
@@ -51,6 +53,14 @@ template <class T> void LinkedList<T>::display() {
         cout << temp->data << endl; // nay thi phai dung da nang hoa toan tu nay!!
         temp = temp->next;
     }
+}
+
+template <class T> Node<T>* LinkedList<T>::begin() {
+    return head->next; 
+}
+
+template <class T> Node<T>* LinkedList<T>::end() {
+    return head; 
 }
 
 template <class T> Node<T>* LinkedList<T>::getHead() {

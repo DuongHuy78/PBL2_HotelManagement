@@ -11,7 +11,8 @@ public:
     void themKhachHang(KhachHang);
     void suaThongTin(string);
     void xoaKhachHang(KhachHang *); 
-
-    KhachHang *timKiemKhachHang(string); // Tim kiem theo ID
+    string getMaxIDKhachHang();         // Lấy ID khách hàng lớn nhat để tạo ID mới
+    string taoIDKhachHang();            // Tạo ID khách hàng mới
+    KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
 };
 #endif

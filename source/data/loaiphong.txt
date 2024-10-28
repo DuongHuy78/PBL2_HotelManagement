@@ -1,0 +1,12 @@
+VIPS;1;1;40;300000;giuong don cao cap, khu vuc lam viec rieng va ghe thu gian, cua so lon mang lai anh sang tu nhien va khong gian mo rong rai
+VIPD;2;2;40;500000;giuong doi cao cap, phong rong va thoang mat, tam nhin dep ra bien, yen tinh va binh yen, double sweet
+VIPD2;1;2;40;500000;2 giuong don cao cap, phong rong va thoang mat, tam nhin dep ra bien, yen tinh va binh yen, double sweet
+VIPT;12;3;50;700000;2 giuong don va 1 giuong doi cao cap, phong rong va thoang mat, tam nhin dep ra bien, yen tinh va binh yen, do an nhe mien phi
+VIPF;2;4;50;900000;2 giuong doi cao cap, phong rong va thoang mat, tam nhin dep ra bien, yen tinh va binh yen, thoai mai va am cung
+VIPF2;12;4;50;900000;2 giuong don va  giuong don cao cap, phong rong va thoang mat, tam nhin dep ra bien, yen tinh va binh yen, thoai mai va am cung
+STS;1;1;40;200000;giuong don tieu chuan, khu vuc lam viec rieng va ghe thu gian, cua so lon mang lai anh sang tu nhien va khong gian mo rong rai
+STD;2;2;40;400000;giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, double sweet, noi that don gian va tien nghi
+STD2;1;2;40;400000;2 giuong don tieu chuan, phong rong va thoang mat, yen tinh va binh yen, double sweet, noi that don gian va tien nghi
+STT;12;3;50;600000;2 giuong don va 1 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, noi that don gian va tien nghi
+STF;2;4;50;700000;2 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, thoai mai va am cung, noi that don gian va tien nghi
+STF2;12;4;50;700000;2 giuong don va 1 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, thoai mai va am cung, noi that don gian va tien nghi
