@@ -9,8 +9,11 @@ public:
     ~QLKhachHang();
 
     void themKhachHang(KhachHang);
-    KhachHang *timKiemKhachHang(string); // Tim kiem theo id
     void suaThongTin(string);
-    void xoaKhachHang(KhachHang); // xóa khách hàng theo id và ten
+    void xoaKhachHang(KhachHang *); 
+    string getMaxIDKhachHang();         // Lấy ID khách hàng lớn nhat để tạo ID mới
+    string taoIDKhachHang();            // Tạo ID khách hàng mới
+    KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
+
 };
 #endif

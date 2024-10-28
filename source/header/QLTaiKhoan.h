@@ -1,15 +1,18 @@
 #ifndef QLTAIKHOAN_H
 #define QLTAIKHOAN_H
+
 #include "TaiKhoan.h"
+#include "LinkedList.h"
 class QLTaiKhoan {
-    TaiKhoan *DSTK; // Danh sach tai khoan
+    LinkedList<TaiKhoan> DSTK; // Danh sach tai khoan
 public:
-    QLTaiKhoan();  // Tao danh sach
+    QLTaiKhoan();
     ~QLTaiKhoan();
 
     void themTaiKhoan(TaiKhoan);
-    void timKiemTaiKhoan(string); // Tim kiem theo id hay ten?
-    void suaThongTin(string);
-    void xoaTaiKhoan(TaiKhoan); // string?
+    void xoaTaiKhoan(TaiKhoan *);
+    void suaThongTinTaiKhoan(string);
+    string kiemTraTaiKhoan(string, string);
+    TaiKhoan *getTaiKhoanByID(string);
 };
 #endif

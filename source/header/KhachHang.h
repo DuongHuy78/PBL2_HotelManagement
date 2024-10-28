@@ -1,8 +1,7 @@
 #ifndef KHACHHANG_H
 #define KHACHHANG_H
 #include "NguoiDung.h"
-#include "Phong.h"
-#include "QLKhachSan.h"
+#include "Utils.h"
 
 class KhachHang:public NguoiDung {
     string IDKhachHang;
@@ -27,12 +26,11 @@ public:
     void setNgaySinh(time_t);
     void setSoDienThoai(string);
     void setGioiTinh(bool); 
-    string nhapNgaySinh();                  //nhập ngày sinh và kiểm tra
 
     void menuSuaThongTin();                 //in menu sửa thông tin
     void suaThongTin();
-    void work();                            //in ra thông tin
-    string taoIDKhachHang();                //tạo ID khách hàng
-    void huyDatPhong(string);               //hủy đặt phòng
+    string nhapNgaySinh();
+    void huyDatPhong(string);
+    void work();
 };
 #endif

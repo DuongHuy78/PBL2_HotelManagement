@@ -1,14 +1,13 @@
 #ifndef PHONG_H
 #define PHONG_H
-#include <iostream>
-using namespace std;
+#include "Utils.h"
+
 class Phong {
     string maPhong; 
-    string loaiPhong;
-    time_t ngayNhan = 0;
-    time_t ngayTra = 0;
+    string loaiPhong; 
 public:
-    Phong(string, string);
+    Phong();
+    Phong(string, string); // phòng theo data (mã phòng, loại phòng)
     Phong(const Phong&);
     ~Phong();
 

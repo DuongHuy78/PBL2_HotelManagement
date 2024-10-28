@@ -1,7 +1,6 @@
 #ifndef DATPHONG_H
 #define DATPHONG_H
-#include <iostream>
-using namespace std;
+#include "Utils.h"
 class DatPhong {
     string maDatPhong; // PK
     string maPhong;
@@ -11,6 +10,7 @@ class DatPhong {
     int soLuongKhach;
     int donGia;
 public:
+    DatPhong();
     DatPhong(string, string, string, time_t, time_t, int, int);
     DatPhong(const DatPhong &);
     ~DatPhong();
