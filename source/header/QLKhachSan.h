@@ -7,6 +7,7 @@
 #include "QLLoaiPhong.h"
 #include "QLPhong.h"
 #include "QLTaiKhoan.h"
+#include "UI.h"
 class QLKhachSan {
     QLKhachHang QLKH;
     QLTaiKhoan QLTK;
@@ -33,7 +34,7 @@ public:
     void outputDatPhong(string);
 
     void work();
-    NguoiDung *dangNhap();
+    NguoiDung *kiemTraDangNhap(string, string);
     void dangXuat();
 };
 #endif

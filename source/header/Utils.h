@@ -5,7 +5,6 @@
 #include <sstream>
 #include <fstream>
 #include <time.h>
-
 using namespace std;
 // Ở đây chứa các hàm tiện ích như chuyển đổi kiểu dữ liệu, thời gian, . . .
 // Nhập xuất dữ liệu từ file

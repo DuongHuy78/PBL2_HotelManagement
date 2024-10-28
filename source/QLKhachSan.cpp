@@ -1,8 +1,8 @@
 #include "./header/QLKhachSan.h"
 
-
 QLKhachSan::QLKhachSan() {
-    
+    UI_init();
+    current_Data = this;
 }
 
 QLKhachSan::~QLKhachSan() {
@@ -67,19 +67,10 @@ void QLKhachSan::outputDatPhong(string) {
 }
 
 void QLKhachSan::work() {
-    NguoiDung *p;
-    while(role == UNDEFINED) {
-        p = dangNhap();
-        if(p != NULL) p->work();
-    }
+    gnk_Window_Loop();
 }
 
-NguoiDung *QLKhachSan::dangNhap() {
-    string username, password;
-    cout << "Nhap username: ";
-    cin >> username;
-    cout << "Nhap password: ";
-    cin >> password;
+NguoiDung *QLKhachSan::kiemTraDangNhap(string username, string password) {
     string ID = QLTK.kiemTraTaiKhoan(username, password);
     if(ID != "") {
         if(ID == quanLi.getIDQuanLi()) {
