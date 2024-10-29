@@ -64,8 +64,10 @@ public:
         return buffer;
     }
 
+    /**
+     * Định dạng của chuỗi s: "YYYY-MM-DD HH:MM:SS"
+     */
     static time_t stringToTime(string s) {
-        // Định dạng của s: "YYYY-MM-DD HH:MM:SS"
         struct tm timeinfo;
         try {
             if(s.size() != 19) {
@@ -108,8 +110,10 @@ public:
         return buffer;
     }
 
+    /**
+     * Định dạng của chuỗi s: "DD-MM-YYYY"
+     */
     static time_t stringToDate(string s) {
-        // Định dạng của s: "YYYY-MM-DD"
         struct tm timeinfo;
         try {
             if(s.size() != 10) {
@@ -159,6 +163,10 @@ public:
         return temp;
     }
 
+    /**
+     * Hàm này dùng để lấy chuỗi con từ chuỗi s từ vị trí pos
+     * cho đến khi gặp kí tự x
+     */
     static string getSubstringUntilX(const string &s, int &pos, char x) {
         string substring = "";
         for(int i = pos; i < s.size(); ++i) {
@@ -169,6 +177,28 @@ public:
             substring += s[i];
         }
         return substring;
+    }
+
+    static string trim(const string &s) {
+        int begin_s, end_s;
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] != ' ' && s[i] != '\n' && s[i] != '\t') {
+                begin_s = i;
+                break;
+            }
+        }
+
+        for(int i = s.size() - 1; i >= 0; --i) {
+            if(s[i] != ' ' && s[i] != '\n' && s[i] != '\t') {
+                end_s = i;
+                break;
+            }
+        }
+
+        if(end_s > begin_s) {
+            return s.substr(begin_s, end_s - begin_s + 1);
+        }
+        else return "";
     }
     // add utils function here . . . 
 };
