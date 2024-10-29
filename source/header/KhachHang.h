@@ -7,10 +7,10 @@ class KhachHang:public NguoiDung {
     string hoTen;
     time_t ngaySinh;
     string soDienThoai;
-    bool gioiTinh; 
+    gender_value gioiTinh; 
 public:
     KhachHang();
-    KhachHang(string, string, time_t, string, bool);
+    KhachHang(string, string, time_t, string, gender_value);
     KhachHang(const KhachHang&);
     ~KhachHang();
 
@@ -24,7 +24,7 @@ public:
     void setHoTen(string);
     void setNgaySinh(time_t);
     void setSoDienThoai(string);
-    void setGioiTinh(bool); 
+    void setGioiTinh(gender_value); 
 
     void suaThongTin();
     string nhapNgaySinh();

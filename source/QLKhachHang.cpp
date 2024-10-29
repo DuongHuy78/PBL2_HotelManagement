@@ -13,8 +13,8 @@ void QLKhachHang::themKhachHang(KhachHang kh) {
 }
 
 KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
-    Node<KhachHang> *p = DSKH.begin()->next;
-    while(p != DSKH.begin()) {
+    Node<KhachHang> *p = DSKH.begin();
+    while(p != DSKH.end()) {
         if(p->data.getIDKhachHang() == ID) return &p->data;
         p = p->next;
     }
@@ -22,8 +22,8 @@ KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
 }
 
 void QLKhachHang::suaThongTin(string ID) {
-    Node<KhachHang> *p = DSKH.begin()->next;
-    while(p != DSKH.begin()) {
+    Node<KhachHang> *p = DSKH.begin();
+    while(p != DSKH.end()) {
         if(p->data.getIDKhachHang() == ID) {
             p->data.suaThongTin();
             return;
