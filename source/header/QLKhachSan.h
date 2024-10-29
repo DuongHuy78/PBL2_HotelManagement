@@ -14,7 +14,7 @@ class QLKhachSan {
     QLDatPhong QLDP;
     QLLoaiPhong QLLP;
     QLPhong QLP;
-    role_value role = UNDEFINED;    
+    role_value role = UNDEFINED_ROLE;    
     NhanVien nhanVien;
     QuanLi quanLi;     
 public:

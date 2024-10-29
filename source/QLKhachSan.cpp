@@ -10,27 +10,53 @@ QLKhachSan::~QLKhachSan() {
 }
 
 void QLKhachSan::inputTaiKhoan(string path) {
-    // Này phải viết hàm đọc dữ liệu từ file, nhưng mà không ai viết nên t thêm chay
-
-    TaiKhoan account("100001", "nguyennhatking", "12345678");
-    TaiKhoan account2("000001", "qlnguyennhatking", "12345678");
-    TaiKhoan account3("200001", "nvnguyennhatking", "12345678");
-
-    quanLi.setIDQuanLi("000001");
-
-    nhanVien.setIDNhanVien("200001");
-
-    time_t ngaySinh = Utils::stringToDate("2005-01-01");
-    KhachHang newUser("100001", "nguyen nhat hoang", ngaySinh, "0905123456", true);
-    this->QLKH.themKhachHang(newUser);
-    
-    this->QLTK.themTaiKhoan(account);
-    this->QLTK.themTaiKhoan(account2);
-    this->QLTK.themTaiKhoan(account3);
+    ifstream fi(path);
+    if(!fi.is_open()) {
+        cout << "Không thể đọc file::" << path << endl;
+    }
+    int index = 0;
+    string line, username, password, ID;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        username = Utils::getSubstringUntilX(line, index, ',');
+        password = Utils::getSubstringUntilX(line, index, ',');
+        ID       = Utils::getSubstringUntilX(line, index, '\n');
+        TaiKhoan newTaiKhoan(ID, username, password);
+        QLTK.themTaiKhoan(newTaiKhoan);
+        role_value role = newTaiKhoan.getRole();
+        if(role == NHANVIEN) {
+            nhanVien.setIDNhanVien(ID);
+        } 
+        else if(role == QUANLI) {
+            quanLi.setIDQuanLi(ID);
+        }
+        index = 0;
+    }  
 }
 
-void QLKhachSan::inputKhachHang(string) {
-
+void QLKhachSan::inputKhachHang(string path) {
+ifstream fi(path);
+    if(!fi.is_open()) {
+        cout << "Không thể đọc file::" << path << endl;
+    }
+    int index = 0;
+    string line, ID, name, birthday, phone, gender;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        ID       = Utils::getSubstringUntilX(line, index, ',');
+        name     = Utils::getSubstringUntilX(line, index, ',');
+        birthday = Utils::getSubstringUntilX(line, index, ',');
+        phone    = Utils::getSubstringUntilX(line, index, ',');
+        gender   = Utils::getSubstringUntilX(line, index, '\n');
+        gender_value genVal;
+        if(gender == "Nam") genVal = NAM;
+        else if(gender == "Nu") genVal = NU;
+        else genVal = UNDEFINED_GENDER;
+        KhachHang newKhachHang(ID, name, Utils::stringToDate(birthday), phone, genVal);
+        index = 0;
+    }  
 }
 
 void QLKhachSan::inputLoaiPhong(string) {
@@ -88,5 +114,5 @@ NguoiDung *QLKhachSan::dangNhap(string username, string password) {
 }
 
 void QLKhachSan::dangXuat() {
-    role = UNDEFINED;
+    role = UNDEFINED_ROLE;
 }

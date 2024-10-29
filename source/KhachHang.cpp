@@ -5,9 +5,9 @@ KhachHang::KhachHang() {
     hoTen = "";
     ngaySinh = 0;
     soDienThoai = "";
-    gioiTinh = false;
+    gioiTinh = UNDEFINED_GENDER;
 }
-KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string soDienThoai, bool gioiTinh) {
+KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string soDienThoai, gender_value gioiTinh) {
     this->IDKhachHang = IDKhachHang;
     this->hoTen = hoTen;
     this->ngaySinh = ngaySinh;
@@ -64,7 +64,7 @@ void KhachHang::setSoDienThoai(string soDienThoai) {
     this->soDienThoai = soDienThoai;
 }
 
-void KhachHang::setGioiTinh(bool gioiTinh) {
+void KhachHang::setGioiTinh(gender_value gioiTinh) {
     this->gioiTinh = gioiTinh;
 } 
 string KhachHang::nhapNgaySinh() {
@@ -132,6 +132,7 @@ void KhachHang::menuSuaThongTin(){        //in menu sửa thông tin
     cout << "Hay nhap lua chon: ";
 }
 void KhachHang::suaThongTin() {
+    int gender = 0;
     int choice;          //lựa chọn
     string temp;            //biến tạm
     while (true) {
@@ -167,7 +168,9 @@ void KhachHang::suaThongTin() {
             case 5:
                 cout << "Nhap gioi tinh moi (Nam nhap 0, Nu nhap 1): ";
                 temp = Utils::nhap(1, 2);           //giới tính có 1 ký tự
-                this->setGioiTinh(Utils::stringToInt(temp));
+                gender = Utils::stringToInt(temp);
+                if(gender == 0) this->setGioiTinh(NAM);
+                else if(gender == 1) this->setGioiTinh(NU);
                 system("clear");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;
                 break;
