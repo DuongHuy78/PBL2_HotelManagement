@@ -15,12 +15,13 @@ using namespace std;
 
 
 enum role_value {
-    UNDEFINED = -1,
+    UNDEFINED_ROLE = -1,
     KHACHHANG,
     NHANVIEN,
     QUANLI,
 };    
-enum gioiTinh {
+enum gender_value {
+    UNDEFINED_GENDER = -1,
     NAM,
     NU,
 };
@@ -156,6 +157,18 @@ public:
             cout << endl;
         }
         return temp;
+    }
+
+    static string getSubstringUntilX(const string &s, int &pos, char x) {
+        string substring = "";
+        for(int i = pos; i < s.size(); ++i) {
+            if(s[i] == x) {
+                pos = i + 1;
+                break;
+            }
+            substring += s[i];
+        }
+        return substring;
     }
     // add utils function here . . . 
 };
