@@ -13,17 +13,18 @@ void QLKhachHang::themKhachHang(KhachHang kh) {
 }
 
 KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
-    Node<KhachHang> *p = DSKH.begin()->next;
-    while(p != DSKH.begin()) {
-        if(p->data.getIDKhachHang() == ID) return &p->data;
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    while(p != DSKH.getHead()) {
+        if(p->data.getIDKhachHang() == ID) 
+            return &p->data;
         p = p->next;
     }
     return NULL;
 }
 
 void QLKhachHang::suaThongTin(string ID) {
-    Node<KhachHang> *p = DSKH.begin()->next;
-    while(p != DSKH.begin()) {
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    while(p != DSKH.getHead()) {
         if(p->data.getIDKhachHang() == ID) {
             p->data.suaThongTin();
             return;
@@ -34,8 +35,8 @@ void QLKhachHang::suaThongTin(string ID) {
 
 string QLKhachHang::getMaxIDKhachHang() {
     string IDKhachHang;
-    Node<KhachHang> *p = DSKH.begin()->next;
-    if(p->prev == p) {
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    if(p == DSKH.getHead()) {
         IDKhachHang = "100000";    //số đầu tên là chia đối tượng kh, nhân viên,...
     }
     else{
@@ -61,8 +62,8 @@ string QLKhachHang::taoIDKhachHang() {        //tạo ID khách hàng bằng cá
 }
 
 void QLKhachHang::xoaKhachHang(KhachHang *kh) {
-    Node<KhachHang> *p = DSKH.begin()->next;
-    while(p != DSKH.begin()) {
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    while(p != DSKH.getHead()) {
         if(&p->data == kh) {
             DSKH.remove(p);
             return;

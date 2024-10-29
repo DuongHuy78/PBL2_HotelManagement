@@ -12,16 +12,16 @@ QLKhachSan::~QLKhachSan() {
 void QLKhachSan::inputTaiKhoan(string path) {
     // Này phải viết hàm đọc dữ liệu từ file, nhưng mà không ai viết nên t thêm chay
 
-    TaiKhoan account("U-00001", "nguyennhatking", "12345678");
-    TaiKhoan account2("M-00001", "qlnguyennhatking", "12345678");
-    TaiKhoan account3("S-00001", "nvnguyennhatking", "12345678");
+    TaiKhoan account("100001", "nguyennhatking", "12345678");
+    TaiKhoan account2("000001", "qlnguyennhatking", "12345678");
+    TaiKhoan account3("200001", "nvnguyennhatking", "12345678");
 
-    quanLi.setIDQuanLi("M-00001");
+    quanLi.setIDQuanLi("000001");
 
-    nhanVien.setIDNhanVien("S-00001");
+    nhanVien.setIDNhanVien("200001");
 
     time_t ngaySinh = Utils::stringToDate("2005-01-01");
-    KhachHang newUser("U-00001", "nguyen nhat hoang", ngaySinh, "0905123456", true);
+    KhachHang newUser("100001", "nguyen nhat hoang", ngaySinh, "0905123456", true);
     this->QLKH.themKhachHang(newUser);
     
     this->QLTK.themTaiKhoan(account);
