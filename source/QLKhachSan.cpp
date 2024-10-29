@@ -54,7 +54,8 @@ ifstream fi(path);
         if(gender == "Nam") genVal = NAM;
         else if(gender == "Nu") genVal = NU;
         else genVal = UNDEFINED_GENDER;
-        KhachHang newKhachHang(ID, name, Utils::stringToDate(birthday), phone, genVal);
+        KhachHang newKhachHang(ID, name, Utils::stringToDate(Utils::trim(birthday)), phone, genVal);
+        QLKH.themKhachHang(newKhachHang);
         index = 0;
     }  
 }
