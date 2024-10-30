@@ -188,9 +188,9 @@ void KhachHang::suaThongTin() {
 void KhachHang::work() {
     cout << "ID Khach Hang: " << this->IDKhachHang << endl;
     cout << "Ho Ten: " << this->hoTen << endl;
-    cout << "Ngay Sinh: " << this->ngaySinh << endl;
+    cout << "Ngay Sinh: " << Utils::dateToString(this->ngaySinh) << endl;
     cout << "So Dien Thoai: " << this->soDienThoai << endl;
-    cout << "Gioi Tinh: " << this->gioiTinh << endl;
+    cout << "Gioi Tinh: " << Utils::genderToString(this->gioiTinh) << endl;
 }
 
 void KhachHang::huyDatPhong(string IDDatPhong) {
