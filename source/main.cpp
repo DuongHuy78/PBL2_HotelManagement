@@ -4,8 +4,8 @@ int main() {
     QLKhachSan db;
     db.inputTaiKhoan("data/tai_khoan.txt");
     db.inputKhachHang("data/khach_hang.txt");
-    db.inputLoaiPhong("data/LoaiPhong.txt");
-    db.inputPhong("data/Phong.txt");
+    db.inputLoaiPhong("data/loaiphong.txt");
+    db.inputPhong("data/phong.txt");
     db.inputDatPhong("data/DatPhong.txt");
     db.work();
     return 0;

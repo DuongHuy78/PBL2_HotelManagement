@@ -33,6 +33,7 @@ void QLKhachSan::inputTaiKhoan(string path) {
         }
         index = 0;
     }  
+    fi.close();
 }
 
 void QLKhachSan::inputKhachHang(string path) {
@@ -50,22 +51,19 @@ ifstream fi(path);
         birthday = Utils::getSubstringUntilX(line, index, ',');
         phone    = Utils::getSubstringUntilX(line, index, ',');
         gender   = Utils::getSubstringUntilX(line, index, '\n');
-        gender_value genVal;
-        if(gender == "Nam") genVal = NAM;
-        else if(gender == "Nu") genVal = NU;
-        else genVal = UNDEFINED_GENDER;
-        KhachHang newKhachHang(ID, name, Utils::stringToDate(Utils::trim(birthday)), phone, genVal);
+        KhachHang newKhachHang(ID, name, Utils::stringToDate(Utils::trim(birthday)), phone, Utils::stringToGender(gender));
         QLKH.themKhachHang(newKhachHang);
         index = 0;
     }  
+    fi.close();
 }
 
-void QLKhachSan::inputLoaiPhong(string) {
-
+void QLKhachSan::inputLoaiPhong(string path) {
+    //QLLP.AddRangeLoaiPhong(path);
 }
 
-void QLKhachSan::inputPhong(string) {
-
+void QLKhachSan::inputPhong(string path) {
+    //QLP.AddRangePhong(path);
 }
 
 void QLKhachSan::inputDatPhong(string) {
