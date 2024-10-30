@@ -25,6 +25,10 @@ enum gender_value {
     NAM,
     NU,
 };
+
+/**
+ * Chứa các hàm tiện ích
+ */
 class Utils {
 public:
     static string intToString(int n) {
@@ -47,12 +51,12 @@ public:
             if(timeinfo == NULL) {
                 throw runtime_error("Loi: khong the lay timeinfo.");
             }
-            buffer += intToString(timeinfo->tm_year + 1900) + '-' 
-                + intToString(timeinfo->tm_mon + 1) + '-'
-                + intToString(timeinfo->tm_mday) + ' '
-                + intToString(timeinfo->tm_hour) + ':'
+            buffer += intToString(timeinfo->tm_hour) + ':'
                 + intToString(timeinfo->tm_min) + ':'
-                + intToString(timeinfo->tm_sec);
+                + intToString(timeinfo->tm_sec) + ' '
+                + intToString(timeinfo->tm_mday) + '/'
+                + intToString(timeinfo->tm_mon + 1) + '/'
+                + intToString(timeinfo->tm_year + 1900);
         }
         catch (const runtime_error &e){
             cout << e.what() << endl;
@@ -65,7 +69,7 @@ public:
     }
 
     /**
-     * Định dạng của chuỗi s: "YYYY-MM-DD HH:MM:SS"
+     * Định dạng của chuỗi s: "HH-MM-SS DD/MM/YYYY"
      */
     static time_t stringToTime(string s) {
         struct tm timeinfo;
@@ -73,12 +77,12 @@ public:
             if(s.size() != 19) {
                 throw runtime_error("Loi: do dai thoi gian khong hop le.");
             }
-            timeinfo.tm_year = stringToInt(s.substr(0, 4)) - 1900;
-            timeinfo.tm_mon = stringToInt(s.substr(5, 2)) - 1;
-            timeinfo.tm_mday = stringToInt(s.substr(8, 2));
-            timeinfo.tm_hour = stringToInt(s.substr(11, 2));
-            timeinfo.tm_min = stringToInt(s.substr(14, 2));
-            timeinfo.tm_sec = stringToInt(s.substr(17, 2));
+            timeinfo.tm_hour = stringToInt(s.substr(0, 2));
+            timeinfo.tm_min = stringToInt(s.substr(3, 2));
+            timeinfo.tm_sec = stringToInt(s.substr(6, 2));
+            timeinfo.tm_mday = stringToInt(s.substr(9, 2));     
+            timeinfo.tm_mon = stringToInt(s.substr(12, 2)) - 1;    
+            timeinfo.tm_year = stringToInt(s.substr(15, 4)) - 1900;            
         }
         catch (const runtime_error& e) {
             cout << e.what() << endl;
@@ -96,9 +100,9 @@ public:
             if(timeinfo == NULL) {
                 throw runtime_error("Loi: khong the lay timeinfo.");
             }
-            buffer += intToString(timeinfo->tm_year + 1900) + '-' 
-                + intToString(timeinfo->tm_mon + 1) + '-'
-                + intToString(timeinfo->tm_mday);
+            buffer += intToString(timeinfo->tm_mday) + '/'
+                + intToString(timeinfo->tm_mon + 1)+ '/'
+                + intToString(timeinfo->tm_year + 1900);
         }
         catch (const runtime_error &e){
             cout << e.what() << endl;
@@ -111,7 +115,7 @@ public:
     }
 
     /**
-     * Định dạng của chuỗi s: "DD-MM-YYYY"
+     * Định dạng của chuỗi s: "DD/MM/YYYY"
      */
     static time_t stringToDate(string s) {
         struct tm timeinfo;
@@ -119,9 +123,12 @@ public:
             if(s.size() != 10) {
                 throw runtime_error("Loi: do dai thoi gian khong hop le.");
             }
-            timeinfo.tm_year = stringToInt(s.substr(0, 4)) - 1900;
-            timeinfo.tm_mon = stringToInt(s.substr(5, 2)) - 1;
-            timeinfo.tm_mday = stringToInt(s.substr(8, 2));
+            timeinfo.tm_mday = stringToInt(s.substr(0, 2));
+            timeinfo.tm_mon = stringToInt(s.substr(3, 2)) - 1;
+            timeinfo.tm_year = stringToInt(s.substr(6, 4)) - 1900;
+            timeinfo.tm_hour = 0;
+            timeinfo.tm_min = 0;
+            timeinfo.tm_sec = 0;
         }
         catch (const runtime_error& e) {
             cout << e.what() << endl;
@@ -200,6 +207,7 @@ public:
         }
         else return "";
     }
+
     const string chuanHoaTen(const string& ten) {
         string tenChuanHoa;
         bool vietHoa = true;
@@ -216,6 +224,32 @@ public:
             }
         }
     return tenChuanHoa; 
+    }
+
+    static string toLower(const string &s) {
+        string newS = "";
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] >= 'A' && s[i] <= 'Z') {
+                newS += s[i] - 'A' + 'a';
+            }
+            else {
+                newS += s[i];
+            }
+        }
+        return newS;
+    }
+
+    static string genderToString(gender_value gender) {
+        if(gender == NAM) return "Nam";
+        if(gender == NU) return "Nu";
+        return "Undefined";
+    }
+
+    static gender_value stringToGender(string s) {
+        string tmp = trim(toLower(s));
+        if(tmp == "nam") return NAM;
+        if(tmp == "nu") return NU;
+        return UNDEFINED_GENDER;
     }
 
     // add utils function here . . . 
