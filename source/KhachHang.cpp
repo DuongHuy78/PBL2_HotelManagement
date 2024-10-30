@@ -149,6 +149,7 @@ void KhachHang::suaThongTin() {
             case 2:
                 cout << "Nhap ho ten moi: ";
                 temp = Utils::nhap(2, MAX_NAME+1);
+                Utils::chuanHoaTen(temp);
                 this->setHoTen(temp);
                 system("clear");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;

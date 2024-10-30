@@ -200,6 +200,24 @@ public:
         }
         else return "";
     }
+    const string chuanHoaTen(const string& ten) {
+        string tenChuanHoa;
+        bool vietHoa = true;
+
+        for (char c : ten) {
+            if (c == ' ') { // Kiểm tra khoảng trắng
+                vietHoa = true;
+                tenChuanHoa += c;
+            } else if (vietHoa) {
+                tenChuanHoa += toupper(c);
+                vietHoa = false;
+            } else {
+                tenChuanHoa += tolower(c);
+            }
+        }
+    return tenChuanHoa; 
+    }
+
     // add utils function here . . . 
 };
 #endif
