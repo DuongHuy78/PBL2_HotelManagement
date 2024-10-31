@@ -80,5 +80,11 @@ void DatPhong::setDonGia(int) {
 
 
 void DatPhong::xemThongTin() {
-
+    cout << maDatPhong << endl;
+    cout << maPhong << endl;
+    cout << IDKhachHang << endl;
+    cout << Utils::dateToString(ngayNhan) << endl;
+    cout << Utils::dateToString(ngayTra) << endl;
+    cout << soLuongKhach << endl;
+    cout << donGia << endl;
 }

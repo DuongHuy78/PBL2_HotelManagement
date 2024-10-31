@@ -9,6 +9,7 @@
 #include <cctype>
 #include <conio.h>
 #include <iomanip>
+#include <set>
 
 #define MAX_NAME 50
 using namespace std;

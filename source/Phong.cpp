@@ -30,3 +30,8 @@ void Phong::setMaPhong(string MP) {
 void Phong::setLoaiPhong(string LP) {
     this->loaiPhong = LP;
 }
+
+void Phong::thongTinPhong() {
+    cout << maPhong << endl;
+    cout << loaiPhong << endl;
+}
