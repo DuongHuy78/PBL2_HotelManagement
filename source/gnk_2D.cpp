@@ -816,8 +816,10 @@ void Gnk_Textbox::display() {
 }
 
 void Gnk_Textbox_password::display() {
+	std::string newText = this->text;
 	for(int i = 0; i < this->text.size(); ++i) {
 		this->text[i] = '*';
 	}
 	Gnk_Textbox::display();
+	this->text = newText;
 }
