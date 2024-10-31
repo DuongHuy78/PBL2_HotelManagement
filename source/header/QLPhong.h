@@ -14,5 +14,6 @@ public:
     void suaThongTin(string);
 
     Phong timPhong(time_t, time_t);
+    LinkedList<Phong> &getDanhSachPhong();
 };
 #endif

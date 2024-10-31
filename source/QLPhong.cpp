@@ -60,3 +60,7 @@ void QLPhong::suaThongTin(string) {
 Phong QLPhong::timPhong(time_t, time_t) {
 
 }
+
+LinkedList<Phong> &QLPhong::getDanhSachPhong() {
+    return this->DSP;
+}

@@ -13,5 +13,7 @@ public:
     void themDatPhong(DatPhong);
     void xoaDatPhong(DatPhong);
     void suaThongTinDatPhong(string);
+
+    LinkedList<DatPhong> &getDanhSachDatPhong();
 };
 #endif

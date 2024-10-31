@@ -37,7 +37,7 @@ void QLKhachSan::inputTaiKhoan(string path) {
 }
 
 void QLKhachSan::inputKhachHang(string path) {
-ifstream fi(path);
+    ifstream fi(path);
     if(!fi.is_open()) {
         cout << "Không thể đọc file::" << path << endl;
     }
@@ -66,8 +66,30 @@ void QLKhachSan::inputPhong(string path) {
     //QLP.AddRangePhong(path);
 }
 
-void QLKhachSan::inputDatPhong(string) {
-
+void QLKhachSan::inputDatPhong(string path) {
+    ifstream fi(path);
+    if(!fi.is_open()) {
+        cout << "Không thể đọc file::" << path << endl;
+    }
+    int index = 0;
+    string line, ID, name, birthday, phone, gender;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        string maDatPhong   = Utils::getSubstringUntilX(line, index, ',');
+        string maPhong      = Utils::getSubstringUntilX(line, index, ',');
+        string IDKhachHang  = Utils::getSubstringUntilX(line, index, ',');
+        string ngayNhan     = Utils::getSubstringUntilX(line, index, ',');
+        string ngayTra      = Utils::getSubstringUntilX(line, index, ',');
+        string soLuongKhach = Utils::getSubstringUntilX(line, index, ',');
+        string donGia       = Utils::getSubstringUntilX(line, index, '\n');
+        DatPhong newDatPhong(maDatPhong, maPhong, IDKhachHang, 
+        Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), 
+        Utils::stringToInt(soLuongKhach), Utils::stringToInt(donGia));
+        QLDP.themDatPhong(newDatPhong);
+        index = 0;
+    }  
+    fi.close();
 }
 
 
@@ -114,4 +136,23 @@ NguoiDung *QLKhachSan::dangNhap(string username, string password) {
 
 void QLKhachSan::dangXuat() {
     role = UNDEFINED_ROLE;
+}
+
+void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate) {
+    // LinkedList<Phong> &DSP = QLP.getDanhSachPhong();
+    // int size = DSP.getSize();
+    // string NA[size] = {}; // Phòng đang được đặt
+    cout << "check in date: " << Utils::dateToString(checkInDate) << endl;
+    cout << "check out date: " << Utils::dateToString(checkOutDate) << endl;
+    LinkedList<DatPhong> &DSDP = QLDP.getDanhSachDatPhong();
+    Node<DatPhong> *p2 = DSDP.begin();
+    while(p2 != DSDP.end()) {
+        time_t ngayNhan = p2->data.getNgayNhan();
+        time_t ngayTra = p2->data.getNgayTra();        
+        if(!(ngayTra < checkInDate || checkOutDate < ngayNhan)) {
+            cout << Utils::dateToString(ngayNhan) << " " << Utils::dateToString(ngayTra) << endl;
+            cout << p2->data.getMaPhong();
+        }        
+        p2 = p2->next;
+    }
 }
