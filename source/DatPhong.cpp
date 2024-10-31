@@ -3,8 +3,14 @@ DatPhong::DatPhong() {
 
 }
 
-DatPhong::DatPhong(string, string, string, time_t, time_t, int, int) {
-
+DatPhong::DatPhong(string MDP, string MP, string MKH, time_t NNhan, time_t NTra, int SL, int Gia) {
+    this->maDatPhong = MDP;
+    this->maPhong = MP;
+    this->IDKhachHang = MKH;
+    this->ngayNhan = NNhan;
+    this->ngayTra = NTra;
+    this->soLuongKhach = SL;
+    this->donGia = Gia;
 }
 
 DatPhong::DatPhong(const DatPhong &) {
@@ -74,5 +80,11 @@ void DatPhong::setDonGia(int) {
 
 
 void DatPhong::xemThongTin() {
-
+    cout << maDatPhong << endl;
+    cout << maPhong << endl;
+    cout << IDKhachHang << endl;
+    cout << Utils::dateToString(ngayNhan) << endl;
+    cout << Utils::dateToString(ngayTra) << endl;
+    cout << soLuongKhach << endl;
+    cout << donGia << endl;
 }

@@ -4,6 +4,7 @@
 
 template <class T> class LinkedList {
     Node<T>* head;
+    int size;
 public:
     LinkedList();
     ~LinkedList();
@@ -11,6 +12,7 @@ public:
     void remove(Node<T>* node);
     void display();
     Node<T>* getHead();
+    int getSize();
     // Phương thức duyệt
     Node<T>* begin();   // Trả về head->next
     Node<T>* end();     // Trả về head
@@ -20,6 +22,7 @@ template <class T> LinkedList<T>::LinkedList() {
     this->head = new Node<T>;
     this->head->next = this->head;
     this->head->prev = this->head;
+    this->size = 0;
 }
 
 template <class T> LinkedList<T>::~LinkedList() {
@@ -39,12 +42,14 @@ template <class T> void LinkedList<T>::add(T data) {
     newNode->prev = this->head->prev;
     this->head->prev->next = newNode;
     this->head->prev = newNode;
+    ++this->size;
 }
 
 template <class T> void LinkedList<T>::remove(Node<T>* node) {
     node->prev->next = node->next;
     node->next->prev = node->prev;
     delete node;
+    --this->size;
 }
 
 template <class T> void LinkedList<T>::display() {
@@ -65,6 +70,10 @@ template <class T> Node<T>* LinkedList<T>::end() {
 
 template <class T> Node<T>* LinkedList<T>::getHead() {
     return this->head;
+}
+
+template <class T> int LinkedList<T>::getSize() {
+    return this->size;
 }
 
 #endif

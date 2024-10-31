@@ -18,3 +18,7 @@ void QLDatPhong::xoaDatPhong(DatPhong) {
 void QLDatPhong::suaThongTinDatPhong(string) {
 
 }
+
+LinkedList<DatPhong> &QLDatPhong::getDanhSachDatPhong() {
+    return this->DSDP;
+}

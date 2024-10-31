@@ -16,5 +16,7 @@ public:
 
     void setMaPhong(string);
     void setLoaiPhong(string);
+
+    void thongTinPhong();
 };
 #endif

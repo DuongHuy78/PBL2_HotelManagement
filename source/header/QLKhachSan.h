@@ -36,5 +36,12 @@ public:
     void work();
     NguoiDung *dangNhap(string, string);
     void dangXuat();
+
+    /**
+     * Duyệt qua 'danh sách đặt phòng' kiểm tra các phòng đang được đặt
+     * Từ đó đặt trạng thái phòng của các phòng đó là bận 
+     * Sau đó in ra danh sách những phòng không có trạng thái bận
+     */
+    void roomAvailability(time_t, time_t);
 };
 #endif
