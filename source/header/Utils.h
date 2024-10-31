@@ -209,7 +209,7 @@ public:
         else return "";
     }
 
-    const string chuanHoaTen(const string& ten) {
+    static string chuanHoaTen(const string& ten) {
         string tenChuanHoa;
         bool vietHoa = true;
 
