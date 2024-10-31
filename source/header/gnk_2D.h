@@ -143,22 +143,43 @@ public:
 		float, float, std::string, std::string,
 		float, Gnk_Color, text_align,
 		void (*hover)(Gnk_Textbox&) = NULL);
-	void display();
+	virtual void display();
 	float getWidth();
 	float getHeight();
 	void select();
 };
 
+class Gnk_Textbox_password: public Gnk_Textbox {
+public:
+	Gnk_Textbox_password(Gnk_Point, Gnk_Point, Gnk_Color, 
+		std::string, float, Gnk_Color, 
+		float, float, std::string, std::string,
+		float, Gnk_Color, text_align,
+		void (*hover)(Gnk_Textbox&) = NULL);
+	void display();
+};
+
 class Gnk_Frame {
 	void (*Draw)();
 public:
-	std::vector<Gnk_Button> buttonList;
-	std::vector<Gnk_Textbox> textboxList;
+	std::vector<Gnk_Button *> buttonList;
+	std::vector<Gnk_Textbox *> textboxList;
 	Gnk_Frame();
+	~Gnk_Frame();
 	Gnk_Frame(void (*Draw)());
 	void display();
-	void addButton(Gnk_Button);
-	void addTextbox(Gnk_Textbox);
+
+	/**
+	 * Địa chỉ của đối tượng nhận vào phải là 
+	 * địa chỉ của đối tượng được khai báo động
+	 */
+	void addButton(Gnk_Button *);
+
+	/**
+	 * Địa chỉ của đối tượng nhận vào phải là 
+	 * địa chỉ của đối tượng được khai báo động
+	 */
+	void addTextbox(Gnk_Textbox *);
 	void buttonDisplay();
 	void textboxDisplay();
 };

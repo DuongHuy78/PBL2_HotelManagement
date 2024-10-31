@@ -173,9 +173,33 @@ void Gnk_Textbox::select() {
 	if (select_effect != NULL) select_effect(*this);
 }
 
+// Textbox Password Definition
+Gnk_Textbox_password::Gnk_Textbox_password(Gnk_Point A, Gnk_Point B, Gnk_Color color, 
+	std::string tFont, float fontSize, Gnk_Color tColor, 
+	float pX, float pY, std::string placeholder, std::string plFont,
+	float plFontSize, Gnk_Color plColor, text_align textAlign,
+	void (*hover)(Gnk_Textbox&))
+	:Gnk_Textbox(A, B, color, tFont, fontSize, tColor, pX, pY, placeholder, plFont, plFontSize, plColor, textAlign, hover) {
+
+}
+
 // Frame Definition
 Gnk_Frame::Gnk_Frame() {
 	this->Draw = NULL;
+}
+
+Gnk_Frame::~Gnk_Frame() {
+	while(!buttonList.empty()) {
+		Gnk_Button *p = buttonList.back();
+		delete p;
+		buttonList.pop_back();
+	}
+
+	while(!textboxList.empty()) {
+		Gnk_Textbox *p = textboxList.back();
+		delete p;
+		textboxList.pop_back();
+	}
 }
 
 Gnk_Frame::Gnk_Frame(void (*Draw)()) {
@@ -186,23 +210,23 @@ void Gnk_Frame::display() {
 	if (Draw != NULL) this->Draw();
 }
 
-void Gnk_Frame::addButton(Gnk_Button B) {
+void Gnk_Frame::addButton(Gnk_Button *B) {
 	buttonList.push_back(B);
 }
 
-void Gnk_Frame::addTextbox(Gnk_Textbox T) {
+void Gnk_Frame::addTextbox(Gnk_Textbox *T) {
 	textboxList.push_back(T);
 }
 
 void Gnk_Frame::buttonDisplay() {
 	for (auto &it:buttonList) {
-		it.display();
+		it->display();
 	}
 }
 
 void Gnk_Frame::textboxDisplay() {
 	for (auto &it:textboxList) {
-		it.display();
+		it->display();
 	}
 }
 
@@ -237,12 +261,12 @@ double gnk_Event_Timeout = 0.5;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
 	ypos = gnk_Height - ypos;
 	for (auto& it : gnk_Current_Frame->buttonList) {
-		if (xpos > it.A.x && xpos < it.B.x &&
-			ypos > it.A.y && ypos < it.B.y) {
-			it.onHover = true;
+		if (xpos > it->A.x && xpos < it->B.x &&
+			ypos > it->A.y && ypos < it->B.y) {
+			it->onHover = true;
 		}
 		else {
-			it.onHover = false;
+			it->onHover = false;
 		}
 	}
 }
@@ -253,19 +277,19 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 		glfwGetCursorPos(window, &xpos, &ypos);
 		ypos = gnk_Height - ypos;
 		for (auto &it:gnk_Current_Frame->textboxList) {
-			if (xpos > it.A.x && xpos < it.B.x &&
-				ypos > it.A.y && ypos < it.B.y) {
-				it.active = true;
+			if (xpos > it->A.x && xpos < it->B.x &&
+				ypos > it->A.y && ypos < it->B.y) {
+				it->active = true;
 			}
 			else {
-				it.active = false;
+				it->active = false;
 			}
 		}
 
 		for (auto &it: gnk_Current_Frame->buttonList) {
-			if (xpos > it.A.x && xpos < it.B.x && 
-				ypos > it.A.y && ypos < it.B.y) {
-				it.process();
+			if (xpos > it->A.x && xpos < it->B.x && 
+				ypos > it->A.y && ypos < it->B.y) {
+				it->process();
 				return;
 			}
 		}
@@ -274,8 +298,8 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 
 void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 	for (auto& it : gnk_Current_Frame->textboxList) {
-		if (it.active == true) {
-			it.text += (char)codepoint;
+		if (it->active == true) {
+			it->text += (char)codepoint;
 		}
 	}
 }
@@ -285,9 +309,9 @@ void gnk_Key_Callback(GLFWwindow* window, int key, int scancode, int action, int
 		double currentTime = glfwGetTime();
 		if (currentTime - gnk_Backspace_Last_Time >= gnk_Backspace_Speed) {
 			for (auto& it : gnk_Current_Frame->textboxList) {
-				if (it.active == true) {
-					if (!it.text.empty()) {
-						it.text.pop_back();
+				if (it->active == true) {
+					if (!it->text.empty()) {
+						it->text.pop_back();
 					}
 				}
 			}
@@ -789,4 +813,11 @@ void Gnk_Textbox::display() {
 		}
 		select();
 	}
+}
+
+void Gnk_Textbox_password::display() {
+	for(int i = 0; i < this->text.size(); ++i) {
+		this->text[i] = '*';
+	}
+	Gnk_Textbox::display();
 }
