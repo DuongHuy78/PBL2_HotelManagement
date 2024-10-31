@@ -14,51 +14,46 @@ void UI_init() {
 	gnk_Image_List.addImage("user_icon", "image/user_icon.jpg");
 	gnk_Image_List.addImage("password_icon", "image/password_icon.jpg");
 
-	login.addTextbox(
-		Gnk_Textbox(
+	Gnk_Textbox *usernameTextbox = new Gnk_Textbox(
 			Gnk_Point(806.0f, 460.0f), Gnk_Point(1190.0f, 520.0f), 
 			Gnk_Color(255, 255, 255), "helvetica",
 			24.0f, Gnk_Color(17, 17, 17), 15.0f, 10.0f, "username",
 			"helvetica", 24.0f, Gnk_Color(85, 85, 85), GNK_TEXT_LEFT,
 			username_and_password_textbox_select
-		)
-	);
+		);
 
-	login.addTextbox(
-		Gnk_Textbox(
+	Gnk_Textbox_password *passwordTextbox = new Gnk_Textbox_password(
 			Gnk_Point(806.0f, 370.0f), Gnk_Point(1190.0f, 430.0f),
 			Gnk_Color(255, 255, 255), "helvetica",
 			24.0f, Gnk_Color(17, 17, 17), 15.0f, 10.0f, "password",
 			"helvetica", 24.0f, Gnk_Color(85, 85, 85), GNK_TEXT_LEFT,
 			username_and_password_textbox_select
-		)
-	);
+		);
 
-	login.addButton(
-		Gnk_Button(
+	Gnk_Button *loginButton = new Gnk_Button(
 			Gnk_Point(1030.0f, 240.0f), Gnk_Point(1190.0f, 300.0f), 
 			Gnk_Color(90, 100, 147), "Login", "helvetica-bold",
 			24.0f, Gnk_Color(255, 255, 255), 15.0f, 10.0f, 30.0f, login_button_clicked,
 			login_button_hover
-		)
-	);
+		);
 
-	login.addButton(
-		Gnk_Button(
+	Gnk_Button *forgotPassButton = new Gnk_Button(
 			Gnk_Point(740.0f, 250.0f), Gnk_Point(990.0f, 284.0f),
 			Gnk_Color(255, 255, 255), "Forgot your password?", "helvetica",
 			24.0f, Gnk_Color(60, 60, 60), 0.0f, 0.0f, 0.0f, forgot_password_button_clicked,
 			NULL, GNK_TEXT_LEFT
-		)
-	);
+		);
 
-	login.addButton(
-		Gnk_Button(
+	Gnk_Button *signInButton = new Gnk_Button(
 			Gnk_Point(740.0f, 180.0f), Gnk_Point(1200.0f, 214.0f),
 			Gnk_Color(255, 255, 255), "Do not have an account? Sign up", "helvetica",
 			24.0f, Gnk_Color(60, 60, 60), 0.0f, 0.0f, 0.0f, sign_up_button_clicked
-		)
-	);
+		);
+	login.addTextbox(usernameTextbox);
+	login.addTextbox(passwordTextbox);
+	login.addButton(loginButton);
+	login.addButton(forgotPassButton);
+	login.addButton(signInButton);
 }
 void draw_login() {
 	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
@@ -86,8 +81,8 @@ void draw_login() {
 }
 
 void login_button_clicked() {
-	NguoiDung *p = current_Data->dangNhap(gnk_Current_Frame->textboxList[0].text, 
-		gnk_Current_Frame->textboxList[1].text);
+	NguoiDung *p = current_Data->dangNhap(gnk_Current_Frame->textboxList[0]->text, 
+		gnk_Current_Frame->textboxList[1]->text);
 	if(p != NULL) {
 		p->work();
 		frame_num = 0;

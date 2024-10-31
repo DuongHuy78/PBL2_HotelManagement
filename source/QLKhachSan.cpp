@@ -59,7 +59,7 @@ void QLKhachSan::inputKhachHang(string path) {
 }
 
 void QLKhachSan::inputLoaiPhong(string path) {
-    //QLLP.AddRangeLoaiPhong(path);
+    QLLP.AddRangeLoaiPhong(path);
 }
 
 void QLKhachSan::inputPhong(string path) {
@@ -71,8 +71,8 @@ void QLKhachSan::inputDatPhong(string path) {
     if(!fi.is_open()) {
         cout << "Không thể đọc file::" << path << endl;
     }
+    string line;
     int index = 0;
-    string line, ID, name, birthday, phone, gender;
     while(!fi.eof()) {
         getline(fi, line);
         if(line == "") break;
