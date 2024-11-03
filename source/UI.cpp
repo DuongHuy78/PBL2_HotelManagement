@@ -10,7 +10,7 @@ void UI_init() {
 	gnk_Font_List.addFont("helvetica", "font/Helvetica.ttf", 24);
 	gnk_Font_List.addFont("helvetica-bold", "font/Helvetica-Bold.ttf", 48);
 
-	gnk_Image_List.addImage("city_image", "image/danang.jpg");
+	gnk_Image_List.addImage("city_image", "image/hoteldelluna.jpg");
 	gnk_Image_List.addImage("user_icon", "image/user_icon.jpg");
 	gnk_Image_List.addImage("password_icon", "image/password_icon.jpg");
 
@@ -66,7 +66,7 @@ void draw_login() {
 
 	gnk_Set_Object_Color(Gnk_Color(30, 30, 30));
 	gnk_Set_Character_Font("helvetica-bold");
-	gnk_Text("HOTEL MANAGEMENT", Gnk_Point(740.0f, 640.0f), 40.0f);
+	gnk_Text("HOTEL DEL LUNA", Gnk_Point(740.0f, 640.0f), 40.0f);
 
 	gnk_Set_Object_Color(Gnk_Color(60, 60, 60));
 	gnk_Set_Character_Font("helvetica");

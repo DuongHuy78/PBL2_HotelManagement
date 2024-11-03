@@ -31,6 +31,7 @@ public:
     void setSoLuongKhach(int);
     void setDonGia(int);
 
+    void nhapThongTinDatPhong();
     void xemThongTin();
 };
 #endif

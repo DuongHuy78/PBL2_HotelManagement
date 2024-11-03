@@ -11,8 +11,10 @@ public:
     ~QLDatPhong();
 
     void themDatPhong(DatPhong);
-    void xoaDatPhong(DatPhong);
-    void suaThongTinDatPhong(string);
+    void xoaDatPhong(DatPhong *);
+    DatPhong *timKiemDatPhong(string);
+    string getMaxMaDatPhong();
+    string taoMaDatPhong();
 
     LinkedList<DatPhong> &getDanhSachDatPhong();
 };

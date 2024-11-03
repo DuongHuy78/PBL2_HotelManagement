@@ -1,6 +1,6 @@
 #include "./header/NhanVien.h"
 NhanVien::NhanVien() {
-
+    IDNhanVien = "";
 }
 
 NhanVien::~NhanVien() {
@@ -13,6 +13,18 @@ string NhanVien::getIDNhanVien() const {
 
 void NhanVien::setIDNhanVien(string ID) {
     this->IDNhanVien = ID;
+}
+
+void NhanVien::themKhachHang(){
+    KhachHang newKH;
+    newKH.nhapThongTin();
+    this->DSKH.themKhachHang(newKH);
+}
+
+void NhanVien::themDatPhong(){                  ????
+    DatPhong newDP;
+    newDP.nhapThongTin();
+    this->DSDP.themDatPhong(newDP);
 }
 
 void NhanVien::work() {

@@ -7,6 +7,7 @@ class QLKhachHang {
 public:
     QLKhachHang();
     ~QLKhachHang();
+    LinkedList<KhachHang> &getDanhSachKhachHang();
 
     void themKhachHang(KhachHang);
     void suaThongTin(string);

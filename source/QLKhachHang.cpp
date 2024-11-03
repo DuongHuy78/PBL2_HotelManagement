@@ -7,7 +7,9 @@ QLKhachHang::~QLKhachHang() {
 
 }
 
-
+LinkedList<KhachHang> &QLKhachHang::getDSKH() {
+    return this->DSKH;
+}
 void QLKhachHang::themKhachHang(KhachHang kh) {
     DSKH.add(kh);
 }
@@ -45,16 +47,15 @@ string QLKhachHang::getMaxIDKhachHang() {
     return IDKhachHang;
 }
 
-string QLKhachHang::taoIDKhachHang() {        //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
+string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
                                             //chứ ko lưu vào file
     string IDKhachHang;
-    QLKhachHang qlkh;
-    if( qlkh.getMaxIDKhachHang() == "199999") {
+    if( this->getMaxIDKhachHang() == "199999") {
         return "-1";      //đã đạt giới hạn số khách hàng
     }
     else{
-        string head =  qlkh.getMaxIDKhachHang().substr(0, 1);   //lấy số đầu
-        string tail =  qlkh.getMaxIDKhachHang().substr(1);      //lấy số sau
+        string head =  this->getMaxIDKhachHang().substr(0, 1);   //lấy số đầu
+        string tail =  this->getMaxIDKhachHang().substr(1);      //lấy số sau
         int num = stoi(tail) + 1;
         IDKhachHang = head + to_string(num);
     }

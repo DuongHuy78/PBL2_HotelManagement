@@ -26,12 +26,13 @@ public:
     void setSoDienThoai(string);
     void setGioiTinh(gender_value); 
 
-    void suaThongTin();
+                                                                ?? chưa có đặt phòng
     string nhapNgaySinh();
+    string NhapSoDienThoai();
+    void nhapThongTin();
     void menuSuaThongTin();
     void huyDatPhong(string);
-    string taoIDKhachHang();
-    
+    void suaThongTin();
     void work();
 };
 #endif

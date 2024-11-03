@@ -146,30 +146,32 @@ public:
      * 1: Chỉ được nhập số.
      * 2: Chỉ được nhập chữ và khoảng trắng. 
      * 3: Được nhập số, chữ và khoảng trắng.
+     * 4: Được nhập số và ký tự " / ".
      */
     static string nhap(int kytu, int sl) { 
-        string temp = "";
-        int a = 0;
-        char ch;
-        if(kytu == 1 || kytu == 2 || kytu == 3) {
-            while (((ch = getch()) != '\r' && ch != '\n') || a <= 0) {
-                if(((kytu == 1 && isdigit(ch)) ||
-                    (kytu == 2 && (isalpha(ch) || ch == ' ')) ||
-                    (kytu == 3 && (isalpha(ch) || isdigit(ch)))) && a < sl-1) {
-                    cout << ch;
-                    temp += ch;
-                    a++;
-                }
-                else if (ch == '\b' && a > 0) {
-                    cout << "\b \b";
-                    temp.pop_back();
-                    a--;
-                }
+         string temp = "";
+    int a = 0;
+    char ch;
+    if(kytu == 1 || kytu == 2 || kytu == 3 || kytu == 4) {
+        while (((ch = getch()) != '\r' && ch != '\n') || a <= 0) {
+            if(((kytu == 1 && isdigit(ch)) ||
+                (kytu == 2 && (isalpha(ch) || ch == ' ')) ||
+                (kytu == 3 && (isalpha(ch) || isdigit(ch))) ||
+                (kytu == 4 && (isdigit(ch) || ch == '/'))) && a < sl-1) {
+                cout << ch;
+                temp += ch;
+                a++;
             }
-            cout << endl;
+            else if (ch == '\b' && a > 0) {
+                cout << "\b \b";
+                temp.pop_back();
+                a--;
+            }
         }
-        return temp;
+        cout << endl;
     }
+    return temp;
+}
 
     /**
      * Hàm này dùng để lấy chuỗi con từ chuỗi s từ vị trí pos
