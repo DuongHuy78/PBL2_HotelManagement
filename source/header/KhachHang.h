@@ -26,9 +26,6 @@ public:
     void setSoDienThoai(string);
     void setGioiTinh(gender_value); 
 
-                                                                ?? chưa có đặt phòng
-    string nhapNgaySinh();
-    string NhapSoDienThoai();
     void nhapThongTin();
     void menuSuaThongTin();
     void huyDatPhong(string);

@@ -17,5 +17,6 @@ public:
     string taoMaDatPhong();
 
     LinkedList<DatPhong> &getDanhSachDatPhong();
+    DatPhong nhapThongTin();
 };
 #endif

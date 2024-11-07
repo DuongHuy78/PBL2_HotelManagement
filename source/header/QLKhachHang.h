@@ -7,7 +7,6 @@ class QLKhachHang {
 public:
     QLKhachHang();
     ~QLKhachHang();
-    LinkedList<KhachHang> &getDanhSachKhachHang();
 
     void themKhachHang(KhachHang);
     void suaThongTin(string);
@@ -15,5 +14,6 @@ public:
     string getMaxIDKhachHang();         // Lấy ID khách hàng lớn nhat để tạo ID mới
     string taoIDKhachHang();            // Tạo ID khách hàng mới
     KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
+    KhachHang nhapThongTin();
 };
 #endif
