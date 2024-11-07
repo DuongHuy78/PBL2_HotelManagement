@@ -9,6 +9,8 @@
 QLKhachSan::QLKhachSan() {
     UI_init();
     current_Data = this;
+    nhanVien.setDSKH(&QLKH);
+    nhanVien.setDSDP(&QLDP);
 }
 
 QLKhachSan::~QLKhachSan() {}

@@ -7,9 +7,6 @@ QLKhachHang::~QLKhachHang() {
 
 }
 
-LinkedList<KhachHang> &QLKhachHang::getDSKH() {
-    return this->DSKH;
-}
 void QLKhachHang::themKhachHang(KhachHang kh) {
     DSKH.add(kh);
 }
@@ -71,4 +68,33 @@ void QLKhachHang::xoaKhachHang(KhachHang *kh) {
         }
         p = p->next;
     }
+}
+
+KhachHang QLKhachHang::nhapThongTin() {
+    KhachHang newKH;
+    gender_value gender = UNDEFINED_GENDER;
+    string temp;
+    temp = this->taoIDKhachHang();     //tạo ID khách hàng mới
+    newKH.setIDKhachHang(temp);
+
+    cout << "Nhap thong tin khach hang" << endl;
+    cout << "Nhap ho ten : ";
+    temp = Utils::nhap(2, MAX_NAME+1);
+    newKH.setHoTen(Utils::chuanHoaTen(temp));
+    
+    temp = Utils::nhapNgaySinh();
+    newKH.setNgaySinh(Utils::stringToTime(temp));
+
+    cout << "Nhap So dien thoai : ";
+    newKH.setSoDienThoai(Utils::NhapSoDienThoai());
+
+    while(1) {
+        cout << "Nhap gioi tinh (Nam nhap 0, Nu nhap 1): ";
+        temp = Utils::nhap(1, 2);           //giới tính có 1 ký tự
+        if(temp == "0" || temp == "1") break;
+        system("clear");
+        cout << "Nhap sai, vui long nhap lai!" << endl;
+    }
+    gender = Utils::stringToGender(temp);
+    newKH.setGioiTinh(gender);
 }
