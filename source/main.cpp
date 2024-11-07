@@ -6,7 +6,7 @@ int main() {
     db.inputKhachHang("data/khach_hang.txt");
     db.inputLoaiPhong("data/loaiphong.txt");
     db.inputPhong("data/phong.txt");
-    db.inputDatPhong("data/DatPhong.txt");
+    db.inputDatPhong("data/dat_phong.txt");
     db.work();
     return 0;
 }
