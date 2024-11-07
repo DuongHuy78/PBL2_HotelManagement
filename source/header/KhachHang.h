@@ -31,5 +31,6 @@ public:
     void huyDatPhong(string);
     void suaThongTin();
     void work();
+    friend ostream& operator<<(ostream&, const KhachHang&);
 };
 #endif

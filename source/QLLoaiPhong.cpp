@@ -339,7 +339,7 @@ void QLLoaiPhong::QLChoice()
 {
     AddRangeLoaiPhong("./data/loaiphong.txt"); // DSLP
     int Choice;
-    do{
+    do {
         cout << "XIN CHAO QUAN LY CUA DREAM HOTEL: " << endl;
         cout << "Vui Long Nhap Lua Chon: " << endl;
         cout << "1. Xem Danh Sach Loai Phong " << endl;
