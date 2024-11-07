@@ -15,5 +15,6 @@ public:
     string taoIDKhachHang();            // Tạo ID khách hàng mới
     KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
     KhachHang nhapThongTin();
+    void display();
 };
 #endif

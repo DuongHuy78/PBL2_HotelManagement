@@ -77,7 +77,7 @@ void KhachHang::menuSuaThongTin(){        //in menu sửa thông tin
     cout << "Hay nhap lua chon: ";
 }
 void KhachHang::suaThongTin() {
-    int gender = 0;
+    gender_value gender = UNDEFINED_GENDER;
     int choice;          //lựa chọn
     string temp;            //biến tạm
     while (true) {
@@ -89,39 +89,40 @@ void KhachHang::suaThongTin() {
                 temp = Utils::nhap(2, MAX_NAME+1);
                 Utils::chuanHoaTen(temp);
                 this->setHoTen(temp);
-                system("clear");
+                system("cls");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;
                 break;
             case 2:
                 temp = Utils::nhapNgaySinh();
-                this->setNgaySinh(Utils::stringToTime(temp));
-                system("clear");
+                this->setNgaySinh(Utils::stringToDate(temp));
+                system("cls");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;
                 break;
             case 3:
                 cout << "Nhap So dien thoai moi: ";
                 temp = Utils::NhapSoDienThoai();
                 this->setSoDienThoai(temp);
-                system("clear");
+                system("cls");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;
                 break;
             case 4:
-                while(1){
-                    cout << "Nhap gioi tinh (Nam nhap 0, Nu nhap 1): ";
-                    temp = Utils::nhap(1, 2);           //giới tính có 1 ký tự
-                    if(temp == "0" || temp == "1") break;
+                while(1) {
+                    cout << "Nhap gioi tinh (Nam/Nu): ";
+                    temp = Utils::nhap(2, 4);
+                    gender = Utils::stringToGender(temp);
+                    if(gender != UNDEFINED_GENDER) break;
+                    system("cls");
                     cout << "Nhap sai, vui long nhap lai!" << endl;
                 }
-                gender = Utils::stringToInt(temp);
-                if(gender == 0) this->setGioiTinh(NAM);
-                else if(gender == 1) this->setGioiTinh(NU);
-                system("clear");
+                gender = Utils::stringToGender(temp);
+                this->setGioiTinh(gender);
+                system("cls");
                 cout<< "Chinh sua thong tin thanh cong!" << endl;
                 break;
             case 5:
                 return;
             default:
-                system("clear");
+                system("cls");
                 cout << "Lua chon khong hop le." << endl;
                 cout<< "Vui long chon lai!" << endl;
                 break;
@@ -137,6 +138,15 @@ void KhachHang::work() {
     cout << "Ngay Sinh: " << Utils::dateToString(this->ngaySinh) << endl;
     cout << "So Dien Thoai: " << this->soDienThoai << endl;
     cout << "Gioi Tinh: " << Utils::genderToString(this->gioiTinh) << endl;
+}
+
+ostream& operator<<(ostream& out, const KhachHang& kh) {
+    out << "ID Khach Hang: " << kh.IDKhachHang << endl;
+    out << "Ho Ten: " << kh.hoTen << endl;
+    out << "Ngay Sinh: " << Utils::dateToString(kh.ngaySinh) << endl;
+    out << "So Dien Thoai: " << kh.soDienThoai << endl;
+    out << "Gioi Tinh: " << Utils::genderToString(kh.gioiTinh) << endl;
+    return out;
 }
 
 void KhachHang::huyDatPhong(string IDDatPhong) {

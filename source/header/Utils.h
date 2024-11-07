@@ -135,7 +135,7 @@ public:
             cout << e.what() << endl;
         }
         catch (const exception &e) {
-            cout << e.what() << endl;
+            cout << "no duong loi o day" << e.what() << endl;
         }
         return mktime(&timeinfo);
     }

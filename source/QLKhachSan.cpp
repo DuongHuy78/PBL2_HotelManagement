@@ -7,7 +7,7 @@
  * và gán con trỏ current_Data trỏ đến đối tượng hiện tại.
  */
 QLKhachSan::QLKhachSan() {
-    UI_init();
+    // UI_init();
     current_Data = this;
     nhanVien.setDSKH(&QLKH);
     nhanVien.setDSDP(&QLDP);
@@ -148,28 +148,53 @@ void QLKhachSan::inputDatPhong(string path) {
 }
 
 
-void QLKhachSan::outputTaiKhoan(string) {
+void QLKhachSan::outputTaiKhoan(string path) {
+    ofstream fo(path);
+    if(!fo.is_open()) {
+        cout << "Không thể ghi file::" << path << endl;
+    }
+    LinkedList<TaiKhoan> &DSTK = QLTK.getDanhSachTaiKhoan();
+    Node<TaiKhoan> *p = DSTK.begin();
+    while(p != DSTK.end()) {
+        fo << p->data.getUsername() << "," << p->data.getPassword() << "," << p->data.getID() << endl;
+        p = p->next;
+    }
+    fo.close();
+}
+
+void QLKhachSan::outputKhachHang(string path) {
+    ofstream fo(path);
+    if(!fo.is_open()) {
+        cout << "Không thể ghi file::" << path << endl;
+    }
+    LinkedList<KhachHang> &DSKH = QLKH.getDanhSachKhachHang();
+    Node<KhachHang> *p = DSKH.begin();
+    while(p != DSKH.end()) {
+        fo << p->data.getIDKhachHang() << "," << p->data.getTen() << "," << Utils::dateToString(p->data.getNgaySinh()) << "," << p->data.getSDT()
+}
+
+void QLKhachSan::outputLoaiPhong(string path) {
 
 }
 
-void QLKhachSan::outputKhachHang(string) {
+void QLKhachSan::outputPhong(string path) {
 
 }
 
-void QLKhachSan::outputLoaiPhong(string) {
-
-}
-
-void QLKhachSan::outputPhong(string) {
-
-}
-
-void QLKhachSan::outputDatPhong(string) {
+void QLKhachSan::outputDatPhong(string path) {
+    
 
 }
 
 void QLKhachSan::work() {
-    gnk_Window_Loop();
+    cout << "Test Quan Li Khach Hang" << endl;
+    KhachHang *kh = QLKH.timKiemKhachHang("100048");
+    cout << *kh << endl;
+    QLKH.suaThongTin(kh->getIDKhachHang());
+    cout << *kh << endl;
+    cout << "Test Loai Phong" << endl;
+    QLLP.QLChoice();
+    //gnk_Window_Loop();
 }
 
 
