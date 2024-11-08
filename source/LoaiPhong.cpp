@@ -97,3 +97,34 @@ void LoaiPhong::setGiaPhong(int GP) {
 void LoaiPhong::setMoTaPhong(string MTP) {
     this->moTaPhong = MTP;
 }
+
+// HÀM ĐỊNH DẠNG CHO TRƯỜNG MÔ TẢ ( ý là chưa biết bỏ mô nên để tạm đây keke)
+void wrapText(const string& text, int width, int indent) {
+    istringstream iss(text);
+    string word;
+    string line;
+    bool firstLine = true;
+
+    while (iss >> word) {
+        if (line.length() + word.length() + 1 > width) {
+            if (!firstLine) cout << setw(indent) << ""; // Thụt lề cho các dòng sau
+            cout << line << endl;
+            line.clear();
+            firstLine = false;
+        }
+        line += (line.empty() ? "" : " ") + word;
+    }
+    if (!line.empty()) {
+        if (!firstLine) cout << setw(indent) << "";
+        cout << line << endl;
+    }
+}
+
+// In thông tin loai ra màn hình với định dạng
+void LoaiPhong::thongTinLoaiPhong(string path){
+    cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
+    << setw(9) << dienTich << setw(13) << giaPhong; 
+    wrapText(moTaPhong, 40, 65);
+    cout << string(105, '-') << endl;
+}
+   

@@ -1,4 +1,5 @@
 #include "./header/Phong.h"
+#include <bits/stdc++.h>
 
 Phong::Phong() {
 }
@@ -31,7 +32,8 @@ void Phong::setLoaiPhong(string LP) {
     this->loaiPhong = LP;
 }
 
+// In thông tin đã đọc được ra màn hình với định dạng
 void Phong::thongTinPhong() {
-    cout << maPhong << endl;
-    cout << loaiPhong << endl;
+    cout << left << setw(15) << maPhong << loaiPhong << endl;
+    cout << string(25, '-') << endl;
 }

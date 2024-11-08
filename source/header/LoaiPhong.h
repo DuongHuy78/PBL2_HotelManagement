@@ -8,6 +8,7 @@ class LoaiPhong {
     int dienTich;
     int giaPhong;
     string moTaPhong;
+
 public:
     LoaiPhong();
     LoaiPhong(string, int, int, int, int, string);
@@ -28,5 +29,7 @@ public:
     void setDienTich(int);
     void setGiaPhong(int);
     void setMoTaPhong(string);
+
+    void thongTinLoaiPhong(string);
 };
 #endif

@@ -1,71 +1,5 @@
 
-// #include "./header/QLPhong.h"
 #include "./header/QLLoaiPhong.h"
-
-
-
-// QLPhong::QLPhong() {
-
-// }
-
-// QLPhong::~QLPhong() {
-
-// }
-
-// void QLPhong::AddRangePhong(string file)
-// {
-//     ifstream inputFile(file);
-//     if(!inputFile.is_open())
-//         {
-//             cout << "Error: Could not open file." << endl;
-//             return;
-//         }
-
-//     cout << "Day la danh sach phong cua chung toi: "<< endl;
-//     cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
-//     cout << string(24, '-') << endl;
-
-//     string line; 
-//     while(getline(inputFile, line))
-//         {
-//            // cout << line << endl;
-//             string str[2]; // chua hai truong : maphong va loaiphong
-//             string r = "";
-//             int c = 0; 
-//             for(int i = 0; i < line.size(); i++)
-//             {
-//                 if(line[i] == ';')
-//                 {
-//                     str[c++] = r;  // Lưu giá trị r vào str[c] và tăng c
-//                     r = ""; // Reset r về chuỗi rỗng để chuẩn bị cho trường mới
-//                 }
-//                 else r += line[i];
-//             }
-//             if(r.size() > 0)
-//             {
-//                 str[c++] = r;
-//             }       
-//             Phong A(str[0], str[1]);
-//             (this->DSP).add(A); // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
-
-//             // In thông tin đã đọc được ra màn hình với định dạng
-//             cout << left << setw(15) << str[0] << str[1] << endl;
-//             cout << string(25, '-') << endl;
-//         }
-
-//     inputFile.close();
-//     return; 
-// }
-
-// void QLPhong::themPhong(Phong) {
-    
-// }
-
-// void QLPhong::xoaPhong(Phong) {
-
-// }
-// Phong QLPhong::timPhong(time_t, time_t) {}
-
 
 /*
 Quản lí loại phòng:
@@ -88,28 +22,6 @@ QLLoaiPhong::QLLoaiPhong()
 
 QLLoaiPhong::~QLLoaiPhong()
 {
-}
-
-// HÀM ĐỊNH DẠNG CHO TRƯỜNG MÔ TẢ ( ý là chưa biết bỏ mô nên để tạm đây keke)
-void wrapText(const string& text, int width, int indent) {
-    istringstream iss(text);
-    string word;
-    string line;
-    bool firstLine = true;
-
-    while (iss >> word) {
-        if (line.length() + word.length() + 1 > width) {
-            if (!firstLine) cout << setw(indent) << ""; // Thụt lề cho các dòng sau
-            cout << line << endl;
-            line.clear();
-            firstLine = false;
-        }
-        line += (line.empty() ? "" : " ") + word;
-    }
-    if (!line.empty()) {
-        if (!firstLine) cout << setw(indent) << "";
-        cout << line << endl;
-    }
 }
 
 // HÀM GHI DỮ LIỆU LẠI VÀO FILE
@@ -135,51 +47,6 @@ void QLLoaiPhong::capNhapDuLieuVaoFile(const string& file)
     }
     outputFile.close(); // Đóng file
     cout << "Du lieu da duoc ghi vao file." << endl;
-}
-
-// HÀM IN RA DANH SÁCH LOẠI PHÒNG (loaiphong.txt)
-void QLLoaiPhong::xemLoaiPhong(string file) // file = loaiphong.txt
-{
-    ifstream inputFile(file);
-    if(!inputFile.is_open())
-        {
-           cerr << "Error: Khong the mo data LoaiPhong!" << endl; 
-           return;
-        }
-    cout << "DANH SACH LOAI PHONG CUA KHACH SAN CHUNG TOI:\n" << endl;
-    cout << left << setw(12) << "LoaiPhong" << setw(13) << "LoaiGiuong" << setw(15) << "SoLuongKhach" 
-        << setw(13) << "DienTich" << setw(25) << "Gia" << "MoTaPhong" << endl;
-        // Đặt chiều rộng của cột = setw() để tạo khoảng cách đều giữa các cột.
-        // left: Đảm bảo văn bản được căn trái.
-    cout << string(105, '-') << endl; 
-        // Tạo một đường kẻ ngang để phân cách tiêu đề bảng với dữ liệu
-
-    string line; 
-    while (getline(inputFile, line)) 
-        {  
-            string str[6]; // chứa  6 trường của loại phòng 
-            int c = 0;
-            string r = "";
-            for (int i = 0; i < line.size(); i++)
-                {
-                    if (line[i] == ';')
-                    {
-                        str[c++] = r;
-                        r = "";
-                    } 
-                    else r += line[i]; // nếu kí tự không phải dấu ; thì thêm dữ liệu vào r
-                }
-            if (r.size() > 0)
-                {
-                    str[c++] = r;
-                }
-             // In thông tin đã đọc được ra màn hình với định dạng
-            cout << left << setw(16) << str[0] << setw(14) << str[1] << setw(13) << str[2]
-                 << setw(9) << str[3] << setw(13) << str[4];  wrapText(str[5], 40, 65);
-            cout << string(105, '-') << endl;
-    }
-    inputFile.close();
-    return; 
 }
 
 // HÀM THÊM LOẠI PHÒNG (loaiphong.txt)
@@ -210,6 +77,14 @@ void QLLoaiPhong::AddRangeLoaiPhong(string file){
         cerr << "Error: Could not open file." << endl;
         return ;
     }
+    // cout << "DANH SACH LOAI PHONG CUA KHACH SAN CHUNG TOI:\n" << endl;
+    // cout << left << setw(12) << "LoaiPhong" << setw(13) << "LoaiGiuong" << setw(15) << "SoLuongKhach" 
+    //     << setw(13) << "DienTich" << setw(25) << "Gia" << "MoTaPhong" << endl;
+    //     // Đặt chiều rộng của cột = setw() để tạo khoảng cách đều giữa các cột.
+    //     // left: Đảm bảo văn bản được căn trái.
+    // cout << string(105, '-') << endl; 
+    //     // Tạo một đường kẻ ngang để phân cách tiêu đề bảng với dữ liệu
+
     string line; 
     while (getline(inputFile, line)) 
         {  
@@ -232,7 +107,7 @@ void QLLoaiPhong::AddRangeLoaiPhong(string file){
           //  cout << str[0] << "\n" << str[1] << "\n" << str[2] << "\n"<< str[3] << "\n" <<str[4] << "\n" << str[5] << "\n";
 
             LoaiPhong A(str[0], stoi(str[1]), stoi(str[2]), stoi(str[3]), stoi(str[4]), str[5]);
-            DSLP.add(A);
+            (this->DSLP).add(A);
     }
     inputFile.close();
     return; 

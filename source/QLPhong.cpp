@@ -7,6 +7,7 @@ QLPhong::~QLPhong() {
 
 }
 
+// HÀM THÊM CÁC LPHÒNG vào DSP (LinkedList)
 void QLPhong::AddRangePhong(string file)
 {
     ifstream inputFile(file);
@@ -15,13 +16,18 @@ void QLPhong::AddRangePhong(string file)
             cout << "Error: Could not open file." << endl;
             return;
         }
-    string str[3];
-    string line;
-    int c = 0; 
-    string r = "";
+
+    // cout << "Day la danh sach phong cua chung toi: "<< endl;
+    // cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
+    // cout << string(24, '-') << endl;
+
+    string line; 
     while(getline(inputFile, line))
         {
-            cout << line << endl;
+           // cout << line << endl;
+            string str[2]; // chua hai truong : maphong va loaiphong
+            string r = "";
+            int c = 0; 
             for(int i = 0; i < line.size(); i++)
             {
                 if(line[i] == ';')
@@ -36,10 +42,8 @@ void QLPhong::AddRangePhong(string file)
                 str[c++] = r;
             }       
             Phong A(str[0], str[1]);
-
-            (this->DSP).add(A);
-        } // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
-   
+            (this->DSP).add(A); // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
+        }
     inputFile.close();
     return; 
 }

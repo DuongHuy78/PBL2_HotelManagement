@@ -15,7 +15,6 @@ public:
     ~QLLoaiPhong();
 
     void capNhapDuLieuVaoFile(const string&);   // cân nhắc chuyển vào QLKhachSan
-    void xemLoaiPhong(string);
     void themLoaiPhong(LoaiPhong); 
     void suaThongTinLoaiPhong(const string&);
     void xoaLoaiPhong(LoaiPhong);
