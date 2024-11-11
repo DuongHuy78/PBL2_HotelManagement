@@ -230,6 +230,92 @@ void Gnk_Frame::textboxDisplay() {
 	}
 }
 
+void Gnk_Frame::setScrollbar(Gnk_Scrollbar scrollbar) {
+	this->scrollbar = scrollbar;
+}
+
+// Scrollbar Definition------------------------------------------------------
+Gnk_Scrollbar::Gnk_Scrollbar() {
+	this->maxHeight = 0;
+	this->frameHeight = 0;
+	this->scrollPosition = 0;
+	this->A = Gnk_Point(0, 0);
+	this->B = Gnk_Point(0, 0);
+	this->color = Gnk_Color(0, 0, 0);
+	this->scrollColor = Gnk_Color(0, 0, 0);
+	this->hoverColor = Gnk_Color(0, 0, 0);
+	this->clickColor = Gnk_Color(0, 0, 0);
+}
+
+Gnk_Scrollbar::Gnk_Scrollbar(int maxHeight, int frameHeight, Gnk_Point A, Gnk_Point B, Gnk_Color color, Gnk_Color scrollColor, Gnk_Color hoverColor, Gnk_Color clickColor) {
+	this->maxHeight = maxHeight;
+	this->frameHeight = frameHeight;
+	this->scrollPosition = 0;
+	this->A = A;
+	this->B = B;
+	this->C = Gnk_Point(0, 0);
+	this->D = Gnk_Point(0, 0);
+	this->color = color;
+	this->scrollColor = scrollColor;
+	this->hoverColor = hoverColor;
+	this->clickColor = clickColor;
+}
+
+void Gnk_Scrollbar::display() {
+	if(maxHeight <= frameHeight) return;
+	gnk_Set_Object_Color(color);
+	gnk_Rectangle(A.translate(0.0f, gnk_Frame_Position - gnk_Height), B.translate(0.0f, gnk_Frame_Position - gnk_Height));
+	if(onHover) {
+		gnk_Set_Object_Color(hoverColor);
+	}
+	else if(onClick) {
+		gnk_Set_Object_Color(clickColor);
+	}
+	else {
+		gnk_Set_Object_Color(scrollColor);
+	}
+	float ratio = (float)frameHeight / maxHeight;
+	C = Gnk_Point(A.x, -ratio*(scrollPosition - frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
+	D = Gnk_Point(B.x, -ratio*(scrollPosition - 2 * frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
+	gnk_Rectangle(C, D);
+}
+
+void Gnk_Scrollbar::process() {
+	double xpos, ypos;
+	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+	ypos = gnk_Height - ypos;
+	if(xpos > C.x && xpos < D.x && ypos > D.y && ypos < C.y) {
+		onHover = true;
+	}
+	else {
+		onHover = false;
+	}
+}
+
+void Gnk_Scrollbar::setMaxHeight(int maxHeight) {
+	this->maxHeight = maxHeight;
+}
+
+void Gnk_Scrollbar::setFrameHeight(int frameHeight) {
+	this->frameHeight = frameHeight;
+}
+
+void Gnk_Scrollbar::setScrollPosition(int scrollPosition) {
+	this->scrollPosition = scrollPosition;
+}
+
+int Gnk_Scrollbar::getScrollHeight() {
+	return B.y - A.y;
+}
+
+int Gnk_Scrollbar::getScrollPosition() {
+	return scrollPosition;
+}
+
+int Gnk_Scrollbar::getMaxHeight() {
+	return maxHeight;
+}
+
 // -Variable Declaration-----------------------------------------------------
 float gnk_Width = 0, gnk_Height = 0;	// screen width & screen height
 unsigned int gnk_TVA, gnk_TVB;			// text vertex array & text vertex buffer
@@ -256,13 +342,15 @@ double gnk_Text_Cursor_Last_Time;
 bool gnk_Text_Cursor_Appear = false;
 double gnk_Backspace_Last_Time = 0.0;
 double gnk_Backspace_Speed = 0.08;
-
 double gnk_Event_Timeout = 0.5;
+int gnk_Scroll_Speed = 40;
+int gnk_Frame_Position = 0;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
 	ypos = gnk_Height - ypos;
 	for (auto& it : gnk_Current_Frame->buttonList) {
 		if (xpos > it->A.x && xpos < it->B.x &&
-			ypos > it->A.y && ypos < it->B.y) {
+			ypos > it->A.y + (gnk_Height - gnk_Frame_Position) 
+			&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
 			it->onHover = true;
 		}
 		else {
@@ -278,7 +366,8 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 		ypos = gnk_Height - ypos;
 		for (auto &it:gnk_Current_Frame->textboxList) {
 			if (xpos > it->A.x && xpos < it->B.x &&
-				ypos > it->A.y && ypos < it->B.y) {
+				ypos > it->A.y + (gnk_Height - gnk_Frame_Position) 
+				&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
 				it->active = true;
 			}
 			else {
@@ -288,7 +377,8 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 
 		for (auto &it: gnk_Current_Frame->buttonList) {
 			if (xpos > it->A.x && xpos < it->B.x && 
-				ypos > it->A.y && ypos < it->B.y) {
+				ypos > it->A.y + (gnk_Height - gnk_Frame_Position)
+				&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
 				it->process();
 				return;
 			}
@@ -302,6 +392,19 @@ void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 			it->text += (char)codepoint;
 		}
 	}
+}
+
+void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
+	std::cout << xoffset << " " << yoffset << std::endl;
+	gnk_Frame_Position += yoffset * gnk_Scroll_Speed;
+	if(gnk_Frame_Position > gnk_Height) gnk_Frame_Position = gnk_Height;
+	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight()) 
+	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight();
+	glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	projection = glm::translate(projection, glm::vec3(0.0f, gnk_Height - gnk_Frame_Position, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(projection));
+	
 }
 
 void gnk_Key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -383,6 +486,8 @@ void gnk_Initialize(float width, float height, std::string title, std::string ve
 	glfwSetCharCallback(gnk_Window, gnk_Character_Callback);
 	glfwSetKeyCallback(gnk_Window, gnk_Key_Callback);
 	glfwSetCursorPosCallback(gnk_Window, gnk_Cursor_Position_Callback);
+	glfwSetScrollCallback(gnk_Window, gnk_Scroll_Callback);
+	gnk_Frame_Position = gnk_Height;
 }
 
 void gnk_Set_Object_Color(Gnk_Color color) {
@@ -419,6 +524,7 @@ void gnk_Window_Loop() {
 		gnk_Current_Frame->display();
 		gnk_Current_Frame->buttonDisplay();
 		gnk_Current_Frame->textboxDisplay();
+		gnk_Current_Frame->scrollbar.display();
 		glfwSwapBuffers(gnk_Window);
 		glfwPollEvents();
 	}
@@ -647,7 +753,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 		maxHeight = height;
 
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(P.x, P.y, width, height);
+	glScissor(P.x, P.y + (gnk_Height - gnk_Frame_Position), width, height + (gnk_Height - gnk_Frame_Position));
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
 				(width - maxWidth) / 2 - text_overflow,

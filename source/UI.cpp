@@ -49,11 +49,14 @@ void UI_init() {
 			Gnk_Color(255, 255, 255), "Do not have an account? Sign up", "helvetica",
 			24.0f, Gnk_Color(60, 60, 60), 0.0f, 0.0f, 0.0f, sign_up_button_clicked
 		);
+	
+	Gnk_Scrollbar login_scrollbar(gnk_Height * 2, gnk_Height, Gnk_Point(gnk_Width - 20.0f, 0.0f), Gnk_Point(gnk_Width, gnk_Height), Gnk_Color(255, 255, 255), Gnk_Color(0, 0, 0), Gnk_Color(0, 0, 0), Gnk_Color(0, 0, 0));
 	login.addTextbox(usernameTextbox);
 	login.addTextbox(passwordTextbox);
 	login.addButton(loginButton);
 	login.addButton(forgotPassButton);
 	login.addButton(signInButton);
+	login.setScrollbar(login_scrollbar);
 }
 void draw_login() {
 	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
