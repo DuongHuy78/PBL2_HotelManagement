@@ -159,11 +159,39 @@ public:
 	void display();
 };
 
+class Gnk_Scrollbar {
+	int maxHeight;
+	int frameHeight;
+	int scrollPosition;
+	Gnk_Point A;
+	Gnk_Point B;
+	Gnk_Point C;
+	Gnk_Point D;
+	Gnk_Color color;
+	Gnk_Color scrollColor;
+	Gnk_Color hoverColor;
+	Gnk_Color clickColor;
+	bool onHover = false;
+	bool onClick = false;
+public:
+	Gnk_Scrollbar();
+	Gnk_Scrollbar(int, int, Gnk_Point, Gnk_Point, Gnk_Color, Gnk_Color, Gnk_Color, Gnk_Color);
+	void display();
+	void process();
+	void setMaxHeight(int);
+	void setFrameHeight(int);
+	void setScrollPosition(int);
+	int getScrollHeight();
+	int getScrollPosition();
+	int getMaxHeight();
+};
+
 class Gnk_Frame {
 	void (*Draw)();
 public:
 	std::vector<Gnk_Button *> buttonList;
 	std::vector<Gnk_Textbox *> textboxList;
+	Gnk_Scrollbar scrollbar;
 	Gnk_Frame();
 	~Gnk_Frame();
 	Gnk_Frame(void (*Draw)());
@@ -182,6 +210,7 @@ public:
 	void addTextbox(Gnk_Textbox *);
 	void buttonDisplay();
 	void textboxDisplay();
+	void setScrollbar(Gnk_Scrollbar);
 };
 
 // -Variable Declaration-----------------------------------------------------
@@ -212,11 +241,15 @@ extern double gnk_Backspace_Last_Time;
 extern double gnk_Backspace_Speed;
 
 extern double gnk_Event_Timeout;
+extern int gnk_Scroll_Speed;
+extern int gnk_Frame_Position;
 
 // -Function Prototype-------------------------------------------------------
 static void gnk_Cursor_Position_Callback(GLFWwindow*, double, double);
 void gnk_Mouse_Button_Callback(GLFWwindow*, int, int, int);
+void gnk_Key_Callback(GLFWwindow*, int, int, int, int);
 void gnk_Character_Callback(GLFWwindow*, unsigned int);
+void gnk_Scroll_Callback(GLFWwindow*, double, double);
 bool gnk_GLFW_Init();
 bool gnk_Create_Window(std::string);
 bool gnk_GLEW_Init();
