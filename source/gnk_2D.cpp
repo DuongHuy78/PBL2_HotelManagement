@@ -120,6 +120,22 @@ Gnk_Button::Gnk_Button(Gnk_Point A, Gnk_Point B, Gnk_Color color, std::string te
 	this->textAlign = textAlign;
 }
 
+void Gnk_Button::display() {
+	gnk_Set_Object_Color(color);
+	gnk_Rounded_Rectangle(A, B, radius);
+	gnk_Set_Object_Color(textColor);
+	gnk_Set_Character_Font(textFont);
+	gnk_Text_Limited(
+		text, 
+		A.translate(paddingX, paddingY), 
+		getWidth() - 2 * paddingX, 
+		getHeight() - 2 * paddingY, 
+		fontSize, 
+		textAlign
+	);
+	if (onHover) hover();
+}
+
 void Gnk_Button::process() {
 	logic();
 }
@@ -162,6 +178,74 @@ Gnk_Textbox::Gnk_Textbox(Gnk_Point A, Gnk_Point B, Gnk_Color color,
 	this->select_effect = hover;
 }
 
+void Gnk_Textbox::display() {
+	gnk_Set_Object_Color(color);
+	gnk_Rectangle(A, B);
+	std::string output;
+	std::string outputFont;
+	float outputFontSize;
+	Gnk_Color outputColor;
+	if (text == "") {
+		if (!active) output = placeholder;
+		else output = "";
+		outputFont = plFont;
+		outputFontSize = plFontSize;
+		outputColor = plColor;
+	}
+	else {
+		output = text;
+		outputFont = textFont;
+		outputFontSize = fontSize;
+		outputColor = textColor;
+	}
+
+	gnk_Set_Character_Font(outputFont);
+	float scale = outputFontSize / gnk_Current_Font->size;
+	gnk_Set_Object_Color(outputColor);
+
+	float maxWidth = gnk_Get_Text_Width(output, outputFontSize);
+	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
+
+	if (maxWidth > getWidth() - 2 * paddingX) {
+		maxWidth = getWidth() - 2 * paddingX;
+	}
+		
+	if (maxHeight > getHeight() - 2 * paddingY)
+		maxHeight = getHeight() - 2 * paddingY;
+
+	float cpX = 0, cpY = 0;
+	if (textAlign == GNK_TEXT_CENTER) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_CENTER);
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) / 2 + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	else if (textAlign == GNK_TEXT_LEFT) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_LEFT);
+		cpX = paddingX + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	else if (textAlign == GNK_TEXT_RIGHT) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_RIGHT);
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	
+	if (active) {
+		if (glfwGetTime() - gnk_Text_Cursor_Last_Time > 0.5f) {
+			gnk_Text_Cursor_Appear = !gnk_Text_Cursor_Appear;
+			gnk_Text_Cursor_Last_Time = glfwGetTime();
+		}
+		if (gnk_Text_Cursor_Appear) {
+			gnk_Set_Line_Width(2.0f);
+			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
+			gnk_Line(Gnk_Point(A.x + cpX, A.y + cpY - maxHeight),
+				Gnk_Point(A.x + cpX, A.y + cpY));
+			gnk_Set_Line_Width(1.0f);
+		}
+		select();
+	}
+}
+
 float Gnk_Textbox::getWidth() {
 	return B.x - A.x;
 }
@@ -181,6 +265,15 @@ Gnk_Textbox_password::Gnk_Textbox_password(Gnk_Point A, Gnk_Point B, Gnk_Color c
 	void (*hover)(Gnk_Textbox&))
 	:Gnk_Textbox(A, B, color, tFont, fontSize, tColor, pX, pY, placeholder, plFont, plFontSize, plColor, textAlign, hover) {
 
+}
+
+void Gnk_Textbox_password::display() {
+	std::string newText = this->text;
+	for(int i = 0; i < this->text.size(); ++i) {
+		this->text[i] = '*';
+	}
+	Gnk_Textbox::display();
+	this->text = newText;
 }
 
 // Frame Definition
@@ -230,7 +323,7 @@ void Gnk_Frame::textboxDisplay() {
 	}
 }
 
-void Gnk_Frame::setScrollbar(Gnk_Scrollbar scrollbar) {
+void Gnk_Frame::setScrollbar(Gnk_Scrollbar *scrollbar) {
 	this->scrollbar = scrollbar;
 }
 
@@ -395,11 +488,11 @@ void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 }
 
 void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
-	std::cout << xoffset << " " << yoffset << std::endl;
+	if(gnk_Current_Frame->scrollbar == nullptr) return;
 	gnk_Frame_Position += yoffset * gnk_Scroll_Speed;
 	if(gnk_Frame_Position > gnk_Height) gnk_Frame_Position = gnk_Height;
-	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight()) 
-	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight();
+	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar->getMaxHeight()) 
+	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar->getMaxHeight();
 	glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 	projection = glm::translate(projection, glm::vec3(0.0f, gnk_Height - gnk_Frame_Position, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
@@ -524,7 +617,7 @@ void gnk_Window_Loop() {
 		gnk_Current_Frame->display();
 		gnk_Current_Frame->buttonDisplay();
 		gnk_Current_Frame->textboxDisplay();
-		gnk_Current_Frame->scrollbar.display();
+		if(gnk_Current_Frame->scrollbar != nullptr)gnk_Current_Frame->scrollbar->display();
 		glfwSwapBuffers(gnk_Window);
 		glfwPollEvents();
 	}
@@ -837,95 +930,3 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
 }
 
-void Gnk_Button::display() {
-	gnk_Set_Object_Color(color);
-	gnk_Rounded_Rectangle(A, B, radius);
-	gnk_Set_Object_Color(textColor);
-	gnk_Set_Character_Font(textFont);
-	gnk_Text_Limited(
-		text, 
-		A.translate(paddingX, paddingY), 
-		getWidth() - 2 * paddingX, 
-		getHeight() - 2 * paddingY, 
-		fontSize, 
-		textAlign
-	);
-	if (onHover) hover();
-}
-
-void Gnk_Textbox::display() {
-	gnk_Set_Object_Color(color);
-	gnk_Rectangle(A, B);
-	std::string output;
-	std::string outputFont;
-	float outputFontSize;
-	Gnk_Color outputColor;
-	if (text == "") {
-		if (!active) output = placeholder;
-		else output = "";
-		outputFont = plFont;
-		outputFontSize = plFontSize;
-		outputColor = plColor;
-	}
-	else {
-		output = text;
-		outputFont = textFont;
-		outputFontSize = fontSize;
-		outputColor = textColor;
-	}
-
-	gnk_Set_Character_Font(outputFont);
-	float scale = outputFontSize / gnk_Current_Font->size;
-	gnk_Set_Object_Color(outputColor);
-
-	float maxWidth = gnk_Get_Text_Width(output, outputFontSize);
-	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
-
-	if (maxWidth > getWidth() - 2 * paddingX) {
-		maxWidth = getWidth() - 2 * paddingX;
-	}
-		
-	if (maxHeight > getHeight() - 2 * paddingY)
-		maxHeight = getHeight() - 2 * paddingY;
-
-	float cpX = 0, cpY = 0;
-	if (textAlign == GNK_TEXT_CENTER) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_CENTER);
-		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) / 2 + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	else if (textAlign == GNK_TEXT_LEFT) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_LEFT);
-		cpX = paddingX + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	else if (textAlign == GNK_TEXT_RIGHT) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_RIGHT);
-		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	
-	if (active) {
-		if (glfwGetTime() - gnk_Text_Cursor_Last_Time > 0.5f) {
-			gnk_Text_Cursor_Appear = !gnk_Text_Cursor_Appear;
-			gnk_Text_Cursor_Last_Time = glfwGetTime();
-		}
-		if (gnk_Text_Cursor_Appear) {
-			gnk_Set_Line_Width(2.0f);
-			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
-			gnk_Line(Gnk_Point(A.x + cpX, A.y + cpY - maxHeight),
-				Gnk_Point(A.x + cpX, A.y + cpY));
-			gnk_Set_Line_Width(1.0f);
-		}
-		select();
-	}
-}
-
-void Gnk_Textbox_password::display() {
-	std::string newText = this->text;
-	for(int i = 0; i < this->text.size(); ++i) {
-		this->text[i] = '*';
-	}
-	Gnk_Textbox::display();
-	this->text = newText;
-}

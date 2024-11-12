@@ -3,8 +3,6 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
-#include <iterator>
-#include <string>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -191,26 +189,16 @@ class Gnk_Frame {
 public:
 	std::vector<Gnk_Button *> buttonList;
 	std::vector<Gnk_Textbox *> textboxList;
-	Gnk_Scrollbar scrollbar;
+	Gnk_Scrollbar *scrollbar = NULL;
 	Gnk_Frame();
 	~Gnk_Frame();
 	Gnk_Frame(void (*Draw)());
 	void display();
-
-	/**
-	 * Địa chỉ của đối tượng nhận vào phải là 
-	 * địa chỉ của đối tượng được khai báo động
-	 */
 	void addButton(Gnk_Button *);
-
-	/**
-	 * Địa chỉ của đối tượng nhận vào phải là 
-	 * địa chỉ của đối tượng được khai báo động
-	 */
 	void addTextbox(Gnk_Textbox *);
 	void buttonDisplay();
 	void textboxDisplay();
-	void setScrollbar(Gnk_Scrollbar);
+	void setScrollbar(Gnk_Scrollbar*);
 };
 
 // -Variable Declaration-----------------------------------------------------
