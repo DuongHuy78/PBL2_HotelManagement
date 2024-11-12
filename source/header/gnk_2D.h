@@ -2,7 +2,6 @@
 #define GNK_2D_H
 #include <iostream>
 #include <unordered_map>
-#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -17,11 +16,12 @@
 #include "shader.h"
 
 // --Constant variable----------------------------------------------------------
-enum text_align {
+enum text_align_value {
 	GNK_TEXT_LEFT,
 	GNK_TEXT_CENTER,
 	GNK_TEXT_RIGHT,
 };
+
 const float GNK_PI = acos(-1.0f);		// PI = 3.14
 const float GNK_NUM_SEGMENTS = 1024;	// num segments to draw circle
 const int GNK_NUM_COLORS = 255;			
@@ -86,78 +86,107 @@ public:
 };
 
 class Gnk_Button {
-	void (*logic)();
-	void (*hover_effect)(Gnk_Button &);
+	void (*hover_process)(Gnk_Button*);
+	void (*click_process)(Gnk_Button*);
 public:
+	bool appear = true;
 	Gnk_Point A;
 	Gnk_Point B;
 	Gnk_Color color;
-
-	std::string text;
-	std::string textFont;
-	float fontSize;
-	Gnk_Color textColor;
-
-	float paddingX, paddingY;
-	float radius;
-
-	text_align textAlign;
+	float border_radius;
 	bool onHover = false;
-	
-	Gnk_Button(Gnk_Point, Gnk_Point, Gnk_Color, std::string, 
-		std::string, float, Gnk_Color, 
-		float, float, float, void (*logic)(), 
-		void (*hover)(Gnk_Button &) = NULL, text_align = GNK_TEXT_CENTER);
-	void display();
+	bool onClick = false;
+	Gnk_Button();
+	void setAppear(bool);
+	void setRange(Gnk_Point, Gnk_Point);
+	void setColor(Gnk_Color);
+	void setRadius(float);
+	void setHoverProcess(void (*)(Gnk_Button*));
+	void setClickProcess(void (*)(Gnk_Button*));
+	virtual void display();
+	void hover_effect();
+	void click_effect();
 	void process();
-	float getWidth();
-	float getHeight();
-	void hover();
+};
+
+class Gnk_Button_With_Text: public Gnk_Button {
+public:
+	std::string text;
+	std::string text_font;
+	float font_size;
+	Gnk_Color text_color;
+	float paddingX, paddingY;
+	text_align_value textAlign;
+	Gnk_Button_With_Text();
+	void setText(std::string);
+	void setTextFont(std::string);
+	void setFontSize(float);
+	void setTextColor(Gnk_Color);
+	void setPaddingX(float);
+	void setPaddingY(float);
+	void setTextAlign(text_align_value);
+	virtual void display();
+};
+
+class Gnk_Button_With_Image: public Gnk_Button {
+public:
+	Gnk_Image *image;
+	Gnk_Button_With_Image();
+	void setImage(Gnk_Image *);
+	virtual void display();
 };
 
 class Gnk_Textbox {
-	void (*select_effect)(Gnk_Textbox&);
+	void (*select_process)(Gnk_Textbox*);
 public:
-	std::string text;
+	bool appear = true;
 	Gnk_Point A;
 	Gnk_Point B;
 	Gnk_Color color;
-
-	std::string textFont;
-	float fontSize;
-	Gnk_Color textColor;
-
+	float border_radius;
+	std::string text;
+	std::string text_font;
+	float font_size;
+	Gnk_Color text_color;
 	std::string placeholder;
-	std::string plFont;
-	float plFontSize;
-	Gnk_Color plColor;
-
+	std::string placeholder_font;
+	float placeholder_font_size;
+	Gnk_Color placeholder_color;
 	float paddingX, paddingY;
-	text_align textAlign;
-	bool active = false;
-	bool onHover = false;
-	Gnk_Textbox(Gnk_Point, Gnk_Point, Gnk_Color, 
-		std::string, float, Gnk_Color, 
-		float, float, std::string, std::string,
-		float, Gnk_Color, text_align,
-		void (*hover)(Gnk_Textbox&) = NULL);
-	virtual void display();
+	text_align_value text_align;
+	bool on_select = false;
+	Gnk_Textbox();
+	void setAppear(bool);
+	void setRange(Gnk_Point, Gnk_Point);
+	void setColor(Gnk_Color);
+	void setBorderRadius(float);
+	void setText(std::string);
+	void setTextFont(std::string);
+	void setFontSize(float);
+	void setTextColor(Gnk_Color);
+	void setPlaceholder(std::string);
+	void setPlaceholderFont(std::string);
+	void setPlaceholderFontSize(float);
+	void setPlaceholderColor(Gnk_Color);
+	void setPaddingX(float);
+	void setPaddingY(float);
+	void setTextAlign(text_align_value);
+	void setSelectProcess(void (*)(Gnk_Textbox*));
 	float getWidth();
 	float getHeight();
-	void select();
+	virtual void display();
+	void select_effect();
+	void process();
 };
 
-class Gnk_Textbox_password: public Gnk_Textbox {
+class Gnk_Textbox_Password: public Gnk_Textbox {
 public:
-	Gnk_Textbox_password(Gnk_Point, Gnk_Point, Gnk_Color, 
-		std::string, float, Gnk_Color, 
-		float, float, std::string, std::string,
-		float, Gnk_Color, text_align,
-		void (*hover)(Gnk_Textbox&) = NULL);
-	void display();
+	virtual void display();
 };
 
 class Gnk_Scrollbar {
+public:
+	bool appear = false;
 	int maxHeight;
 	int frameHeight;
 	int scrollPosition;
@@ -171,63 +200,52 @@ class Gnk_Scrollbar {
 	Gnk_Color clickColor;
 	bool onHover = false;
 	bool onClick = false;
-public:
 	Gnk_Scrollbar();
-	Gnk_Scrollbar(int, int, Gnk_Point, Gnk_Point, Gnk_Color, Gnk_Color, Gnk_Color, Gnk_Color);
-	void display();
-	void process();
+	void setAppear(bool);
+	void setRange(Gnk_Point, Gnk_Point);
+	void setColor(Gnk_Color);
+	void setScrollColor(Gnk_Color);
+	void setHoverColor(Gnk_Color);
+	void setClickColor(Gnk_Color);
 	void setMaxHeight(int);
 	void setFrameHeight(int);
-	void setScrollPosition(int);
-	int getScrollHeight();
-	int getScrollPosition();
-	int getMaxHeight();
+	void display();
+	void process();
 };
 
 class Gnk_Frame {
-	void (*Draw)();
+	void (*process)(Gnk_Frame *);
 public:
-	std::vector<Gnk_Button *> buttonList;
-	std::vector<Gnk_Textbox *> textboxList;
+	std::unordered_map<std::string, Gnk_Button *> buttonList;
+	std::unordered_map<std::string, Gnk_Textbox *> textboxList;
 	Gnk_Scrollbar *scrollbar = NULL;
 	Gnk_Frame();
 	~Gnk_Frame();
-	Gnk_Frame(void (*Draw)());
-	void display();
-	void addButton(Gnk_Button *);
-	void addTextbox(Gnk_Textbox *);
-	void buttonDisplay();
-	void textboxDisplay();
+	Gnk_Frame(void (*process)(Gnk_Frame *));
+	void addButton(std::string, Gnk_Button *);
+	void addTextbox(std::string, Gnk_Textbox *);
 	void setScrollbar(Gnk_Scrollbar*);
+	void display();
 };
 
 // -Variable Declaration-----------------------------------------------------
 extern float gnk_Width, gnk_Height;	// screen width & screen height
 extern unsigned int gnk_TVA, gnk_TVB;			// text vertex array & text vertex buffer
-
-// window
 extern GLFWwindow* gnk_Window;
-
-// text render
 extern FT_Library gnk_FT;
 extern FT_Face gnk_Face;
-
 extern Shader gnk_Shader;
 extern Gnk_Frame gnk_Default_Frame;
 extern Gnk_Frame* gnk_Current_Frame;
 extern void (*gnk_Frame_Space)();
-
 extern Gnk_Font gnk_Default_Font;
 extern Gnk_Font* gnk_Current_Font;
-
 extern Gnk_Font_List gnk_Font_List;
 extern Gnk_Image_List gnk_Image_List;
-
 extern double gnk_Text_Cursor_Last_Time;
 extern bool gnk_Text_Cursor_Appear;
 extern double gnk_Backspace_Last_Time;
 extern double gnk_Backspace_Speed;
-
 extern double gnk_Event_Timeout;
 extern int gnk_Scroll_Speed;
 extern int gnk_Frame_Position;
@@ -238,29 +256,38 @@ void gnk_Mouse_Button_Callback(GLFWwindow*, int, int, int);
 void gnk_Key_Callback(GLFWwindow*, int, int, int, int);
 void gnk_Character_Callback(GLFWwindow*, unsigned int);
 void gnk_Scroll_Callback(GLFWwindow*, double, double);
+
 bool gnk_GLFW_Init();
 bool gnk_Create_Window(std::string);
 bool gnk_GLEW_Init();
 bool gnk_Shader_Init(std::string, std::string);
 void gnk_Texture_Buffer_Init();
 void gnk_Initialize(float, float, std::string, std::string, std::string);
+
 void gnk_Set_Object_Color(Gnk_Color);
 void gnk_Set_Background_Color(Gnk_Color);
+void gnk_Set_Line_Width(float);
+
 void gnk_Process_Input();
+
 void gnk_Set_Frame_Space(void (*)());
-void gnk_Set_Frame(Gnk_Frame&);
+void gnk_Set_Current_Frame(Gnk_Frame&);
+
 void gnk_Window_Loop();
+
 void gnk_Triangle(Gnk_Point, Gnk_Point, Gnk_Point, bool = true);
 void gnk_Rectangle(Gnk_Point, Gnk_Point, bool = true);
 void gnk_Circle(Gnk_Point, float, float, float, bool = true);
-void gnk_Set_Line_Width(float);
 void gnk_Line(Gnk_Point, Gnk_Point);
 void gnk_Rounded_Rectangle(Gnk_Point, Gnk_Point, float, bool = true);
+
 bool gnk_Load_Font(Gnk_Font&, std::string, int);
 void gnk_Set_Character_Font(std::string);
-void gnk_Text(std::string, Gnk_Point, float);
+
 float gnk_Get_Text_Width(std::string, float);
-void gnk_Text_Limited(std::string, Gnk_Point, float, float, float, text_align);
+void gnk_Text(std::string, Gnk_Point, float);
+void gnk_Text_Limited(std::string, Gnk_Point, float, float, float, text_align_value);
+
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);
 #endif

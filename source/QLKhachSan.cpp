@@ -204,7 +204,7 @@ NguoiDung *QLKhachSan::dangNhap(string username, string password) {
         role = KHACHHANG;
         return QLKH.timKiemKhachHang(ID);
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
