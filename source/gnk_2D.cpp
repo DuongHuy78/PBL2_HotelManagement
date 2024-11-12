@@ -43,6 +43,9 @@ Gnk_Color Gnk_Color::operator+(const Gnk_Color& other) {
 	int r = (this->red + other.red)* GNK_NUM_COLORS;
 	int g = (this->green + other.green)* GNK_NUM_COLORS;
 	int b = (this->blue + other.blue)* GNK_NUM_COLORS;
+	if(r > GNK_NUM_COLORS) r = GNK_NUM_COLORS;
+	if(g > GNK_NUM_COLORS) g = GNK_NUM_COLORS;
+	if(b > GNK_NUM_COLORS) b = GNK_NUM_COLORS;
 	Gnk_Color newColor(r, g, b);
 	return newColor;
 }
@@ -51,6 +54,9 @@ Gnk_Color Gnk_Color::operator-(const Gnk_Color& other) {
 	int r = (this->red - other.red) * GNK_NUM_COLORS;
 	int g = (this->green - other.green) * GNK_NUM_COLORS;
 	int b = (this->blue - other.blue) * GNK_NUM_COLORS;
+	if(r < 0) r = 0;
+	if(g < 0) g = 0;
+	if(b < 0) b = 0;
 	Gnk_Color newColor(r, g, b);
 	return newColor;
 }
@@ -131,15 +137,22 @@ void Gnk_Button::setClickProcess(void (*click)(Gnk_Button*)) {
 	this->click_process = click;
 }
 
-void Gnk_Button::display() {
+void Gnk_Button::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
-	if (onHover) {
+}
+
+void Gnk_Button::display() {
+	if (!appear) return;
+	if (onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if (onHover && hover_process != nullptr) {
 		hover_effect();
 	}
-	if (onClick) {
-		click_effect();
+	else {
+		draw();
 	}
 }
 
@@ -218,9 +231,9 @@ void Gnk_Button_With_Text::setTextAlign(text_align_value align) {
 	this->textAlign = align;
 }
 
-void Gnk_Button_With_Text::display() {
-	if(!appear) return;
-	Gnk_Button::display();
+void Gnk_Button_With_Text::draw() {
+	if (!appear) return;
+	Gnk_Button::draw();
 	gnk_Set_Character_Font(text_font);
 	gnk_Set_Object_Color(text_color);
 	float scale = font_size / gnk_Current_Font->size;
@@ -243,6 +256,19 @@ void Gnk_Button_With_Text::display() {
 	}
 }
 
+void Gnk_Button_With_Text::display() {
+	if(!appear) return;
+	if (onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if (onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
+}
+
 // Button with Image Definition
 Gnk_Button_With_Image::Gnk_Button_With_Image() {
 	this->image = new Gnk_Image();
@@ -254,10 +280,23 @@ void Gnk_Button_With_Image::setImage(Gnk_Image *image) {
 	delete tmp;
 }
 
+void Gnk_Button_With_Image::draw() {
+	if (!appear) return;
+	Gnk_Button::draw();
+	gnk_Image(*image, A, B);
+}
+
 void Gnk_Button_With_Image::display() {
 	if(!appear) return;
-	Gnk_Button::display();
-	gnk_Image(*image, A, B);
+	if(onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if(onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
 }
 
 // Textbox definition
@@ -352,7 +391,7 @@ float Gnk_Textbox::getHeight() {
 	return B.y - A.y;
 }
 
-void Gnk_Textbox::display() {
+void Gnk_Textbox::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
@@ -417,7 +456,16 @@ void Gnk_Textbox::display() {
 				Gnk_Point(A.x + cpX, A.y + cpY));
 			gnk_Set_Line_Width(1.0f);
 		}
+	}
+}
+
+void Gnk_Textbox::display() {
+	if (!appear) return;
+	if(on_select && select_process != nullptr) {
 		select_effect();
+	}
+	else {
+		draw();
 	}
 }
 
@@ -444,14 +492,24 @@ void Gnk_Textbox::process() {
 }
 
 // Textbox Password Definition
-void Gnk_Textbox_Password::display() {
+void Gnk_Textbox_Password::draw() {
 	if(!appear) return;
 	std::string newText = this->text;
 	for(int i = 0; i < this->text.size(); ++i) {
 		this->text[i] = '*';
 	}
-	Gnk_Textbox::display();
+	Gnk_Textbox::draw();
 	this->text = newText;
+}
+
+void Gnk_Textbox_Password::display() {
+	if(!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
 }
 
 // Frame Definition
@@ -619,7 +677,7 @@ Gnk_Image_List gnk_Image_List;
 double gnk_Text_Cursor_Last_Time;
 bool gnk_Text_Cursor_Appear = false;
 double gnk_Backspace_Last_Time = 0.0;
-double gnk_Backspace_Speed = 0.08;
+double gnk_Backspace_Speed = 0.06;
 double gnk_Event_Timeout = 0.5;
 int gnk_Scroll_Speed = 40;
 int gnk_Frame_Position = 0;

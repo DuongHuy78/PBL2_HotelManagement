@@ -86,6 +86,7 @@ public:
 };
 
 class Gnk_Button {
+protected:
 	void (*hover_process)(Gnk_Button*);
 	void (*click_process)(Gnk_Button*);
 public:
@@ -103,6 +104,7 @@ public:
 	void setRadius(float);
 	void setHoverProcess(void (*)(Gnk_Button*));
 	void setClickProcess(void (*)(Gnk_Button*));
+	virtual void draw();
 	virtual void display();
 	void hover_effect();
 	void click_effect();
@@ -125,6 +127,7 @@ public:
 	void setPaddingX(float);
 	void setPaddingY(float);
 	void setTextAlign(text_align_value);
+	virtual void draw();
 	virtual void display();
 };
 
@@ -133,10 +136,12 @@ public:
 	Gnk_Image *image;
 	Gnk_Button_With_Image();
 	void setImage(Gnk_Image *);
+	virtual void draw();
 	virtual void display();
 };
 
 class Gnk_Textbox {
+protected:
 	void (*select_process)(Gnk_Textbox*);
 public:
 	bool appear = true;
@@ -174,6 +179,7 @@ public:
 	void setSelectProcess(void (*)(Gnk_Textbox*));
 	float getWidth();
 	float getHeight();
+	virtual void draw();
 	virtual void display();
 	void select_effect();
 	void process();
@@ -181,6 +187,7 @@ public:
 
 class Gnk_Textbox_Password: public Gnk_Textbox {
 public:
+	virtual void draw();
 	virtual void display();
 };
 
