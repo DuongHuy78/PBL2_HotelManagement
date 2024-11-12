@@ -1,4 +1,5 @@
 #include "header/gnk_2D.h"
+bool creative = false;
 // -Class Definition---------------------------------------------------------
 // Point Definition
 Gnk_Point::Gnk_Point(float x, float y) {
@@ -42,6 +43,9 @@ Gnk_Color Gnk_Color::operator+(const Gnk_Color& other) {
 	int r = (this->red + other.red)* GNK_NUM_COLORS;
 	int g = (this->green + other.green)* GNK_NUM_COLORS;
 	int b = (this->blue + other.blue)* GNK_NUM_COLORS;
+	if(r > GNK_NUM_COLORS) r = GNK_NUM_COLORS;
+	if(g > GNK_NUM_COLORS) g = GNK_NUM_COLORS;
+	if(b > GNK_NUM_COLORS) b = GNK_NUM_COLORS;
 	Gnk_Color newColor(r, g, b);
 	return newColor;
 }
@@ -50,6 +54,9 @@ Gnk_Color Gnk_Color::operator-(const Gnk_Color& other) {
 	int r = (this->red - other.red) * GNK_NUM_COLORS;
 	int g = (this->green - other.green) * GNK_NUM_COLORS;
 	int b = (this->blue - other.blue) * GNK_NUM_COLORS;
+	if(r < 0) r = 0;
+	if(g < 0) g = 0;
+	if(b < 0) b = 0;
 	Gnk_Color newColor(r, g, b);
 	return newColor;
 }
@@ -98,68 +105,282 @@ Gnk_Image& Gnk_Image_List::operator[](std::string key) {
 }
 
 // Button Definition
-Gnk_Button::Gnk_Button(Gnk_Point A, Gnk_Point B, Gnk_Color color, std::string text, 
-	std::string tFont, float fontSize, Gnk_Color tColor, 
-	float pX, float pY,	float radius, void (*logic)(), 
-	void (*hover)(Gnk_Button &), text_align textAlign) {
+Gnk_Button::Gnk_Button() {
+	this->A = Gnk_Point();
+	this->B = Gnk_Point();
+	this->color = Gnk_Color();
+	this->border_radius = 0;
+}
+
+void Gnk_Button::setAppear(bool appear) {
+	this->appear = appear;
+}
+
+void Gnk_Button::setRange(Gnk_Point A, Gnk_Point B) {
 	this->A = A;
 	this->B = B;
-	this->color = color;
+}
 
-	this->text = text;
-	this->textFont = tFont;
-	this->fontSize = fontSize;
-	this->textColor = tColor;
-	
-	this->paddingX = pX;
-	this->paddingY = pY;
-	this->radius = radius;
-	
-	this->logic = logic;
-	this->hover_effect = hover;
-	this->textAlign = textAlign;
+void Gnk_Button::setColor(Gnk_Color color) {
+	this->color = color;
+}
+
+void Gnk_Button::setRadius(float radius) {
+	this->border_radius = radius;
+}
+
+void Gnk_Button::setHoverProcess(void (*hover)(Gnk_Button*)) {
+	this->hover_process = hover;
+}
+
+void Gnk_Button::setClickProcess(void (*click)(Gnk_Button*)) {
+	this->click_process = click;
+}
+
+void Gnk_Button::draw() {
+	if (!appear) return;
+	gnk_Set_Object_Color(color);
+	gnk_Rounded_Rectangle(A, B, border_radius);
+}
+
+void Gnk_Button::display() {
+	if (!appear) return;
+	if (onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if (onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+void Gnk_Button::hover_effect() {
+	if (this->hover_process != nullptr) hover_process(this);
+}
+
+void Gnk_Button::click_effect() {
+	if (this->click_process != nullptr) click_process(this);
+	this->onClick = false;
 }
 
 void Gnk_Button::process() {
-	logic();
+	if(!appear) return;
+	double xpos, ypos;
+	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+	ypos = gnk_Height - ypos;
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if (xpos >= A.x && xpos <= B.x && 
+		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
+		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+			onClick = true;
+		}
+		else {
+			onClick = false;
+		}
+	}
+	else if (xpos >= A.x && xpos <= B.x && 
+		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
+		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+		onHover = true;
+		onClick = false;
+	}
+	else {
+		onHover = false;
+		onClick = false;
+	}
 }
 
-float Gnk_Button::getWidth() {
-	return B.x - A.x;
+// Button with Text Definition
+Gnk_Button_With_Text::Gnk_Button_With_Text() {
+	this->text = "";
+	this->text_font = "";
+	this->font_size = 0;
+	this->text_color = Gnk_Color();
+	this->paddingX = 0;
+	this->paddingY = 0;
+	this->textAlign = GNK_TEXT_LEFT;
 }
 
-float Gnk_Button::getHeight() {
-	return B.y - A.y;
+void Gnk_Button_With_Text::setText(std::string text) {
+	this->text = text;
 }
 
-void Gnk_Button::hover() {
-	if (hover_effect != NULL) hover_effect(*this);
+void Gnk_Button_With_Text::setTextFont(std::string font) {
+	this->text_font = font;
+}
+
+void Gnk_Button_With_Text::setFontSize(float size) {
+	this->font_size = size;
+}
+
+void Gnk_Button_With_Text::setTextColor(Gnk_Color color) {
+	this->text_color = color;
+}
+
+void Gnk_Button_With_Text::setPaddingX(float x) {
+	this->paddingX = x;
+}
+
+void Gnk_Button_With_Text::setPaddingY(float y) {
+	this->paddingY = y;
+}
+
+void Gnk_Button_With_Text::setTextAlign(text_align_value align) {
+	this->textAlign = align;
+}
+
+void Gnk_Button_With_Text::draw() {
+	if (!appear) return;
+	Gnk_Button::draw();
+	gnk_Set_Character_Font(text_font);
+	gnk_Set_Object_Color(text_color);
+	float scale = font_size / gnk_Current_Font->size;
+	float maxWidth = gnk_Get_Text_Width(text, font_size);
+	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
+	if (maxWidth > B.x - A.x - 2 * paddingX) {
+		maxWidth = B.x - A.x - 2 * paddingX;
+	}
+	if (maxHeight > B.y - A.y - 2 * paddingY) {
+		maxHeight = B.y - A.y - 2 * paddingY;
+	}
+	if (textAlign == GNK_TEXT_CENTER) {
+		gnk_Text_Limited(text, A.translate(paddingX, paddingY), B.x - A.x - 2 * paddingX, B.y - A.y - 2 * paddingY, font_size, GNK_TEXT_CENTER);
+	}
+	else if (textAlign == GNK_TEXT_LEFT) {
+		gnk_Text_Limited(text, A.translate(paddingX, paddingY), B.x - A.x - 2 * paddingX, B.y - A.y - 2 * paddingY, font_size, GNK_TEXT_LEFT);
+	}
+	else if (textAlign == GNK_TEXT_RIGHT) {
+		gnk_Text_Limited(text, A.translate(paddingX, paddingY), B.x - A.x - 2 * paddingX, B.y - A.y - 2 * paddingY, font_size, GNK_TEXT_RIGHT);
+	}
+}
+
+void Gnk_Button_With_Text::display() {
+	if(!appear) return;
+	if (onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if (onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+// Button with Image Definition
+Gnk_Button_With_Image::Gnk_Button_With_Image() {
+	this->image = new Gnk_Image();
+}
+
+void Gnk_Button_With_Image::setImage(Gnk_Image *image) {
+	Gnk_Image *tmp = this->image;
+	this->image = image;
+	delete tmp;
+}
+
+void Gnk_Button_With_Image::draw() {
+	if (!appear) return;
+	Gnk_Button::draw();
+	gnk_Image(*image, A, B);
+}
+
+void Gnk_Button_With_Image::display() {
+	if(!appear) return;
+	if(onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if(onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
 }
 
 // Textbox definition
-Gnk_Textbox::Gnk_Textbox(Gnk_Point A, Gnk_Point B, Gnk_Color color, 
-	std::string tFont, float fontSize, Gnk_Color tColor, 
-	float pX, float pY, std::string placeholder, std::string plFont,
-	float plFontSize, Gnk_Color plColor, text_align textAlign,
-	void (*hover)(Gnk_Textbox&)) {
+Gnk_Textbox::Gnk_Textbox() {
+	this->A = Gnk_Point();
+	this->B = Gnk_Point();
+	this->color = Gnk_Color();
+	this->text = "";
+	this->text_font = "";
+	this->font_size = 0;
+	this->text_color = Gnk_Color();
+	this->placeholder = "";
+	this->placeholder_font = "";
+	this->placeholder_font_size = 0;
+	this->placeholder_color = Gnk_Color();
+	this->paddingX = 0;
+	this->paddingY = 0;
+	this->text_align = GNK_TEXT_LEFT;
+	this->on_select = false;
+}
+
+void Gnk_Textbox::setAppear(bool appear) {
+	this->appear = appear;
+}
+
+void Gnk_Textbox::setRange(Gnk_Point A, Gnk_Point B) {
 	this->A = A;
 	this->B = B;
+}
+
+void Gnk_Textbox::setColor(Gnk_Color color) {
 	this->color = color;
+}
 
-	this->textFont = tFont;
-	this->fontSize = fontSize;
-	this->textColor = tColor;
+void Gnk_Textbox::setBorderRadius(float radius) {
+	this->border_radius = radius;
+}
 
-	this->paddingX = pX;
-	this->paddingY = pY;
+void Gnk_Textbox::setText(std::string text) {
+	this->text = text;
+}
 
-	this->placeholder = placeholder;
-	this->plFont = plFont;
-	this->plFontSize = plFontSize;
-	this->plColor = plColor;
+void Gnk_Textbox::setTextFont(std::string font) {
+	this->text_font = font;
+}
 
-	this->textAlign = textAlign;
-	this->select_effect = hover;
+void Gnk_Textbox::setFontSize(float size) {
+	this->font_size = size;
+}
+
+void Gnk_Textbox::setTextColor(Gnk_Color color) {
+	this->text_color = color;
+}
+
+void Gnk_Textbox::setPlaceholder(std::string text) {
+	this->placeholder = text;
+}
+
+void Gnk_Textbox::setPlaceholderFont(std::string font) {
+	this->placeholder_font = font;
+}
+
+void Gnk_Textbox::setPlaceholderFontSize(float size) {
+	this->placeholder_font_size = size;
+}
+
+void Gnk_Textbox::setPlaceholderColor(Gnk_Color color) {
+	this->placeholder_color = color;
+}
+
+void Gnk_Textbox::setPaddingX(float x) {
+	this->paddingX = x;
+}
+
+void Gnk_Textbox::setPaddingY(float y) {
+	this->paddingY = y;
+}
+
+void Gnk_Textbox::setTextAlign(text_align_value align) {
+	this->text_align = align;
+}
+
+void Gnk_Textbox::setSelectProcess(void (*select)(Gnk_Textbox*)) {
+	this->select_process = select;
 }
 
 float Gnk_Textbox::getWidth() {
@@ -169,69 +390,171 @@ float Gnk_Textbox::getWidth() {
 float Gnk_Textbox::getHeight() {
 	return B.y - A.y;
 }
-void Gnk_Textbox::select() {
-	if (select_effect != NULL) select_effect(*this);
+
+void Gnk_Textbox::draw() {
+	if (!appear) return;
+	gnk_Set_Object_Color(color);
+	gnk_Rounded_Rectangle(A, B, border_radius);
+	std::string output;
+	std::string output_font;
+	float output_font_size;
+	Gnk_Color output_color;
+	if (text == "") {
+		if (!on_select) output = placeholder;
+		else output = "";
+		output_font = placeholder_font;
+		output_font_size = placeholder_font_size;
+		output_color = placeholder_color;
+	}
+	else {
+		output = text;
+		output_font = text_font;
+		output_font_size = font_size;
+		output_color = text_color;
+	}
+
+	gnk_Set_Character_Font(output_font);
+	float scale = output_font_size / gnk_Current_Font->size;
+	gnk_Set_Object_Color(output_color);
+
+	float maxWidth = gnk_Get_Text_Width(output, output_font_size);
+	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
+
+	if (maxWidth > getWidth() - 2 * paddingX) {
+		maxWidth = getWidth() - 2 * paddingX;
+	}
+		
+	if (maxHeight > getHeight() - 2 * paddingY)
+		maxHeight = getHeight() - 2 * paddingY;
+
+	float cpX = 0, cpY = 0;
+	if (text_align == GNK_TEXT_CENTER) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, font_size, GNK_TEXT_CENTER);
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) / 2 + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	else if (text_align == GNK_TEXT_LEFT) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, font_size, GNK_TEXT_LEFT);
+		cpX = paddingX + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	else if (text_align == GNK_TEXT_RIGHT) {
+		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, font_size, GNK_TEXT_RIGHT);
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) + maxWidth;
+		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
+	}
+	
+	if (on_select) {
+		if (glfwGetTime() - gnk_Text_Cursor_Last_Time > 0.5f) {
+			gnk_Text_Cursor_Appear = !gnk_Text_Cursor_Appear;
+			gnk_Text_Cursor_Last_Time = glfwGetTime();
+		}
+		if (gnk_Text_Cursor_Appear) {
+			gnk_Set_Line_Width(2.0f);
+			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
+			gnk_Line(Gnk_Point(A.x + cpX, A.y + cpY - maxHeight),
+				Gnk_Point(A.x + cpX, A.y + cpY));
+			gnk_Set_Line_Width(1.0f);
+		}
+	}
+}
+
+void Gnk_Textbox::display() {
+	if (!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+void Gnk_Textbox::select_effect() {
+	if (select_process != NULL) select_process(this);
+}
+
+void Gnk_Textbox::process() {
+	if(!appear) return;
+	double xpos, ypos;
+	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+	ypos = gnk_Height - ypos;
+	
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if (xpos >= A.x && xpos <= B.x && 
+		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
+		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+			on_select = true;
+		}
+		else {
+			on_select = false;
+		}
+	}
 }
 
 // Textbox Password Definition
-Gnk_Textbox_password::Gnk_Textbox_password(Gnk_Point A, Gnk_Point B, Gnk_Color color, 
-	std::string tFont, float fontSize, Gnk_Color tColor, 
-	float pX, float pY, std::string placeholder, std::string plFont,
-	float plFontSize, Gnk_Color plColor, text_align textAlign,
-	void (*hover)(Gnk_Textbox&))
-	:Gnk_Textbox(A, B, color, tFont, fontSize, tColor, pX, pY, placeholder, plFont, plFontSize, plColor, textAlign, hover) {
+void Gnk_Textbox_Password::draw() {
+	if(!appear) return;
+	std::string newText = this->text;
+	for(int i = 0; i < this->text.size(); ++i) {
+		this->text[i] = '*';
+	}
+	Gnk_Textbox::draw();
+	this->text = newText;
+}
 
+void Gnk_Textbox_Password::display() {
+	if(!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
 }
 
 // Frame Definition
 Gnk_Frame::Gnk_Frame() {
-	this->Draw = NULL;
+	this->process = nullptr;
 }
 
 Gnk_Frame::~Gnk_Frame() {
-	while(!buttonList.empty()) {
-		Gnk_Button *p = buttonList.back();
-		delete p;
-		buttonList.pop_back();
+	for(auto &it:buttonList) {
+		if(it.second != nullptr) {
+			delete it.second;
+			it.second = nullptr;
+		}
 	}
 
-	while(!textboxList.empty()) {
-		Gnk_Textbox *p = textboxList.back();
-		delete p;
-		textboxList.pop_back();
+	for(auto &it:textboxList) {
+		if(it.second != nullptr) {
+			delete it.second;
+			it.second = nullptr;
+		}
+	}
+
+	if(scrollbar != nullptr) {
+		delete scrollbar;
 	}
 }
 
-Gnk_Frame::Gnk_Frame(void (*Draw)()) {
-	this->Draw = Draw;
+Gnk_Frame::Gnk_Frame(void (*process)(Gnk_Frame *)) {
+	this->process = process;
+}
+
+void Gnk_Frame::addButton(std::string key, Gnk_Button *button) {
+	buttonList[key] = button;
+}
+
+void Gnk_Frame::addTextbox(std::string key, Gnk_Textbox *textbox) {
+	textboxList[key] = textbox;
+}
+
+void Gnk_Frame::setScrollbar(Gnk_Scrollbar *scrollbar) {
+	this->scrollbar = scrollbar;
 }
 
 void Gnk_Frame::display() {
-	if (Draw != NULL) this->Draw();
-}
-
-void Gnk_Frame::addButton(Gnk_Button *B) {
-	buttonList.push_back(B);
-}
-
-void Gnk_Frame::addTextbox(Gnk_Textbox *T) {
-	textboxList.push_back(T);
-}
-
-void Gnk_Frame::buttonDisplay() {
-	for (auto &it:buttonList) {
-		it->display();
-	}
-}
-
-void Gnk_Frame::textboxDisplay() {
-	for (auto &it:textboxList) {
-		it->display();
-	}
-}
-
-void Gnk_Frame::setScrollbar(Gnk_Scrollbar scrollbar) {
-	this->scrollbar = scrollbar;
+	if (process != nullptr) this->process(this);
 }
 
 // Scrollbar Definition------------------------------------------------------
@@ -239,37 +562,59 @@ Gnk_Scrollbar::Gnk_Scrollbar() {
 	this->maxHeight = 0;
 	this->frameHeight = 0;
 	this->scrollPosition = 0;
-	this->A = Gnk_Point(0, 0);
-	this->B = Gnk_Point(0, 0);
-	this->color = Gnk_Color(0, 0, 0);
-	this->scrollColor = Gnk_Color(0, 0, 0);
-	this->hoverColor = Gnk_Color(0, 0, 0);
-	this->clickColor = Gnk_Color(0, 0, 0);
+	this->A = Gnk_Point();
+	this->B = Gnk_Point();
+	this->C = Gnk_Point();
+	this->D = Gnk_Point();
+	this->color = Gnk_Color();
+	this->scrollColor = Gnk_Color();
+	this->hoverColor = Gnk_Color();
+	this->clickColor = Gnk_Color();
 }
 
-Gnk_Scrollbar::Gnk_Scrollbar(int maxHeight, int frameHeight, Gnk_Point A, Gnk_Point B, Gnk_Color color, Gnk_Color scrollColor, Gnk_Color hoverColor, Gnk_Color clickColor) {
-	this->maxHeight = maxHeight;
-	this->frameHeight = frameHeight;
-	this->scrollPosition = 0;
+void Gnk_Scrollbar::setAppear(bool appear) {
+	this->appear = appear;
+	if(maxHeight <= frameHeight) appear = false;
+}
+
+void Gnk_Scrollbar::setRange(Gnk_Point A, Gnk_Point B) {
 	this->A = A;
 	this->B = B;
-	this->C = Gnk_Point(0, 0);
-	this->D = Gnk_Point(0, 0);
+}
+
+void Gnk_Scrollbar::setColor(Gnk_Color color) {
 	this->color = color;
-	this->scrollColor = scrollColor;
-	this->hoverColor = hoverColor;
-	this->clickColor = clickColor;
+}
+
+void Gnk_Scrollbar::setScrollColor(Gnk_Color color) {
+	this->scrollColor = color;
+}
+
+void Gnk_Scrollbar::setHoverColor(Gnk_Color color) {
+	this->hoverColor = color;
+}
+
+void Gnk_Scrollbar::setClickColor(Gnk_Color color) {
+	this->clickColor = color;
+}
+
+void Gnk_Scrollbar::setMaxHeight(int maxHeight) {
+	this->maxHeight = maxHeight;
+}
+
+void Gnk_Scrollbar::setFrameHeight(int frameHeight) {
+	this->frameHeight = frameHeight;
 }
 
 void Gnk_Scrollbar::display() {
-	if(maxHeight <= frameHeight) return;
+	if(!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rectangle(A.translate(0.0f, gnk_Frame_Position - gnk_Height), B.translate(0.0f, gnk_Frame_Position - gnk_Height));
-	if(onHover) {
-		gnk_Set_Object_Color(hoverColor);
-	}
-	else if(onClick) {
+	if(onClick) {
 		gnk_Set_Object_Color(clickColor);
+	}
+	else if(onHover) {
+		gnk_Set_Object_Color(hoverColor);
 	}
 	else {
 		gnk_Set_Object_Color(scrollColor);
@@ -281,39 +626,30 @@ void Gnk_Scrollbar::display() {
 }
 
 void Gnk_Scrollbar::process() {
+	if(!appear) return;
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	if(xpos > C.x && xpos < D.x && ypos > D.y && ypos < C.y) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if (xpos >= C.x && xpos <= D.x && 
+		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
+		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
+			onClick = true;
+		}
+		else {
+			onClick = false;
+		}
+	}
+	else if (xpos >= C.x && xpos <= D.x && 
+		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
+		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
 		onHover = true;
+		onClick = false;
 	}
 	else {
 		onHover = false;
+		onClick = false;
 	}
-}
-
-void Gnk_Scrollbar::setMaxHeight(int maxHeight) {
-	this->maxHeight = maxHeight;
-}
-
-void Gnk_Scrollbar::setFrameHeight(int frameHeight) {
-	this->frameHeight = frameHeight;
-}
-
-void Gnk_Scrollbar::setScrollPosition(int scrollPosition) {
-	this->scrollPosition = scrollPosition;
-}
-
-int Gnk_Scrollbar::getScrollHeight() {
-	return B.y - A.y;
-}
-
-int Gnk_Scrollbar::getScrollPosition() {
-	return scrollPosition;
-}
-
-int Gnk_Scrollbar::getMaxHeight() {
-	return maxHeight;
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -341,65 +677,71 @@ Gnk_Image_List gnk_Image_List;
 double gnk_Text_Cursor_Last_Time;
 bool gnk_Text_Cursor_Appear = false;
 double gnk_Backspace_Last_Time = 0.0;
-double gnk_Backspace_Speed = 0.08;
+double gnk_Backspace_Speed = 0.06;
 double gnk_Event_Timeout = 0.5;
 int gnk_Scroll_Speed = 40;
 int gnk_Frame_Position = 0;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
-	ypos = gnk_Height - ypos;
-	for (auto& it : gnk_Current_Frame->buttonList) {
-		if (xpos > it->A.x && xpos < it->B.x &&
-			ypos > it->A.y + (gnk_Height - gnk_Frame_Position) 
-			&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
-			it->onHover = true;
+	for(auto &it: gnk_Current_Frame->buttonList) {
+		if(it.second != nullptr) {
+			it.second->process();
 		}
-		else {
-			it->onHover = false;
+		if (gnk_Current_Frame->scrollbar != nullptr) {
+			gnk_Current_Frame->scrollbar->process();
 		}
 	}
 }
 
 void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int mods) {
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+		creative = true;
+	}
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
+		creative = false;
+	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-		ypos = gnk_Height - ypos;
-		for (auto &it:gnk_Current_Frame->textboxList) {
-			if (xpos > it->A.x && xpos < it->B.x &&
-				ypos > it->A.y + (gnk_Height - gnk_Frame_Position) 
-				&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
-				it->active = true;
-			}
-			else {
-				it->active = false;
+		for (auto& it : gnk_Current_Frame->buttonList) {
+			if (it.second != nullptr) {
+				it.second->process();
 			}
 		}
-
-		for (auto &it: gnk_Current_Frame->buttonList) {
-			if (xpos > it->A.x && xpos < it->B.x && 
-				ypos > it->A.y + (gnk_Height - gnk_Frame_Position)
-				&& ypos < it->B.y + (gnk_Height - gnk_Frame_Position)) {
-				it->process();
-				return;
+		for (auto& it : gnk_Current_Frame->textboxList) {
+			if (it.second != nullptr) {
+				it.second->process();
 			}
+		}
+		if (gnk_Current_Frame->scrollbar != nullptr) {
+			gnk_Current_Frame->scrollbar->process();
 		}
 	}
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        for (auto& it : gnk_Current_Frame->buttonList) {
+			if (it.second != nullptr) {
+				it.second->onClick = false;
+			}
+		}
+		if (gnk_Current_Frame->scrollbar != nullptr) {
+			gnk_Current_Frame->scrollbar->onClick = false;
+		}
+    }
 }
 
 void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 	for (auto& it : gnk_Current_Frame->textboxList) {
-		if (it->active == true) {
-			it->text += (char)codepoint;
+		if (it.second->on_select == true) {
+			it.second->text += (char)codepoint;
 		}
 	}
 }
 
 void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
-	std::cout << xoffset << " " << yoffset << std::endl;
+	if(gnk_Current_Frame->scrollbar == nullptr) return;
 	gnk_Frame_Position += yoffset * gnk_Scroll_Speed;
+
 	if(gnk_Frame_Position > gnk_Height) gnk_Frame_Position = gnk_Height;
-	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight()) 
-	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar.getMaxHeight();
+	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight) 
+	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight;
+
 	glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 	projection = glm::translate(projection, glm::vec3(0.0f, gnk_Height - gnk_Frame_Position, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
@@ -412,9 +754,9 @@ void gnk_Key_Callback(GLFWwindow* window, int key, int scancode, int action, int
 		double currentTime = glfwGetTime();
 		if (currentTime - gnk_Backspace_Last_Time >= gnk_Backspace_Speed) {
 			for (auto& it : gnk_Current_Frame->textboxList) {
-				if (it->active == true) {
-					if (!it->text.empty()) {
-						it->text.pop_back();
+				if (it.second->on_select == true) {
+					if (!it.second->text.empty()) {
+						it.second->text.pop_back();
 					}
 				}
 			}
@@ -511,7 +853,7 @@ void gnk_Set_Frame_Space(void (*space)()) {
 	gnk_Frame_Space = space;
 }
 
-void gnk_Set_Frame(Gnk_Frame &frame) {
+void gnk_Set_Current_Frame(Gnk_Frame &frame) {
 	gnk_Current_Frame = &frame;
 }
 
@@ -522,9 +864,18 @@ void gnk_Window_Loop() {
 		gnk_Process_Input();
 		if(gnk_Frame_Space != NULL) gnk_Frame_Space();
 		gnk_Current_Frame->display();
-		gnk_Current_Frame->buttonDisplay();
-		gnk_Current_Frame->textboxDisplay();
-		gnk_Current_Frame->scrollbar.display();
+		if(creative) {
+			double xpos, ypos;
+			glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+			ypos = gnk_Height - ypos;
+			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
+			gnk_Set_Line_Width(1.5f);
+			gnk_Line(Gnk_Point(xpos - 100, ypos), Gnk_Point(xpos + 100, ypos));
+			gnk_Line(Gnk_Point(xpos, ypos - 100), Gnk_Point(xpos, ypos + 100));
+			gnk_Set_Line_Width(1.0f);
+			std::string message = "x: " + std::to_string(xpos) + " y: " + std::to_string(ypos);
+			gnk_Text(message, Gnk_Point(50, 40), 24);
+		}
 		glfwSwapBuffers(gnk_Window);
 		glfwPollEvents();
 	}
@@ -738,7 +1089,7 @@ float gnk_Get_Text_Width(std::string text, float fontSize) {
 	return width;
 }
 
-void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, float fontSize, text_align textAlign = GNK_TEXT_LEFT) {
+void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, float fontSize, text_align_value textAlign = GNK_TEXT_LEFT) {
 	float scale = fontSize / gnk_Current_Font->size;
 	float maxWidth = gnk_Get_Text_Width(text, fontSize);
 	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
@@ -837,95 +1188,3 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
 }
 
-void Gnk_Button::display() {
-	gnk_Set_Object_Color(color);
-	gnk_Rounded_Rectangle(A, B, radius);
-	gnk_Set_Object_Color(textColor);
-	gnk_Set_Character_Font(textFont);
-	gnk_Text_Limited(
-		text, 
-		A.translate(paddingX, paddingY), 
-		getWidth() - 2 * paddingX, 
-		getHeight() - 2 * paddingY, 
-		fontSize, 
-		textAlign
-	);
-	if (onHover) hover();
-}
-
-void Gnk_Textbox::display() {
-	gnk_Set_Object_Color(color);
-	gnk_Rectangle(A, B);
-	std::string output;
-	std::string outputFont;
-	float outputFontSize;
-	Gnk_Color outputColor;
-	if (text == "") {
-		if (!active) output = placeholder;
-		else output = "";
-		outputFont = plFont;
-		outputFontSize = plFontSize;
-		outputColor = plColor;
-	}
-	else {
-		output = text;
-		outputFont = textFont;
-		outputFontSize = fontSize;
-		outputColor = textColor;
-	}
-
-	gnk_Set_Character_Font(outputFont);
-	float scale = outputFontSize / gnk_Current_Font->size;
-	gnk_Set_Object_Color(outputColor);
-
-	float maxWidth = gnk_Get_Text_Width(output, outputFontSize);
-	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
-
-	if (maxWidth > getWidth() - 2 * paddingX) {
-		maxWidth = getWidth() - 2 * paddingX;
-	}
-		
-	if (maxHeight > getHeight() - 2 * paddingY)
-		maxHeight = getHeight() - 2 * paddingY;
-
-	float cpX = 0, cpY = 0;
-	if (textAlign == GNK_TEXT_CENTER) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_CENTER);
-		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) / 2 + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	else if (textAlign == GNK_TEXT_LEFT) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_LEFT);
-		cpX = paddingX + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	else if (textAlign == GNK_TEXT_RIGHT) {
-		gnk_Text_Limited(output, A.translate(paddingX, paddingY), getWidth() - 2 * paddingX, getHeight() - 2 * paddingY, fontSize, GNK_TEXT_RIGHT);
-		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) + maxWidth;
-		cpY = paddingY + (getHeight() - 2 * paddingY - maxHeight) / 2 + maxHeight;
-	}
-	
-	if (active) {
-		if (glfwGetTime() - gnk_Text_Cursor_Last_Time > 0.5f) {
-			gnk_Text_Cursor_Appear = !gnk_Text_Cursor_Appear;
-			gnk_Text_Cursor_Last_Time = glfwGetTime();
-		}
-		if (gnk_Text_Cursor_Appear) {
-			gnk_Set_Line_Width(2.0f);
-			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
-			gnk_Line(Gnk_Point(A.x + cpX, A.y + cpY - maxHeight),
-				Gnk_Point(A.x + cpX, A.y + cpY));
-			gnk_Set_Line_Width(1.0f);
-		}
-		select();
-	}
-}
-
-void Gnk_Textbox_password::display() {
-	std::string newText = this->text;
-	for(int i = 0; i < this->text.size(); ++i) {
-		this->text[i] = '*';
-	}
-	Gnk_Textbox::display();
-	this->text = newText;
-}
