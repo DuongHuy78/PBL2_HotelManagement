@@ -22,6 +22,8 @@ public:
     void QLChoice();
 
     void AddRangeLoaiPhong(string); // cân nhắc chuyển vào QLKhachSan
-    void updateLoaiPhong(LoaiPhong);     
+    void updateLoaiPhong(LoaiPhong);  
+    LoaiPhong nhapThongTin();  
+    LoaiPhong* timKiemLoaiPhong(const string&); 
 };
 #endif

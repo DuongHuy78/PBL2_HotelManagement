@@ -56,7 +56,13 @@ void QLPhong::suaThongTin(string) {
 
 }
 
+Phong *QLPhong::timKiemPhong(string) {
 
+}
+
+Phong QLPhong::nhapThongTin() {
+
+}
 Phong QLPhong::timPhong(time_t, time_t) {
 
 }

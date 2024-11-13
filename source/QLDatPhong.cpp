@@ -61,6 +61,10 @@ string QLDatPhong::taoMaDatPhong(){
         MDPNew = Utils::intToString(Utils::stringToInt(getMaxMaDatPhong()) + 1);
     }
 }
+
+Node<DatPhong> *QLDatPhong::getHead() {
+    return this->DSDP.getHead();
+}
 LinkedList<DatPhong> &QLDatPhong::getDanhSachDatPhong() {
     return this->DSDP;
 }
