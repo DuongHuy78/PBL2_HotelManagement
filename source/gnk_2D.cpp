@@ -597,7 +597,6 @@ void Gnk_Frame::display() {
 Gnk_Scrollbar::Gnk_Scrollbar() {
 	this->maxHeight = 0;
 	this->frameHeight = 0;
-	this->scrollPosition = 0;
 	this->A = Gnk_Point();
 	this->B = Gnk_Point();
 	this->C = Gnk_Point();
@@ -656,9 +655,9 @@ void Gnk_Scrollbar::display() {
 		gnk_Set_Object_Color(scrollColor);
 	}
 	float ratio = (float)frameHeight / maxHeight;
-	C = Gnk_Point(A.x, -ratio*(scrollPosition - frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
-	D = Gnk_Point(B.x, -ratio*(scrollPosition - 2 * frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
-	gnk_Rectangle(C, D);
+	C = Gnk_Point(A.x, gnk_Height - ratio * (2 * gnk_Height - gnk_Frame_Position));
+	D = Gnk_Point(B.x, gnk_Height - ratio * (gnk_Height - gnk_Frame_Position));
+	gnk_Rectangle(C.translate(0.0f, gnk_Frame_Position - gnk_Height), D.translate(0.0f, gnk_Frame_Position - gnk_Height));
 }
 
 void Gnk_Scrollbar::process() {

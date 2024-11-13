@@ -1,5 +1,5 @@
 #include "header/UI.h"
-frame_num_value frame_num = SIGN_UP_FRAME;
+frame_num_value frame_num = LOGIN_FRAME;
 QLKhachSan *current_Data;
 bool login_failed = false;
 void login_frame_draw(Gnk_Frame *frame) {
@@ -85,7 +85,6 @@ void login_frame_sign_up_button_click(Gnk_Button *button) {
 	buttonText->text_color = Gnk_Color(70, 80, 127);
 	buttonText->draw();
 	buttonText->text_color = color;
-	cout << "Sign up" << endl;
 	frame_num = SIGN_UP_FRAME;
 }
 
@@ -189,21 +188,9 @@ void UI_init() {
 	login_frame_username_textbox->setTextAlign(GNK_TEXT_LEFT);
 	login_frame_username_textbox->setSelectProcess(login_frame_textbox_select);
 
-	Gnk_Textbox_Password *login_frame_password_textbox = new Gnk_Textbox_Password();
+	Gnk_Textbox_Password *login_frame_password_textbox = new Gnk_Textbox_Password(*login_frame_username_textbox);
 	login_frame_password_textbox->setRange(Gnk_Point(806.0f, 370.0f), Gnk_Point(1190.0f, 430.0f));
-	login_frame_password_textbox->setColor(Gnk_Color(255, 255, 255));
-	login_frame_password_textbox->setBorderRadius(0.0f);
-	login_frame_password_textbox->setTextFont("helvetica");
-	login_frame_password_textbox->setFontSize(24.0f);
-	login_frame_password_textbox->setTextColor(Gnk_Color(17, 17, 17));
 	login_frame_password_textbox->setPlaceholder("password");
-	login_frame_password_textbox->setPlaceholderFont("helvetica");
-	login_frame_password_textbox->setPlaceholderFontSize(24.0f);
-	login_frame_password_textbox->setPlaceholderColor(Gnk_Color(85, 85, 85));
-	login_frame_password_textbox->setPaddingX(15.0f);
-	login_frame_password_textbox->setPaddingY(10.0f);
-	login_frame_password_textbox->setTextAlign(GNK_TEXT_LEFT);
-	login_frame_password_textbox->setSelectProcess(login_frame_textbox_select);
 
 	Gnk_Button_With_Text *login_frame_login_button = new Gnk_Button_With_Text();
 	login_frame_login_button->setRange(Gnk_Point(1030.0f, 230.0f), Gnk_Point(1190.0f, 290.0f));
@@ -231,17 +218,10 @@ void UI_init() {
 	login_frame_forgotten_password_button->setClickProcess(login_frame_forgotten_password_button_click);
 	login_frame_forgotten_password_button->setHoverProcess(login_frame_forgotten_password_sign_up_button_hover);
 
-	Gnk_Button_With_Text *login_frame_sign_up_button = new Gnk_Button_With_Text();
+	Gnk_Button_With_Text *login_frame_sign_up_button = new Gnk_Button_With_Text(*login_frame_forgotten_password_button);
 	login_frame_sign_up_button->setRange(Gnk_Point(990.0f, 180.0f), Gnk_Point(1200.0f, 214.0f));
-	login_frame_sign_up_button->setColor(Gnk_Color(255, 255, 255));
 	login_frame_sign_up_button->setText("Sign up");
-	login_frame_sign_up_button->setTextFont("helvetica");
-	login_frame_sign_up_button->setFontSize(24.0f);
-	login_frame_sign_up_button->setTextColor(Gnk_Color(60, 60, 60));
-	login_frame_sign_up_button->setPaddingX(0.0f);
-	login_frame_sign_up_button->setPaddingY(0.0f);
 	login_frame_sign_up_button->setClickProcess(login_frame_sign_up_button_click);
-	login_frame_sign_up_button->setHoverProcess(login_frame_forgotten_password_sign_up_button_hover);
 
 	login.addTextbox("username_textbox", login_frame_username_textbox);
 	login.addTextbox("password_textbox", login_frame_password_textbox);
@@ -296,14 +276,15 @@ void UI_init() {
 		sign_up_frame_password_textbox->setPlaceholder("Password");
 
 		Gnk_Button_With_Text *sign_up_frame_sign_up_button = new Gnk_Button_With_Text();
-		sign_up_frame_sign_up_button->setRange(Gnk_Point(990.0f, -70.0f), Gnk_Point(1200.0f, -30.0f));
-		sign_up_frame_sign_up_button->setColor(Gnk_Color(255, 255, 255));
+		sign_up_frame_sign_up_button->setRange(Gnk_Point(700.0f, -70.0f), Gnk_Point(900.0f, -30.0f));
+		sign_up_frame_sign_up_button->setColor(Gnk_Color(90, 100, 147));
 		sign_up_frame_sign_up_button->setText("Sign up");
 		sign_up_frame_sign_up_button->setTextFont("helvetica");
 		sign_up_frame_sign_up_button->setFontSize(24.0f);
 		sign_up_frame_sign_up_button->setTextColor(Gnk_Color(60, 60, 60));
 		sign_up_frame_sign_up_button->setPaddingX(0.0f);
 		sign_up_frame_sign_up_button->setPaddingY(0.0f);
+		sign_up_frame_sign_up_button->setTextAlign(GNK_TEXT_CENTER);
 		//sign_up_frame_sign_up_button->setClickProcess();
 		//sign_up_frame_sign_up_button->setHoverProcess();
 
@@ -314,7 +295,7 @@ void UI_init() {
 		sign_up_frame_scrollbar->setScrollColor(Gnk_Color(200, 200, 200));
 		sign_up_frame_scrollbar->setHoverColor(Gnk_Color(180, 180, 180));
 		sign_up_frame_scrollbar->setClickColor(Gnk_Color(160, 160, 160));
-		sign_up_frame_scrollbar->setMaxHeight(gnk_Height * 1.5);		// Loi scrollbar
+		sign_up_frame_scrollbar->setMaxHeight(gnk_Height * 1.4);		// Loi scrollbar
 		sign_up_frame_scrollbar->setFrameHeight(gnk_Height);
 		sign_up_frame_scrollbar->setAppear(true);
 

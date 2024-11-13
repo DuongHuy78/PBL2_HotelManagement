@@ -199,7 +199,6 @@ public:
 	bool appear = false;
 	int maxHeight;
 	int frameHeight;
-	int scrollPosition;
 	Gnk_Point A;
 	Gnk_Point B;
 	Gnk_Point C;
