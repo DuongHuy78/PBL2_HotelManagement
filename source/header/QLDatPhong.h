@@ -16,6 +16,7 @@ public:
     string getMaxMaDatPhong();
     string taoMaDatPhong();
 
+    Node<DatPhong> *getHead();
     LinkedList<DatPhong> &getDanhSachDatPhong();
     DatPhong nhapThongTin();
 };

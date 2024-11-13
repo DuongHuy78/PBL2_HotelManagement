@@ -97,3 +97,7 @@ void LoaiPhong::setGiaPhong(int GP) {
 void LoaiPhong::setMoTaPhong(string MTP) {
     this->moTaPhong = MTP;
 }
+
+void LoaiPhong::suaThongTin() {
+
+}

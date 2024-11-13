@@ -330,9 +330,9 @@ void QLLoaiPhong::suaThongTinLoaiPhong(const string& MaLoaiPhong)
 
 
 // HÀM XÓA LOẠI PHÒNG (xóa trong file)
-// void QLLoaiPhong::xoaLoaiPhong(LoaiPhong LP) {
+void QLLoaiPhong::xoaLoaiPhong(LoaiPhong LP) {
 //    (this->DSLP).remove(LP);
-// }
+}
 
 //Các lựa chọn trong hàm này sẽ thao tác với file loaiphong.txt
 void QLLoaiPhong::QLChoice()
@@ -383,3 +383,11 @@ void QLLoaiPhong::QLChoice()
             } 
         } while(Choice!=4);
 } 
+
+LoaiPhong QLLoaiPhong::nhapThongTin(){
+
+}
+
+LoaiPhong* QLLoaiPhong::timKiemLoaiPhong(const string& maLoaiPhong) {
+
+}

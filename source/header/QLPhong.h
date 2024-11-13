@@ -13,6 +13,8 @@ public:
     void xoaPhong(Phong);
     void suaThongTin(string);
 
+    Phong *timKiemPhong(string);
+    Phong nhapThongTin();
     Phong timPhong(time_t, time_t);
     LinkedList<Phong> &getDanhSachPhong();
 };

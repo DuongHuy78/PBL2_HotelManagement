@@ -28,5 +28,6 @@ public:
     void setDienTich(int);
     void setGiaPhong(int);
     void setMoTaPhong(string);
+    void suaThongTin();
 };
 #endif
