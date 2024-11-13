@@ -160,6 +160,8 @@ public:
 	float paddingX, paddingY;
 	text_align_value text_align;
 	bool on_select = false;
+	bool border = false;
+	Gnk_Color border_color;
 	Gnk_Textbox();
 	void setAppear(bool);
 	void setRange(Gnk_Point, Gnk_Point);
@@ -177,6 +179,8 @@ public:
 	void setPaddingY(float);
 	void setTextAlign(text_align_value);
 	void setSelectProcess(void (*)(Gnk_Textbox*));
+	void setBorder(bool);
+	void setBorderColor(Gnk_Color);
 	float getWidth();
 	float getHeight();
 	virtual void draw();
@@ -258,7 +262,7 @@ extern double gnk_Backspace_Speed;
 extern double gnk_Event_Timeout;
 extern int gnk_Scroll_Speed;
 extern int gnk_Frame_Position;
-
+extern bool gnk_Mouse_Ignore;
 // -Function Prototype-------------------------------------------------------
 static void gnk_Cursor_Position_Callback(GLFWwindow*, double, double);
 void gnk_Mouse_Button_Callback(GLFWwindow*, int, int, int);

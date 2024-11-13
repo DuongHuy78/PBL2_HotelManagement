@@ -175,7 +175,7 @@ void Gnk_Button::process() {
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= A.x && xpos <= B.x && 
 		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
@@ -323,6 +323,8 @@ Gnk_Textbox::Gnk_Textbox() {
 	this->paddingY = 0;
 	this->text_align = GNK_TEXT_LEFT;
 	this->on_select = false;
+	this->border = false;
+	this->border_color = Gnk_Color();
 }
 
 void Gnk_Textbox::setAppear(bool appear) {
@@ -390,6 +392,14 @@ void Gnk_Textbox::setSelectProcess(void (*select)(Gnk_Textbox*)) {
 	this->select_process = select;
 }
 
+void Gnk_Textbox::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_Textbox::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
 float Gnk_Textbox::getWidth() {
 	return B.x - A.x;
 }
@@ -402,6 +412,12 @@ void Gnk_Textbox::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
+	if (border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rounded_Rectangle(A, B, border_radius, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 	std::string output;
 	std::string output_font;
 	float output_font_size;
@@ -486,7 +502,7 @@ void Gnk_Textbox::process() {
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
 	
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= A.x && xpos <= B.x && 
 		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
@@ -665,7 +681,7 @@ void Gnk_Scrollbar::process() {
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= C.x && xpos <= D.x && 
 		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
@@ -716,6 +732,7 @@ double gnk_Backspace_Speed = 0.06;
 double gnk_Event_Timeout = 0.5;
 int gnk_Scroll_Speed = 40;
 int gnk_Frame_Position = 0;
+bool gnk_Mouse_Ignore = false;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
 	for(auto &it: gnk_Current_Frame->buttonList) {
 		if(it.second != nullptr) {
@@ -734,7 +751,7 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
 		creative = false;
 	}
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		for (auto& it : gnk_Current_Frame->buttonList) {
 			if (it.second != nullptr) {
 				it.second->process();
@@ -748,8 +765,10 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 		if (gnk_Current_Frame->scrollbar != nullptr) {
 			gnk_Current_Frame->scrollbar->process();
 		}
+		gnk_Mouse_Ignore = true;
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		gnk_Mouse_Ignore = false;
         for (auto& it : gnk_Current_Frame->buttonList) {
 			if (it.second != nullptr) {
 				it.second->onClick = false;
@@ -889,7 +908,13 @@ void gnk_Set_Frame_Space(void (*space)()) {
 }
 
 void gnk_Set_Current_Frame(Gnk_Frame &frame) {
-	gnk_Current_Frame = &frame;
+	if(gnk_Current_Frame != &frame) {
+		gnk_Current_Frame = &frame;
+		glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+		glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+			1, GL_FALSE, glm::value_ptr(projection));
+		gnk_Frame_Position = gnk_Height;
+	}
 }
 
 void gnk_Window_Loop() {
