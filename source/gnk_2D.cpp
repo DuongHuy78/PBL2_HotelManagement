@@ -110,6 +110,11 @@ Gnk_Button::Gnk_Button() {
 	this->B = Gnk_Point();
 	this->color = Gnk_Color();
 	this->border_radius = 0;
+	this->appear = true;
+	this->hover_process = nullptr;
+	this->click_process = nullptr;
+	this->onHover = false;
+	this->onClick = false;
 }
 
 void Gnk_Button::setAppear(bool appear) {
@@ -193,7 +198,8 @@ void Gnk_Button::process() {
 }
 
 // Button with Text Definition
-Gnk_Button_With_Text::Gnk_Button_With_Text() {
+Gnk_Button_With_Text::Gnk_Button_With_Text() 
+	: Gnk_Button() {
 	this->text = "";
 	this->text_font = "";
 	this->font_size = 0;
@@ -270,7 +276,8 @@ void Gnk_Button_With_Text::display() {
 }
 
 // Button with Image Definition
-Gnk_Button_With_Image::Gnk_Button_With_Image() {
+Gnk_Button_With_Image::Gnk_Button_With_Image() 
+	: Gnk_Button() {
 	this->image = new Gnk_Image();
 }
 
@@ -470,7 +477,7 @@ void Gnk_Textbox::display() {
 }
 
 void Gnk_Textbox::select_effect() {
-	if (select_process != NULL) select_process(this);
+	if (select_process != nullptr) select_process(this);
 }
 
 void Gnk_Textbox::process() {
@@ -492,6 +499,35 @@ void Gnk_Textbox::process() {
 }
 
 // Textbox Password Definition
+Gnk_Textbox_Password::Gnk_Textbox_Password() 
+	: Gnk_Textbox() {
+}
+
+Gnk_Textbox_Password::Gnk_Textbox_Password(Gnk_Textbox &textbox) 
+	: Gnk_Textbox(textbox) {
+}
+
+Gnk_Textbox_Password::Gnk_Textbox_Password(Gnk_Textbox_Password &textbox) {
+	this->appear = textbox.appear;
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->select_process = textbox.select_process;
+}
+
 void Gnk_Textbox_Password::draw() {
 	if(!appear) return;
 	std::string newText = this->text;
@@ -870,10 +906,10 @@ void gnk_Window_Loop() {
 			ypos = gnk_Height - ypos;
 			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
 			gnk_Set_Line_Width(1.5f);
-			gnk_Line(Gnk_Point(xpos - 100, ypos), Gnk_Point(xpos + 100, ypos));
-			gnk_Line(Gnk_Point(xpos, ypos - 100), Gnk_Point(xpos, ypos + 100));
+			gnk_Line(Gnk_Point(xpos  - 100, ypos - gnk_Height + gnk_Frame_Position), Gnk_Point(xpos + 100, ypos - gnk_Height + gnk_Frame_Position));
+			gnk_Line(Gnk_Point(xpos, ypos - 100 - gnk_Height + gnk_Frame_Position), Gnk_Point(xpos, ypos + 100 - gnk_Height + gnk_Frame_Position));
 			gnk_Set_Line_Width(1.0f);
-			std::string message = "x: " + std::to_string(xpos) + " y: " + std::to_string(ypos);
+			std::string message = "x: " + std::to_string(xpos) + " y: " + std::to_string(ypos - gnk_Height + gnk_Frame_Position);
 			gnk_Text(message, Gnk_Point(50, 40), 24);
 		}
 		glfwSwapBuffers(gnk_Window);
