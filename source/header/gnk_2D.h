@@ -187,6 +187,9 @@ public:
 
 class Gnk_Textbox_Password: public Gnk_Textbox {
 public:
+	Gnk_Textbox_Password();
+	Gnk_Textbox_Password(Gnk_Textbox&);
+	Gnk_Textbox_Password(Gnk_Textbox_Password&);
 	virtual void draw();
 	virtual void display();
 };
