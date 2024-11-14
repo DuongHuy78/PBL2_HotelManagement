@@ -3,6 +3,8 @@ frame_num_value current_frame = LOGIN_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 QLKhachSan *current_Data;
 bool login_failed = false;
+bool blank_info = false;
+bool username_existed = false;
 bool male_toggle_enable = false;
 bool female_toggle_enable = false;
 // ---------------------------------------------------------
@@ -161,40 +163,49 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 	buttonText->color = color - Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
+	string gender = "";
+	if(((Gnk_Button_Toggle *)sign_up.buttonList["male_toggle"])->toggle) {
+		gender = "Nam";
+	}
+	if(((Gnk_Button_Toggle *)sign_up.buttonList["female_toggle"])->toggle) {
+		gender = "Nu";
+	}
+	sign_up_return_value res = current_Data->taoTaiKhoan(
+		(sign_up.textboxList["first_name_textbox"])->text,
+		(sign_up.textboxList["surname_textbox"])->text,
+		(sign_up.textboxList["date_textbox"])->text + "/" + 
+		(sign_up.textboxList["month_textbox"])->text + "/" + 
+		(sign_up.textboxList["year_textbox"])->text,
+		gender,
+		(sign_up.textboxList["username_textbox"])->text,
+		(sign_up.textboxList["password_textbox"])->text);
+	if(res == SIGN_UP_BLANK_INFO) {
+		cout << "Blank info" << endl;
+	}
+	else if(res == SIGN_UP_USERNAME_EXISTED) {
+		cout << "Username existed" << endl;
+	}
+	else if(res == SIGN_UP_SUCCESS) {
+		current_frame = LOGIN_FRAME;
+	}
+
 }
 
 void sign_up_frame_toggle_click(Gnk_Button *button) {
 	Gnk_Button_Toggle *toggle = (Gnk_Button_Toggle *)button;
-	for(auto &it : gnk_Current_Frame->buttonList) {
-		if(it.first == "male_toggle") {
-			if(male_toggle_enable == false && 
-			((Gnk_Button_Toggle *)it.second)->toggle == true) {
-				for(auto &it2 : gnk_Current_Frame->buttonList) {
-					if(it2.first == "female_toggle") {
-						((Gnk_Button_Toggle *)it2.second)->toggle = false;
-						female_toggle_enable = false;
-						break;
-					}	
-				}
-				male_toggle_enable = true;
-				break;
-			}
-		}
-		else if(it.first == "female_toggle") {
-			if(female_toggle_enable == false && 
-			((Gnk_Button_Toggle *)it.second)->toggle == true) {
-				for(auto &it2 : gnk_Current_Frame->buttonList) {
-					cout << it2.first << endl;
-					if(it2.first == "male_toggle") {
-						((Gnk_Button_Toggle *)it2.second)->toggle = false;
-						male_toggle_enable = false;
-						break;
-					}
-				}
-				female_toggle_enable = true;
-				break;
-			}
-		}
+	if(male_toggle_enable == false && ((Gnk_Button_Toggle *) \
+	gnk_Current_Frame ->buttonList["male_toggle"])->toggle == true) {
+		((Gnk_Button_Toggle *)gnk_Current_Frame-> \
+		buttonList["female_toggle"])->toggle = false;
+		female_toggle_enable = false;
+		male_toggle_enable = true;
+	}
+	else if(female_toggle_enable == false && ((Gnk_Button_Toggle *) \
+	gnk_Current_Frame ->buttonList["female_toggle"])->toggle == true) {
+		((Gnk_Button_Toggle *)gnk_Current_Frame-> \
+		buttonList["male_toggle"])->toggle = false;
+		male_toggle_enable = false;
+		female_toggle_enable = true;
 	}
 	toggle->draw();
 }

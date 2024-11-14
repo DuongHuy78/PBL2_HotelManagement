@@ -13,6 +13,10 @@ extern QLKhachSan *current_Data;
 extern frame_num_value current_frame;
 extern frame_num_value previous_frame;
 extern bool login_failed;
+extern bool blank_info;
+extern bool username_existed;
+extern bool male_toggle_enable;
+extern bool female_toggle_enable;
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button*);
 void button_hover_type_2(Gnk_Button*);

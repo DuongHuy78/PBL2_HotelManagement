@@ -17,6 +17,7 @@ class QLKhachSan {
     role_value role = UNDEFINED_ROLE;    
     NhanVien nhanVien;
     QuanLi quanLi;     
+    KhachHang *khachHang = nullptr;
 public:
     QLKhachSan();
     ~QLKhachSan();
@@ -36,6 +37,7 @@ public:
     void work();
     NguoiDung *dangNhap(string, string);
     void dangXuat();
+    sign_up_return_value taoTaiKhoan(string, string, string, string, string, string);
 
     /**
      * Duyệt qua 'danh sách đặt phòng' kiểm tra các phòng đang được đặt

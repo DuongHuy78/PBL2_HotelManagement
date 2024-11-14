@@ -26,6 +26,12 @@ enum gender_value {
     NAM,
     NU,
 };
+enum sign_up_return_value {
+    SIGN_UP_SUCCESS,
+    SIGN_UP_USERNAME_EXISTED,
+    SIGN_UP_BLANK_INFO,
+    SIGN_UP_INVALID_INFO,
+};
 
 /**
  * Chứa các hàm tiện ích
@@ -135,7 +141,7 @@ public:
             cout << e.what() << endl;
         }
         catch (const exception &e) {
-            cout << "no duong loi o day" << e.what() << endl;
+            cout << e.what() << endl;
         }
         return mktime(&timeinfo);
     }
