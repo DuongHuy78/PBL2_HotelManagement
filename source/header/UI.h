@@ -10,25 +10,35 @@ enum frame_num_value {
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;
-extern frame_num_value frame_num;
+extern frame_num_value current_frame;
+extern frame_num_value previous_frame;
+extern bool login_failed;
+extern bool blank_info;
+extern bool username_existed;
+extern bool male_toggle_enable;
+extern bool female_toggle_enable;
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button*);
 void button_hover_type_2(Gnk_Button*);
 void textbox_select_type1(Gnk_Textbox*);
 void textbox_select_type2(Gnk_Textbox*);
-//---------------------------------------------------------
+// ---------------------------------------------------------
 void login_frame_draw(Gnk_Frame *);
 void login_frame_login_button_click(Gnk_Button*);
 void login_frame_forgotten_password_button_click(Gnk_Button*);
 void login_frame_sign_up_button_click(Gnk_Button*);
-
 extern Gnk_Frame login;
-// //---------------------------------------------------------
+// ---------------------------------------------------------
 void sign_up_frame_draw(Gnk_Frame *);
+void sign_up_frame_to_login_button_click(Gnk_Button*);
+void sign_up_frame_sign_up_button_click(Gnk_Button*);
+void sign_up_frame_toggle_click(Gnk_Button*);
 extern Gnk_Frame sign_up;
-// //---------------------------------------------------------
+// ---------------------------------------------------------
 
-// //---------------------------------------------------------
+// ---------------------------------------------------------
+void login_frame_init();
+void sign_up_frame_init();
 void UI_init();
 void frame_Space();
 #endif

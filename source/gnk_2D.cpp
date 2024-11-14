@@ -97,6 +97,7 @@ GLenum Gnk_Image::get_Format() {
 	if (nrChannels == 1) return GL_RED;
 	if (nrChannels == 3) return GL_RGB;
 	if (nrChannels == 4) return GL_RGBA;
+	return GL_RED;
 }
 
 // Image List Definition
@@ -115,6 +116,8 @@ Gnk_Button::Gnk_Button() {
 	this->click_process = nullptr;
 	this->onHover = false;
 	this->onClick = false;
+	this->border = false;
+	this->border_color = Gnk_Color();
 }
 
 void Gnk_Button::setAppear(bool appear) {
@@ -142,10 +145,24 @@ void Gnk_Button::setClickProcess(void (*click)(Gnk_Button*)) {
 	this->click_process = click;
 }
 
+void Gnk_Button::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_Button::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
 void Gnk_Button::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
+	if (border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rounded_Rectangle(A, B, border_radius, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 }
 
 void Gnk_Button::display() {
@@ -306,6 +323,68 @@ void Gnk_Button_With_Image::display() {
 	}
 }
 
+// Button Toggle Definition
+Gnk_Button_Toggle::Gnk_Button_Toggle() 
+	: Gnk_Button_With_Text() {
+	this->toggle = false;
+}
+
+Gnk_Button_Toggle::Gnk_Button_Toggle(Gnk_Button_With_Text &button) 
+	: Gnk_Button_With_Text(button) {
+	this->toggle = false;
+}
+
+void Gnk_Button_Toggle::setToggleRange(Gnk_Point C, Gnk_Point D) {
+	this->C = C;
+	this->D = D;
+}
+
+void Gnk_Button_Toggle::setToggleColor(Gnk_Color color) {
+	this->toggleColor = color;
+}
+
+void Gnk_Button_Toggle::setToggleEnableColor(Gnk_Color color) {
+	this->toggleEnableColor = color;
+}
+
+void Gnk_Button_Toggle::setToggleRadius(float radius) {
+	this->toggleRadius = radius;
+}
+
+void Gnk_Button_Toggle::draw() {
+	if (!appear) return;
+	Gnk_Button_With_Text::draw();
+	if (toggle) {
+		gnk_Set_Object_Color(toggleEnableColor);
+		gnk_Rounded_Rectangle(C, D, toggleRadius);
+	}
+	else {
+		gnk_Set_Object_Color(toggleColor);
+		gnk_Rounded_Rectangle(C, D, toggleRadius);
+	}
+}
+
+void Gnk_Button_Toggle::display() {
+	if(!appear) return;
+	if(onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if(onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+void Gnk_Button_Toggle::process() {
+	if(!appear) return;
+	Gnk_Button::process();
+	if (onClick) {
+		toggle = !toggle;
+	}
+}
+
 // Textbox definition
 Gnk_Textbox::Gnk_Textbox() {
 	this->A = Gnk_Point();
@@ -400,6 +479,10 @@ void Gnk_Textbox::setBorderColor(Gnk_Color color) {
 	this->border_color = color;
 }
 
+void Gnk_Textbox::setMaxLength(int maxLength) {
+	this->maxLength = maxLength;
+}
+
 float Gnk_Textbox::getWidth() {
 	return B.x - A.x;
 }
@@ -430,6 +513,10 @@ void Gnk_Textbox::draw() {
 		output_color = placeholder_color;
 	}
 	else {
+		if(text.size() > maxLength) {
+			// Cắt bớt chuỗi nếu quá dài
+			text = text.substr(0, maxLength);
+		}
 		output = text;
 		output_font = text_font;
 		output_font_size = font_size;

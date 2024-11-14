@@ -25,6 +25,7 @@ enum text_align_value {
 const float GNK_PI = acos(-1.0f);		// PI = 3.14
 const float GNK_NUM_SEGMENTS = 1024;	// num segments to draw circle
 const int GNK_NUM_COLORS = 255;			
+const int GNK_TEXT_MAX_LENGTH = 1024;		// max size of text
 // --Class Declaration----------------------------------------------------------
 class Gnk_Point {
 public:
@@ -97,6 +98,8 @@ public:
 	float border_radius;
 	bool onHover = false;
 	bool onClick = false;
+	bool border = false;
+	Gnk_Color border_color;
 	Gnk_Button();
 	void setAppear(bool);
 	void setRange(Gnk_Point, Gnk_Point);
@@ -104,11 +107,13 @@ public:
 	void setRadius(float);
 	void setHoverProcess(void (*)(Gnk_Button*));
 	void setClickProcess(void (*)(Gnk_Button*));
+	void setBorder(bool);
+	void setBorderColor(Gnk_Color);
 	virtual void draw();
 	virtual void display();
 	void hover_effect();
 	void click_effect();
-	void process();
+	virtual void process();
 };
 
 class Gnk_Button_With_Text: public Gnk_Button {
@@ -140,6 +145,25 @@ public:
 	virtual void display();
 };
 
+class Gnk_Button_Toggle: public Gnk_Button_With_Text {
+public:
+	Gnk_Point C;
+	Gnk_Point D;
+	Gnk_Color toggleColor;
+	Gnk_Color toggleEnableColor;
+	float toggleRadius;
+	bool toggle = false;
+	Gnk_Button_Toggle();
+	Gnk_Button_Toggle(Gnk_Button_With_Text&);
+	void setToggleRange(Gnk_Point, Gnk_Point);
+	void setToggleColor(Gnk_Color);
+	void setToggleEnableColor(Gnk_Color);
+	void setToggleRadius(float);
+	virtual void draw();
+	virtual void display();
+	virtual void process();
+};
+
 class Gnk_Textbox {
 protected:
 	void (*select_process)(Gnk_Textbox*);
@@ -162,6 +186,7 @@ public:
 	bool on_select = false;
 	bool border = false;
 	Gnk_Color border_color;
+	int maxLength = GNK_TEXT_MAX_LENGTH;
 	Gnk_Textbox();
 	void setAppear(bool);
 	void setRange(Gnk_Point, Gnk_Point);
@@ -181,6 +206,7 @@ public:
 	void setSelectProcess(void (*)(Gnk_Textbox*));
 	void setBorder(bool);
 	void setBorderColor(Gnk_Color);
+	void setMaxLength(int);
 	float getWidth();
 	float getHeight();
 	virtual void draw();
