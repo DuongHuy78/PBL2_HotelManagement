@@ -8,6 +8,7 @@ public:
     QLPhong();
     ~QLPhong();
     // cân nhắc cái addrangephong ->QLKhachSan
+    int getSoLuongKhach(string);
     void AddRangePhong(string); // đọc dữ liệu đầu vào và trả về danh sách phòng
     void themPhong(Phong);
     void xoaPhong(Phong);
@@ -17,5 +18,6 @@ public:
     Phong nhapThongTin();
     Phong timPhong(time_t, time_t);
     LinkedList<Phong> &getDanhSachPhong();
+    Node<Phong> *getHead();
 };
 #endif

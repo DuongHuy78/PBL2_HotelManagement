@@ -56,7 +56,6 @@ int LoaiPhong::getLoaiGiuong() const {
 
 int LoaiPhong::getSoLuongKhach() const {
     return this->soLuongKhach;
-
 }
 
 int LoaiPhong::getDienTich() const {

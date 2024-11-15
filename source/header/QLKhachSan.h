@@ -16,7 +16,8 @@ class QLKhachSan {
     QLPhong QLP;
     role_value role = UNDEFINED_ROLE;    
     NhanVien nhanVien;
-    QuanLi quanLi;     
+    QuanLi quanLi;
+    string currentID;
 public:
     QLKhachSan();
     ~QLKhachSan();
@@ -42,6 +43,6 @@ public:
      * Từ đó đặt trạng thái phòng của các phòng đó là bận 
      * Sau đó in ra danh sách những phòng không có trạng thái bận
      */
-    void roomAvailability(time_t, time_t);
+    // void roomAvailability(time_t, time_t);
 };
 #endif

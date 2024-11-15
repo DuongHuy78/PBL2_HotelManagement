@@ -389,5 +389,20 @@ LoaiPhong QLLoaiPhong::nhapThongTin(){
 }
 
 LoaiPhong* QLLoaiPhong::timKiemLoaiPhong(const string& maLoaiPhong) {
-
+    Node<LoaiPhong>* current = DSLP.begin();
+    while (current != DSLP.end()) {
+        if (current->data.getLoaiPhong() == maLoaiPhong) {
+            return &current->data;
+        }
+        current = current->next;
+    }
+    return nullptr;
 }
+
+int QLLoaiPhong::soLuongKhach(string maLoaiPhong) {
+    return timKiemLoaiPhong(maLoaiPhong)->getSoLuongKhach();
+}
+
+int QLLoaiPhong::getGiaPhong(string maLoaiPhong) {
+    return timKiemLoaiPhong(maLoaiPhong)->getGiaPhong();
+} 
