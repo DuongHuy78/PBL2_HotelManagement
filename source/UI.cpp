@@ -215,19 +215,26 @@ Gnk_Frame sign_up(sign_up_frame_draw);
 void guest_frame_draw(Gnk_Frame *frame) {
 	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
 	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
 	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
 
 	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
 	gnk_Set_Line_Width(2.0f);
 	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
+	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
+
+	gnk_Set_Object_Color(Gnk_Color(253, 247, 228));
+	gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f);
+	gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
+	gnk_Set_Line_Width(2.0f);
+	gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
+	gnk_Set_Line_Width(1.0f);
 
 	for(auto &button : frame->buttonList) {
 		button.second->display();
@@ -247,7 +254,7 @@ void guest_frame_logout_button_click(Gnk_Button *button) {
 	current_frame = LOGIN_FRAME;
 }
 
-Gnk_Frame home(guest_frame_draw);
+Gnk_Frame guest(guest_frame_draw);
 
 // ---------------------------------------------------------
 void login_frame_init() {
@@ -435,11 +442,11 @@ void sign_up_frame_init() {
 void guest_frame_init() {
 	Gnk_Button_With_Text *guest_frame_logout_button = new Gnk_Button_With_Text();
 	guest_frame_logout_button->setRange(Gnk_Point(1380.0f, 820.0f), Gnk_Point(1540.0f, 880.0f));
-	guest_frame_logout_button->setColor(Gnk_Color(90, 100, 147));
+	guest_frame_logout_button->setColor(Gnk_Color(255, 236, 200));
 	guest_frame_logout_button->setText("Logout");
 	guest_frame_logout_button->setTextFont("helvetica-bold");
 	guest_frame_logout_button->setFontSize(24.0f);
-	guest_frame_logout_button->setTextColor(Gnk_Color(255, 255, 255));
+	guest_frame_logout_button->setTextColor(Gnk_Color(34, 40, 49));
 	guest_frame_logout_button->setPaddingX(0.0f);
 	guest_frame_logout_button->setPaddingY(0.0f);
 	guest_frame_logout_button->setTextAlign(GNK_TEXT_CENTER);
@@ -449,14 +456,12 @@ void guest_frame_init() {
 
 	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
 	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
-	guest_frame_search_room_button->setColor(Gnk_Color(254, 250, 246));
+	guest_frame_search_room_button->setColor(Gnk_Color(253, 247, 228));
 	guest_frame_search_room_button->setText("Search room");
 	guest_frame_search_room_button->setTextFont("helvetica");
 	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
 	guest_frame_search_room_button->setHoverProcess(button_hover_type_1);
 	guest_frame_search_room_button->setClickProcess(nullptr);
-	//guest_frame_search_room_button->setBorder(true);
-	//guest_frame_search_room_button->setBorderColor(Gnk_Color(26, 26, 29));
 	guest_frame_search_room_button->setTextAlign(GNK_TEXT_LEFT);
 	guest_frame_search_room_button->setPaddingX(30.0f);
 
@@ -472,11 +477,38 @@ void guest_frame_init() {
 	guest_frame_booking_button->setRange(Gnk_Point(40.0f, 380.0f), Gnk_Point(400.0f, 460.0f));
 	guest_frame_booking_button->setText("Booking");
 
-	home.addButton("logout_button", guest_frame_logout_button);
-	home.addButton("search_room_button", guest_frame_search_room_button);
-	home.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
-	home.addButton("profile_button", guest_frame_profile_button);
-	home.addButton("booking_button", guest_frame_booking_button);
+	Gnk_Textbox *guest_frame_check_in_textbox = new Gnk_Textbox();
+	guest_frame_check_in_textbox->setRange(Gnk_Point(630.0f, 700.0f), Gnk_Point(860.0f, 760.0f));
+	guest_frame_check_in_textbox->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_check_in_textbox->setTextFont("helvetica");
+	guest_frame_check_in_textbox->setFontSize(24.0f);
+	guest_frame_check_in_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	guest_frame_check_in_textbox->setPlaceholder("Check in");
+	guest_frame_check_in_textbox->setPlaceholderFont("helvetica");
+	guest_frame_check_in_textbox->setPlaceholderFontSize(24.0f);
+	guest_frame_check_in_textbox->setPlaceholderColor(Gnk_Color(85, 85, 85));
+	guest_frame_check_in_textbox->setPaddingX(15.0f);
+	guest_frame_check_in_textbox->setPaddingY(10.0f);
+	guest_frame_check_in_textbox->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_check_in_textbox->setMaxLength(10);
+
+	Gnk_Textbox *guest_frame_check_out_textbox = new Gnk_Textbox(*guest_frame_check_in_textbox);
+	guest_frame_check_out_textbox->setRange(Gnk_Point(860.0f, 700.0f), Gnk_Point(1090.0f, 760.0f));
+	guest_frame_check_out_textbox->setPlaceholder("Check out");
+
+	Gnk_Textbox *guest_frame_number_of_guest_textbox = new Gnk_Textbox(*guest_frame_check_in_textbox);
+	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1090.0f, 700.0f), Gnk_Point(1320.0f, 760.0f));
+	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
+	guest_frame_number_of_guest_textbox->setMaxLength(1);
+
+	guest.addButton("logout_button", guest_frame_logout_button);
+	guest.addButton("search_room_button", guest_frame_search_room_button);
+	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
+	guest.addButton("profile_button", guest_frame_profile_button);
+	guest.addButton("booking_button", guest_frame_booking_button);
+	guest.addTextbox("check_in_textbox", guest_frame_check_in_textbox);
+	guest.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
+	guest.addTextbox("number_of_guest_textbox", guest_frame_number_of_guest_textbox);
 }
 
 void UI_init() {
@@ -522,7 +554,7 @@ void frame_Space() {
 	}
 	switch (current_frame) {
 	case GUEST_FRAME:
-		gnk_Set_Current_Frame(home);
+		gnk_Set_Current_Frame(guest);
 		break;
 	case LOGIN_FRAME:
 		gnk_Set_Current_Frame(login);
