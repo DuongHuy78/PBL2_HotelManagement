@@ -271,6 +271,28 @@ void QLKhachSan::dangXuat() {
     role = UNDEFINED_ROLE;
 }
 
+sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, string birthday, string gender, string username, string password) {
+    if(firstName == "" || surname == "" || birthday == "" || gender == "" || username == "" || password == "") {
+        return SIGN_UP_BLANK_INFO;
+    }
+    LinkedList<TaiKhoan> &DSTK = QLTK.getDanhSachTaiKhoan();
+    Node<TaiKhoan> *p = DSTK.begin();
+    while(p != DSTK.end()) {
+        if(p->data.getUsername() == username) {
+            return SIGN_UP_USERNAME_EXISTED;
+        }
+        p = p->next;
+    }
+    string ID = QLKH.taoIDKhachHang();
+    KhachHang newKhachHang(ID, Utils::trim(firstName) + " " + \
+    Utils::trim(surname), Utils::stringToDate(birthday), "",  \
+    Utils::stringToGender(gender));
+    cout << newKhachHang << endl;
+    QLKH.themKhachHang(newKhachHang);
+    QLTK.themTaiKhoan(TaiKhoan(ID, username, password));
+    return SIGN_UP_SUCCESS;
+}
+
 /**
  * @brief Kiểm tra sự sẵn có của phòng trong khoảng thời gian nhất định.
  * 

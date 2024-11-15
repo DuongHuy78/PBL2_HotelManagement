@@ -97,6 +97,7 @@ GLenum Gnk_Image::get_Format() {
 	if (nrChannels == 1) return GL_RED;
 	if (nrChannels == 3) return GL_RGB;
 	if (nrChannels == 4) return GL_RGBA;
+	return GL_RED;
 }
 
 // Image List Definition
@@ -115,6 +116,8 @@ Gnk_Button::Gnk_Button() {
 	this->click_process = nullptr;
 	this->onHover = false;
 	this->onClick = false;
+	this->border = false;
+	this->border_color = Gnk_Color();
 }
 
 void Gnk_Button::setAppear(bool appear) {
@@ -142,10 +145,24 @@ void Gnk_Button::setClickProcess(void (*click)(Gnk_Button*)) {
 	this->click_process = click;
 }
 
+void Gnk_Button::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_Button::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
 void Gnk_Button::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
+	if (border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rounded_Rectangle(A, B, border_radius, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 }
 
 void Gnk_Button::display() {
@@ -175,7 +192,7 @@ void Gnk_Button::process() {
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= A.x && xpos <= B.x && 
 		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
@@ -306,6 +323,68 @@ void Gnk_Button_With_Image::display() {
 	}
 }
 
+// Button Toggle Definition
+Gnk_Button_Toggle::Gnk_Button_Toggle() 
+	: Gnk_Button_With_Text() {
+	this->toggle = false;
+}
+
+Gnk_Button_Toggle::Gnk_Button_Toggle(Gnk_Button_With_Text &button) 
+	: Gnk_Button_With_Text(button) {
+	this->toggle = false;
+}
+
+void Gnk_Button_Toggle::setToggleRange(Gnk_Point C, Gnk_Point D) {
+	this->C = C;
+	this->D = D;
+}
+
+void Gnk_Button_Toggle::setToggleColor(Gnk_Color color) {
+	this->toggleColor = color;
+}
+
+void Gnk_Button_Toggle::setToggleEnableColor(Gnk_Color color) {
+	this->toggleEnableColor = color;
+}
+
+void Gnk_Button_Toggle::setToggleRadius(float radius) {
+	this->toggleRadius = radius;
+}
+
+void Gnk_Button_Toggle::draw() {
+	if (!appear) return;
+	Gnk_Button_With_Text::draw();
+	if (toggle) {
+		gnk_Set_Object_Color(toggleEnableColor);
+		gnk_Rounded_Rectangle(C, D, toggleRadius);
+	}
+	else {
+		gnk_Set_Object_Color(toggleColor);
+		gnk_Rounded_Rectangle(C, D, toggleRadius);
+	}
+}
+
+void Gnk_Button_Toggle::display() {
+	if(!appear) return;
+	if(onClick && click_process != nullptr) {
+		click_effect();
+	}
+	else if(onHover && hover_process != nullptr) {
+		hover_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+void Gnk_Button_Toggle::process() {
+	if(!appear) return;
+	Gnk_Button::process();
+	if (onClick) {
+		toggle = !toggle;
+	}
+}
+
 // Textbox definition
 Gnk_Textbox::Gnk_Textbox() {
 	this->A = Gnk_Point();
@@ -323,6 +402,8 @@ Gnk_Textbox::Gnk_Textbox() {
 	this->paddingY = 0;
 	this->text_align = GNK_TEXT_LEFT;
 	this->on_select = false;
+	this->border = false;
+	this->border_color = Gnk_Color();
 }
 
 void Gnk_Textbox::setAppear(bool appear) {
@@ -390,6 +471,18 @@ void Gnk_Textbox::setSelectProcess(void (*select)(Gnk_Textbox*)) {
 	this->select_process = select;
 }
 
+void Gnk_Textbox::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_Textbox::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
+void Gnk_Textbox::setMaxLength(int maxLength) {
+	this->maxLength = maxLength;
+}
+
 float Gnk_Textbox::getWidth() {
 	return B.x - A.x;
 }
@@ -402,6 +495,12 @@ void Gnk_Textbox::draw() {
 	if (!appear) return;
 	gnk_Set_Object_Color(color);
 	gnk_Rounded_Rectangle(A, B, border_radius);
+	if (border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rounded_Rectangle(A, B, border_radius, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 	std::string output;
 	std::string output_font;
 	float output_font_size;
@@ -414,6 +513,10 @@ void Gnk_Textbox::draw() {
 		output_color = placeholder_color;
 	}
 	else {
+		if(text.size() > maxLength) {
+			// Cắt bớt chuỗi nếu quá dài
+			text = text.substr(0, maxLength);
+		}
 		output = text;
 		output_font = text_font;
 		output_font_size = font_size;
@@ -486,7 +589,7 @@ void Gnk_Textbox::process() {
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
 	
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= A.x && xpos <= B.x && 
 		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
@@ -597,7 +700,6 @@ void Gnk_Frame::display() {
 Gnk_Scrollbar::Gnk_Scrollbar() {
 	this->maxHeight = 0;
 	this->frameHeight = 0;
-	this->scrollPosition = 0;
 	this->A = Gnk_Point();
 	this->B = Gnk_Point();
 	this->C = Gnk_Point();
@@ -656,9 +758,9 @@ void Gnk_Scrollbar::display() {
 		gnk_Set_Object_Color(scrollColor);
 	}
 	float ratio = (float)frameHeight / maxHeight;
-	C = Gnk_Point(A.x, -ratio*(scrollPosition - frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
-	D = Gnk_Point(B.x, -ratio*(scrollPosition - 2 * frameHeight) + (ratio + 1)*(gnk_Frame_Position - gnk_Height));
-	gnk_Rectangle(C, D);
+	C = Gnk_Point(A.x, gnk_Height - ratio * (2 * gnk_Height - gnk_Frame_Position));
+	D = Gnk_Point(B.x, gnk_Height - ratio * (gnk_Height - gnk_Frame_Position));
+	gnk_Rectangle(C.translate(0.0f, gnk_Frame_Position - gnk_Height), D.translate(0.0f, gnk_Frame_Position - gnk_Height));
 }
 
 void Gnk_Scrollbar::process() {
@@ -666,7 +768,7 @@ void Gnk_Scrollbar::process() {
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		if (xpos >= C.x && xpos <= D.x && 
 		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
 		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
@@ -717,6 +819,7 @@ double gnk_Backspace_Speed = 0.06;
 double gnk_Event_Timeout = 0.5;
 int gnk_Scroll_Speed = 40;
 int gnk_Frame_Position = 0;
+bool gnk_Mouse_Ignore = false;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
 	for(auto &it: gnk_Current_Frame->buttonList) {
 		if(it.second != nullptr) {
@@ -735,7 +838,7 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
 		creative = false;
 	}
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		for (auto& it : gnk_Current_Frame->buttonList) {
 			if (it.second != nullptr) {
 				it.second->process();
@@ -749,8 +852,10 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 		if (gnk_Current_Frame->scrollbar != nullptr) {
 			gnk_Current_Frame->scrollbar->process();
 		}
+		gnk_Mouse_Ignore = true;
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		gnk_Mouse_Ignore = false;
         for (auto& it : gnk_Current_Frame->buttonList) {
 			if (it.second != nullptr) {
 				it.second->onClick = false;
@@ -890,7 +995,13 @@ void gnk_Set_Frame_Space(void (*space)()) {
 }
 
 void gnk_Set_Current_Frame(Gnk_Frame &frame) {
-	gnk_Current_Frame = &frame;
+	if(gnk_Current_Frame != &frame) {
+		gnk_Current_Frame = &frame;
+		glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+		glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+			1, GL_FALSE, glm::value_ptr(projection));
+		gnk_Frame_Position = gnk_Height;
+	}
 }
 
 void gnk_Window_Loop() {
