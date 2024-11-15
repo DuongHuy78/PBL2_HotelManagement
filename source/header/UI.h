@@ -4,6 +4,7 @@
 #include "QLKhachSan.h"
 enum frame_num_value {
 	DEFAULT_FRAME,
+	GUEST_FRAME,
 	LOGIN_FRAME,
 	FORGOT_PASSWORD_FRAME,
 	SIGN_UP_FRAME
@@ -35,7 +36,9 @@ void sign_up_frame_sign_up_button_click(Gnk_Button*);
 void sign_up_frame_toggle_click(Gnk_Button*);
 extern Gnk_Frame sign_up;
 // ---------------------------------------------------------
-
+void guest_frame_draw(Gnk_Frame *);
+void guest_frame_logout_button_click(Gnk_Button *);
+extern Gnk_Frame home;
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();

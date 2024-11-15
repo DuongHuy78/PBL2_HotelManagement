@@ -86,6 +86,14 @@ public:
 	Gnk_Image& operator[](std::string);
 };
 
+// class Animation {
+// public:
+// 	float startTime;
+// 	float currentTime;
+// 	float duration;
+// };
+// Comming soon...
+
 class Gnk_Button {
 protected:
 	void (*hover_process)(Gnk_Button*);

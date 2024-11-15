@@ -1,5 +1,5 @@
 #include "header/UI.h"
-frame_num_value current_frame = LOGIN_FRAME;
+frame_num_value current_frame = GUEST_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 QLKhachSan *current_Data;
 bool login_failed = false;
@@ -7,6 +7,7 @@ bool blank_info = false;
 bool username_existed = false;
 bool male_toggle_enable = false;
 bool female_toggle_enable = false;
+role_value current_role = KHACHHANG;
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
@@ -94,9 +95,7 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	buttonText->color = color;
 	NguoiDung *p = current_Data->dangNhap((login.textboxList["username_textbox"])->text, (login.textboxList["password_textbox"])->text);
 	if(p != nullptr) {
-		p->work();
-		current_frame = DEFAULT_FRAME;
-		login_failed = false;
+		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
 	}
 	else {
 		login_failed = true;
@@ -212,6 +211,45 @@ void sign_up_frame_toggle_click(Gnk_Button *button) {
 
 Gnk_Frame sign_up(sign_up_frame_draw);
 
+// ---------------------------------------------------------
+void guest_frame_draw(Gnk_Frame *frame) {
+	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+
+	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Line_Width(2.0f);
+	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
+	gnk_Set_Character_Font("helvetica-bold");
+	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
+
+	for(auto &button : frame->buttonList) {
+		button.second->display();
+	}
+
+	for(auto &textbox : frame->textboxList) {
+		textbox.second->display();
+	}
+}
+
+void guest_frame_logout_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+	current_frame = LOGIN_FRAME;
+}
+
+Gnk_Frame home(guest_frame_draw);
+
+// ---------------------------------------------------------
 void login_frame_init() {
 	Gnk_Textbox *login_frame_username_textbox = new Gnk_Textbox();
 	login_frame_username_textbox->setRange(Gnk_Point(806.0f, 460.0f), Gnk_Point(1190.0f, 520.0f));
@@ -261,7 +299,7 @@ void login_frame_init() {
 	login_frame_forgotten_password_button->setHoverProcess(button_hover_type_2);
 
 	Gnk_Button_With_Text *login_frame_sign_up_button = new Gnk_Button_With_Text(*login_frame_forgotten_password_button);
-	login_frame_sign_up_button->setRange(Gnk_Point(990.0f, 180.0f), Gnk_Point(1200.0f, 214.0f));
+	login_frame_sign_up_button->setRange(Gnk_Point(995.0f, 180.0f), Gnk_Point(1200.0f, 214.0f));
 	login_frame_sign_up_button->setText("Sign up");
 	login_frame_sign_up_button->setClickProcess(login_frame_sign_up_button_click);
 
@@ -394,6 +432,53 @@ void sign_up_frame_init() {
 	sign_up.setScrollbar(sign_up_frame_scrollbar);
 }
 
+void guest_frame_init() {
+	Gnk_Button_With_Text *guest_frame_logout_button = new Gnk_Button_With_Text();
+	guest_frame_logout_button->setRange(Gnk_Point(1380.0f, 820.0f), Gnk_Point(1540.0f, 880.0f));
+	guest_frame_logout_button->setColor(Gnk_Color(90, 100, 147));
+	guest_frame_logout_button->setText("Logout");
+	guest_frame_logout_button->setTextFont("helvetica-bold");
+	guest_frame_logout_button->setFontSize(24.0f);
+	guest_frame_logout_button->setTextColor(Gnk_Color(255, 255, 255));
+	guest_frame_logout_button->setPaddingX(0.0f);
+	guest_frame_logout_button->setPaddingY(0.0f);
+	guest_frame_logout_button->setTextAlign(GNK_TEXT_CENTER);
+	guest_frame_logout_button->border_radius = 10.0f;
+	guest_frame_logout_button->setHoverProcess(button_hover_type_1);
+	guest_frame_logout_button->setClickProcess(guest_frame_logout_button_click);
+
+	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
+	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
+	guest_frame_search_room_button->setColor(Gnk_Color(254, 250, 246));
+	guest_frame_search_room_button->setText("Search room");
+	guest_frame_search_room_button->setTextFont("helvetica");
+	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
+	guest_frame_search_room_button->setHoverProcess(button_hover_type_1);
+	guest_frame_search_room_button->setClickProcess(nullptr);
+	//guest_frame_search_room_button->setBorder(true);
+	//guest_frame_search_room_button->setBorderColor(Gnk_Color(26, 26, 29));
+	guest_frame_search_room_button->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_search_room_button->setPaddingX(30.0f);
+
+	Gnk_Button_With_Text *guest_frame_booking_infomation_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
+	guest_frame_booking_infomation_button->setRange(Gnk_Point(40.0f, 580.0f), Gnk_Point(400.0f, 660.0f));
+	guest_frame_booking_infomation_button->setText("Booking infomation");
+
+	Gnk_Button_With_Text *guest_frame_profile_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
+	guest_frame_profile_button->setRange(Gnk_Point(40.0f, 480.0f), Gnk_Point(400.0f, 560.0f));
+	guest_frame_profile_button->setText("Profile");
+
+	Gnk_Button_With_Text *guest_frame_booking_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
+	guest_frame_booking_button->setRange(Gnk_Point(40.0f, 380.0f), Gnk_Point(400.0f, 460.0f));
+	guest_frame_booking_button->setText("Booking");
+
+	home.addButton("logout_button", guest_frame_logout_button);
+	home.addButton("search_room_button", guest_frame_search_room_button);
+	home.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
+	home.addButton("profile_button", guest_frame_profile_button);
+	home.addButton("booking_button", guest_frame_booking_button);
+}
+
 void UI_init() {
 	// Initialize
 	const float width = 1600.0f, height = 900.0f;
@@ -409,6 +494,7 @@ void UI_init() {
 	gnk_Image_List.addImage("password_icon", "image/password_icon.jpg");
 	login_frame_init();
 	sign_up_frame_init();
+	guest_frame_init();
 }
 
 void frame_Space() {
@@ -435,6 +521,9 @@ void frame_Space() {
 		}
 	}
 	switch (current_frame) {
+	case GUEST_FRAME:
+		gnk_Set_Current_Frame(home);
+		break;
 	case LOGIN_FRAME:
 		gnk_Set_Current_Frame(login);
 		break;
