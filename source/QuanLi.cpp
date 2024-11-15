@@ -15,6 +15,18 @@ void QuanLi::setIDQuanLi(string ID) {
     this->IDQuanLi = ID;
 }
 
+void QuanLi::setDSLP(QLLoaiPhong* DSLP) {
+    this->DSLP = DSLP;
+}
+
+void QuanLi::setDSP(QLPhong* DSP) {
+    this->DSP = DSP;
+}
+
+void QuanLi::setDSDP(QLDatPhong* DSDP) {
+    this->DSDP = DSDP;
+}
+
 string operator+(const string &time,const int &n) {
     int day, month, year;
     int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -27,9 +39,9 @@ string operator+(const string &time,const int &n) {
     getline(ss, temp_year, '/');
 
     // Chuyển chuỗi sang số nguyên
-    day = atoi(temp_day.c_str());
-    month = atoi(temp_month.c_str());
-    year = atoi(temp_year.c_str());
+    day = Utils::stringToInt(temp_day.c_str());
+    month = Utils::stringToInt(temp_month.c_str());
+    year = Utils::stringToInt(temp_year.c_str());
 
     if(year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
         maxDaysInMonth[1] = 29;
@@ -97,33 +109,39 @@ void QuanLi::xoaPhong(const string& maPhong){
 /**
  * hàm này để tính doanh thu từ ngày bắt đầu đến ngày kết thúc
  */
-string QuanLi::thongKe(string t_begin, string t_end){
-    string doanhThu;
-    time_t timeBegin, timeEnd;
-    Node<DatPhong>* time1,*time2;
-    timeBegin = Utils::stringToTime(t_begin);
-    timeEnd = Utils::stringToTime(t_end);
-    time1 = DSDP->getHead()->next;
-    time2 = DSDP->getHead()->next;
-    while(time1 != DSDP->getHead() || time2 != DSDP->getHead()){
-        if(time1->data.getNgayNhan() == timeBegin){
-            if(time2->data.getNgayTra() == timeEnd){
-                doanhThu = Utils::intToString(time1->data.getDonGia() + time2->data.getDonGia());
-                return doanhThu;
-            }
-            time2 = time2->next;
+int QuanLi::thongKe(string t_begin, string t_end) {
+    int doanhThu = 0;
+    time_t timeBegin = Utils::stringToDate(t_begin);
+    time_t timeEnd = Utils::stringToDate(t_end);
+    
+    Node<DatPhong>* curr = DSDP->getHead()->next;
+    while(curr != DSDP->getHead()) {
+        time_t ngayNhan = curr->data.getNgayNhan();
+        time_t ngayTra = curr->data.getNgayTra();
+        
+        // Kiểm tra nếu thời gian đặt phòng nằm trong khoảng cần thống kê
+        if(!(ngayTra < timeBegin || ngayNhan > timeEnd)) {
+            doanhThu += curr->data.getDonGia();
         }
-        time1 = time1->next;
+        
+        curr = curr->next;
     }
+    
+    return doanhThu;
 }
 void QuanLi::xemDanhSachLuaChonXemDoanhThu(){
     cout<<"1. XEM DOANH THU THEO NGAY."<<endl;
     cout<<"2. XEM DOANH THU THEO THANG."<<endl;
     cout<<"3. XEM DOANH THU THEO NAM."<<endl;
 }
+
+/**
+ * hàm này để xem doanh thu theo ngày, tháng, năm
+ */
 void QuanLi::xemDoanhThu() {
-    string temp, doanhThu;
-    int ktra = 1;
+    string temp;
+    string d_begin, d_end;
+    int ktra = 1, doanhThu;
     while(ktra){
         ktra = 0;
         xemDanhSachLuaChonXemDoanhThu();
@@ -135,8 +153,9 @@ void QuanLi::xemDoanhThu() {
         }
     }
     if(temp == "1"){
-        temp = Utils::nhapNgayThangNam();
-        doanhThu = thongKe(temp, temp+1);
+        d_begin = Utils::nhapNgayThangNam("Nhap ngay thang nam theo dinh dang(dd/mm/yyyy): ");
+        doanhThu = thongKe(d_begin, d_begin+1);
+        cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
     }
     else if (temp == "2")
     {
@@ -158,17 +177,20 @@ void QuanLi::xemDoanhThu() {
                 cout<<"Nhap sai, vui long nhap lai!"<<endl;
             }
         }
-        doanhThu = thongKe("01/"+ month +"/" + year, "31/" + month + "/" + year);
+        d_begin = "01/" + month + "/" + year;
+        d_end = "31/" + month + "/" + year;
+        doanhThu = thongKe(d_begin, d_end + 1);
+        cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
     }
     else if(temp == "3"){
         int ktra;
-        string year, date;
+        string year;
         ktra = 1;
         while(ktra){
             ktra = 0;
             cout<<"Nhap nam muon xem (theo dinh dang yyyy): ";
-            date = Utils::nhap(1, 5);
-            if(Utils::stringToInt(date) < 1900){
+            year = Utils::nhap(1, 5);
+            if(Utils::stringToInt(year) < 1900){
                 ktra = 1;
             }
             if(ktra){
@@ -176,7 +198,10 @@ void QuanLi::xemDoanhThu() {
                 cout<<"Nhap sai, vui long nhap lai!"<<endl;
             }
         }
-        doanhThu = thongKe("01/01/"+date, "31/12/"+date);
+        d_begin = "01/01/" + year;
+        d_end = "31/12/" + year;
+        doanhThu = thongKe(d_begin, d_end + 1);
+        cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
     }
 }
 void QuanLi::work() {

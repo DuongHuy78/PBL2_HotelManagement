@@ -29,7 +29,7 @@ QLKhachSan::~QLKhachSan() {}
 void QLKhachSan::inputTaiKhoan(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Không thể đọc file::" << path << endl;
+        cout << "Khong the doc file::" << path << endl;
     }
     int index = 0;
     string line, username, password, ID;
@@ -65,7 +65,7 @@ void QLKhachSan::inputTaiKhoan(string path) {
 void QLKhachSan::inputKhachHang(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Không thể đọc file::" << path << endl;
+        cout << "Khong the doc file::" << path << endl;
     }
     int index = 0;
     string line, ID, name, birthday, phone, gender;
@@ -108,7 +108,30 @@ void QLKhachSan::inputLoaiPhong(string path) {
  * @param path Đường dẫn tới file chứa thông tin phòng.
  */
 void QLKhachSan::inputPhong(string path) {
-    //QLP.AddRangePhong(path);
+    ifstream fi(path);
+    if(!fi.is_open()) {
+        cout << "Khong the doc file::" << path << endl;
+        return;
+    }
+
+    string line;
+    int index = 0;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        
+        // Extract room info using Utils::getSubstringUntilX
+        string maPhong = Utils::getSubstringUntilX(line, index, ';');
+        string maLoaiPhong = Utils::getSubstringUntilX(line, index, '\n');
+        
+        // Create new Phong object and add to list
+        Phong newPhong(maPhong, maLoaiPhong);
+        QLP.themPhong(newPhong);
+        
+        index = 0;
+    }
+    
+    fi.close();
 }
 
 /**
@@ -124,7 +147,7 @@ void QLKhachSan::inputPhong(string path) {
 void QLKhachSan::inputDatPhong(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Không thể đọc file::" << path << endl;
+        cout << "Khong the doc file::" << path << endl;
     }
     string line;
     int index = 0;
@@ -170,6 +193,7 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
+    //Nhớ nhập đầy đủ dữ liệu vào nha
     // cout << "Test Quan Li Khach Hang" << endl;
     // KhachHang *kh = QLKH.timKiemKhachHang("100048");
     // cout << *kh << endl;
@@ -177,7 +201,34 @@ void QLKhachSan::work() {
     // cout << *kh << endl;
     // cout << "Test Loai Phong" << endl;
     // QLLP.QLChoice();
-    gnk_Window_Loop();
+
+    // string MADAPHONG;
+    // role_value role = KHACHHANG;
+    // QLDP.setDSP(&QLP);
+    // QLDP.setDSKH(&QLKH);
+    // QLDP.setDSLP(&QLLP);
+    // QLDP.setRole(role);
+    // QLDP.setcurrentID("100001");
+    // DatPhong dp = QLDP.nhapThongTin();
+    // QLDP.themDatPhong(dp);
+    
+    // cout << "\n=== BOOKING DETAILS ===\n" << endl;
+    // cout << "Ma dat phong: " << dp.getMaDatPhong() << endl;
+    // cout << "Ma phong: " << dp.getMaPhong() << endl;
+    // cout << "ID khach hang: " << dp.getIDKhachHang() << endl;
+    // cout << "Ngay nhan: " << Utils::dateToString(dp.getNgayNhan()) << endl;
+    // cout << "Ngay tra: " << Utils::dateToString(dp.getNgayTra()) << endl;
+    // cout << "So luong khach: " << dp.getSoLuongKhach() << endl;
+    // cout << "Don gia: " << dp.getDonGia() << endl;
+    // MADAPHONG = dp.getMaDatPhong();
+    // cout <<"Ma phong"<<QLDP.timKiemDatPhong(MADAPHONG)->getMaPhong()<<endl;
+
+    QuanLi quanLi;
+    quanLi.setDSLP(&QLLP);
+    quanLi.setDSP(&QLP);
+    quanLi.setDSDP(&QLDP);
+    quanLi.xemDoanhThu();
+    // gnk_Window_Loop();
 }
 
 
@@ -202,7 +253,11 @@ NguoiDung *QLKhachSan::dangNhap(string username, string password) {
             return &nhanVien;
         }
         role = KHACHHANG;
-        return QLKH.timKiemKhachHang(ID);
+        if(QLKH.timKiemKhachHang(ID) != nullptr) {
+            QLDP.setcurrentID(this->currentID);
+            QLDP.setRole(role);
+            return QLKH.timKiemKhachHang(ID);
+        }
     }
     return nullptr;
 }
@@ -248,34 +303,42 @@ sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, s
  * @param checkInDate Ngày nhận phòng.
  * @param checkOutDate Ngày trả phòng.
  */
-void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate) {
-    LinkedList<Phong> &DSP = QLP.getDanhSachPhong();
-    set<string> maPhongDaDat;
-    cout << "check in date: " << Utils::dateToString(checkInDate) << endl;
-    cout << "check out date: " << Utils::dateToString(checkOutDate) << endl;
-    LinkedList<DatPhong> &DSDP = QLDP.getDanhSachDatPhong();
-    Node<DatPhong> *p = DSDP.begin();
-    while(p != DSDP.end()) {
-        time_t ngayNhan = p->data.getNgayNhan();
-        time_t ngayTra = p->data.getNgayTra();        
-        if(!(ngayTra < checkInDate || checkOutDate < ngayNhan)) {
-            cout << Utils::dateToString(ngayNhan) << " " << Utils::dateToString(ngayTra) << endl;
-            maPhongDaDat.insert(p->data.getMaPhong());
-        }        
-        p = p->next;
-    }
+// void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate) {
+//     LinkedList<Phong> &DSP = QLP.getDanhSachPhong();
+//     set<string> maPhongDaDat;
+//     cout << "check in date: " << Utils::dateToString(checkInDate) << endl;
+//     cout << "check out date: " << Utils::dateToString(checkOutDate) << endl;
+//     LinkedList<DatPhong> &DSDP = QLDP.getDanhSachDatPhong();
+//     Node<DatPhong> *p = DSDP.begin();
+//     while(p != DSDP.end()) {
+//         time_t ngayNhan = p->data.getNgayNhan();
+//         time_t ngayTra = p->data.getNgayTra();        
+//         if(!(ngayTra < checkInDate || checkOutDate < ngayNhan)) {
+//             // cout << Utils::dateToString(ngayNhan) << " " << Utils::dateToString(ngayTra) << endl;
+//             maPhongDaDat.insert(p->data.getMaPhong());
+//         }        
+//         p = p->next;
+//     }
 
-    Node<Phong> *p2 = DSP.begin();
-    while(p2 != DSP.end()) {
-        string maPhong = p2->data.getMaPhong();
-        for(string i:maPhongDaDat) {
-            cout << i << endl;
-            if(maPhong == i) {
-                p2 = p2->next;
-                continue;
-            }
-        }
-        p2->data.thongTinPhong();
-        p2 = p2->next;
-    }
-}
+//     Node<Phong> *p2 = DSP.begin();
+//     while(p2 != DSP.end()) {
+//         string maPhong = p2->data.getMaPhong();
+//         bool isAvailable = true;
+//         for(string i:maPhongDaDat) {
+//             // cout << i << endl;
+//             if(maPhong == i) {
+//                 // p2->data.thongTinPhong();
+//                 // cout<<endl;
+//                 // p2 = p2->next;
+//                 // break;
+//                 isAvailable = false;
+//                 break;
+//             }
+//         }
+//         if(isAvailable) {
+//             p2->data.thongTinPhong();
+//         }
+//         // p2->data.thongTinPhong();
+//         p2 = p2->next;
+//     }
+// }

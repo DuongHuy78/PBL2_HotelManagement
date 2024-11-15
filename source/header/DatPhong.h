@@ -30,6 +30,6 @@ public:
     void setNgayTra(time_t);
     void setSoLuongKhach(int);
     void setDonGia(int);
-    void xemThongTin();
+    void work();
 };
 #endif

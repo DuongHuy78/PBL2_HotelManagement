@@ -7,6 +7,7 @@ QLPhong::~QLPhong() {
 
 }
 
+
 void QLPhong::AddRangePhong(string file)
 {
     ifstream inputFile(file);
@@ -44,8 +45,8 @@ void QLPhong::AddRangePhong(string file)
     return; 
 }
 
-void QLPhong::themPhong(Phong) {
-
+void QLPhong::themPhong(Phong P) {
+    DSP.add(P);
 }
 
 void QLPhong::xoaPhong(Phong) {
@@ -69,4 +70,8 @@ Phong QLPhong::timPhong(time_t, time_t) {
 
 LinkedList<Phong> &QLPhong::getDanhSachPhong() {
     return this->DSP;
+}
+
+Node<Phong> *QLPhong::getHead() {
+    return this->DSP.getHead();
 }

@@ -206,7 +206,7 @@ void DatPhong::setDonGia(int Gia) {
  * - Số lượng khách
  * - Đơn giá
  */
-void DatPhong::xemThongTin() {
+void DatPhong::work() {
     cout << maDatPhong << endl;
     cout << maPhong << endl;
     cout << IDKhachHang << endl;

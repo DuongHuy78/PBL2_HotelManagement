@@ -338,20 +338,24 @@ public:
     /**
      * Hàm này để nhập ngày tháng năm tránh lỗi
      */
-    static string nhapNgayThangNam() {
+    static string nhapNgayThangNam(string tieuDe) {
         string input;
         int day, month, year;
         int check;
         int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  // Số ngày trong tháng
 
         while (1) {  // Lặp lại nếu nhập sai
-            cout << "Nhap ngay thang nam (theo dinh dang dd/mm/yyyy): ";
-            input = Utils::nhap(4, 11);  // Nhập ngày tháng năm sinh
+            cout << tieuDe;
+            input = Utils::nhap(4, 11);
 
             // Tách chuỗi thành ngày, tháng, năm
             stringstream ss(input);
             string temp_day, temp_month, temp_year;
-
+            if(input.length() != 10 || input[2] != '/' || input[5] != '/')
+            {
+                cout << "Ban nhap sai, vui long nhap lai!\n";
+                continue;
+            }
             getline(ss, temp_day, '/');
             getline(ss, temp_month, '/');
             getline(ss, temp_year, '/');

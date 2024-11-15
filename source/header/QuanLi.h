@@ -17,6 +17,9 @@ public:
 
     string getIDQuanLi() const;
     void setIDQuanLi(string);
+    void setDSLP(QLLoaiPhong*);
+    void setDSP(QLPhong*);
+    void setDSDP(QLDatPhong*);
     
     friend const string& operator+(const int&, const string&); 
     void taoLoaiPhong();
@@ -25,7 +28,7 @@ public:
     void taoPhong();
     void suaPhong(const string&);
     void xoaPhong(const string&);
-    string thongKe(string,string);
+    int thongKe(string,string);
     void xemDanhSachLuaChonXemDoanhThu();
     void xemDoanhThu();
     void work();

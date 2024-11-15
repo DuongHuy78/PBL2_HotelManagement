@@ -25,5 +25,7 @@ public:
     void updateLoaiPhong(LoaiPhong);  
     LoaiPhong nhapThongTin();  
     LoaiPhong* timKiemLoaiPhong(const string&); 
+    int soLuongKhach(string);
+    int getGiaPhong(string);
 };
 #endif
