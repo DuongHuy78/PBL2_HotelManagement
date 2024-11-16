@@ -275,6 +275,9 @@ public:
 	Gnk_Point object_start_position;
 	int object_space;
 
+	bool border = false;
+	Gnk_Color border_color;
+
 	Gnk_List_Object();
 	void setRange(Gnk_Point, Gnk_Point);
 	void setDrawProcess(void (*)());
@@ -284,6 +287,8 @@ public:
 	void setObjectStartPosition(Gnk_Point);
 	void setObjectSpace(int);
 	void setAppear(bool);
+	void setBorder(bool);
+	void setBorderColor(Gnk_Color);
 	void process(int, int);	
 	void draw();
 };

@@ -848,14 +848,25 @@ void Gnk_List_Object::setAppear(bool appear) {
 	this->appear = appear;
 }
 
+void Gnk_List_Object::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_List_Object::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
 void Gnk_List_Object::process(int xpos, int ypos) {
 	if(!appear) return;
 
 }
 
 void Gnk_List_Object::draw() {
-	return;
 	//if (draw_process == nullptr) return;
+	gnk_Set_Object_Color(border_color);
+	gnk_Set_Line_Width(2.0f);
+	gnk_Rectangle(A, B, false);
+	gnk_Set_Line_Width(1.0f);
 	Gnk_Scrollbar scrollbar;
 	scrollbar.setRange(Gnk_Point(B.x - 20, A.y), B);
 	scrollbar.setColor(Gnk_Color(255, 255, 255));
@@ -865,23 +876,32 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setAppear(true);
 
-	glScissor(A.x, A.y, B.x - A.x, B.y - A.y);
+	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, B.x - A.x, B.y - A.y);
 	glEnable(GL_SCISSOR_TEST);
 
-	gnk_Translate_X = object_start_position.x;
-	gnk_Translate_Y = object_start_position.y;
+	float prev_translate_X = gnk_Translate_X;
+	float prev_translate_Y = gnk_Translate_Y;
+	gnk_Translate_X += object_start_position.x;
+	gnk_Translate_Y += object_start_position.y;
 	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 
-	for(int i = 0; i < 5; ++i) {
+	for(int i = 0; i < 2; ++i) {
 		gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
 		gnk_Rectangle(Gnk_Point(0, 0 - i*(object_height + object_space)), Gnk_Point(object_width, object_height - i*(object_height + object_space)));
 	}
+
+	gnk_Translate_X = prev_translate_X;
+	gnk_Translate_Y = prev_translate_Y;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 	
+	//scrollbar.display();
 	glDisable(GL_SCISSOR_TEST);
-	scrollbar.display();
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -1122,10 +1142,10 @@ void gnk_Window_Loop() {
 			ypos = gnk_Height - ypos;
 			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
 			gnk_Set_Line_Width(1.5f);
-			gnk_Line(Gnk_Point(xpos  - 100, ypos - gnk_Translate_Y), Gnk_Point(xpos + 100, ypos - gnk_Translate_Y));
-			gnk_Line(Gnk_Point(xpos, ypos - 100 - gnk_Translate_Y), Gnk_Point(xpos, ypos + 100 - gnk_Translate_Y));
+			gnk_Line(Gnk_Point(xpos - 100 - gnk_Translate_X, ypos - gnk_Translate_Y), Gnk_Point(xpos + 100 - gnk_Translate_X, ypos - gnk_Translate_Y));
+			gnk_Line(Gnk_Point(xpos - gnk_Translate_X, ypos - 100 - gnk_Translate_Y), Gnk_Point(xpos - gnk_Translate_X, ypos + 100 - gnk_Translate_Y));
 			gnk_Set_Line_Width(1.0f);
-			std::string message = "x: " + std::to_string(xpos) + " y: " + std::to_string(ypos - gnk_Translate_Y);
+			std::string message = "x: " + std::to_string(xpos - gnk_Translate_X) + " y: " + std::to_string(ypos - gnk_Translate_Y);
 			gnk_Text(message, Gnk_Point(50, 40), 24);
 		}
 		glfwSwapBuffers(gnk_Window);
@@ -1356,7 +1376,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 		maxHeight = height;
 
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width + gnk_Translate_X, height + gnk_Translate_Y);
+	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width, height);
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
 				(width - maxWidth) / 2 - text_overflow,

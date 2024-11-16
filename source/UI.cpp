@@ -259,8 +259,11 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		group.setObjectStartPosition(Gnk_Point(480.0f, 630.0f));
 		group.setObjectSpace(50);
 		group.setGroupHeight(1000);
+		group.setBorder(true);
+		group.setBorderColor(Gnk_Color(255, 0, 0));
 		group.draw();
 	}
+	frame->scrollbar->display();
 }
 
 void guest_frame_logout_button_click(Gnk_Button *button) {
@@ -559,6 +562,16 @@ void guest_frame_init() {
 	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
+	Gnk_Scrollbar *guest_frame_scrollbar = new Gnk_Scrollbar();
+	guest_frame_scrollbar->setRange(Gnk_Point(gnk_Width - 20.0f, 0.0f), Gnk_Point(gnk_Width, gnk_Height));
+	guest_frame_scrollbar->setColor(Gnk_Color(255, 255, 255));
+	guest_frame_scrollbar->setScrollColor(Gnk_Color(200, 200, 200));
+	guest_frame_scrollbar->setHoverColor(Gnk_Color(180, 180, 180));
+	guest_frame_scrollbar->setClickColor(Gnk_Color(160, 160, 160));
+	guest_frame_scrollbar->setMaxHeight(gnk_Height * 1.4);
+	guest_frame_scrollbar->setCurrentPos(gnk_Height);
+	guest_frame_scrollbar->setAppear(true);
+
 	guest.addButton("logout_button", guest_frame_logout_button);
 	guest.addButton("search_room_button", guest_frame_search_room_button);
 	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
@@ -567,6 +580,7 @@ void guest_frame_init() {
 	guest.addTextbox("check_in_textbox", guest_frame_check_in_textbox);
 	guest.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
 	guest.addTextbox("number_of_guest_textbox", guest_frame_number_of_guest_textbox);
+	guest.setScrollbar(guest_frame_scrollbar);
 }
 
 void UI_init() {
