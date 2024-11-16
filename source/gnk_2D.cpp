@@ -94,10 +94,23 @@ Gnk_Image::Gnk_Image() {
 }
 
 GLenum Gnk_Image::get_Format() {
-	if (nrChannels == 1) return GL_RED;
-	if (nrChannels == 3) return GL_RGB;
-	if (nrChannels == 4) return GL_RGBA;
-	return GL_RED;
+	switch(nrChannels) {
+		case 4: return GL_RGBA;
+		case 3: return GL_RGB;
+		case 2: return GL_RG;   
+		case 1: return GL_RED;
+		default: return GL_RED;
+	}
+}
+
+GLint Gnk_Image::get_internalFormat() {
+	switch(nrChannels) {
+		case 4: return GL_RGBA8;
+		case 3: return GL_RGB8;
+		case 2: return GL_RG8;   
+		case 1: return GL_RED;
+		default: return GL_RED;
+	}
 }
 
 // Image List Definition
@@ -1278,18 +1291,21 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 
 void gnk_Load_Image(Gnk_Image &image, std::string imagePath) {
 	glGenTextures(1, &image.textureID);
-
 	stbi_set_flip_vertically_on_load(true);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glBindTexture(GL_TEXTURE_2D, image.textureID);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
 	unsigned char* data = stbi_load(imagePath.c_str(), &image.width, 
 		&image.height, &image.nrChannels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, image.get_Format(), GL_UNSIGNED_BYTE, data);
+	if (data != NULL) {
+		glTexImage2D(GL_TEXTURE_2D, 0, image.get_internalFormat(), image.width, image.height, 0, 
+					image.get_Format(), GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
@@ -1305,6 +1321,8 @@ void Gnk_Image_List::addImage(std::string imageName, std::string imagePath) {
 }
 
 void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	float width = B.x - A.x;
 	float height = B.y - A.y;
 	float image_ratio_x = width / image.width;
@@ -1332,6 +1350,8 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
+	glDisable(GL_BLEND);
 }
 

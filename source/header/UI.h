@@ -9,6 +9,13 @@ enum frame_num_value {
 	FORGOT_PASSWORD_FRAME,
 	SIGN_UP_FRAME
 };
+enum option_value {
+	DEFAULT_OPTION,
+	SEARCH_ROOM,
+	BOOKING_INFORMATION,
+	PROFILE,
+	BOOKING,
+};
 class QLKhachSan;
 extern QLKhachSan *current_Data;
 extern frame_num_value current_frame;
@@ -38,6 +45,10 @@ extern Gnk_Frame sign_up;
 // ---------------------------------------------------------
 void guest_frame_draw(Gnk_Frame *);
 void guest_frame_logout_button_click(Gnk_Button *);
+void guest_frame_search_room_button_click(Gnk_Button *);
+void guest_frame_booking_infomation_button_click(Gnk_Button *);
+void guest_frame_profile_button_click(Gnk_Button *);
+void guest_frame_booking_button_click(Gnk_Button *);
 extern Gnk_Frame home;
 // ---------------------------------------------------------
 void login_frame_init();

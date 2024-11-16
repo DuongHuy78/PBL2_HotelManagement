@@ -77,6 +77,7 @@ public:
 	int width, height, nrChannels;
 	Gnk_Image();
 	GLenum get_Format();
+	GLint get_internalFormat();
 };
 
 class Gnk_Image_List {

@@ -23,6 +23,10 @@ void main() {
             vec4 sampled = vec4(vec3(texture(text, TexCoords).r), 1.0);
             color = sampled;
         }
+        else if(nrChannels == 2) {
+            vec4 sampled = vec4(vec3(texture(text, TexCoords).r), texture(text, TexCoords).g);
+            color = sampled;
+        }
         else if(nrChannels == 3) {
             vec4 sampled = vec4(texture(text, TexCoords).rgb, 1.0);
             color = sampled;
