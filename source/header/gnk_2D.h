@@ -237,7 +237,7 @@ class Gnk_Scrollbar {
 public:
 	bool appear = false;
 	int maxHeight;
-	int frameHeight;
+	int currentPos;
 	Gnk_Point A;
 	Gnk_Point B;
 	Gnk_Point C;
@@ -256,14 +256,36 @@ public:
 	void setHoverColor(Gnk_Color);
 	void setClickColor(Gnk_Color);
 	void setMaxHeight(int);
-	void setFrameHeight(int);
+	void setCurrentPos(int);
+	int getHeight();
 	void display();
 	void process();
 };
 
-class Gnk_List_Item {
+class Gnk_List_Object {
+	void (*draw_process)();
+public:
+	bool appear = true;
+	Gnk_Point A;
+	Gnk_Point B;
+	int group_height;
 
+	int object_height;
+	int object_width;
+	Gnk_Point object_start_position;
+	int object_space;
 
+	Gnk_List_Object();
+	void setRange(Gnk_Point, Gnk_Point);
+	void setDrawProcess(void (*)());
+	void setGroupHeight(int);
+	void setObjectHeight(int);
+	void setObjectWidth(int);
+	void setObjectStartPosition(Gnk_Point);
+	void setObjectSpace(int);
+	void setAppear(bool);
+	void process(int, int);	
+	void draw();
 };
 
 class Gnk_Frame {
@@ -271,12 +293,14 @@ class Gnk_Frame {
 public:
 	std::unordered_map<std::string, Gnk_Button *> buttonList;
 	std::unordered_map<std::string, Gnk_Textbox *> textboxList;
+	std::unordered_map<std::string, Gnk_List_Object *> listObjectList;
 	Gnk_Scrollbar *scrollbar = NULL;
 	Gnk_Frame();
 	~Gnk_Frame();
 	Gnk_Frame(void (*process)(Gnk_Frame *));
 	void addButton(std::string, Gnk_Button *);
 	void addTextbox(std::string, Gnk_Textbox *);
+	void addListObject(std::string, Gnk_List_Object *);
 	void setScrollbar(Gnk_Scrollbar*);
 	void display();
 };
@@ -303,6 +327,9 @@ extern double gnk_Event_Timeout;
 extern int gnk_Scroll_Speed;
 extern int gnk_Frame_Position;
 extern bool gnk_Mouse_Ignore;
+extern glm::mat4 gnk_Projection;
+extern float gnk_Translate_X;
+extern float gnk_Translate_Y;
 // -Function Prototype-------------------------------------------------------
 static void gnk_Cursor_Position_Callback(GLFWwindow*, double, double);
 void gnk_Mouse_Button_Callback(GLFWwindow*, int, int, int);

@@ -252,6 +252,14 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Set_Line_Width(2.0f);
 		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
 		gnk_Set_Line_Width(1.0f);
+		Gnk_List_Object group;
+		group.setRange(Gnk_Point(480.0f, 0.0f), Gnk_Point(1550.0f, 680.0f));
+		group.setObjectHeight(200);
+		group.setObjectWidth(2000);
+		group.setObjectStartPosition(Gnk_Point(480.0f, 630.0f));
+		group.setObjectSpace(50);
+		group.setGroupHeight(1000);
+		group.draw();
 	}
 }
 
@@ -468,7 +476,7 @@ void sign_up_frame_init() {
 	sign_up_frame_scrollbar->setHoverColor(Gnk_Color(180, 180, 180));
 	sign_up_frame_scrollbar->setClickColor(Gnk_Color(160, 160, 160));
 	sign_up_frame_scrollbar->setMaxHeight(gnk_Height * 1.4);
-	sign_up_frame_scrollbar->setFrameHeight(gnk_Height);
+	sign_up_frame_scrollbar->setCurrentPos(gnk_Height);
 	sign_up_frame_scrollbar->setAppear(true);
 
 	sign_up.addTextbox("first_name_textbox", sign_up_frame_first_name_textbox);
