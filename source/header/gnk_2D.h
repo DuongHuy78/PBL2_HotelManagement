@@ -77,6 +77,7 @@ public:
 	int width, height, nrChannels;
 	Gnk_Image();
 	GLenum get_Format();
+	GLint get_internalFormat();
 };
 
 class Gnk_Image_List {
@@ -85,6 +86,14 @@ public:
 	void addImage(std::string, std::string);
 	Gnk_Image& operator[](std::string);
 };
+
+// class Animation {
+// public:
+// 	float startTime;
+// 	float currentTime;
+// 	float duration;
+// };
+// Comming soon...
 
 class Gnk_Button {
 protected:
