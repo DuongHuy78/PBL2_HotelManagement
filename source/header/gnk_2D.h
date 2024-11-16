@@ -261,6 +261,11 @@ public:
 	void process();
 };
 
+class Gnk_List_Item {
+
+
+};
+
 class Gnk_Frame {
 	void (*process)(Gnk_Frame *);
 public:

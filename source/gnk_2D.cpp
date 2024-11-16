@@ -928,6 +928,7 @@ bool gnk_GLFW_Init() {
 }
 
 bool gnk_Create_Window(std::string title) {
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);	// Khong cho phep thay doi kich thuoc cua so
 	gnk_Window = glfwCreateWindow((int)gnk_Width, (int)gnk_Height, title.c_str(), NULL, NULL);
 	if (gnk_Window == NULL) {
 		std::cout << "ERROR::Khong The Khoi Tao Cua So::" << title << std::endl;

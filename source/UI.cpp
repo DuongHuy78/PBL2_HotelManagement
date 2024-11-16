@@ -247,10 +247,11 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		frame->textboxList["check_in_textbox"]->display();
 		frame->textboxList["check_out_textbox"]->display();
 		frame->textboxList["number_of_guest_textbox"]->display();
+		
+		gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
 		gnk_Set_Line_Width(2.0f);
 		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
 		gnk_Set_Line_Width(1.0f);
-		gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
 	}
 }
 
