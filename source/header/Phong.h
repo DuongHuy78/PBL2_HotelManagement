@@ -1,7 +1,8 @@
 #ifndef PHONG_H
 #define PHONG_H
 #include "Utils.h"
-
+#include "LoaiPhong.h"
+#define MAX_MAPHONG 7
 class Phong {
     string maPhong; 
     string loaiPhong; 
@@ -16,7 +17,8 @@ public:
 
     void setMaPhong(string);
     void setLoaiPhong(string);
-    void suaThongTin();
-    void thongTinPhong();
+
+    string capNhatThongTin();
+    void xuatThongTin();
 };
 #endif

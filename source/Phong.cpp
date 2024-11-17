@@ -1,17 +1,22 @@
 #include "./header/Phong.h"
 
 Phong::Phong() {
+    this->maPhong = "";
+    this->loaiPhong = "";
+}
+
+Phong::Phong(string MaPhong, string LoaiPhong){
+    this->maPhong = MaPhong;
+    this->loaiPhong = LoaiPhong;
+}
+
+Phong::Phong(const Phong& other){
+    this->maPhong = other.maPhong;
+    this->loaiPhong = other.loaiPhong;
 }
 
 Phong::~Phong() {
 }
-
-//Constructor copy
-Phong::Phong(const Phong& other)
- :maPhong(other.maPhong), loaiPhong(other.loaiPhong) {}
-
-// Constructor có tham số
-Phong::Phong(string MaPhong, string LoaiPhong) : maPhong(MaPhong), loaiPhong(LoaiPhong) {}
 
 // Hàm get
 string Phong::getMaPhong() const {
@@ -23,7 +28,7 @@ string Phong::getLoaiPhong() const {
 }
 
 
-void Phong::setMaPhong(string MP) {
+void Phong::setMaPhong(string MP){
     this->maPhong = MP;
 }
 
@@ -31,10 +36,13 @@ void Phong::setLoaiPhong(string LP) {
     this->loaiPhong = LP;
 }
 
-void Phong::suaThongTin() {
+string Phong::capNhatThongTin(){
+    cout << "Nhap Loai Phong: ";
+    string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
+    return tempStr;
+}
+void Phong::xuatThongTin() {
+    cout << left << setw(15) << maPhong << loaiPhong << endl;
+    cout << string(25, '-') << endl;
+}
 
-}
-void Phong::thongTinPhong() {
-    cout << maPhong << endl;
-    cout << loaiPhong << endl;
-}
