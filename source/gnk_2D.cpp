@@ -206,18 +206,16 @@ void Gnk_Button::process() {
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
 	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
-		if (xpos >= A.x && xpos <= B.x && 
-		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
-		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+		if (xpos - gnk_Translate_X >= A.x && xpos - gnk_Translate_X <= B.x && 
+		ypos - gnk_Translate_Y >= A.y && ypos - gnk_Translate_Y <= B.y) {
 			onClick = true;
 		}
 		else {
 			onClick = false;
 		}
 	}
-	else if (xpos >= A.x && xpos <= B.x && 
-		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
-		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+	else if (xpos - gnk_Translate_X >= A.x && xpos - gnk_Translate_X <= B.x && 
+		ypos - gnk_Translate_Y >= A.y && ypos - gnk_Translate_Y <= B.y) {
 		onHover = true;
 		onClick = false;
 	}
@@ -601,11 +599,9 @@ void Gnk_Textbox::process() {
 	double xpos, ypos;
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
-	
 	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
-		if (xpos >= A.x && xpos <= B.x && 
-		ypos >= A.y + (gnk_Height - gnk_Frame_Position)&& 
-		ypos <= B.y + (gnk_Height - gnk_Frame_Position)) {
+		if (xpos - gnk_Translate_X >= A.x && xpos - gnk_Translate_X <= B.x && 
+		ypos - gnk_Translate_Y >= A.y && ypos - gnk_Translate_Y <= B.y) {
 			on_select = true;
 		}
 		else {
@@ -701,6 +697,10 @@ void Gnk_Frame::addTextbox(std::string key, Gnk_Textbox *textbox) {
 	textboxList[key] = textbox;
 }
 
+void Gnk_Frame::addListObject(std::string key, Gnk_List_Object *listObject) {
+	listObjectList[key] = listObject;
+}
+
 void Gnk_Frame::setScrollbar(Gnk_Scrollbar *scrollbar) {
 	this->scrollbar = scrollbar;
 }
@@ -712,7 +712,7 @@ void Gnk_Frame::display() {
 // Scrollbar Definition------------------------------------------------------
 Gnk_Scrollbar::Gnk_Scrollbar() {
 	this->maxHeight = 0;
-	this->frameHeight = 0;
+	this->currentPos = 0;
 	this->A = Gnk_Point();
 	this->B = Gnk_Point();
 	this->C = Gnk_Point();
@@ -725,7 +725,7 @@ Gnk_Scrollbar::Gnk_Scrollbar() {
 
 void Gnk_Scrollbar::setAppear(bool appear) {
 	this->appear = appear;
-	if(maxHeight <= frameHeight) appear = false;
+	if(maxHeight <= getHeight()) appear = false;
 }
 
 void Gnk_Scrollbar::setRange(Gnk_Point A, Gnk_Point B) {
@@ -753,14 +753,18 @@ void Gnk_Scrollbar::setMaxHeight(int maxHeight) {
 	this->maxHeight = maxHeight;
 }
 
-void Gnk_Scrollbar::setFrameHeight(int frameHeight) {
-	this->frameHeight = frameHeight;
+void Gnk_Scrollbar::setCurrentPos(int currentPos) {
+	this->currentPos = currentPos;
+}
+
+int Gnk_Scrollbar::getHeight() {
+	return B.y - A.y;
 }
 
 void Gnk_Scrollbar::display() {
 	if(!appear) return;
 	gnk_Set_Object_Color(color);
-	gnk_Rectangle(A.translate(0.0f, gnk_Frame_Position - gnk_Height), B.translate(0.0f, gnk_Frame_Position - gnk_Height));
+	gnk_Rectangle(A.translate(0.0f, currentPos - getHeight()), B.translate(0.0f, currentPos - getHeight()));
 	if(onClick) {
 		gnk_Set_Object_Color(clickColor);
 	}
@@ -770,10 +774,10 @@ void Gnk_Scrollbar::display() {
 	else {
 		gnk_Set_Object_Color(scrollColor);
 	}
-	float ratio = (float)frameHeight / maxHeight;
-	C = Gnk_Point(A.x, gnk_Height - ratio * (2 * gnk_Height - gnk_Frame_Position));
-	D = Gnk_Point(B.x, gnk_Height - ratio * (gnk_Height - gnk_Frame_Position));
-	gnk_Rectangle(C.translate(0.0f, gnk_Frame_Position - gnk_Height), D.translate(0.0f, gnk_Frame_Position - gnk_Height));
+	float ratio = (float)getHeight() / maxHeight;
+	C = Gnk_Point(A.x, getHeight() - ratio * (2 * getHeight() - currentPos));
+	D = Gnk_Point(B.x, getHeight() - ratio * (getHeight() - currentPos));
+	gnk_Rectangle(C.translate(0.0f, currentPos - getHeight()), D.translate(0.0f, currentPos - getHeight()));
 }
 
 void Gnk_Scrollbar::process() {
@@ -782,18 +786,16 @@ void Gnk_Scrollbar::process() {
 	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 	ypos = gnk_Height - ypos;
 	if (glfwGetMouseButton(gnk_Window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !gnk_Mouse_Ignore) {
-		if (xpos >= C.x && xpos <= D.x && 
-		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
-		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
+		if (xpos - gnk_Translate_X >= C.x && xpos - gnk_Translate_X <= D.x && 
+		ypos - gnk_Translate_Y >= C.y && ypos - gnk_Translate_Y <= D.y) {
 			onClick = true;
 		}
 		else {
 			onClick = false;
 		}
 	}
-	else if (xpos >= C.x && xpos <= D.x && 
-		ypos >= C.y + (gnk_Height - gnk_Frame_Position)&& 
-		ypos <= D.y + (gnk_Height - gnk_Frame_Position)) {
+	else if (xpos - gnk_Translate_X >= C.x && xpos - gnk_Translate_X <= D.x && 
+		ypos - gnk_Translate_Y >= C.y && ypos - gnk_Translate_Y <= D.y) {
 		onHover = true;
 		onClick = false;
 	}
@@ -801,6 +803,131 @@ void Gnk_Scrollbar::process() {
 		onHover = false;
 		onClick = false;
 	}
+}
+
+// Group Draw Object Definition
+Gnk_List_Object::Gnk_List_Object() {
+	this->group_height = 0;
+	this->object_height = 0;
+	this->object_width = 0;
+	this->object_start_position = Gnk_Point();
+	this->object_space = 0;
+	this->draw_process = nullptr;
+}
+
+void Gnk_List_Object::setRange(Gnk_Point A, Gnk_Point B) {
+	this->A = A;
+	this->B = B;
+}
+
+void Gnk_List_Object::setCurrentPos(int currentPos) {
+	this->currentPos = currentPos;
+}
+
+void Gnk_List_Object::setDrawProcess(void (*draw)(Gnk_List_Object *)) {
+	this->draw_process = draw;
+}
+
+void Gnk_List_Object::setGroupHeight(int height) {
+	this->group_height = height;
+}
+
+void Gnk_List_Object::setObjectHeight(int height) {
+	this->object_height = height;
+}
+
+void Gnk_List_Object::setObjectWidth(int width) {
+	this->object_width = width;
+}
+
+void Gnk_List_Object::setObjectStartPosition(Gnk_Point position) {
+	this->object_start_position = position;
+}
+
+void Gnk_List_Object::setObjectSpace(int space) {
+	this->object_space = space;
+}
+
+void Gnk_List_Object::setAppear(bool appear) {
+	this->appear = appear;
+}
+
+void Gnk_List_Object::setBorder(bool border) {
+	this->border = border;
+}
+
+void Gnk_List_Object::setBorderColor(Gnk_Color color) {
+	this->border_color = color;
+}
+
+int Gnk_List_Object::getGroupHeight() {
+	return B.y - A.y;
+}
+
+int Gnk_List_Object::getGroupWidth() {
+	return B.x - A.x;
+}
+
+int Gnk_List_Object::toNextObject() {
+	return object_height + object_space;
+}
+
+void Gnk_List_Object::process() {
+	if(!appear) return;
+
+}
+
+void Gnk_List_Object::draw() {
+	if (draw_process == nullptr) return;
+	Gnk_Scrollbar scrollbar;
+	scrollbar.setRange(Gnk_Point(getGroupWidth() - 20.0f, 0.0f), Gnk_Point(getGroupWidth(), getGroupHeight()));
+	scrollbar.setColor(Gnk_Color(255, 255, 255));
+	scrollbar.setScrollColor(Gnk_Color(200, 200, 200));
+	scrollbar.setHoverColor(Gnk_Color(180, 180, 180));
+	scrollbar.setClickColor(Gnk_Color(160, 160, 160));
+	scrollbar.setMaxHeight(group_height);
+	scrollbar.setCurrentPos(currentPos);
+	scrollbar.setAppear(true);
+	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
+	glEnable(GL_SCISSOR_TEST);
+
+	float prev_translate_X = gnk_Translate_X;
+	float prev_translate_Y = gnk_Translate_Y;
+	gnk_Translate_X += A.x + object_start_position.x;
+	gnk_Translate_Y += A.y + object_start_position.y + getGroupHeight() - currentPos;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+
+	draw_process(this);
+
+	gnk_Translate_X = prev_translate_X;
+	gnk_Translate_Y = prev_translate_Y;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+
+	gnk_Translate_X += A.x;
+	gnk_Translate_Y += A.y + getGroupHeight() - currentPos;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+	scrollbar.display();
+	gnk_Translate_X = prev_translate_X;
+	gnk_Translate_Y = prev_translate_Y;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+	glDisable(GL_SCISSOR_TEST);
+
+	gnk_Set_Object_Color(border_color);
+	gnk_Set_Line_Width(2.0f);
+	gnk_Rectangle(A, B, false);
+	gnk_Set_Line_Width(1.0f);
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -833,6 +960,8 @@ double gnk_Event_Timeout = 0.5;
 int gnk_Scroll_Speed = 40;
 int gnk_Frame_Position = 0;
 bool gnk_Mouse_Ignore = false;
+glm::mat4 gnk_Projection;
+float gnk_Translate_X = 0.0f, gnk_Translate_Y = 0.0f;
 static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double ypos) {
 	for(auto &it: gnk_Current_Frame->buttonList) {
 		if(it.second != nullptr) {
@@ -851,6 +980,7 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
 		creative = false;
 	}
+
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS && !gnk_Mouse_Ignore) {
 		for (auto& it : gnk_Current_Frame->buttonList) {
 			if (it.second != nullptr) {
@@ -889,18 +1019,32 @@ void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 }
 
 void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
+	for(auto &it: gnk_Current_Frame->listObjectList) {
+		double xpos, ypos;
+		glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+		ypos = gnk_Height - ypos;
+		if (xpos - gnk_Translate_X >= it.second->A.x && xpos - gnk_Translate_X <= it.second->B.x &&
+			ypos - gnk_Translate_Y >= it.second->A.y && ypos - gnk_Translate_Y <= it.second->B.y) {
+			it.second->currentPos += yoffset * gnk_Scroll_Speed;
+			if (it.second->currentPos > it.second->getGroupHeight()) it.second->currentPos = it.second->getGroupHeight();
+			if (it.second->currentPos < 2 * it.second->getGroupHeight() - it.second->group_height) it.second->currentPos = 2 * it.second->getGroupHeight() - it.second->group_height;
+			return;
+		}
+	}
+
 	if(gnk_Current_Frame->scrollbar == nullptr) return;
-	gnk_Frame_Position += yoffset * gnk_Scroll_Speed;
+	gnk_Current_Frame->scrollbar->currentPos += yoffset * gnk_Scroll_Speed;
 
-	if(gnk_Frame_Position > gnk_Height) gnk_Frame_Position = gnk_Height;
-	if(gnk_Frame_Position < 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight) 
-	gnk_Frame_Position = 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight;
+	if(gnk_Current_Frame->scrollbar->currentPos > gnk_Height) gnk_Current_Frame->scrollbar->currentPos = gnk_Height;
+	if(gnk_Current_Frame->scrollbar->currentPos < 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight) 
+	gnk_Current_Frame->scrollbar->currentPos = 2 * gnk_Height - gnk_Current_Frame->scrollbar->maxHeight;
 
-	glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
-	projection = glm::translate(projection, glm::vec3(0.0f, gnk_Height - gnk_Frame_Position, 0.0f));
+	gnk_Translate_X = 0.0f;
+	gnk_Translate_Y = gnk_Current_Frame->scrollbar->getHeight() - gnk_Current_Frame->scrollbar->currentPos;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
-		1, GL_FALSE, glm::value_ptr(projection));
-	
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 }
 
 void gnk_Key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -928,6 +1072,7 @@ bool gnk_GLFW_Init() {
 }
 
 bool gnk_Create_Window(std::string title) {
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);	// Khong cho phep thay doi kich thuoc cua so
 	gnk_Window = glfwCreateWindow((int)gnk_Width, (int)gnk_Height, title.c_str(), NULL, NULL);
 	if (gnk_Window == NULL) {
 		std::cout << "ERROR::Khong The Khoi Tao Cua So::" << title << std::endl;
@@ -948,9 +1093,12 @@ bool gnk_GLEW_Init() {
 bool gnk_Shader_Init(std::string vertexPath, std::string fragmentPath) {
 	gnk_Shader = Shader(vertexPath.c_str(), fragmentPath.c_str());
 	gnk_Shader.use();
-	glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+
+	gnk_Translate_X = 0.0f;
+	gnk_Translate_Y = 0.0f;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
-		1, GL_FALSE, glm::value_ptr(projection));
+	1, GL_FALSE, glm::value_ptr(gnk_Projection));
 	return 1;
 }
 
@@ -1010,9 +1158,12 @@ void gnk_Set_Frame_Space(void (*space)()) {
 void gnk_Set_Current_Frame(Gnk_Frame &frame) {
 	if(gnk_Current_Frame != &frame) {
 		gnk_Current_Frame = &frame;
-		glm::mat4 projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+
+		gnk_Translate_X = 0.0f;
+		gnk_Translate_Y = 0.0f;
+		gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 		glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
-			1, GL_FALSE, glm::value_ptr(projection));
+			1, GL_FALSE, glm::value_ptr(gnk_Projection));
 		gnk_Frame_Position = gnk_Height;
 	}
 }
@@ -1030,10 +1181,10 @@ void gnk_Window_Loop() {
 			ypos = gnk_Height - ypos;
 			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
 			gnk_Set_Line_Width(1.5f);
-			gnk_Line(Gnk_Point(xpos  - 100, ypos - gnk_Height + gnk_Frame_Position), Gnk_Point(xpos + 100, ypos - gnk_Height + gnk_Frame_Position));
-			gnk_Line(Gnk_Point(xpos, ypos - 100 - gnk_Height + gnk_Frame_Position), Gnk_Point(xpos, ypos + 100 - gnk_Height + gnk_Frame_Position));
+			gnk_Line(Gnk_Point(xpos - 100 - gnk_Translate_X, ypos - gnk_Translate_Y), Gnk_Point(xpos + 100 - gnk_Translate_X, ypos - gnk_Translate_Y));
+			gnk_Line(Gnk_Point(xpos - gnk_Translate_X, ypos - 100 - gnk_Translate_Y), Gnk_Point(xpos - gnk_Translate_X, ypos + 100 - gnk_Translate_Y));
 			gnk_Set_Line_Width(1.0f);
-			std::string message = "x: " + std::to_string(xpos) + " y: " + std::to_string(ypos - gnk_Height + gnk_Frame_Position);
+			std::string message = "x: " + std::to_string(xpos - gnk_Translate_X) + " y: " + std::to_string(ypos - gnk_Translate_Y);
 			gnk_Text(message, Gnk_Point(50, 40), 24);
 		}
 		glfwSwapBuffers(gnk_Window);
@@ -1264,7 +1415,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 		maxHeight = height;
 
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(P.x, P.y + (gnk_Height - gnk_Frame_Position), width, height + (gnk_Height - gnk_Frame_Position));
+	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width, height);
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
 				(width - maxWidth) / 2 - text_overflow,

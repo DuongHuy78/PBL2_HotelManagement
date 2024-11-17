@@ -247,10 +247,13 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		frame->textboxList["check_in_textbox"]->display();
 		frame->textboxList["check_out_textbox"]->display();
 		frame->textboxList["number_of_guest_textbox"]->display();
+		
+		gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
 		gnk_Set_Line_Width(2.0f);
 		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
 		gnk_Set_Line_Width(1.0f);
-		gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
+
+		frame->listObjectList["search_room_list"]->draw();
 	}
 }
 
@@ -297,6 +300,19 @@ void guest_frame_booking_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = BOOKING;
+}
+
+void guest_frame_search_room_list_process(Gnk_List_Object *list) {
+	//cout << current_Data->
+	for(int i = 0; i < 10; ++i) {
+		gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, list->object_height - i * list->toNextObject()), false);
+		gnk_Set_Line_Width(1.0f);
+		gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+		gnk_Image(gnk_Image_List["hotel_image"], Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), \
+		Gnk_Point(list->object_height, list->object_height - i * list->toNextObject()));
+	}
 }
 
 Gnk_Frame guest(guest_frame_draw);
@@ -467,7 +483,7 @@ void sign_up_frame_init() {
 	sign_up_frame_scrollbar->setHoverColor(Gnk_Color(180, 180, 180));
 	sign_up_frame_scrollbar->setClickColor(Gnk_Color(160, 160, 160));
 	sign_up_frame_scrollbar->setMaxHeight(gnk_Height * 1.4);
-	sign_up_frame_scrollbar->setFrameHeight(gnk_Height);
+	sign_up_frame_scrollbar->setCurrentPos(gnk_Height);
 	sign_up_frame_scrollbar->setAppear(true);
 
 	sign_up.addTextbox("first_name_textbox", sign_up_frame_first_name_textbox);
@@ -550,6 +566,18 @@ void guest_frame_init() {
 	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
+	Gnk_List_Object *group = new Gnk_List_Object();
+	group->setRange(Gnk_Point(480.0f, 0.0f), Gnk_Point(1550.0f, 680.0f));
+	group->setCurrentPos(group->getGroupHeight());
+	group->setObjectWidth(950);
+	group->setObjectHeight(300);
+	group->setObjectStartPosition(Gnk_Point(50.0f, 340.0f));
+	group->setObjectSpace(50);
+	group->setGroupHeight(1000);
+	group->setBorder(true);
+	group->setBorderColor(Gnk_Color(26, 26, 29));
+	group->setDrawProcess(guest_frame_search_room_list_process);
+
 	guest.addButton("logout_button", guest_frame_logout_button);
 	guest.addButton("search_room_button", guest_frame_search_room_button);
 	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
@@ -558,6 +586,7 @@ void guest_frame_init() {
 	guest.addTextbox("check_in_textbox", guest_frame_check_in_textbox);
 	guest.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
 	guest.addTextbox("number_of_guest_textbox", guest_frame_number_of_guest_textbox);
+	guest.addListObject("search_room_list", group);
 }
 
 void UI_init() {
