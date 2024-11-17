@@ -49,10 +49,12 @@ void guest_frame_search_room_button_click(Gnk_Button *);
 void guest_frame_booking_infomation_button_click(Gnk_Button *);
 void guest_frame_profile_button_click(Gnk_Button *);
 void guest_frame_booking_button_click(Gnk_Button *);
+void guest_frame_search_room_list_process(Gnk_List_Object *);
 extern Gnk_Frame home;
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();
+void guest_frame_init();
 void UI_init();
 void frame_Space();
 #endif

@@ -263,8 +263,9 @@ public:
 };
 
 class Gnk_List_Object {
-	void (*draw_process)();
+	void (*draw_process)(Gnk_List_Object *);
 public:
+	int currentPos;
 	bool appear = true;
 	Gnk_Point A;
 	Gnk_Point B;
@@ -280,7 +281,8 @@ public:
 
 	Gnk_List_Object();
 	void setRange(Gnk_Point, Gnk_Point);
-	void setDrawProcess(void (*)());
+	void setCurrentPos(int);
+	void setDrawProcess(void (*)(Gnk_List_Object *));
 	void setGroupHeight(int);
 	void setObjectHeight(int);
 	void setObjectWidth(int);
@@ -289,7 +291,10 @@ public:
 	void setAppear(bool);
 	void setBorder(bool);
 	void setBorderColor(Gnk_Color);
-	void process(int, int);	
+	int getGroupHeight();
+	int getGroupWidth();
+	int toNextObject();
+	void process();	
 	void draw();
 };
 

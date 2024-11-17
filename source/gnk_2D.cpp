@@ -820,7 +820,11 @@ void Gnk_List_Object::setRange(Gnk_Point A, Gnk_Point B) {
 	this->B = B;
 }
 
-void Gnk_List_Object::setDrawProcess(void (*draw)()) {
+void Gnk_List_Object::setCurrentPos(int currentPos) {
+	this->currentPos = currentPos;
+}
+
+void Gnk_List_Object::setDrawProcess(void (*draw)(Gnk_List_Object *)) {
 	this->draw_process = draw;
 }
 
@@ -856,42 +860,47 @@ void Gnk_List_Object::setBorderColor(Gnk_Color color) {
 	this->border_color = color;
 }
 
-void Gnk_List_Object::process(int xpos, int ypos) {
+int Gnk_List_Object::getGroupHeight() {
+	return B.y - A.y;
+}
+
+int Gnk_List_Object::getGroupWidth() {
+	return B.x - A.x;
+}
+
+int Gnk_List_Object::toNextObject() {
+	return object_height + object_space;
+}
+
+void Gnk_List_Object::process() {
 	if(!appear) return;
 
 }
 
 void Gnk_List_Object::draw() {
-	//if (draw_process == nullptr) return;
-	gnk_Set_Object_Color(border_color);
-	gnk_Set_Line_Width(2.0f);
-	gnk_Rectangle(A, B, false);
-	gnk_Set_Line_Width(1.0f);
+	if (draw_process == nullptr) return;
 	Gnk_Scrollbar scrollbar;
-	scrollbar.setRange(Gnk_Point(B.x - 20, A.y), B);
+	scrollbar.setRange(Gnk_Point(getGroupWidth() - 20.0f, 0.0f), Gnk_Point(getGroupWidth(), getGroupHeight()));
 	scrollbar.setColor(Gnk_Color(255, 255, 255));
 	scrollbar.setScrollColor(Gnk_Color(200, 200, 200));
 	scrollbar.setHoverColor(Gnk_Color(180, 180, 180));
 	scrollbar.setClickColor(Gnk_Color(160, 160, 160));
 	scrollbar.setMaxHeight(group_height);
+	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
-
-	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, B.x - A.x, B.y - A.y);
+	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
 	glEnable(GL_SCISSOR_TEST);
 
 	float prev_translate_X = gnk_Translate_X;
 	float prev_translate_Y = gnk_Translate_Y;
-	gnk_Translate_X += object_start_position.x;
-	gnk_Translate_Y += object_start_position.y;
+	gnk_Translate_X += A.x + object_start_position.x;
+	gnk_Translate_Y += A.y + object_start_position.y + getGroupHeight() - currentPos;
 	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 
-	for(int i = 0; i < 2; ++i) {
-		gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
-		gnk_Rectangle(Gnk_Point(0, 0 - i*(object_height + object_space)), Gnk_Point(object_width, object_height - i*(object_height + object_space)));
-	}
+	draw_process(this);
 
 	gnk_Translate_X = prev_translate_X;
 	gnk_Translate_Y = prev_translate_Y;
@@ -899,9 +908,26 @@ void Gnk_List_Object::draw() {
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
-	
-	//scrollbar.display();
+
+	gnk_Translate_X += A.x;
+	gnk_Translate_Y += A.y + getGroupHeight() - currentPos;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+	scrollbar.display();
+	gnk_Translate_X = prev_translate_X;
+	gnk_Translate_Y = prev_translate_Y;
+	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
+	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
+	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
+		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 	glDisable(GL_SCISSOR_TEST);
+
+	gnk_Set_Object_Color(border_color);
+	gnk_Set_Line_Width(2.0f);
+	gnk_Rectangle(A, B, false);
+	gnk_Set_Line_Width(1.0f);
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -993,6 +1019,19 @@ void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 }
 
 void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
+	for(auto &it: gnk_Current_Frame->listObjectList) {
+		double xpos, ypos;
+		glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+		ypos = gnk_Height - ypos;
+		if (xpos - gnk_Translate_X >= it.second->A.x && xpos - gnk_Translate_X <= it.second->B.x &&
+			ypos - gnk_Translate_Y >= it.second->A.y && ypos - gnk_Translate_Y <= it.second->B.y) {
+			it.second->currentPos += yoffset * gnk_Scroll_Speed;
+			if (it.second->currentPos > it.second->getGroupHeight()) it.second->currentPos = it.second->getGroupHeight();
+			if (it.second->currentPos < 2 * it.second->getGroupHeight() - it.second->group_height) it.second->currentPos = 2 * it.second->getGroupHeight() - it.second->group_height;
+			return;
+		}
+	}
+
 	if(gnk_Current_Frame->scrollbar == nullptr) return;
 	gnk_Current_Frame->scrollbar->currentPos += yoffset * gnk_Scroll_Speed;
 
