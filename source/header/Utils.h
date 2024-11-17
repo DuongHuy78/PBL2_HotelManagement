@@ -163,7 +163,10 @@ public:
             if(((kytu == 1 && isdigit(ch)) ||
                 (kytu == 2 && (isalpha(ch) || ch == ' ')) ||
                 (kytu == 3 && (isalpha(ch) || isdigit(ch))) ||
-                (kytu == 4 && (isdigit(ch) || ch == '/'))) && a < sl-1) {
+                (kytu == 4 && (isdigit(ch) || ch == '/')) ||
+                (kytu == 5 && (isupper(ch) || isdigit(ch))) ||// kí tự là in hoa, chữ số
+                (kytu == 6 && (isalpha(ch) || isdigit(ch) || ch == ' ')  && a < sl - 1))) // ký tự, chữ số, có dấu cách   
+            {
                 cout << ch;
                 temp += ch;
                 a++;
