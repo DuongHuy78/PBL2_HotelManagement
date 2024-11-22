@@ -4,7 +4,7 @@
 #define MAX_IDLOAIPHONG 7
 class LoaiPhong {
     string loaiPhong;   // S, D, D2, T, F, F2
-    int loaiGiuong;     // 1, 2
+    int loaiGiuong;  // 1, 2
     int soLuongKhach;   // hiểu là số lượng khách tối đa trong 1 phòng
     int dienTich;
     int giaPhong;
@@ -23,12 +23,12 @@ public:
     int getDienTich() const;
     string getMoTaPhong() const;
 
-    void setLoaiPhong(string);
-    void setLoaiGiuong(int);
-    void setSoLuongKhach(int);
-    void setDienTich(int);
-    void setGiaPhong(int);
-    void setMoTaPhong(string);
+    bool setLoaiPhong(string);
+    bool setLoaiGiuong(int);
+    bool setSoLuongKhach(int);
+    bool setDienTich(int);
+    bool setGiaPhong(int);
+    bool setMoTaPhong(string);
 
     void NhapLoaiPhongMoi();
     void menuCapNhat();

@@ -13,7 +13,6 @@ DatPhong::DatPhong() {
     this->ngayTra       = 0;
     this->soLuongKhach  = 0;
     this->donGia        = 0;
-
 }
 
 /**
@@ -28,13 +27,20 @@ DatPhong::DatPhong() {
  * @param Gia Đơn giá.
  */
 DatPhong::DatPhong(string MDP, string MP, string MKH, time_t NNhan, time_t NTra, int SL, int Gia) {
-    this->maDatPhong    = MDP;
-    this->maPhong       = MP;
-    this->IDKhachHang   = MKH;
-    this->ngayNhan      = NNhan;
-    this->ngayTra       = NTra;
-    this->soLuongKhach  = SL;
-    this->donGia        = Gia;
+    this->maDatPhong    = "";
+    this->maPhong       = "";
+    this->IDKhachHang   = "";
+    this->ngayNhan      = 0;
+    this->ngayTra       = 0;
+    this->soLuongKhach  = 0;
+    this->donGia        = 0;
+    
+    setMaDatPhong(MDP);
+    setMaPhong(MP);
+    setIDKhachHang(MKH);
+    setNgayNhanAndNgayTra(NNhan, NTra);
+    setSoLuongKhach(SL);
+    setDonGia(Gia);
 }
 
 /**
@@ -124,8 +130,13 @@ int DatPhong::getDonGia() const {
  * 
  * @param MDP Mã đặt phòng mới.
  */
-void DatPhong::setMaDatPhong(string MDP) {
-    this->maDatPhong = MDP;
+bool DatPhong::setMaDatPhong(string MDP) {
+    if(Utils::isNumberOnly(MDP)) {
+        this->maDatPhong = MDP;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -135,8 +146,13 @@ void DatPhong::setMaDatPhong(string MDP) {
  * 
  * @param MP Mã phòng mới.
  */
-void DatPhong::setMaPhong(string MP) {
-    this->maPhong = MP;
+bool DatPhong::setMaPhong(string MP) {
+    if(Utils::isAlphabetAndNumberOnly(MP)) {
+        this->maPhong = Utils::toUpper(MP);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -146,30 +162,35 @@ void DatPhong::setMaPhong(string MP) {
  * 
  * @param MKH Mã khách hàng mới.
  */
-void DatPhong::setIDKhachHang(string MKH) {
-    this->IDKhachHang = MKH;
+bool DatPhong::setIDKhachHang(string MKH) {
+    if(Utils::isNumberOnly(MKH)) {
+        this->IDKhachHang = MKH;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
- * @brief Thiết lập ngày nhận phòng.
+ * @brief Thiết lập ngày nhận, trả phòng.
  * 
- * Phương thức này sẽ gán giá trị ngày nhận phòng cho thuộc tính ngayNhan của đối tượng DatPhong.
+ * Phương thức này sẽ gán giá trị ngày nhận phòng, ngày trả phòng cho thuộc tính ngayNhan, ngayTra của đối tượng DatPhong.
  * 
  * @param NNhan Ngày nhận phòng mới.
- */
-void DatPhong::setNgayNhan(time_t NNhan) {
-    this->ngayNhan = NNhan;
-}
-
-/**
- * @brief Thiết lập ngày trả phòng.
- * 
- * Phương thức này sẽ gán giá trị ngày trả phòng cho thuộc tính ngayTra của đối tượng DatPhong.
- * 
  * @param NTra Ngày trả phòng mới.
  */
-void DatPhong::setNgayTra(time_t NTra) {
-    this->ngayTra = NTra;
+bool DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
+    if(Utils::isDate(Utils::timeToString(NNhan)) && 
+       Utils::isDate(Utils::timeToString(NTra))) {
+        if(NNhan < NTra) {
+            this->ngayNhan = NNhan;
+            this->ngayTra = NTra;
+            return true;
+        }
+        return false;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -179,8 +200,13 @@ void DatPhong::setNgayTra(time_t NTra) {
  * 
  * @param SL Số lượng khách mới.
  */
-void DatPhong::setSoLuongKhach(int SL) {
-    this->soLuongKhach = SL;
+bool DatPhong::setSoLuongKhach(int SL) {
+    if(SL > 0) {
+        this->soLuongKhach = SL;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -190,8 +216,13 @@ void DatPhong::setSoLuongKhach(int SL) {
  * 
  * @param Gia Đơn giá mới.
  */
-void DatPhong::setDonGia(int Gia) {
-    this->donGia = Gia;
+bool DatPhong::setDonGia(int Gia) {
+    if(Gia > 0) {
+        this->donGia = Gia;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -206,12 +237,13 @@ void DatPhong::setDonGia(int Gia) {
  * - Số lượng khách
  * - Đơn giá
  */
-void DatPhong::work() {
-    cout << maDatPhong << endl;
-    cout << maPhong << endl;
-    cout << IDKhachHang << endl;
-    cout << Utils::dateToString(ngayNhan) << endl;
-    cout << Utils::dateToString(ngayTra) << endl;
-    cout << soLuongKhach << endl;
-    cout << donGia << endl;
+ostream &operator<<(ostream &out, const DatPhong &dp) {
+    out << "Ma Dat Phong: " << dp.maDatPhong << endl;
+    out << "Ma Phong: " << dp.maPhong << endl;
+    out << "ID Khach Hang: " << dp.IDKhachHang << endl;
+    out << "Ngay Nhan: " << Utils::timeToString(dp.ngayNhan) << endl;
+    out << "Ngay Tra: " << Utils::timeToString(dp.ngayTra) << endl;
+    out << "So Luong Khach: " << dp.soLuongKhach << endl;
+    out << "Don Gia: " << dp.donGia << endl;
+    return out;
 }

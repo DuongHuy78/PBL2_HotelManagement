@@ -9,17 +9,23 @@ LoaiPhong::LoaiPhong(){
     this->moTaPhong = "";
 }
 
-LoaiPhong::LoaiPhong(string LoaiPhong, int LoaiGiuong, int SoLuongKhach, int DienTich, int GiaPhong, string MoTaPhong)
-{
-    this->loaiPhong = LoaiPhong;
-    this->loaiGiuong = LoaiGiuong;
-    this->soLuongKhach = SoLuongKhach;
-    this->dienTich = DienTich;
-    this->giaPhong = GiaPhong;
-    this->moTaPhong = MoTaPhong;
+LoaiPhong::LoaiPhong(string LoaiPhong, int LoaiGiuong, int SoLuongKhach, int DienTich, int GiaPhong, string MoTaPhong) {
+    this->loaiPhong = "";
+    this->loaiGiuong = 0;
+    this->soLuongKhach = 0;
+    this->dienTich = 0;
+    this->giaPhong = 0;
+    this->moTaPhong = "";
+    
+    setLoaiPhong(LoaiPhong);
+    setLoaiGiuong(LoaiGiuong);
+    setSoLuongKhach(SoLuongKhach);
+    setDienTich(DienTich);
+    setGiaPhong(GiaPhong);
+    setMoTaPhong(MoTaPhong);
 }
 
-LoaiPhong::LoaiPhong(const LoaiPhong& other){
+LoaiPhong::LoaiPhong(const LoaiPhong& other) {
     this->loaiPhong = other.loaiPhong;
     this->loaiGiuong = other.loaiGiuong;
     this->soLuongKhach = other.soLuongKhach;
@@ -28,11 +34,9 @@ LoaiPhong::LoaiPhong(const LoaiPhong& other){
     this->moTaPhong = other.moTaPhong;
 
 }
-LoaiPhong::~LoaiPhong() {
+LoaiPhong::~LoaiPhong() {}
 
-}
-
-// GET
+// Getters
 string LoaiPhong::getLoaiPhong() const {
       return this->loaiPhong;
 }
@@ -59,35 +63,69 @@ string LoaiPhong::getMoTaPhong() const {
 }
 
 
-//SET
-void LoaiPhong::setLoaiPhong(string LP){
-    this->loaiPhong = LP;
+// Setters
+bool LoaiPhong::setLoaiPhong(string LP){
+    if(Utils::isRoomType(LP)){
+        this->loaiPhong = LP;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void LoaiPhong::setLoaiGiuong(int LG) {
-    this->loaiGiuong = LG;
+bool LoaiPhong::setLoaiGiuong(int LG) {
+    if(Utils::isRoomBedType(LG)){
+        this->loaiGiuong = LG;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void LoaiPhong::setSoLuongKhach(int SLK) {
-    this->soLuongKhach = SLK;
+bool LoaiPhong::setSoLuongKhach(int SLK) {
+    if(SLK > 0 && SLK < 9){
+        this->soLuongKhach = SLK;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void LoaiPhong::setDienTich(int DT) {
-    this->dienTich = DT;
-    
+bool LoaiPhong::setDienTich(int DT) {
+    if(DT > 0 && DT < 1000){
+        this->dienTich = DT;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void LoaiPhong::setGiaPhong(int GP) {
-    this->giaPhong = GP;
-
+bool LoaiPhong::setGiaPhong(int GP) {
+    if(GP > 0 && GP < 100000000){
+        this->giaPhong = GP;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
-void LoaiPhong::setMoTaPhong(string MTP) {
-    this->moTaPhong = MTP;
+bool LoaiPhong::setMoTaPhong(string MTP) {
+    if(Utils::isAlphabetAndNumberAndSpaceOnly(MTP)){
+        this->moTaPhong = MTP;
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 //NEW LOAIPHONG
-void LoaiPhong::NhapLoaiPhongMoi(){
+void LoaiPhong::NhapLoaiPhongMoi() {
     cout << "Nhap Loai Phong: ";
     this->loaiPhong = Utils::nhap(5,MAX_IDLOAIPHONG+1);
 
@@ -232,36 +270,13 @@ void LoaiPhong::capNhatThongTin()
     }
 }
 
-// HÀM ĐỊNH DẠNG CHO TRƯỜNG MÔ TẢ ( ý là chưa biết bỏ mô nên để tạm đây keke)
-void wrapText(const string& text, int width, int indent) {
-    istringstream iss(text);
-    string word;
-    string line;
-    bool firstLine = true;
-
-    while (iss >> word) {
-        if (line.length() + word.length() + 1 > width) {
-            if (!firstLine) cout << setw(indent) << ""; // Thụt lề cho các dòng sau
-            cout << line << endl;
-            line.clear();
-            firstLine = false;
-        }
-        line += (line.empty() ? "" : " ") + word;
-    }
-    if (!line.empty()) {
-        if (!firstLine) cout << setw(indent) << "";
-        cout << line << endl;
-    }
-}
-
 // XUAT THONG TIN
 void LoaiPhong::xuatThongTin(){
     cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
     << setw(9) << dienTich << setw(13) << giaPhong; 
-    wrapText(moTaPhong, 40, 65);
+    Utils::wrapText(moTaPhong, 40, 65);
     cout << string(105, '-') << endl;
 }   
-
 
 ostream& operator<<(ostream& out, const LoaiPhong& LP) {
     out << "Loai Phong: " << LP.loaiPhong << endl;

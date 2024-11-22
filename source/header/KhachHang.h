@@ -20,17 +20,15 @@ public:
     string getSoDienThoai() const;
     bool getGioiTinh() const; 
 
-    void setIDKhachHang(string);
-    void setHoTen(string);
-    void setNgaySinh(time_t);
-    void setSoDienThoai(string);
-    void setGioiTinh(gender_value); 
+    bool setIDKhachHang(string);
+    bool setHoTen(string);
+    bool setNgaySinh(time_t);
+    bool setSoDienThoai(string);
+    bool setGioiTinh(gender_value); 
 
-    void nhapThongTin();
     void menuSuaThongTin();
-    void huyDatPhong(string);
     void suaThongTin();
-    void work();
+    bool work();
     friend ostream& operator<<(ostream&, const KhachHang&);
 };
 #endif

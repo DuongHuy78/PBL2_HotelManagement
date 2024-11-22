@@ -125,7 +125,7 @@ void QLDatPhong::roomAvailability(time_t checkInDate, time_t checkOutDate, int s
             }
         }
         if(isAvailable && DSLP->soLuongKhach(p2->data.getLoaiPhong()) >= soLuongKhach) {
-            p2->data.thongTinPhong();
+            cout << p2->data;
             phongTrong.add(p2->data);
         }
         p2 = p2->next;

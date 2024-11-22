@@ -3,6 +3,6 @@
 
 class NguoiDung {
 public:
-    virtual void work() = 0;
+    virtual bool work() = 0;
 };
 #endif

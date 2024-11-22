@@ -61,49 +61,51 @@ string operator+(const string &time,const int &n) {
     return dayStr;
 }
 void QuanLi::taoLoaiPhong() {
-    LoaiPhong newLP = DSLP->nhapThongTin(); // chỉnh 
+    LoaiPhong newLP;
+    newLP.NhapLoaiPhongMoi();
     this->DSLP->themLoaiPhong(newLP);
 }
 
 void QuanLi::suaLoaiPhong(const string& maLoaiPhong) {
-    LoaiPhong *LP = DSLP->timKiemLoaiPhong(maLoaiPhong);
+    LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
     if(LP == NULL) {
         cout << "Khong tim thay loai phong!" << endl;
         return;
     }
-    LP->suaThongTin();
+    LP->capNhatThongTin();
 }
 
 void QuanLi::xoaLoaiPhong(const string& maLoaiPhong) {
-    LoaiPhong *LP = DSLP->timKiemLoaiPhong(maLoaiPhong);
+    LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
     if(LP == NULL) {
         cout << "Khong tim thay loai phong!" << endl;
         return;
     }
-    DSLP->xoaLoaiPhong(*LP);
+    DSLP->xoaLoaiPhong(maLoaiPhong);
 }
 
 void QuanLi::taoPhong() {
-    Phong newP = DSP->nhapThongTin();       //chưa có hàm này
+    Phong newP;
+    newP.capNhatThongTin();
     this->DSP->themPhong(newP);
 }
 
 void QuanLi::suaPhong(const string& maPhong) {
-    Phong *P = DSP->timKiemPhong(maPhong);      //chưa có hàm này
+    Phong *P = DSP->timPhong(maPhong);      //chưa có hàm này
     if(P == NULL) {
         cout << "Khong tim thay phong!" << endl;
         return;
     }
-    P->suaThongTin();          //chưa viết xong
+    P->capNhatThongTin();
 }
 
 void QuanLi::xoaPhong(const string& maPhong){
-    Phong *P = DSP->timKiemPhong(maPhong);
+    Phong *P = DSP->timPhong(maPhong);
     if(P == NULL) {
         cout << "Khong tim thay loai phong!" << endl;
         return;
     }
-    DSP->xoaPhong(*P);
+    DSP->xoaPhong(maPhong);
 }
 
 /**
@@ -204,6 +206,59 @@ void QuanLi::xemDoanhThu() {
         cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
     }
 }
-void QuanLi::work() {
-    cout << "Da dang nhap vao tai khoan quan li" << endl;
+bool QuanLi::work() {
+    system("cls");
+    Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
+    Utils::outputData("1. Tao loai phong\n", CONSOLE);
+    Utils::outputData("2. Sua loai phong\n", CONSOLE);
+    Utils::outputData("3. Xoa loai phong\n", CONSOLE);
+    Utils::outputData("4. Tao phong\n", CONSOLE);
+    Utils::outputData("5. Sua phong\n", CONSOLE);
+    Utils::outputData("6. Xoa phong\n", CONSOLE);
+    Utils::outputData("7. Xem doanh thu\n", CONSOLE);
+    Utils::outputData("8. Dang xuat\n", CONSOLE);
+    Utils::outputData("-----------------------------\n", CONSOLE);
+
+    string choice_str;
+    Utils::outputData("Hay nhap lua chon: ", CONSOLE);
+    Utils::inputData(choice_str, CONSOLE_OR_UI);
+    if(Utils::isNumberOnly(choice_str) == false) {
+        Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+        return true;
+    }
+    int choice = Utils::stringToInt(choice_str);
+    string maLoaiPhong, maPhong;
+    switch(choice) {
+        case 1:
+            taoLoaiPhong();
+            return true;
+        case 2:
+            Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
+            Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
+            suaLoaiPhong(maLoaiPhong);
+            return true;
+        case 3:
+            Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
+            Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
+            xoaLoaiPhong(maLoaiPhong);
+            return true;
+        case 4:
+            taoPhong();
+            return true;
+        case 5:
+            Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
+            Utils::inputData(maPhong, CONSOLE_OR_UI);
+            suaPhong(maPhong);
+            return true;
+        case 6:
+            Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
+            Utils::inputData(maPhong, CONSOLE_OR_UI);
+            xoaPhong(maPhong);
+            return true;
+        case 7:
+            xemDoanhThu();
+            return true;
+        case 8:
+            return false;
+    }    
 }

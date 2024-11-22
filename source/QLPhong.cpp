@@ -9,44 +9,42 @@ QLPhong::~QLPhong() {
 }
 
 // HÀM THÊM CÁC LPHÒNG vào DSP (LinkedList)
-void QLPhong::AddRangePhong(string file)
-{
+void QLPhong::AddRangePhong(string file) {
     ifstream inputFile(file);
-    if(!inputFile.is_open())
-        {
-            cout << "Error: Could not open file." << endl;
-            return;
-        }
+    if(!inputFile.is_open()) {
+        cout << "Error: Could not open file." << endl;
+        return;
+    }
 
     // cout << "Day la danh sach phong cua chung toi: "<< endl;
     // cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
     // cout << string(24, '-') << endl;
-
+    int count = 0;
     string line; 
-    while(getline(inputFile, line))
+    while(getline(inputFile, line)) {
+        // cout << line << endl;
+        string str[2]; // chua hai truong : maphong va loaiphong
+        string r = "";
+        int c = 0; 
+        for(int i = 0; i < line.size(); i++)
         {
-           // cout << line << endl;
-            string str[2]; // chua hai truong : maphong va loaiphong
-            string r = "";
-            int c = 0; 
-            for(int i = 0; i < line.size(); i++)
+            if(line[i] == ';')
             {
-                if(line[i] == ';')
-                {
-                    str[c++] = r;  // Lưu giá trị r vào str[c] và tăng c
-                    r = ""; // Reset r về chuỗi rỗng để chuẩn bị cho trường mới
-                }
-                else r += line[i];
+                str[c++] = r;  // Lưu giá trị r vào str[c] và tăng c
+                r = ""; // Reset r về chuỗi rỗng để chuẩn bị cho trường mới
             }
-            if(r.size() > 0)
-            {
-                str[c++] = r;
-            }       
-            Phong A(str[0], str[1]);
-            (this->DSP).add(A); // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
+            else r += line[i];
         }
+        if(r.size() > 0)
+        {
+            str[c++] = r;
+        }       
+        Phong A(str[0], str[1]);
+        (this->DSP).add(A); // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
+        count++;
+    }
     inputFile.close();
-    return; 
+    cout << "Da nhap du lieu cua " << count << " phong tu file: " << file << endl;
 }
 
 //update file
@@ -137,8 +135,7 @@ void QLPhong::suaThongTinPhong(const string& MP){
     cout << "Khong tim thay Phong!" << endl;
 }
 
-void QLPhong::setQLLP(QLLoaiPhong *QLLP)
-{
+void QLPhong::setQLLP(QLLoaiPhong *QLLP) {
     this->QLLP = QLLP;
 }
 
@@ -227,7 +224,7 @@ void QLPhong::QLPhong_Choice()
 } 
 
 Phong QLPhong::timPhong(time_t, time_t) {
-
+    return Phong();
 }
 
 LinkedList<Phong> &QLPhong::getDanhSachPhong() {
@@ -237,3 +234,17 @@ LinkedList<Phong> &QLPhong::getDanhSachPhong() {
 Node<Phong> *QLPhong::getHead() {
     return this->DSP.getHead();
 }
+
+ostream &operator<<(ostream &os, QLPhong &qlPhong) {
+    os << "Danh sach phong: " << endl;
+    os << "Ma phong" << setw(10) << "Loai phong" << endl;
+    Node<Phong> *p = qlPhong.DSP.begin();
+    while (p != qlPhong.DSP.end()) {
+        os << p->data;
+        p = p->next;
+    }
+    return os;
+}
+
+
+

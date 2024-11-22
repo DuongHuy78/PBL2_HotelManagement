@@ -37,6 +37,6 @@ void NhanVien::themDatPhong() {
     this->DSDP->themDatPhong(newDP);
 }
 
-void NhanVien::work() {
+bool NhanVien::work() {
     cout << "Da dang nhap vao tai khoan nhan vien" << endl;
 }

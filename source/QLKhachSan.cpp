@@ -1,5 +1,10 @@
 #include "./header/QLKhachSan.h"
 
+stringstream UI_input_buffer("");
+stringstream UI_output_buffer("");
+IO_MODE current_mode;
+bool UI_enable = false;
+
 /**
  * @brief Hàm khởi tạo của lớp QLKhachSan.
  * 
@@ -7,8 +12,18 @@
  * và gán con trỏ current_Data trỏ đến đối tượng hiện tại.
  */
 QLKhachSan::QLKhachSan() {
-    UI_init();
-    current_Data = this;
+    cout << "Ban co muon su dung giao dien do hoa khong? (Y/N): ";
+    string choice;
+    cin >> choice;
+    if(choice == "Y") {
+        UI_enable = true;
+        current_mode = UI_STREAM;
+        UI_init();
+        current_Data = this;
+    }
+    else {
+        current_mode = CONSOLE;
+    }
     nhanVien.setDSKH(&QLKH);
     nhanVien.setDSDP(&QLDP);
 }
@@ -29,8 +44,9 @@ QLKhachSan::~QLKhachSan() {}
 void QLKhachSan::inputTaiKhoan(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Khong the doc file::" << path << endl;
+        cerr << "Khong the doc file::" << path << endl;
     }
+    int count = 0;
     int index = 0;
     string line, username, password, ID;
     while(!fi.eof()) {
@@ -49,8 +65,10 @@ void QLKhachSan::inputTaiKhoan(string path) {
             quanLi.setIDQuanLi(ID);
         }
         index = 0;
+        ++count;
     }  
     fi.close();
+    cout << "Da nhap du lieu cua " << count << " tai khoan tu file: " << path << endl;
 }
 
 /**
@@ -65,8 +83,9 @@ void QLKhachSan::inputTaiKhoan(string path) {
 void QLKhachSan::inputKhachHang(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Khong the doc file::" << path << endl;
+        cerr << "Khong the doc file::" << path << endl;
     }
+    int count = 0;
     int index = 0;
     string line, ID, name, birthday, phone, gender;
     while(!fi.eof()) {
@@ -80,8 +99,10 @@ void QLKhachSan::inputKhachHang(string path) {
         KhachHang newKhachHang(ID, name, Utils::stringToDate(Utils::trim(birthday)), phone, Utils::stringToGender(gender));
         QLKH.themKhachHang(newKhachHang);
         index = 0;
+        ++count;
     }  
     fi.close();
+    cout << "Da nhap du lieu cua " << count << " khach hang tu file: " << path << endl;
 }
 
 /**
@@ -108,30 +129,7 @@ void QLKhachSan::inputLoaiPhong(string path) {
  * @param path Đường dẫn tới file chứa thông tin phòng.
  */
 void QLKhachSan::inputPhong(string path) {
-    ifstream fi(path);
-    if(!fi.is_open()) {
-        cout << "Khong the doc file::" << path << endl;
-        return;
-    }
-
-    string line;
-    int index = 0;
-    while(!fi.eof()) {
-        getline(fi, line);
-        if(line == "") break;
-        
-        // Extract room info using Utils::getSubstringUntilX
-        string maPhong = Utils::getSubstringUntilX(line, index, ';');
-        string maLoaiPhong = Utils::getSubstringUntilX(line, index, '\n');
-        
-        // Create new Phong object and add to list
-        Phong newPhong(maPhong, maLoaiPhong);
-        QLP.themPhong(newPhong);
-        
-        index = 0;
-    }
-    
-    fi.close();
+    QLP.AddRangePhong(path);
 }
 
 /**
@@ -147,8 +145,9 @@ void QLKhachSan::inputPhong(string path) {
 void QLKhachSan::inputDatPhong(string path) {
     ifstream fi(path);
     if(!fi.is_open()) {
-        cout << "Khong the doc file::" << path << endl;
+        cerr << "Khong the doc file::" << path << endl;
     }
+    int count = 0;
     string line;
     int index = 0;
     while(!fi.eof()) {
@@ -166,8 +165,10 @@ void QLKhachSan::inputDatPhong(string path) {
         Utils::stringToInt(soLuongKhach), Utils::stringToInt(donGia));
         QLDP.themDatPhong(newDatPhong);
         index = 0;
+        ++count;
     }  
     fi.close();
+    cout << "Da nhap du lieu cua " << count << " dat phong tu file: " << path << endl;
 }
 
 
@@ -193,42 +194,27 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
-    //Nhớ nhập đầy đủ dữ liệu vào nha
-    // cout << "Test Quan Li Khach Hang" << endl;
-    // KhachHang *kh = QLKH.timKiemKhachHang("100048");
-    // cout << *kh << endl;
-    // QLKH.suaThongTin(kh->getIDKhachHang());
-    // cout << *kh << endl;
-    // cout << "Test Loai Phong" << endl;
-    // QLLP.QLChoice();
+    if(UI_enable) {
+        gnk_Window_Loop();
+    }
+    else {
+        while(true) {
+            if(current_user == nullptr) {
+                cout << "Dang nhap de tiep tuc: " << endl;
+                current_user = dangNhap();
+                while(current_user == nullptr) {
+                    cout << "Dang nhap that bai. Vui long thu lai." << endl;
+                    current_user = dangNhap();                    
+                }
+            }
+            else {
+                if(current_user->work() == false) {
+                    dangXuat();
+                }
+            }
+        }
 
-    // string MADAPHONG;
-    // role_value role = KHACHHANG;
-    // QLDP.setDSP(&QLP);
-    // QLDP.setDSKH(&QLKH);
-    // QLDP.setDSLP(&QLLP);
-    // QLDP.setRole(role);
-    // QLDP.setcurrentID("100001");
-    // DatPhong dp = QLDP.nhapThongTin();
-    // QLDP.themDatPhong(dp);
-    
-    // cout << "\n=== BOOKING DETAILS ===\n" << endl;
-    // cout << "Ma dat phong: " << dp.getMaDatPhong() << endl;
-    // cout << "Ma phong: " << dp.getMaPhong() << endl;
-    // cout << "ID khach hang: " << dp.getIDKhachHang() << endl;
-    // cout << "Ngay nhan: " << Utils::dateToString(dp.getNgayNhan()) << endl;
-    // cout << "Ngay tra: " << Utils::dateToString(dp.getNgayTra()) << endl;
-    // cout << "So luong khach: " << dp.getSoLuongKhach() << endl;
-    // cout << "Don gia: " << dp.getDonGia() << endl;
-    // MADAPHONG = dp.getMaDatPhong();
-    // cout <<"Ma phong"<<QLDP.timKiemDatPhong(MADAPHONG)->getMaPhong()<<endl;
-
-    QuanLi quanLi;
-    quanLi.setDSLP(&QLLP);
-    quanLi.setDSP(&QLP);
-    quanLi.setDSDP(&QLDP);
-    quanLi.xemDoanhThu();
-    // gnk_Window_Loop();
+    }
 }
 
 
@@ -241,7 +227,12 @@ void QLKhachSan::work() {
  * @param password Mật khẩu của người dùng.
  * @return NguoiDung* Con trỏ đến đối tượng người dùng nếu đăng nhập thành công, NULL nếu thất bại.
  */
-NguoiDung *QLKhachSan::dangNhap(string username, string password) {
+NguoiDung *QLKhachSan::dangNhap() {
+    string username, password;
+    Utils::outputData("Username: ", CONSOLE);
+    Utils::inputData(username, CONSOLE_OR_UI);
+    Utils::outputData("Password: ", CONSOLE);
+    Utils::inputData(password, CONSOLE_OR_UI);
     string ID = QLTK.kiemTraTaiKhoan(username, password);
     if(ID != "") {
         if(ID == quanLi.getIDQuanLi()) {
@@ -269,6 +260,7 @@ NguoiDung *QLKhachSan::dangNhap(string username, string password) {
  */
 void QLKhachSan::dangXuat() {
     role = UNDEFINED_ROLE;
+    current_user = nullptr;
 }
 
 sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, string birthday, string gender, string username, string password) {

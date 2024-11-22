@@ -16,10 +16,9 @@ void QLLoaiPhong::AddRangeLoaiPhong(string file){
         cerr << "Error: Could not open file." << endl;
         return ;
     }
-
+    int count = 0;
     string line; 
-    while (getline(inputFile, line)) 
-        {  
+    while (getline(inputFile, line)) {  
             string str[6]; // chứa  6 trường của loại phòng 
             int c = 0;
             string r = "";
@@ -39,8 +38,10 @@ void QLLoaiPhong::AddRangeLoaiPhong(string file){
 
             LoaiPhong A(str[0], stoi(str[1]), stoi(str[2]), stoi(str[3]), stoi(str[4]), str[5]);
             (this->DSLP).add(A);
+            count++;
     }
     inputFile.close();
+    cout << "Da nhap du lieu cua " << count << " loai phong tu file: " << file << endl;
     return; 
 }
 

@@ -8,6 +8,7 @@
 #include "QLPhong.h"
 #include "QLTaiKhoan.h"
 #include "UI.h"
+
 class QLKhachSan {
     QLKhachHang QLKH;
     QLTaiKhoan QLTK;
@@ -18,7 +19,7 @@ class QLKhachSan {
     NhanVien nhanVien;
     QuanLi quanLi;
     string currentID; 
-    KhachHang *khachHang = nullptr;
+    NguoiDung *current_user = nullptr;
 public:
     QLKhachSan();
     ~QLKhachSan();
@@ -36,7 +37,7 @@ public:
     void outputDatPhong(string);
 
     void work();
-    NguoiDung *dangNhap(string, string);
+    NguoiDung *dangNhap();
     void dangXuat();
     sign_up_return_value taoTaiKhoan(string, string, string, string, string, string);
 

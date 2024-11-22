@@ -19,6 +19,6 @@ public:
     void setIDNhanVien(string);
     void themKhachHang();
     void themDatPhong();
-    void work();
+    bool work();
 };
 #endif
