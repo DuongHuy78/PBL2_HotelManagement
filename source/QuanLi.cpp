@@ -208,6 +208,7 @@ void QuanLi::xemDoanhThu() {
 }
 bool QuanLi::work() {
     system("cls");
+    Utils::clearBuffer();
     Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("1. Tao loai phong\n", CONSOLE);
     Utils::outputData("2. Sua loai phong\n", CONSOLE);
@@ -231,34 +232,44 @@ bool QuanLi::work() {
     switch(choice) {
         case 1:
             taoLoaiPhong();
+            system("pause");
             return true;
         case 2:
             Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
             Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
             suaLoaiPhong(maLoaiPhong);
+            system("pause");
             return true;
         case 3:
             Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
             Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
             xoaLoaiPhong(maLoaiPhong);
+            system("pause");
             return true;
         case 4:
             taoPhong();
+            system("pause");
             return true;
         case 5:
             Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
             Utils::inputData(maPhong, CONSOLE_OR_UI);
             suaPhong(maPhong);
+            system("pause");
             return true;
         case 6:
             Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
             Utils::inputData(maPhong, CONSOLE_OR_UI);
             xoaPhong(maPhong);
+            system("pause");
             return true;
         case 7:
             xemDoanhThu();
+            system("pause");
             return true;
         case 8:
             return false;
+        default:
+            Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+            return true;
     }    
 }

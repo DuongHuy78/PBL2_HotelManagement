@@ -194,17 +194,25 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
+    nhanVien.setDSKH(&QLKH);
+    nhanVien.setDSDP(&QLDP);
+    quanLi.setDSLP(&QLLP);
+    quanLi.setDSP(&QLP);
+    quanLi.setDSDP(&QLDP);
+    QLDP.setDSKH(&QLKH);
+    QLDP.setDSLP(&QLLP);
+    QLDP.setDSP(&QLP);
+    QLP.setQLLP(&QLLP);
     if(UI_enable) {
         gnk_Window_Loop();
     }
     else {
         while(true) {
-            if(current_user == nullptr) {
+            system("cls");
+            if(role == UNDEFINED_ROLE) {
                 cout << "Dang nhap de tiep tuc: " << endl;
-                current_user = dangNhap();
-                while(current_user == nullptr) {
-                    cout << "Dang nhap that bai. Vui long thu lai." << endl;
-                    current_user = dangNhap();                    
+                while(!dangNhap()) {
+                    cout << "Dang nhap that bai. Vui long thu lai." << endl;               
                 }
             }
             else {
@@ -227,7 +235,7 @@ void QLKhachSan::work() {
  * @param password Mật khẩu của người dùng.
  * @return NguoiDung* Con trỏ đến đối tượng người dùng nếu đăng nhập thành công, NULL nếu thất bại.
  */
-NguoiDung *QLKhachSan::dangNhap() {
+bool QLKhachSan::dangNhap() {
     string username, password;
     Utils::outputData("Username: ", CONSOLE);
     Utils::inputData(username, CONSOLE_OR_UI);
@@ -237,20 +245,23 @@ NguoiDung *QLKhachSan::dangNhap() {
     if(ID != "") {
         if(ID == quanLi.getIDQuanLi()) {
             role = QUANLI;
-            return &quanLi;
+            current_user = &quanLi;
+            return true;
         }
         if(ID == nhanVien.getIDNhanVien()) {
             role = NHANVIEN;
-            return &nhanVien;
+            current_user = &nhanVien;
+            return true;
         }
         role = KHACHHANG;
         if(QLKH.timKiemKhachHang(ID) != nullptr) {
             QLDP.setcurrentID(this->currentID);
             QLDP.setRole(role);
-            return QLKH.timKiemKhachHang(ID);
+            current_user = QLKH.timKiemKhachHang(ID);
+            return true;
         }
     }
-    return nullptr;
+    return false;
 }
 
 /**

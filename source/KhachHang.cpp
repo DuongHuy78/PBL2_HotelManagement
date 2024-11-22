@@ -170,6 +170,36 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
 }
 
 bool KhachHang::work() {
-    cout << "Da dang nhap vao tai khoan khach hang" << endl;
+    system("cls");
+    Utils::clearBuffer();
+    Utils::outputData("-----------KHACH-HANG---------\n", CONSOLE);
+    Utils::outputData("1. Sua thong tin\n", CONSOLE);
+    Utils::outputData("2. Xem thong tin\n", CONSOLE);
+    Utils::outputData("3. Dang xuat\n", CONSOLE);
+    Utils::outputData("-----------------------------\n", CONSOLE);
+
+    string choice_str;
+    Utils::outputData("Hay nhap lua chon: ", CONSOLE);
+    Utils::inputData(choice_str, CONSOLE_OR_UI);
+    if(Utils::isNumberOnly(choice_str) == false) {
+        Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+        return true;
+    }
+    int choice = Utils::stringToInt(choice_str);
+    switch(choice) {
+        case 1:
+            suaThongTin();
+            system("pause");
+            return true;
+        case 2:
+            cout << *this;
+            system("pause");
+            return true;
+        case 3:
+            return false;
+        default:
+            Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+            return true;
+    }
     
 }

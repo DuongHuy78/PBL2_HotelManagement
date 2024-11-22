@@ -511,16 +511,12 @@ public:
 }
 
     static bool isDate(const string &s) {
-        if (s.length() != 10) {
-            return false;
-        }
-        if (s[2] != '/' || s[5] != '/') {
-            return false;
-        }
-        string day = s.substr(0, 2);
-        string month = s.substr(3, 2);
-        string year = s.substr(6, 4);
-        if (!isNumberOnly(day) || !isNumberOnly(month) || !isNumberOnly(year)) {
+        string day, month, year;
+        int pos = 0;
+        day = getSubstringUntilX(s, pos, '/');
+        month = getSubstringUntilX(s, pos, '/');
+        year = getSubstringUntilX(s, pos, '\n');
+        if(isNumberOnly(day) == false || isNumberOnly(month) == false || isNumberOnly(year) == false) {
             return false;
         }
         int d = stringToInt(day);
