@@ -75,7 +75,7 @@ bool LoaiPhong::setLoaiPhong(string LP){
 }
 
 bool LoaiPhong::setLoaiGiuong(int LG) {
-    if(Utils::isRoomBedType(LG)){
+    if(Utils::isRoomBedType(Utils::intToString(LG))){
         this->loaiGiuong = LG;
         return true;
     }

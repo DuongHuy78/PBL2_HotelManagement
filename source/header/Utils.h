@@ -40,6 +40,19 @@ enum IO_MODE {
     CONSOLE_OR_UI, // Nhập xuất trên console và từ UI
 };
 
+enum condition_value {
+    GENDER,
+    NUMBER_ONLY,
+    ALPHABET_ONLY,
+    ALPHABET_AND_NUMBER_ONLY,
+    ALPHABET_AND_SPACE_ONLY,
+    ALPHABET_AND_NUMBER_AND_SPACE_ONLY,
+    VIETNAM_PHONE_NUMBER,
+    DATE,
+    ROOM_TYPE,
+    ROOM_BED_TYPE,
+};
+
 extern stringstream UI_input_buffer;
 extern stringstream UI_output_buffer;
 extern IO_MODE current_mode;    // Chế độ hiện tại: {CONSOLE, UI_STREAM}
@@ -423,7 +436,38 @@ public:
             return input;
         }
     }
+
+    static string inputWithCondition(string message, int minSize, int maxSize, condition_value condition) {
+        outputData(message, CONSOLE);
+        string input;
+        inputData(input, CONSOLE_OR_UI);
+        bool (*isVaild)(const string &) = nullptr;
+        if(condition == GENDER) isVaild = isGender;
+        if(condition == NUMBER_ONLY) isVaild = isNumberOnly;
+        if(condition == ALPHABET_ONLY) isVaild = isAlphabetOnly;
+        if(condition == ALPHABET_AND_NUMBER_ONLY) isVaild = isAlphabetAndNumberOnly;
+        if(condition == ALPHABET_AND_SPACE_ONLY) isVaild = isAlphabetAndSpaceOnly;
+        if(condition == ALPHABET_AND_NUMBER_AND_SPACE_ONLY) isVaild = isAlphabetAndNumberAndSpaceOnly;
+        if(condition == VIETNAM_PHONE_NUMBER) isVaild = isVietNamPhoneNumber;
+        if(condition == DATE) isVaild = isDate;
+        if(condition == ROOM_TYPE) isVaild = isRoomType;
+        if(condition == ROOM_BED_TYPE) isVaild = isRoomBedType;
+        while (input.size() < minSize || input.size() > maxSize || !isVaild(input)) {
+            if(input.size() < minSize || input.size() > maxSize) 
+            outputData("Do dai khong hop le. Vui long nhap lai: \n", CONSOLE);
+            else outputData("Du lieu khong hop le. Vui long nhap lai: \n", CONSOLE);
+            inputData(input, CONSOLE_OR_UI);
+        }
+        return input;
+    }
     // add utils function here . . . 
+    static bool isGender(const string &s) {
+        if(stringToGender(s) == UNDEFINED_GENDER) {
+            return false;
+        }
+        return true;
+    }
+
     static bool isNumberOnly(const string &s) {
         for (char c : s) {
             if (!isdigit(c)) {
@@ -498,20 +542,35 @@ public:
     }
 
     static int monthDays(int month, int year) {
-    if(isLeapYear(year)) {
-        //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
-        int maxDay[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        return maxDay[month - 1];
+        if(isLeapYear(year)) {
+            //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
+            int maxDay[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+            return maxDay[month - 1];
+        }
+        else {
+            //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
+            int maxDay[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+            return maxDay[month - 1];
+        }
     }
-    else {
-        //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
-        int maxDay[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        return maxDay[month - 1];
-    }
-}
 
     static bool isDate(const string &s) {
-        string day, month, year;
+        if(s.length() < 8) {
+            return false;
+        }
+        int slashCount = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] != '/' && !isdigit(s[i])) {
+                return false;
+            }
+            if(s[i] == '/') {
+                slashCount++;
+            }
+        }
+        if(slashCount != 2) {
+            return false;
+        }
+        string day = "", month = "", year = "";
         int pos = 0;
         day = getSubstringUntilX(s, pos, '/');
         month = getSubstringUntilX(s, pos, '/');
@@ -534,14 +593,15 @@ public:
     static bool isRoomType(const string &s) {
         string roomTypes[] = {"S", "D", "D2", "T", "F", "F2"};
         for (string roomType : roomTypes) {
-            if (s == roomType) {
+            if (s == "ST" + roomType || s == "VIP" + roomType) {
                 return true;
             }
         }
         return false;
     }
 
-    static bool isRoomBedType(int s) {
+    static bool isRoomBedType(const string &str) {
+        int s = stringToInt(str);
         int roomBedTypes[] = {1, 2, 12};
         for (int roomBedType : roomBedTypes) {
             if (s == roomBedType) {
@@ -580,14 +640,15 @@ public:
     }
 
     static void inputData(string &data, IO_MODE mode) {
+        if (cin.peek() == '\n') cin.ignore(); // bỏ qua kí tự nếu nó là \n
         if(current_mode == CONSOLE) {
             if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
-                cin >> data;
+                std::getline(cin, data);
             }
         }
         else if(current_mode == UI_STREAM) {
             if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
-                UI_input_buffer >> data;
+                std::getline(UI_input_buffer, data);
             }
         }
     }
