@@ -7,6 +7,8 @@ int main() {
     db.inputLoaiPhong("data/loaiphong.txt");
     db.inputPhong("data/phong.txt");
     db.inputDatPhong("data/dat_phong.txt");
+    system("pause");
+    system("cls");
     db.work();
     return 0;
 }

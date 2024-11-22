@@ -23,13 +23,12 @@ public:
     int getSoLuongKhach() const;
     int getDonGia() const;
 
-    void setMaDatPhong(string);
-    void setMaPhong(string);
-    void setIDKhachHang(string);
-    void setNgayNhan(time_t);
-    void setNgayTra(time_t);
-    void setSoLuongKhach(int);
-    void setDonGia(int);
-    void work();
+    bool setMaDatPhong(string);
+    bool setMaPhong(string);
+    bool setIDKhachHang(string);
+    bool setNgayNhanAndNgayTra(time_t, time_t);
+    bool setSoLuongKhach(int);
+    bool setDonGia(int);
+    friend ostream& operator<<(ostream&, const DatPhong&);
 };
 #endif

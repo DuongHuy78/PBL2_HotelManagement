@@ -14,24 +14,35 @@
 #define MAX_NAME 50
 using namespace std;
 
-
 enum role_value {
     UNDEFINED_ROLE = -1,
     KHACHHANG,
     NHANVIEN,
     QUANLI,
 };    
+
 enum gender_value {
     UNDEFINED_GENDER = -1,
     NAM,
     NU,
 };
+
 enum sign_up_return_value {
     SIGN_UP_SUCCESS,
     SIGN_UP_USERNAME_EXISTED,
     SIGN_UP_BLANK_INFO,
     SIGN_UP_INVALID_INFO,
 };
+
+enum IO_MODE {
+    CONSOLE,        // Nhập xuất trên console
+    UI_STREAM,      // Nhập xuất từ UI
+    CONSOLE_OR_UI, // Nhập xuất trên console và từ UI
+};
+
+extern stringstream UI_input_buffer;
+extern stringstream UI_output_buffer;
+extern IO_MODE current_mode;    // Chế độ hiện tại: {CONSOLE, UI_STREAM}
 
 /**
  * Chứa các hàm tiện ích
@@ -251,6 +262,19 @@ public:
         return newS;
     }
 
+    static string toUpper(const string &s) {
+        string newS = "";
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] >= 'a' && s[i] <= 'z') {
+                newS += s[i] - 'a' + 'A';
+            }
+            else {
+                newS += s[i];
+            }
+        }
+        return newS;
+    }
+
     static string genderToString(gender_value gender) {
         if(gender == NAM) return "Nam";
         if(gender == NU) return "Nu";
@@ -400,5 +424,189 @@ public:
         }
     }
     // add utils function here . . . 
+    static bool isNumberOnly(const string &s) {
+        for (char c : s) {
+            if (!isdigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool isAlphabetOnly(const string &s) {
+        for (char c : s) {
+            if (!isalpha(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool isAlphabetAndNumberOnly(const string &s) {
+        for (char c : s) {
+            if (!isalnum(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool isAlphabetAndSpaceOnly(const string &s) {
+        for (char c : s) {
+            if (!isalpha(c) && c != ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool isAlphabetAndNumberAndSpaceOnly(const string &s) {
+        for (char c : s) {
+            if (!isalnum(c) && c != ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool isVietNamPhoneNumber(const string &s) {
+        if (s.length() != 10) {
+            return false;
+        }
+        for (char c : s) {
+            if (!isdigit(c)) {
+                return false;
+            }
+        }
+        string prefix_list[] = {"032", "033", "034", "035", "036", "037", "038", "039",
+            "096", "097", "098", "086", "083", "084", "085", "081", "082", "088", "091",
+            "094", "070", "079", "077", "076", "078", "090", "093", "089", "056", "058",
+            "092", "059", "099"};
+        string prefix = s.substr(0, 3);
+        for(string p : prefix_list) {
+            if (prefix == p) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static bool isLeapYear(int year) {
+        if(year % 400 == 0) return true;
+        if(year % 4 == 0 && year % 100 != 0) return true;
+        return false;
+    }
+
+    static int monthDays(int month, int year) {
+    if(isLeapYear(year)) {
+        //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
+        int maxDay[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        return maxDay[month - 1];
+    }
+    else {
+        //                01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12
+        int maxDay[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        return maxDay[month - 1];
+    }
+}
+
+    static bool isDate(const string &s) {
+        if (s.length() != 10) {
+            return false;
+        }
+        if (s[2] != '/' || s[5] != '/') {
+            return false;
+        }
+        string day = s.substr(0, 2);
+        string month = s.substr(3, 2);
+        string year = s.substr(6, 4);
+        if (!isNumberOnly(day) || !isNumberOnly(month) || !isNumberOnly(year)) {
+            return false;
+        }
+        int d = stringToInt(day);
+        int m = stringToInt(month);
+        int y = stringToInt(year);
+        if (m < 1 || m > 12) {
+            return false;
+        }
+        if (d < 1 || d > monthDays(m, y)) {
+            return false;
+        }
+        return true;
+    }
+
+    static bool isRoomType(const string &s) {
+        string roomTypes[] = {"S", "D", "D2", "T", "F", "F2"};
+        for (string roomType : roomTypes) {
+            if (s == roomType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static bool isRoomBedType(int s) {
+        int roomBedTypes[] = {1, 2, 12};
+        for (int roomBedType : roomBedTypes) {
+            if (s == roomBedType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void wrapText(const string& text, int width, int indent) {
+        istringstream iss(text);
+        string word;
+        string line;
+        bool firstLine = true;
+
+        while (iss >> word) {
+            if (line.length() + word.length() + 1 > width) {
+                if (!firstLine) cout << setw(indent) << ""; // Thụt lề cho các dòng sau
+                cout << line << endl;
+                line.clear();
+                firstLine = false;
+            }
+            line += (line.empty() ? "" : " ") + word;
+        }
+        if (!line.empty()) {
+            if (!firstLine) cout << setw(indent) << "";
+            cout << line << endl;
+        }
+    }
+
+    static void clearBuffer() {
+        UI_input_buffer.clear();
+        UI_output_buffer.clear();
+        std::cin.clear();
+        std::cout.clear();
+    }
+
+    static void inputData(string &data, IO_MODE mode) {
+        if(current_mode == CONSOLE) {
+            if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
+                cin >> data;
+            }
+        }
+        else if(current_mode == UI_STREAM) {
+            if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
+                UI_input_buffer >> data;
+            }
+        }
+    }
+
+    static void outputData(string data, IO_MODE mode) {
+        if(current_mode == CONSOLE) {
+            if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
+                cout << data;
+            }
+        }
+        else if(current_mode == UI_STREAM) {
+            if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
+                UI_output_buffer << data;
+            }
+        }
+    }
 };
 #endif

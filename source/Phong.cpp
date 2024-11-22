@@ -46,3 +46,9 @@ void Phong::xuatThongTin() {
     cout << string(25, '-') << endl;
 }
 
+ostream& operator<<(ostream& os, const Phong& P) {
+    os << left << setw(15) << P.maPhong << P.loaiPhong << endl;
+    os << string(25, '-') << endl;
+    return os;
+}
+

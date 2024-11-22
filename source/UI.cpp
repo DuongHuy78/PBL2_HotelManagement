@@ -2,7 +2,7 @@
 frame_num_value current_frame = GUEST_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 option_value option = DEFAULT_OPTION;
-QLKhachSan *current_Data;
+QLKhachSan *current_Data = nullptr;
 bool login_failed = false;
 bool blank_info = false;
 bool username_existed = false;
@@ -94,7 +94,10 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	buttonText->color = color - Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
-	NguoiDung *p = current_Data->dangNhap((login.textboxList["username_textbox"])->text, (login.textboxList["password_textbox"])->text);
+	Utils::clearBuffer();
+	UI_input_buffer << (login.textboxList["username_textbox"])->text << endl;
+	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
+	NguoiDung *p = current_Data->dangNhap();
 	if(p != nullptr) {
 		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
 	}

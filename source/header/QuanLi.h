@@ -31,6 +31,6 @@ public:
     int thongKe(string,string);
     void xemDanhSachLuaChonXemDoanhThu();
     void xemDoanhThu();
-    void work();
+    bool work();
 };
 #endif

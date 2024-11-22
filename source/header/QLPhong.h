@@ -26,5 +26,6 @@ public:
     LinkedList<Phong> &getDanhSachPhong();
     Node<Phong> *getHead();
 
+    friend ostream& operator<<(ostream&, QLPhong&);
 };
 #endif

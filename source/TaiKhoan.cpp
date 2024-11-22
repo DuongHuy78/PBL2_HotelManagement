@@ -49,8 +49,8 @@ void TaiKhoan::setID(string ID) {
 }
 
 role_value TaiKhoan::getRole() const {
-    if(this->ID[0] == '0') return KHACHHANG;
-    if(this->ID[0] == '1') return NHANVIEN;
-    if(this->ID[0] == '2') return QUANLI;
+    if(this->ID[0] == '1') return KHACHHANG;
+    if(this->ID[0] == '2') return NHANVIEN;
+    if(this->ID[0] == '3') return QUANLI;
     return UNDEFINED_ROLE;
 }
