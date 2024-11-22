@@ -137,7 +137,6 @@ void QLDatPhong::roomAvailability(time_t checkInDate, time_t checkOutDate, int s
 }
 
 DatPhong QLDatPhong::nhapThongTin() {
-
     int ktra = 1, donGia;
     string temp, soLuongKhach;
     time_t ngayNhan, ngayTra;
@@ -210,5 +209,6 @@ DatPhong QLDatPhong::nhapThongTin() {
         DatPhong newDP(ma, temp, currentID, ngayNhan, ngayTra, Utils::stringToInt(soLuongKhach), donGia);
         return newDP;
     }
+    return DatPhong();
 }
 

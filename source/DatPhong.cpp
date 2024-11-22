@@ -135,6 +135,7 @@ bool DatPhong::setMaDatPhong(string MDP) {
         this->maDatPhong = MDP;
         return true;
     } else {
+        cerr << "DatPhong::setMaDatPhong::Ma dat phong khong hop le!" << endl;
         return false;
     }
 }
@@ -151,6 +152,7 @@ bool DatPhong::setMaPhong(string MP) {
         this->maPhong = Utils::toUpper(MP);
         return true;
     } else {
+        cerr << "DatPhong::setMaPhong::Ma phong khong hop le!" << endl;
         return false;
     }
 }
@@ -167,6 +169,7 @@ bool DatPhong::setIDKhachHang(string MKH) {
         this->IDKhachHang = MKH;
         return true;
     } else {
+        cerr << "DatPhong::setIDKhachHang::ID khach hang khong hop le!" << endl;
         return false;
     }
 }
@@ -180,8 +183,8 @@ bool DatPhong::setIDKhachHang(string MKH) {
  * @param NTra Ngày trả phòng mới.
  */
 bool DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
-    if(Utils::isDate(Utils::timeToString(NNhan)) && 
-       Utils::isDate(Utils::timeToString(NTra))) {
+    if(Utils::isDate(Utils::dateToString(NNhan)) && 
+       Utils::isDate(Utils::dateToString(NTra))) {
         if(NNhan < NTra) {
             this->ngayNhan = NNhan;
             this->ngayTra = NTra;
@@ -189,6 +192,9 @@ bool DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
         }
         return false;
     } else {
+        cerr << "DatPhong::setNgayNhanAndNgayTra::Ngay nhan hoac ngay tra khong hop le!" << endl;
+        cerr << "NNhan: " << Utils::dateToString(NNhan) << endl;
+        cerr << "NTra: " << Utils::dateToString(NTra) << endl;
         return false;
     }
 }
@@ -205,6 +211,7 @@ bool DatPhong::setSoLuongKhach(int SL) {
         this->soLuongKhach = SL;
         return true;
     } else {
+        cerr << "DatPhong::setSoLuongKhach::So luong khach khong hop le!" << endl;
         return false;
     }
 }
@@ -221,6 +228,7 @@ bool DatPhong::setDonGia(int Gia) {
         this->donGia = Gia;
         return true;
     } else {
+        cerr << "DatPhong::setDonGia::Don gia khong hop le!" << endl;
         return false;
     }
 }

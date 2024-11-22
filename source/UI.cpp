@@ -97,8 +97,8 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	Utils::clearBuffer();
 	UI_input_buffer << (login.textboxList["username_textbox"])->text << endl;
 	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
-	NguoiDung *p = current_Data->dangNhap();
-	if(p != nullptr) {
+	bool res = current_Data->dangNhap();
+	if(res) {
 		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
 	}
 	else {

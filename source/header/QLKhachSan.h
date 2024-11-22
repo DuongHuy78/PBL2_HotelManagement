@@ -37,7 +37,7 @@ public:
     void outputDatPhong(string);
 
     void work();
-    NguoiDung *dangNhap();
+    bool dangNhap();
     void dangXuat();
     sign_up_return_value taoTaiKhoan(string, string, string, string, string, string);
 
