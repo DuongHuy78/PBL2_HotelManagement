@@ -8,6 +8,7 @@ public:
     QLKhachHang();
     ~QLKhachHang();
 
+    void setDSDPChoKH(QLDatPhong *);   // Set danh sách đặt phòng cho khách hàng
     void themKhachHang(KhachHang);
     void suaThongTin(string);
     void xoaKhachHang(KhachHang *); 

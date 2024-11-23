@@ -51,6 +51,13 @@ bool KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
+bool KhachHang::setDSDP(QLDatPhong* QLDP) {
+    if(QLDP == nullptr) {
+        return false;
+    }
+    this->QLDP = *QLDP;
+    return true;
+}
 
 bool KhachHang::setIDKhachHang(string IDKhachHang) {
     if(Utils::isNumberOnly(IDKhachHang)) {
@@ -160,6 +167,11 @@ void KhachHang::suaThongTin() {
     }
 }
 
+void themDatPhong(){
+    DatPhong new_DP;
+    new_DP = QLDP.nhapThongTin();
+    QLDP.themDatPhong(new_DP);
+}
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     out << "ID Khach Hang: " << kh.IDKhachHang << endl;
     out << "Ho Ten: " << kh.hoTen << endl;
@@ -169,13 +181,14 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     return out;
 }
 
-bool KhachHang::work() {
+int KhachHang::work() {
     system("cls");
     Utils::clearBuffer();
     Utils::outputData("-----------KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);
-    Utils::outputData("3. Dang xuat\n", CONSOLE);
+    Utils::outputData("3. Dat Phong\n", CONSOLE);
+    Utils::outputData("4. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -190,13 +203,13 @@ bool KhachHang::work() {
         case 1:
             suaThongTin();
             system("pause");
-            return true;
+            return 1;
         case 2:
             cout << *this;
             system("pause");
-            return true;
+            return 2;
         case 3:
-            return false;
+            return ;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
             return true;
