@@ -115,13 +115,8 @@ bool LoaiPhong::setGiaPhong(int GP) {
 }
 
 bool LoaiPhong::setMoTaPhong(string MTP) {
-    if(Utils::isAlphabetAndNumberAndSpaceOnly(MTP)){
-        this->moTaPhong = MTP;
-        return true;
-    }
-    else {
-        return false;
-    }
+    this->moTaPhong = MTP;
+    return true;
 }
 
 //NEW LOAIPHONG
@@ -278,12 +273,19 @@ void LoaiPhong::xuatThongTin(){
     cout << string(105, '-') << endl;
 }   
 
-ostream& operator<<(ostream& out, const LoaiPhong& LP) {
-    out << "Loai Phong: " << LP.loaiPhong << endl;
-    out << "Loai Giuong: " << LP.loaiGiuong << endl;
-    out << "So Luong Khach: " << LP.soLuongKhach << endl;
-    out << "Dien Tich: " << LP.dienTich << endl;
-    out << "Gia: " << LP.giaPhong << endl;
-    out << "Mo ta Phong" << LP.moTaPhong << endl;
+ostream& operator<<(ostream& out, const LoaiPhong& lp) {
+    Utils::outputData("-----------THONG-TIN-LOAI-PHONG---------\n", CONSOLE);
+    Utils::outputData("Loai Phong: ", CONSOLE);
+    Utils::outputData(lp.loaiPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Loai Giuong: ", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.loaiGiuong) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("So Luong Khach: ", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.soLuongKhach) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Dien Tich: ", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.dienTich) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Gia: ", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.giaPhong) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Mo ta Phong: ", CONSOLE);
+    Utils::outputData(lp.moTaPhong + "\n", CONSOLE_OR_UI);
     return out;
 }

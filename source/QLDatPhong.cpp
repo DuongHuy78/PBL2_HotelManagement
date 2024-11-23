@@ -212,3 +212,14 @@ DatPhong QLDatPhong::nhapThongTin() {
     return DatPhong();
 }
 
+ostream &operator<<(ostream &os, const QLDatPhong &ql) {
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
+    Utils::outputData("Danh sach dat phong: \n", CONSOLE);
+    Node<DatPhong> *p = ql.DSDP.begin();
+    while(p != ql.DSDP.end()) {
+        os << p->data;
+        Utils::outputData("\n", CONSOLE);
+        p = p->next;
+    }
+    return os;
+}

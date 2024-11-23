@@ -32,5 +32,6 @@ public:
     void xemDanhSachLuaChonXemDoanhThu();
     void xemDoanhThu();
     bool work();
+    friend ostream& operator<<(ostream&, QuanLi&);
 };
 #endif

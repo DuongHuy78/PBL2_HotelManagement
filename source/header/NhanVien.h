@@ -20,5 +20,6 @@ public:
     void themKhachHang();
     void themDatPhong();
     bool work();
+    friend ostream& operator<<(ostream& out, const NhanVien&);
 };
 #endif

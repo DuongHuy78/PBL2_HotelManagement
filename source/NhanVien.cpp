@@ -37,9 +37,15 @@ void NhanVien::themDatPhong() {
     this->DSDP->themDatPhong(newDP);
 }
 
+ostream& operator<<(ostream& out, const NhanVien& nv) {
+    Utils::outputData("-----------THONG-TIN-NHAN-VIEN---------\n", CONSOLE);
+    Utils::outputData("ID Nhan Vien: ", CONSOLE);
+    Utils::outputData(nv.IDNhanVien + "\n", CONSOLE_OR_UI);
+    return out;
+}
+
 bool NhanVien::work() {
     system("cls");
-    Utils::clearBuffer();
     Utils::outputData("-----------NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("1. Them khach hang\n", CONSOLE);
     Utils::outputData("2. Them dat phong\n", CONSOLE);

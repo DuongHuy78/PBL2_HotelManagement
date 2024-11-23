@@ -16,5 +16,7 @@ public:
     KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
     KhachHang nhapThongTin();
     void display();
+    
+    friend ostream& operator<<(ostream&, const QLKhachHang&);
 };
 #endif

@@ -161,17 +161,22 @@ void KhachHang::suaThongTin() {
 }
 
 ostream& operator<<(ostream& out, const KhachHang& kh) {
-    out << "ID Khach Hang: " << kh.IDKhachHang << endl;
-    out << "Ho Ten: " << kh.hoTen << endl;
-    out << "Ngay Sinh: " << Utils::dateToString(kh.ngaySinh) << endl;
-    out << "So Dien Thoai: " << kh.soDienThoai << endl;
-    out << "Gioi Tinh: " << Utils::genderToString(kh.gioiTinh) << endl;
+    Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
+    Utils::outputData("ID Khach Hang: ", CONSOLE);
+    Utils::outputData(kh.IDKhachHang + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ho Ten: ", CONSOLE);
+    Utils::outputData(kh.hoTen + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ngay Sinh: ", CONSOLE);
+    Utils::outputData(Utils::dateToString(kh.ngaySinh) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("So Dien Thoai: ", CONSOLE);
+    Utils::outputData(kh.soDienThoai + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Gioi Tinh: ", CONSOLE);
+    Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
     return out;
 }
 
 bool KhachHang::work() {
     system("cls");
-    Utils::clearBuffer();
     Utils::outputData("-----------KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);

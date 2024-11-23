@@ -206,9 +206,16 @@ void QuanLi::xemDoanhThu() {
         cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
     }
 }
+
+ostream &operator<<(ostream &out, QuanLi &ql) {
+    Utils::outputData("-----------THONG-TIN-QUAN-LI-----------\n", CONSOLE);
+    Utils::outputData("ID quan li: ", CONSOLE);
+    Utils::outputData(ql.IDQuanLi + "\n", CONSOLE_OR_UI);
+    return out;
+}
+
 bool QuanLi::work() {
     system("cls");
-    Utils::clearBuffer();
     Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("1. Tao loai phong\n", CONSOLE);
     Utils::outputData("2. Sua loai phong\n", CONSOLE);

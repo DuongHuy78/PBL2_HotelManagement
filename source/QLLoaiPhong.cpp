@@ -210,3 +210,15 @@ int QLLoaiPhong::soLuongKhach(string maLoaiPhong) {
 int QLLoaiPhong::getGiaPhong(string maLoaiPhong) {
     return timLoaiPhong(maLoaiPhong)->getGiaPhong();
 } 
+
+ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-LOAI-PHONG----------------\n", CONSOLE);
+    Utils::outputData("Danh sach loai phong: \n", CONSOLE);
+    Node<LoaiPhong> *p = ql.DSLP.begin();
+    while(p != ql.DSLP.end()){
+        os << p->data;
+        Utils::outputData("\n", CONSOLE);
+        p = p->next;
+    }
+    return os;
+}

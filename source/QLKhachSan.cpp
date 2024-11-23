@@ -15,6 +15,7 @@ QLKhachSan::QLKhachSan() {
     cout << "Ban co muon su dung giao dien do hoa khong? (Y/N): ";
     string choice;
     cin >> choice;
+    // cin.ignore();
     if(choice == "Y") {
         UI_enable = true;
         current_mode = UI_STREAM;
@@ -56,7 +57,6 @@ void QLKhachSan::inputTaiKhoan(string path) {
         password = Utils::getSubstringUntilX(line, index, ',');
         ID       = Utils::getSubstringUntilX(line, index, '\n');
         TaiKhoan newTaiKhoan(ID, username, password);
-        Utils::outputData(newTaiKhoan, CONSOLE)
         QLTK.themTaiKhoan(newTaiKhoan);
         role_value role = newTaiKhoan.getRole();
         if(role == NHANVIEN) {
@@ -117,7 +117,29 @@ void QLKhachSan::inputKhachHang(string path) {
  * @param path Đường dẫn tới file chứa thông tin loại phòng.
  */
 void QLKhachSan::inputLoaiPhong(string path) {
-    QLLP.AddRangeLoaiPhong(path);
+    ifstream fi(path);
+    if(!fi.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+    }
+    int count = 0;
+    int index = 0;
+    string line, maLoaiPhong, loaiGiuong, soLuongKhach, dienTich, giaPhong, moTaPhong;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        maLoaiPhong = Utils::getSubstringUntilX(line, index, ';');
+        loaiGiuong  = Utils::getSubstringUntilX(line, index, ';');
+        soLuongKhach = Utils::getSubstringUntilX(line, index, ';');
+        dienTich    = Utils::getSubstringUntilX(line, index, ';');
+        giaPhong    = Utils::getSubstringUntilX(line, index, ';');
+        moTaPhong   = Utils::getSubstringUntilX(line, index, '\n');
+        LoaiPhong newLoaiPhong(maLoaiPhong, Utils::stringToInt(loaiGiuong), Utils::stringToInt(soLuongKhach), Utils::stringToInt(dienTich), Utils::stringToInt(giaPhong), moTaPhong);
+        QLLP.themLoaiPhong(newLoaiPhong);
+        index = 0;
+        ++count;
+    }  
+    fi.close();
+    cout << "Da nhap du lieu cua " << count << " loai phong tu file: " << path << endl;
 }
 
 /**
@@ -130,7 +152,25 @@ void QLKhachSan::inputLoaiPhong(string path) {
  * @param path Đường dẫn tới file chứa thông tin phòng.
  */
 void QLKhachSan::inputPhong(string path) {
-    QLP.AddRangePhong(path);
+    ifstream fi(path);
+    if(!fi.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+    }
+    int count = 0;
+    int index = 0;
+    string line, maPhong, maLoaiPhong;
+    while(!fi.eof()) {
+        getline(fi, line);
+        if(line == "") break;
+        maPhong     = Utils::getSubstringUntilX(line, index, ';');
+        maLoaiPhong = Utils::getSubstringUntilX(line, index, '\n');
+        Phong newPhong(maPhong, maLoaiPhong);
+        //cout << count << " " << newPhong;
+        QLP.themPhong(newPhong);
+        index = 0;
+        ++count;
+    }  
+    fi.close();
 }
 
 /**
@@ -195,6 +235,15 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
+    system("cls");
+    cout << QLKH;
+    cout << QLTK;
+    cout << QLLP;
+    cout << QLP;
+    cout << QLDP;
+    cout << nhanVien;
+    cout << quanLi;
+    return;
     nhanVien.setDSKH(&QLKH);
     nhanVien.setDSDP(&QLDP);
     quanLi.setDSLP(&QLLP);
@@ -222,7 +271,6 @@ void QLKhachSan::work() {
                 }
             }
         }
-
     }
 }
 

@@ -246,12 +246,20 @@ bool DatPhong::setDonGia(int Gia) {
  * - Đơn giá
  */
 ostream &operator<<(ostream &out, const DatPhong &dp) {
-    out << "Ma Dat Phong: " << dp.maDatPhong << endl;
-    out << "Ma Phong: " << dp.maPhong << endl;
-    out << "ID Khach Hang: " << dp.IDKhachHang << endl;
-    out << "Ngay Nhan: " << Utils::timeToString(dp.ngayNhan) << endl;
-    out << "Ngay Tra: " << Utils::timeToString(dp.ngayTra) << endl;
-    out << "So Luong Khach: " << dp.soLuongKhach << endl;
-    out << "Don Gia: " << dp.donGia << endl;
+    Utils::outputData("-----------THONG-TIN-DAT-PHONG---------\n", CONSOLE);
+    Utils::outputData("Ma Dat Phong: ", CONSOLE);
+    Utils::outputData(dp.maDatPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ma Phong: ", CONSOLE);
+    Utils::outputData(dp.maPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData("ID Khach Hang: ", CONSOLE);
+    Utils::outputData(dp.IDKhachHang + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ngay Nhan: ", CONSOLE);
+    Utils::outputData(Utils::dateToString(dp.ngayNhan) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ngay Tra: ", CONSOLE);
+    Utils::outputData(Utils::dateToString(dp.ngayTra) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("So Luong Khach: ", CONSOLE);
+    Utils::outputData(Utils::intToString(dp.soLuongKhach) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Don Gia: ", CONSOLE);
+    Utils::outputData(Utils::intToString(dp.donGia) + "\n", CONSOLE_OR_UI);
     return out;
 }

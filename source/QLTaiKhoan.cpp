@@ -49,3 +49,15 @@ TaiKhoan *QLTaiKhoan::getTaiKhoanByID(string ID) {
 LinkedList<TaiKhoan> &QLTaiKhoan::getDanhSachTaiKhoan() {
     return DSTK;
 }
+
+ostream& operator<<(ostream& os, const QLTaiKhoan& ql) {
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-TAI-KHOAN-----------------\n", CONSOLE);
+    Utils::outputData("Danh sach tai khoan: \n", CONSOLE);
+    Node<TaiKhoan> *p = ql.DSTK.begin();
+    while(p != ql.DSTK.end()) {
+        os << p->data;
+        Utils::outputData("\n", CONSOLE);
+        p = p->next;
+    }
+    return os;
+}

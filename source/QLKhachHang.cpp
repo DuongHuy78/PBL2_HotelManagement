@@ -4,7 +4,7 @@ QLKhachHang::QLKhachHang() {
 }
 
 QLKhachHang::~QLKhachHang() {
-
+    
 }
 
 void QLKhachHang::themKhachHang(KhachHang kh) {
@@ -108,4 +108,16 @@ void QLKhachHang::display() {
         cout << p->data << endl;
         p = p->next;
     }
+}
+
+ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-KHACH-HANG-----------------\n", CONSOLE);
+    Utils::outputData("Danh sach khach hang: \n", CONSOLE);
+    Node<KhachHang> *p = qlkh.DSKH.begin();
+    while(p != qlkh.DSKH.end()) {
+        os << p->data;
+        Utils::outputData("\n", CONSOLE);
+        p = p->next;
+    }
+    return os;
 }

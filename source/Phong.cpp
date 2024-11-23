@@ -41,14 +41,18 @@ string Phong::capNhatThongTin(){
     string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
     return tempStr;
 }
+
 void Phong::xuatThongTin() {
     cout << left << setw(15) << maPhong << loaiPhong << endl;
     cout << string(25, '-') << endl;
 }
 
 ostream& operator<<(ostream& os, const Phong& P) {
-    os << left << setw(15) << P.maPhong << P.loaiPhong << endl;
-    os << string(25, '-') << endl;
+    Utils::outputData("-----------THONG-TIN-PHONG---------\n", CONSOLE);
+    Utils::outputData("Ma Phong: ", CONSOLE);
+    Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Loai Phong: ", CONSOLE);
+    Utils::outputData(P.loaiPhong + "\n", CONSOLE_OR_UI);
     return os;
 }
 
