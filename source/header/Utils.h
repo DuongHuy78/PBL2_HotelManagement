@@ -53,6 +53,17 @@ enum condition_value {
     ROOM_BED_TYPE,
 };
 
+enum option_user {
+    // THEM_KHACH_HANG,
+    // SUA_THONG_TIN_KHACH_HANG,
+    // TIM_KIEM_KHACH_HANG,
+    // DAT_PHONG,
+    // THOAT_KHACH_HANG,
+    DAT_PHONG,
+    DANG_XUAT,
+    TIEP_TUC,
+};
+
 extern stringstream UI_input_buffer;
 extern stringstream UI_output_buffer;
 extern IO_MODE current_mode;    // Chế độ hiện tại: {CONSOLE, UI_STREAM}
