@@ -73,41 +73,25 @@ void QLKhachHang::xoaKhachHang(KhachHang *kh) {
 
 KhachHang QLKhachHang::nhapThongTin() {
     KhachHang newKH;
-    gender_value gender = UNDEFINED_GENDER;
     string temp;
     temp = this->taoIDKhachHang();     //tạo ID khách hàng mới
     newKH.setIDKhachHang(temp);
 
-    cout << "Nhap thong tin khach hang" << endl;
-    cout << "Nhap ho ten : ";
-    temp = Utils::nhap(2, MAX_NAME+1);
+    Utils::outputData("Nhap thong tin khach hang: \n", CONSOLE);
+    temp = Utils::inputWithCondition("Nhap ho ten: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
     newKH.setHoTen(Utils::chuanHoaTen(temp));
     
-    temp = Utils::nhapNgaySinh();
+    temp = Utils::inputWithCondition("Nhap ngay sinh (dd/mm/yyyy): ", 1, 10, DATE);
     newKH.setNgaySinh(Utils::stringToDate(temp));
 
-    cout << "Nhap So dien thoai : ";
-    newKH.setSoDienThoai(Utils::NhapSoDienThoai());
+    temp = Utils::inputWithCondition("Nhap So dien thoai: ", 1, 10, VIETNAM_PHONE_NUMBER);
+    newKH.setSoDienThoai(temp);
 
-    while(1) {
-        cout << "Nhap gioi tinh (Nam/Nu): ";
-        temp = Utils::nhap(2, 4);
-        gender = Utils::stringToGender(temp);
-        if(gender != UNDEFINED_GENDER) break;
-        system("cls");
-        cout << "Nhap sai, vui long nhap lai!" << endl;
-    }
-    gender = Utils::stringToGender(temp);
-    newKH.setGioiTinh(gender);
+    temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
+    newKH.setGioiTinh(Utils::stringToGender(temp));
+
+    Utils::outputData("Nhap du lieu khach hang thanh cong!\n", CONSOLE);
     return newKH;
-}
-
-void QLKhachHang::display() {
-    Node<KhachHang> *p = DSKH.begin();
-    while(p != DSKH.end()) {
-        cout << p->data << endl;
-        p = p->next;
-    }
 }
 
 ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {

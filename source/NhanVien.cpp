@@ -50,7 +50,8 @@ user_option_value NhanVien::work() {
     Utils::outputData("-----------NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("1. Them khach hang\n", CONSOLE);
     Utils::outputData("2. Them dat phong\n", CONSOLE);
-    Utils::outputData("3. Dang xuat\n", CONSOLE);
+    Utils::outputData("3. Danh sach khach hang\n", CONSOLE);
+    Utils::outputData("4. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -71,6 +72,10 @@ user_option_value NhanVien::work() {
             system("pause");
             return CONTINUE;
         case 3:
+            cout << *DSKH;
+            system("pause");
+            return CONTINUE;
+        case 4:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
