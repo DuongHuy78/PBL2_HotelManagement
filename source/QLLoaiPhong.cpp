@@ -220,5 +220,6 @@ ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
+    Utils::outputData("--------------------------------------------------------------\n", CONSOLE);
     return os;
 }

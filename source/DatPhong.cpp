@@ -261,5 +261,6 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData(Utils::intToString(dp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Don Gia: ", CONSOLE);
     Utils::outputData(Utils::intToString(dp.donGia) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
     return out;
 }

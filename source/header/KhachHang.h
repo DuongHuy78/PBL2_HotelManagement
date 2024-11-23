@@ -28,7 +28,7 @@ public:
 
     void menuSuaThongTin();
     void suaThongTin();
-    bool work();
+    user_option_value work();
     
     friend ostream& operator<<(ostream&, const KhachHang&);
 };

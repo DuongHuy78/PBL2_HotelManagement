@@ -66,5 +66,6 @@ ostream& operator<<(ostream& os, const TaiKhoan& tk) {
     Utils::outputData("Password: ", CONSOLE);
     Utils::outputData(tk.password, CONSOLE_OR_UI);
     Utils::outputData("\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
     return os;
 }

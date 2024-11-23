@@ -221,5 +221,6 @@ ostream &operator<<(ostream &os, const QLDatPhong &ql) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
+    Utils::outputData("-------------------------------------------------------------\n", CONSOLE);
     return os;
 }

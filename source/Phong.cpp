@@ -53,6 +53,7 @@ ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(P.loaiPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
     return os;
 }
 

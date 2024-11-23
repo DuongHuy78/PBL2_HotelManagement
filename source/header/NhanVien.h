@@ -19,7 +19,7 @@ public:
     void setIDNhanVien(string);
     void themKhachHang();
     void themDatPhong();
-    bool work();
+    user_option_value work();
     friend ostream& operator<<(ostream& out, const NhanVien&);
 };
 #endif

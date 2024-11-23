@@ -248,6 +248,7 @@ ostream &operator<<(ostream &os, QLPhong &qlPhong) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
+    Utils::outputData("--------------------------------------------------------------\n", CONSOLE);
     return os;
 }
 

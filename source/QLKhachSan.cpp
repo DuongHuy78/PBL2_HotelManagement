@@ -236,14 +236,6 @@ void QLKhachSan::outputDatPhong(string path) {
 
 void QLKhachSan::work() {
     system("cls");
-    cout << QLKH;
-    cout << QLTK;
-    cout << QLLP;
-    cout << QLP;
-    cout << QLDP;
-    cout << nhanVien;
-    cout << quanLi;
-    return;
     nhanVien.setDSKH(&QLKH);
     nhanVien.setDSDP(&QLDP);
     quanLi.setDSLP(&QLLP);
@@ -266,7 +258,7 @@ void QLKhachSan::work() {
                 }
             }
             else {
-                if(current_user->work() == false) {
+                if(current_user->work() == SIGN_OUT) {
                     dangXuat();
                 }
             }

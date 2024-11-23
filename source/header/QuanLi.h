@@ -31,7 +31,7 @@ public:
     int thongKe(string,string);
     void xemDanhSachLuaChonXemDoanhThu();
     void xemDoanhThu();
-    bool work();
+    user_option_value work();
     friend ostream& operator<<(ostream&, QuanLi&);
 };
 #endif

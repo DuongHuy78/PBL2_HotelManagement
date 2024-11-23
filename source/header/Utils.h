@@ -53,6 +53,12 @@ enum condition_value {
     ROOM_BED_TYPE,
 };
 
+enum user_option_value {
+    CONTINUE,
+    SIGN_OUT,
+    BOOK_ROOM,
+};
+
 extern stringstream UI_input_buffer;
 extern stringstream UI_output_buffer;
 extern IO_MODE current_mode;    // Chế độ hiện tại: {CONSOLE, UI_STREAM}
@@ -662,6 +668,7 @@ public:
         if(current_mode == CONSOLE) {
             if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
                 cout << data;
+                cout.flush();
             }
         }
         else if(current_mode == UI_STREAM) {
