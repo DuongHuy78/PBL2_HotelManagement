@@ -638,22 +638,31 @@ public:
         std::cin.clear();
         std::cout.clear();
     }
-
-    static void inputData(string &data, IO_MODE mode) {
+    
+    template<typename T>
+    static void inputData(T &data, IO_MODE mode, bool isGetLine = false) {
         if (cin.peek() == '\n') cin.ignore(); // bỏ qua kí tự nếu nó là \n
-        if(current_mode == CONSOLE) {
-            if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
-                std::getline(cin, data);
+        try {
+            if(current_mode == CONSOLE) {
+                if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
+                    if(isGetLine) std::getline(cin, data);
+                    else cin >> data;
+                }
             }
-        }
-        else if(current_mode == UI_STREAM) {
-            if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
-                std::getline(UI_input_buffer, data);
+            else if(current_mode == UI_STREAM) {
+                if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
+                    if(isGetLine) std::getline(UI_input_buffer, data);
+                    else UI_input_buffer >> data;
+                }
             }
+        } 
+        catch (const exception &e) {
+            cout << e.what() << endl;
         }
     }
 
-    static void outputData(string data, IO_MODE mode) {
+    template<typename T>
+    static void outputData(T data, IO_MODE mode) {
         if(current_mode == CONSOLE) {
             if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
                 cout << data;

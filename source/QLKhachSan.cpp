@@ -56,6 +56,7 @@ void QLKhachSan::inputTaiKhoan(string path) {
         password = Utils::getSubstringUntilX(line, index, ',');
         ID       = Utils::getSubstringUntilX(line, index, '\n');
         TaiKhoan newTaiKhoan(ID, username, password);
+        Utils::outputData(newTaiKhoan, CONSOLE)
         QLTK.themTaiKhoan(newTaiKhoan);
         role_value role = newTaiKhoan.getRole();
         if(role == NHANVIEN) {
@@ -194,11 +195,6 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
-    Utils::inputWithCondition("Nhap ten cua ban: ", 1, 50, ALPHABET_AND_SPACE_ONLY);
-    Utils::inputWithCondition("Nhap ngay sinh cua ban: ", 1, 10, DATE);
-    Utils::inputWithCondition("Nhap gioi tinh cua ban: ", 1, 10, GENDER);
-    Utils::inputWithCondition("Nhap so dien thoai cua ban: ", 1, 10, VIETNAM_PHONE_NUMBER);
-    Utils::inputWithCondition("Nhap ten dang nhap cua ban: ", 1, 50, ALPHABET_AND_NUMBER_ONLY);
     nhanVien.setDSKH(&QLKH);
     nhanVien.setDSDP(&QLDP);
     quanLi.setDSLP(&QLLP);
