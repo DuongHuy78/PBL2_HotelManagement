@@ -29,7 +29,9 @@ public:
 
     Node<DatPhong> *getHead();
     LinkedList<DatPhong> &getDanhSachDatPhong();
-    void roomAvailability(time_t, time_t, int, LinkedList<Phong>&);
-    DatPhong nhapThongTin();
+    //void roomAvailability(time_t, time_t, int, LinkedList<Phong>&);
+    //DatPhong nhapThongTin();
+    
+    friend ostream& operator<<(ostream&, const QLDatPhong&);
 };
 #endif

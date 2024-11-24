@@ -20,6 +20,7 @@ public:
     void QLLoaiPhong_Choice();
     int soLuongKhach(string);
     int getGiaPhong(string);
-     
+
+    friend ostream& operator<<(ostream&, const QLLoaiPhong&);
 };
 #endif

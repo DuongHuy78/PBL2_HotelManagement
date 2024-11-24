@@ -94,11 +94,10 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	buttonText->color = color - Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
-	Utils::clearBuffer();
+	UI_input_buffer.clear();
 	UI_input_buffer << (login.textboxList["username_textbox"])->text << endl;
 	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
-	bool res = current_Data->dangNhap();
-	if(res) {
+	if(current_Data->dangNhap()) {
 		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
 	}
 	else {

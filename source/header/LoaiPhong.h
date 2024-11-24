@@ -34,5 +34,7 @@ public:
     void menuCapNhat();
     void capNhatThongTin();
     void xuatThongTin();
+    
+    friend ostream& operator<<(ostream& out, const LoaiPhong&);
 };
 #endif

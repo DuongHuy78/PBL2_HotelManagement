@@ -54,3 +54,18 @@ role_value TaiKhoan::getRole() const {
     if(this->ID[0] == '3') return QUANLI;
     return UNDEFINED_ROLE;
 }
+
+ostream& operator<<(ostream& os, const TaiKhoan& tk) {
+    Utils::outputData("-----------THONG-TIN-TAI-KHOAN---------\n", CONSOLE);
+    Utils::outputData("ID: ", CONSOLE);
+    Utils::outputData(tk.ID, CONSOLE_OR_UI);
+    Utils::outputData("\n", CONSOLE_OR_UI);
+    Utils::outputData("Username: ", CONSOLE);
+    Utils::outputData(tk.username, CONSOLE_OR_UI);
+    Utils::outputData("\n", CONSOLE_OR_UI);
+    Utils::outputData("Password: ", CONSOLE);
+    Utils::outputData(tk.password, CONSOLE_OR_UI);
+    Utils::outputData("\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
+    return os;
+}

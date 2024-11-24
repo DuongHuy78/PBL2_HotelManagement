@@ -33,17 +33,25 @@ void NhanVien::themKhachHang(){
 }
 
 void NhanVien::themDatPhong() {
-    DatPhong newDP = DSDP->nhapThongTin();
-    this->DSDP->themDatPhong(newDP);
+    // DatPhong newDP = DSDP->nhapThongTin();
+    // this->DSDP->themDatPhong(newDP);
 }
 
-bool NhanVien::work() {
+ostream& operator<<(ostream& out, const NhanVien& nv) {
+    Utils::outputData("-----------THONG-TIN-NHAN-VIEN---------\n", CONSOLE);
+    Utils::outputData("ID Nhan Vien: ", CONSOLE);
+    Utils::outputData(nv.IDNhanVien + "\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
+    return out;
+}
+
+user_option_value NhanVien::work() {
     system("cls");
-    Utils::clearBuffer();
     Utils::outputData("-----------NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("1. Them khach hang\n", CONSOLE);
     Utils::outputData("2. Them dat phong\n", CONSOLE);
-    Utils::outputData("3. Dang xuat\n", CONSOLE);
+    Utils::outputData("3. Danh sach khach hang\n", CONSOLE);
+    Utils::outputData("4. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -51,22 +59,26 @@ bool NhanVien::work() {
     Utils::inputData(choice_str, CONSOLE_OR_UI);
     if(Utils::isNumberOnly(choice_str) == false) {
         Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-        return true;
+        return CONTINUE;
     }
     int choice = Utils::stringToInt(choice_str);
     switch(choice) {
         case 1:
             themKhachHang();
             system("pause");
-            return true;
+            return CONTINUE;
         case 2:
             themDatPhong();
             system("pause");
-            return true;
+            return CONTINUE;
         case 3:
-            return false;
+            cout << *DSKH;
+            system("pause");
+            return CONTINUE;
+        case 4:
+            return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            return true;
+            return CONTINUE;
     }
 }

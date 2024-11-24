@@ -79,7 +79,11 @@ void QLPhong::xemPhong(){
 }
 
 //NEW PHÒNG
-void QLPhong::themPhong(Phong newPhong){
+void QLPhong::themPhong(Phong newPhong) {
+    this->DSP.add(newPhong);
+}
+
+void QLPhong::taoPhongMoi(Phong newPhong) {
     string MaPhongMoi;
     cout << "Nhap Ma Phong: "; 
     MaPhongMoi = Utils::nhap(5,MAX_MAPHONG+1);
@@ -179,7 +183,7 @@ void QLPhong::QLPhong_Choice()
                 Phong NewP;
                 Phong* DSP = nullptr;
                 cout << "Hay nhap thong tin phong moi: " << endl;
-                themPhong(NewP);
+                taoPhongMoi(NewP);
                 capNhatFile(DSP,"./data/phong.txt");
                 cout << "Them Phong thanh cong!" << endl;
                 system("pause");
@@ -236,11 +240,12 @@ Node<Phong> *QLPhong::getHead() {
 }
 
 ostream &operator<<(ostream &os, QLPhong &qlPhong) {
-    os << "Danh sach phong: " << endl;
-    os << "Ma phong" << setw(10) << "Loai phong" << endl;
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-PHONG-----------------\n", CONSOLE);
+    Utils::outputData("Danh sach phong: \n", CONSOLE);
     Node<Phong> *p = qlPhong.DSP.begin();
     while (p != qlPhong.DSP.end()) {
         os << p->data;
+        Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
     return os;

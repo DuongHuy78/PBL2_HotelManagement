@@ -8,6 +8,7 @@ public:
     QLKhachHang();
     ~QLKhachHang();
 
+    void setDSDPChoKH(QLDatPhong *);   // Set danh sách đặt phòng cho khách hàng
     void themKhachHang(KhachHang);
     void suaThongTin(string);
     void xoaKhachHang(KhachHang *); 
@@ -15,6 +16,7 @@ public:
     string taoIDKhachHang();            // Tạo ID khách hàng mới
     KhachHang *timKiemKhachHang(string);// Tìm kiếm theo ID
     KhachHang nhapThongTin();
-    void display();
+    
+    friend ostream& operator<<(ostream&, const QLKhachHang&);
 };
 #endif

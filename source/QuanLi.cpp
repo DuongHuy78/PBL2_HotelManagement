@@ -206,9 +206,17 @@ void QuanLi::xemDoanhThu() {
         cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
     }
 }
-bool QuanLi::work() {
+
+ostream &operator<<(ostream &out, QuanLi &ql) {
+    Utils::outputData("-----------THONG-TIN-QUAN-LI-----------\n", CONSOLE);
+    Utils::outputData("ID quan li: ", CONSOLE);
+    Utils::outputData(ql.IDQuanLi + "\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
+    return out;
+}
+
+user_option_value QuanLi::work() {
     system("cls");
-    Utils::clearBuffer();
     Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("1. Tao loai phong\n", CONSOLE);
     Utils::outputData("2. Sua loai phong\n", CONSOLE);
@@ -225,7 +233,7 @@ bool QuanLi::work() {
     Utils::inputData(choice_str, CONSOLE_OR_UI);
     if(Utils::isNumberOnly(choice_str) == false) {
         Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-        return true;
+        return CONTINUE;
     }
     int choice = Utils::stringToInt(choice_str);
     string maLoaiPhong, maPhong;
@@ -233,43 +241,43 @@ bool QuanLi::work() {
         case 1:
             taoLoaiPhong();
             system("pause");
-            return true;
+            return CONTINUE;
         case 2:
             Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
             Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
             suaLoaiPhong(maLoaiPhong);
             system("pause");
-            return true;
+            return CONTINUE;
         case 3:
             Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
             Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
             xoaLoaiPhong(maLoaiPhong);
             system("pause");
-            return true;
+            return CONTINUE;
         case 4:
             taoPhong();
             system("pause");
-            return true;
+            return CONTINUE;
         case 5:
             Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
             Utils::inputData(maPhong, CONSOLE_OR_UI);
             suaPhong(maPhong);
             system("pause");
-            return true;
+            return CONTINUE;
         case 6:
             Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
             Utils::inputData(maPhong, CONSOLE_OR_UI);
             xoaPhong(maPhong);
             system("pause");
-            return true;
+            return CONTINUE;
         case 7:
             xemDoanhThu();
             system("pause");
-            return true;
+            return CONTINUE;
         case 8:
-            return false;
+            return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            return true;
+            return CONTINUE;
     }    
 }
