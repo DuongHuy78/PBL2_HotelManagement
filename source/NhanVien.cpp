@@ -33,8 +33,8 @@ void NhanVien::themKhachHang(){
 }
 
 void NhanVien::themDatPhong() {
-    DatPhong newDP = DSDP->nhapThongTin();
-    this->DSDP->themDatPhong(newDP);
+    // DatPhong newDP = DSDP->nhapThongTin();
+    // this->DSDP->themDatPhong(newDP);
 }
 
 ostream& operator<<(ostream& out, const NhanVien& nv) {

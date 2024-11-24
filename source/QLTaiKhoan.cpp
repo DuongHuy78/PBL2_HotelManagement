@@ -59,6 +59,5 @@ ostream& operator<<(ostream& os, const QLTaiKhoan& ql) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
-    Utils::outputData("--------------------------------------------------------------\n", CONSOLE);
     return os;
 }

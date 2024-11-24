@@ -121,14 +121,13 @@ void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
 
 LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
     Node<LoaiPhong> *p = DSLP.begin();
-    while(p != DSLP.end()){
-        if(p->data.getLoaiPhong() == IDLoaiPhong)
-            {
-               return &p->data;
-            }
+    while(p != DSLP.end()) {
+        if(p->data.getLoaiPhong() == IDLoaiPhong) {
+            return &p->data;
+        }
         p = p -> next;
     }
-    return NULL;
+    return nullptr;
 }
 
 void QLLoaiPhong::QLLoaiPhong_Choice()
@@ -220,6 +219,5 @@ ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
-    Utils::outputData("--------------------------------------------------------------\n", CONSOLE);
     return os;
 }

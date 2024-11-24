@@ -194,7 +194,7 @@ user_option_value KhachHang::work() {
             system("pause");
             return CONTINUE;
         case 3:
-            return BOOK_ROOM;
+            return USER_BOOK_ROOM;
         case 4:
             return SIGN_OUT;
         default:

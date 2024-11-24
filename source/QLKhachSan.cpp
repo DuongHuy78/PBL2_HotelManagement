@@ -258,8 +258,14 @@ void QLKhachSan::work() {
                 }
             }
             else {
-                if(current_user->work() == SIGN_OUT) {
+                int choice = current_user->work();
+                if(choice == SIGN_OUT) {
                     dangXuat();
+                }
+                else if(choice == USER_BOOK_ROOM) {
+                    bookingRoom();
+                    cout << QLDP;
+                    system("pause");
                 }
             }
         }
@@ -296,7 +302,7 @@ bool QLKhachSan::dangNhap() {
         }
         role = KHACHHANG;
         if(QLKH.timKiemKhachHang(ID) != nullptr) {
-            QLDP.setcurrentID(this->currentID);
+            // QLDP.setcurrentID(this->currentID);
             QLDP.setRole(role);
             current_user = QLKH.timKiemKhachHang(ID);
             return true;
@@ -347,42 +353,96 @@ sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, s
  * @param checkInDate Ngày nhận phòng.
  * @param checkOutDate Ngày trả phòng.
  */
-// void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate) {
-//     LinkedList<Phong> &DSP = QLP.getDanhSachPhong();
-//     set<string> maPhongDaDat;
-//     cout << "check in date: " << Utils::dateToString(checkInDate) << endl;
-//     cout << "check out date: " << Utils::dateToString(checkOutDate) << endl;
-//     LinkedList<DatPhong> &DSDP = QLDP.getDanhSachDatPhong();
-//     Node<DatPhong> *p = DSDP.begin();
-//     while(p != DSDP.end()) {
-//         time_t ngayNhan = p->data.getNgayNhan();
-//         time_t ngayTra = p->data.getNgayTra();        
-//         if(!(ngayTra < checkInDate || checkOutDate < ngayNhan)) {
-//             // cout << Utils::dateToString(ngayNhan) << " " << Utils::dateToString(ngayTra) << endl;
-//             maPhongDaDat.insert(p->data.getMaPhong());
-//         }        
-//         p = p->next;
-//     }
+void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate, 
+int soLuongKhach, LinkedList<Phong *> &phongTrong) {
+    LinkedList<string> IDPhongDaDat;
+    Node<DatPhong> *p = QLDP.getDanhSachDatPhong().begin();
+    while(p != QLDP.getDanhSachDatPhong().end()) {
+        time_t ngayNhan = p->data.getNgayNhan();
+        time_t ngayTra = p->data.getNgayTra();
+        if(!(ngayTra < checkInDate || checkOutDate < ngayNhan )) {
+            IDPhongDaDat.add(p->data.getMaPhong());
+        }        
+        p = p->next;
+    }
 
-//     Node<Phong> *p2 = DSP.begin();
-//     while(p2 != DSP.end()) {
-//         string maPhong = p2->data.getMaPhong();
-//         bool isAvailable = true;
-//         for(string i:maPhongDaDat) {
-//             // cout << i << endl;
-//             if(maPhong == i) {
-//                 // p2->data.thongTinPhong();
-//                 // cout<<endl;
-//                 // p2 = p2->next;
-//                 // break;
-//                 isAvailable = false;
-//                 break;
-//             }
-//         }
-//         if(isAvailable) {
-//             p2->data.thongTinPhong();
-//         }
-//         // p2->data.thongTinPhong();
-//         p2 = p2->next;
-//     }
-// }
+    Node<Phong> *p2 = QLP.getDanhSachPhong().begin();
+    while(p2 != QLP.getDanhSachPhong().end()) {
+        string maPhong = p2->data.getMaPhong();
+        bool isAvailable = true;
+        Node<string> *p3 = IDPhongDaDat.begin();
+        while(p3 != IDPhongDaDat.end()) {
+            if(p3->data == maPhong) {
+                isAvailable = false;
+                break;
+            }
+            p3 = p3->next;
+        }
+
+        if(isAvailable && QLLP.soLuongKhach(p2->data.getLoaiPhong()) >= soLuongKhach) {
+            phongTrong.add(&p2->data);
+        }
+        p2 = p2->next;
+    }
+}
+
+void QLKhachSan::bookingRoom() {
+    string ngayNhan, ngayTra;
+    while(true) {
+        ngayNhan = Utils::inputWithCondition("Nhap ngay nhan(dd/mm/yyyy): ", 1, 10, DATE);
+        ngayTra = Utils::inputWithCondition("Nhap ngay tra(dd/mm/yyyy): ", 1, 10, DATE);
+        if(Utils::stringToDate(ngayNhan) < time(0)) {
+            Utils::outputData("Ngay nhan phai lon hon ngay hien tai!\n", CONSOLE_OR_UI);
+            continue;
+        }
+        if(Utils::stringToDate(ngayTra) < Utils::stringToDate(ngayNhan)) {
+            Utils::outputData("Ngay tra phai lon hon ngay nhan!\n", CONSOLE_OR_UI);
+            continue;
+        }
+        break;
+    }
+    
+    string soLuongKhach;
+    soLuongKhach = Utils::inputWithCondition("Nhap so luong khach: ", 1, 2, NUMBER_ONLY);
+    LinkedList<Phong *> phongTrong;
+    roomAvailability(Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), phongTrong);
+    string maPhong;
+    string loaiPhong;
+    bool roomNotFound = true;
+    while(roomNotFound) {
+        int count = 0;
+        cout << "Danh sach phong trong: " << endl;
+        Node<Phong *> *p = phongTrong.begin();
+        while(p != phongTrong.end()) {
+            cout << *p->data;
+            ++count;
+            p = p->next;
+        }
+        if(count == 0) {
+            Utils::outputData("Khong co phong trong cho thoi gian nay!\n", CONSOLE_OR_UI);
+            return;
+        }
+        maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
+        p = phongTrong.begin();
+        while(p != phongTrong.end()) {
+            if(p->data->getMaPhong() == maPhong) {
+                roomNotFound = false;
+                loaiPhong = p->data->getLoaiPhong();
+                break;
+            }
+            p = p->next;
+        }
+    }
+    int donGia = QLLP.getGiaPhong(loaiPhong);
+    if(role == NHANVIEN) {
+        KhachHang KH = QLKH.nhapThongTin();
+        QLKH.themKhachHang(KH);
+        DatPhong newDP(QLDP.taoMaDatPhong(), maPhong, KH.getIDKhachHang(), Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), donGia);
+        QLDP.themDatPhong(newDP);
+    }
+    else if(role == KHACHHANG) {
+        KhachHang *KH = (KhachHang *)current_user;
+        DatPhong newDP(QLDP.taoMaDatPhong(), maPhong, KH->getIDKhachHang(), Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), donGia);
+        QLDP.themDatPhong(newDP);
+    }
+}

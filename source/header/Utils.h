@@ -9,7 +9,6 @@
 #include <cctype>
 #include <conio.h>
 #include <iomanip>
-#include <set>
 
 #define MAX_NAME 50
 using namespace std;
@@ -56,7 +55,7 @@ enum condition_value {
 enum user_option_value {
     CONTINUE,
     SIGN_OUT,
-    BOOK_ROOM,
+    USER_BOOK_ROOM,
 };
 
 extern stringstream UI_input_buffer;

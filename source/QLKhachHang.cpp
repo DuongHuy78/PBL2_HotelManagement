@@ -103,6 +103,5 @@ ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
-    Utils::outputData("--------------------------------------------------------------\n", CONSOLE);
     return os;
 }
