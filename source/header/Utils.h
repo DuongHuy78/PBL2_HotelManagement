@@ -9,7 +9,6 @@
 #include <cctype>
 #include <conio.h>
 #include <iomanip>
-#include <set>
 
 #define MAX_NAME 50
 using namespace std;
@@ -53,15 +52,10 @@ enum condition_value {
     ROOM_BED_TYPE,
 };
 
-enum option_user {
-    // THEM_KHACH_HANG,
-    // SUA_THONG_TIN_KHACH_HANG,
-    // TIM_KIEM_KHACH_HANG,
-    // DAT_PHONG,
-    // THOAT_KHACH_HANG,
-    DAT_PHONG,
-    DANG_XUAT,
-    TIEP_TUC,
+enum user_option_value {
+    CONTINUE,
+    SIGN_OUT,
+    USER_BOOK_ROOM,
 };
 
 extern stringstream UI_input_buffer;
@@ -642,31 +636,27 @@ public:
             cout << line << endl;
         }
     }
-
-    static void clearBuffer() {
-        UI_input_buffer.clear();
-        UI_output_buffer.clear();
-        std::cin.clear();
-        std::cout.clear();
-    }
     
     template<typename T>
-    static void inputData(T &data, IO_MODE mode, bool isGetLine = false) {
-        if (cin.peek() == '\n') cin.ignore(); // bỏ qua kí tự nếu nó là \n
+    static void inputData(T &data, IO_MODE mode) {
+        if(cin.rdbuf()->in_avail()) {
+            if(cin.peek() == '\n') cin.ignore();
+        }
+        if(UI_input_buffer.rdbuf()->in_avail()) {
+            if(UI_input_buffer.peek() == '\n') UI_input_buffer.ignore();
+        }
         try {
             if(current_mode == CONSOLE) {
                 if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
-                    if(isGetLine) std::getline(cin, data);
-                    else cin >> data;
+                    std::getline(cin, data);
                 }
             }
             else if(current_mode == UI_STREAM) {
                 if(mode == UI_STREAM || mode == CONSOLE_OR_UI) {
-                    if(isGetLine) std::getline(UI_input_buffer, data);
-                    else UI_input_buffer >> data;
+                    std::getline(UI_input_buffer, data);
                 }
             }
-        } 
+        }
         catch (const exception &e) {
             cout << e.what() << endl;
         }
@@ -677,6 +667,7 @@ public:
         if(current_mode == CONSOLE) {
             if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
                 cout << data;
+                cout.flush();
             }
         }
         else if(current_mode == UI_STREAM) {

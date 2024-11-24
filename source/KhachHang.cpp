@@ -105,63 +105,54 @@ bool KhachHang::setGioiTinh(gender_value gioiTinh) {
 } 
 
 void KhachHang::menuSuaThongTin() {        //in menu sửa thông tin
-    cout << "1. Sua Ho Ten" << endl;
-    cout << "2. Sua Ngay Sinh" << endl;
-    cout << "3. Sua So Dien Thoai" << endl;
-    cout << "4. Sua Gioi Tinh" << endl;
-    cout << "5. Thoat" << endl;
-    cout << "Hay nhap lua chon: ";
+    Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
+    Utils::outputData("1. Sua Ho Ten\n", CONSOLE);
+    Utils::outputData("2. Sua Ngay Sinh\n", CONSOLE);
+    Utils::outputData("3. Sua So Dien Thoai\n", CONSOLE);
+    Utils::outputData("4. Sua Gioi Tinh\n", CONSOLE);
+    Utils::outputData("5. Thoat\n", CONSOLE);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
 }
 
 void KhachHang::suaThongTin() {
-    gender_value gender = UNDEFINED_GENDER;
-    int choice;          //lựa chọn
-    string temp;            //biến tạm
+    int choice;
+    string temp;
     while (true) {
+        system("cls");
         menuSuaThongTin();
-        choice = stoi(Utils::nhap(1, 2));         //chọn 2 vì 1 số và 1 ký tự '\0'
+        choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
         switch(choice) {
             case 1:
-                cout << "Nhap ho ten moi: ";
-                temp = Utils::nhap(2, MAX_NAME+1);
+                temp = Utils::inputWithCondition("Nhap ho ten moi: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
                 Utils::chuanHoaTen(temp);
                 this->setHoTen(temp);
-                system("cls");
-                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
                 break;
             case 2:
-                temp = Utils::nhapNgaySinh();
+                temp = Utils::inputWithCondition("Nhap ngay sinh moi: ", 1, 10, DATE);
                 this->setNgaySinh(Utils::stringToDate(temp));
-                system("cls");
-                cout<< "Chinh sua thong tin thanh cong!" << endl;
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
                 break;
             case 3:
-                cout << "Nhap So dien thoai moi: ";
-                temp = Utils::NhapSoDienThoai();
+                temp = Utils::inputWithCondition("Nhap so dien thoai moi: ", 1, 10, VIETNAM_PHONE_NUMBER);
                 this->setSoDienThoai(temp);
-                system("cls");
-                cout<< "Chinh sua thong tin thanh cong!" << endl;
-                break;
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+            break;
             case 4:
-                while(1) {
-                    cout << "Nhap gioi tinh (Nam/Nu): ";
-                    temp = Utils::nhap(2, 4);
-                    gender = Utils::stringToGender(temp);
-                    if(gender != UNDEFINED_GENDER) break;
-                    system("cls");
-                    cout << "Nhap sai, vui long nhap lai!" << endl;
-                }
-                gender = Utils::stringToGender(temp);
-                this->setGioiTinh(gender);
-                system("cls");
-                cout<< "Chinh sua thong tin thanh cong!" << endl;
-                break;
+                temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
+                this->setGioiTinh(Utils::stringToGender(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+            break;
             case 5:
+                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
             default:
-                system("cls");
-                cout << "Lua chon khong hop le." << endl;
-                cout<< "Vui long chon lai!" << endl;
+                Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
+                system("pause");
                 break;
         }  
     }
@@ -173,18 +164,24 @@ void themDatPhong(){
     QLDP.themDatPhong(new_DP);
 }
 ostream& operator<<(ostream& out, const KhachHang& kh) {
-    out << "ID Khach Hang: " << kh.IDKhachHang << endl;
-    out << "Ho Ten: " << kh.hoTen << endl;
-    out << "Ngay Sinh: " << Utils::dateToString(kh.ngaySinh) << endl;
-    out << "So Dien Thoai: " << kh.soDienThoai << endl;
-    out << "Gioi Tinh: " << Utils::genderToString(kh.gioiTinh) << endl;
+    Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
+    Utils::outputData("ID Khach Hang: ", CONSOLE);
+    Utils::outputData(kh.IDKhachHang + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ho Ten: ", CONSOLE);
+    Utils::outputData(kh.hoTen + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ngay Sinh: ", CONSOLE);
+    Utils::outputData(Utils::dateToString(kh.ngaySinh) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("So Dien Thoai: ", CONSOLE);
+    Utils::outputData(kh.soDienThoai + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Gioi Tinh: ", CONSOLE);
+    Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
     return out;
 }
 
-int KhachHang::work() {
+user_option_value KhachHang::work() {
     system("cls");
-    Utils::clearBuffer();
-    Utils::outputData("-----------KHACH-HANG---------\n", CONSOLE);
+    Utils::outputData("----------KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);
     Utils::outputData("3. Dat Phong\n", CONSOLE);
@@ -196,23 +193,24 @@ int KhachHang::work() {
     Utils::inputData(choice_str, CONSOLE_OR_UI);
     if(Utils::isNumberOnly(choice_str) == false) {
         Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-        return true;
+        return CONTINUE;
     }
     int choice = Utils::stringToInt(choice_str);
     switch(choice) {
         case 1:
             suaThongTin();
             system("pause");
-            return 1;
+            return CONTINUE;
         case 2:
             cout << *this;
             system("pause");
-            return 2;
+            return CONTINUE;
         case 3:
-            return ;
+            return USER_BOOK_ROOM;
+        case 4:
+            return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            return true;
+            return CONTINUE;
     }
-    
 }

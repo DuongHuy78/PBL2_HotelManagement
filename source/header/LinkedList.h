@@ -14,8 +14,8 @@ public:
     Node<T>* getHead();
     int getSize();
     // Phương thức duyệt
-    Node<T>* begin();   // Trả về head->next
-    Node<T>* end();     // Trả về head
+    Node<T>* begin() const;   // Trả về head->next
+    Node<T>* end() const;     // Trả về head
 };
 
 template <class T> LinkedList<T>::LinkedList() {
@@ -60,11 +60,11 @@ template <class T> void LinkedList<T>::display() {
     }
 }
 
-template <class T> Node<T>* LinkedList<T>::begin() {
+template <class T> Node<T>* LinkedList<T>::begin() const {
     return head->next; 
 }
 
-template <class T> Node<T>* LinkedList<T>::end() {
+template <class T> Node<T>* LinkedList<T>::end() const {
     return head; 
 }
 

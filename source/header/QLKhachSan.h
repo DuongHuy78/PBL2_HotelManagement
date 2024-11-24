@@ -18,7 +18,7 @@ class QLKhachSan {
     role_value role = UNDEFINED_ROLE;    
     NhanVien nhanVien;
     QuanLi quanLi;
-    string currentID; 
+    // string currentID; 
     NguoiDung *current_user = nullptr;
 public:
     QLKhachSan();
@@ -41,11 +41,7 @@ public:
     void dangXuat();
     sign_up_return_value taoTaiKhoan(string, string, string, string, string, string);
 
-    /**
-     * Duyệt qua 'danh sách đặt phòng' kiểm tra các phòng đang được đặt
-     * Từ đó đặt trạng thái phòng của các phòng đó là bận 
-     * Sau đó in ra danh sách những phòng không có trạng thái bận
-     */
-    // void roomAvailability(time_t, time_t);
+    void roomAvailability(time_t, time_t, int, LinkedList<Phong *> &);
+    void bookingRoom();
 };
 #endif

@@ -3,6 +3,6 @@
 #include "Utils.h"
 class NguoiDung {
 public:
-    virtual option_user work() = 0;
+    virtual user_option_value work() = 0;
 };
 #endif

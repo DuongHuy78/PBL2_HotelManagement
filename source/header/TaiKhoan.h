@@ -21,5 +21,6 @@ public:
     void setID(string);
 
     role_value getRole() const;
+    friend ostream& operator<<(ostream&, const TaiKhoan&);
 };
 #endif

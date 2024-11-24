@@ -121,14 +121,13 @@ void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
 
 LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
     Node<LoaiPhong> *p = DSLP.begin();
-    while(p != DSLP.end()){
-        if(p->data.getLoaiPhong() == IDLoaiPhong)
-            {
-               return &p->data;
-            }
+    while(p != DSLP.end()) {
+        if(p->data.getLoaiPhong() == IDLoaiPhong) {
+            return &p->data;
+        }
         p = p -> next;
     }
-    return NULL;
+    return nullptr;
 }
 
 void QLLoaiPhong::QLLoaiPhong_Choice()
@@ -210,3 +209,15 @@ int QLLoaiPhong::soLuongKhach(string maLoaiPhong) {
 int QLLoaiPhong::getGiaPhong(string maLoaiPhong) {
     return timLoaiPhong(maLoaiPhong)->getGiaPhong();
 } 
+
+ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
+    Utils::outputData("-----------------THONG-TIN-QUAN-LI-LOAI-PHONG----------------\n", CONSOLE);
+    Utils::outputData("Danh sach loai phong: \n", CONSOLE);
+    Node<LoaiPhong> *p = ql.DSLP.begin();
+    while(p != ql.DSLP.end()){
+        os << p->data;
+        Utils::outputData("\n", CONSOLE);
+        p = p->next;
+    }
+    return os;
+}

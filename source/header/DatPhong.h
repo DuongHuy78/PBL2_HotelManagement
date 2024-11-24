@@ -29,6 +29,7 @@ public:
     bool setNgayNhanAndNgayTra(time_t, time_t);
     bool setSoLuongKhach(int);
     bool setDonGia(int);
+    
     friend ostream& operator<<(ostream&, const DatPhong&);
 };
 #endif
