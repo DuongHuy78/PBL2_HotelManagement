@@ -88,20 +88,20 @@ void QLLoaiPhong::xemLoaiPhong(){
       }
 }
 
-void QLLoaiPhong::suaThongTinLoaiPhong(const string& IDLoaiPhong){
-    Node<LoaiPhong> *p = DSLP.begin();
-    while ((p != DSLP.end()))
-    {
-        if(p->data.getLoaiPhong() == IDLoaiPhong)
-            {
-                p->data.capNhatThongTin();
-                cout << "Da cap nhat thong tin loai phong voi ID " << IDLoaiPhong << " thanh cong!" << endl;
-                return;
-            }
-        p = p -> next;
-    } 
-    cout << "Khong tim thay Loai Phong!" << endl;
-}
+// void QLLoaiPhong::suaThongTinLoaiPhong(const string& IDLoaiPhong){
+//     Node<LoaiPhong> *p = DSLP.begin();
+//     while ((p != DSLP.end()))
+//     {
+//         if(p->data.getLoaiPhong() == IDLoaiPhong)
+//             {
+//                 p->data.capNhatThongTin();
+//                 cout << "Da cap nhat thong tin loai phong voi ID " << IDLoaiPhong << " thanh cong!" << endl;
+//                 return;
+//             }
+//         p = p -> next;
+//     } 
+//     cout << "Khong tim thay Loai Phong!" << endl;
+// }
 
 
 void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
@@ -130,77 +130,77 @@ LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
     return nullptr;
 }
 
-void QLLoaiPhong::QLLoaiPhong_Choice()
-{
-    int Choice;
-    do {
-        cout << "XIN CHAO QUAN LY CUA DREAM HOTEL: " << endl;
-        cout << "Vui Long Nhap Lua Chon " << endl;
-        cout << "1. Xem Danh Sach Loai Phong " << endl;
-        cout << "2. Them Loai Phong" << endl;
-        cout << "3. Sua Thong Tin Loai Phong" << endl;
-        cout << "4. Xoa Loai Phong" << endl;
-        cout << "5. Thoat!" << endl;
+// void QLLoaiPhong::QLLoaiPhong_Choice()
+// {
+//     int Choice;
+//     do {
+//         cout << "XIN CHAO QUAN LY CUA DREAM HOTEL: " << endl;
+//         cout << "Vui Long Nhap Lua Chon " << endl;
+//         cout << "1. Xem Danh Sach Loai Phong " << endl;
+//         cout << "2. Them Loai Phong" << endl;
+//         cout << "3. Sua Thong Tin Loai Phong" << endl;
+//         cout << "4. Xoa Loai Phong" << endl;
+//         cout << "5. Thoat!" << endl;
         
-        Choice = stoi(Utils::nhap(1,2));
-        switch (Choice)
-            {
-            case 1:
-            {
-                xemLoaiPhong();
-                system("pause");
-                system("cls");     
-                break;
-            }
-            case 2: 
-            {
-                LoaiPhong NewLP;
-                LoaiPhong* DSLP = nullptr;
-                cout << "Hay nhap thong tin loai phong moi: " << endl;
-                NewLP.NhapLoaiPhongMoi();
-                themLoaiPhong(NewLP);
-                cout << "Them Loai Phong thanh cong!" << endl;
-                capNhatFile(DSLP, "./data/loaiphong.txt");
-                system("pause");
-                system("cls");
-                break;
-            }
-            case 3:
-            {
-                string IDLoaiPhong_Sua;
-                LoaiPhong* DSLP = nullptr;
-                cout << "Nhap Loai Phong ma ban muon sua: ";
-                IDLoaiPhong_Sua = Utils::nhap(5,MAX_IDLOAIPHONG+1);
-                suaThongTinLoaiPhong(IDLoaiPhong_Sua);
-                capNhatFile(DSLP, "./data/loaiphong.txt");
-                system("pause");
-                system("cls");
-                break;    
-            }
-            case 4:
-            {
-                string IDLoaiPhong_Xoa;
-                LoaiPhong* DSLP = nullptr;
-                cout << "Nhap Loai Phong ma ban muon xoa: ";
-                IDLoaiPhong_Xoa = Utils::nhap(5,MAX_IDLOAIPHONG+1);
-                xoaLoaiPhong(IDLoaiPhong_Xoa);
-                capNhatFile(DSLP, "./data/loaiphong.txt");
-                system("pause");
-                system("cls");
-                break;    
-            }
-            case 5:
-            {
-                cout << "Ban dang thoat khoi QLLoaiPhong........" << endl;
-                return;
-            }
-            default:
-                cout << "Lua chon khong hop le";
-                cout << "Vui long nhap lai!" << endl;
-                break;
-            } 
-        } while(Choice!=5);
-} 
+//         Choice = stoi(Utils::nhap(1,2));
+//         switch (Choice)
+//             {
+//             case 1:
+//             {
+//                 xemLoaiPhong();
+//                 system("pause");
+//                 system("cls");     
+//                 break;
+//             }
+//             case 2: 
+//             {
+//                 LoaiPhong NewLP;
+//                 LoaiPhong* DSLP = nullptr;
+//                 cout << "Hay nhap thong tin loai phong moi: " << endl;
+//                 NewLP.NhapLoaiPhongMoi();
+//                 themLoaiPhong(NewLP);
+//                 cout << "Them Loai Phong thanh cong!" << endl;
+//                 capNhatFile(DSLP, "./data/loaiphong.txt");
+//                 system("pause");
+//                 system("cls");
+//                 break;
+//             }
+//             case 3:
+//             {
+//                 string IDLoaiPhong_Sua;
+//                 LoaiPhong* DSLP = nullptr;
+//                 cout << "Nhap Loai Phong ma ban muon sua: ";
+//                 IDLoaiPhong_Sua = Utils::nhap(5,MAX_IDLOAIPHONG+1);
+//                 suaThongTinLoaiPhong(IDLoaiPhong_Sua);
+//                 capNhatFile(DSLP, "./data/loaiphong.txt");
+//                 system("pause");
+//                 system("cls");
+//                 break;    
+//             }
+//             case 4:
+//             {
+//                 string IDLoaiPhong_Xoa;
+//                 LoaiPhong* DSLP = nullptr;
+//                 cout << "Nhap Loai Phong ma ban muon xoa: ";
+//                 IDLoaiPhong_Xoa = Utils::nhap(5,MAX_IDLOAIPHONG+1);
+//                 xoaLoaiPhong(IDLoaiPhong_Xoa);
+//                 capNhatFile(DSLP, "./data/loaiphong.txt");
+//                 system("pause");
+//                 system("cls");
+//                 break;    
+//             }
+//             case 5:
+//             {
+//                 cout << "Ban dang thoat khoi QLLoaiPhong........" << endl;
+//                 return;
+//             }
+//             default:
+//                 cout << "Lua chon khong hop le";
+//                 cout << "Vui long nhap lai!" << endl;
+//                 break;
+//             } 
+//         } while(Choice!=5);
+// } 
 
 int QLLoaiPhong::soLuongKhach(string maLoaiPhong) {
     return timLoaiPhong(maLoaiPhong)->getSoLuongKhach();

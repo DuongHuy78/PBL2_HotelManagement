@@ -61,18 +61,18 @@ string operator+(const string &time,const int &n) {
     return dayStr;
 }
 void QuanLi::taoLoaiPhong() {
-    LoaiPhong newLP;
-    newLP.NhapLoaiPhongMoi();
-    this->DSLP->themLoaiPhong(newLP);
+    // LoaiPhong newLP;
+    // newLP.NhapLoaiPhongMoi();
+    // this->DSLP->themLoaiPhong(newLP);
 }
 
 void QuanLi::suaLoaiPhong(const string& maLoaiPhong) {
-    LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
-    if(LP == NULL) {
-        cout << "Khong tim thay loai phong!" << endl;
-        return;
-    }
-    LP->capNhatThongTin();
+    // LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
+    // if(LP == NULL) {
+    //     cout << "Khong tim thay loai phong!" << endl;
+    //     return;
+    // }
+    // LP->capNhatThongTin();
 }
 
 void QuanLi::xoaLoaiPhong(const string& maLoaiPhong) {
@@ -85,18 +85,18 @@ void QuanLi::xoaLoaiPhong(const string& maLoaiPhong) {
 }
 
 void QuanLi::taoPhong() {
-    Phong newP;
-    newP.capNhatThongTin();
-    this->DSP->themPhong(newP);
+    // Phong newP;
+    // newP.capNhatThongTin();
+    // this->DSP->themPhong(newP);
 }
 
 void QuanLi::suaPhong(const string& maPhong) {
-    Phong *P = DSP->timPhong(maPhong);      //chưa có hàm này
-    if(P == NULL) {
-        cout << "Khong tim thay phong!" << endl;
-        return;
-    }
-    P->capNhatThongTin();
+    // Phong *P = DSP->timPhong(maPhong);      //chưa có hàm này
+    // if(P == NULL) {
+    //     cout << "Khong tim thay phong!" << endl;
+    //     return;
+    // }
+    // P->capNhatThongTin();
 }
 
 void QuanLi::xoaPhong(const string& maPhong){
@@ -141,70 +141,70 @@ void QuanLi::xemDanhSachLuaChonXemDoanhThu(){
  * hàm này để xem doanh thu theo ngày, tháng, năm
  */
 void QuanLi::xemDoanhThu() {
-    string temp;
-    string d_begin, d_end;
-    int ktra = 1, doanhThu;
-    while(ktra){
-        ktra = 0;
-        xemDanhSachLuaChonXemDoanhThu();
-        cout<<"Vui long nhap lua chon: "<<endl;
-        temp = Utils::nhap(1, 2);
-        if(temp != "1" && temp != "2" && temp != "3"){
-            cout<<"Nhap sai, vui long nhap lai!"<<endl;
-            ktra = 1;
-        }
-    }
-    if(temp == "1"){
-        d_begin = Utils::nhapNgayThangNam("Nhap ngay thang nam theo dinh dang(dd/mm/yyyy): ");
-        doanhThu = thongKe(d_begin, d_begin+1);
-        cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
-    }
-    else if (temp == "2")
-    {
-        int ktra;
-        string month, year, date;
-        ktra = 1;
-        while(ktra){
-            ktra = 0;
-            cout<<"Nhap thang muon xem (theo dinh dang mm/yyyy): ";
-            date = Utils::nhap(4, 8);
-            stringstream ss(date);
-            getline(ss, month, '/');
-            getline(ss, year, '/');
-            if(Utils::stringToInt(month) > 12 || Utils::stringToInt(month) < 1){
-                ktra = 1;
-            }
-            if(ktra){
-                system("clear");
-                cout<<"Nhap sai, vui long nhap lai!"<<endl;
-            }
-        }
-        d_begin = "01/" + month + "/" + year;
-        d_end = "31/" + month + "/" + year;
-        doanhThu = thongKe(d_begin, d_end + 1);
-        cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
-    }
-    else if(temp == "3"){
-        int ktra;
-        string year;
-        ktra = 1;
-        while(ktra){
-            ktra = 0;
-            cout<<"Nhap nam muon xem (theo dinh dang yyyy): ";
-            year = Utils::nhap(1, 5);
-            if(Utils::stringToInt(year) < 1900){
-                ktra = 1;
-            }
-            if(ktra){
-                system("clear");
-                cout<<"Nhap sai, vui long nhap lai!"<<endl;
-            }
-        }
-        d_begin = "01/01/" + year;
-        d_end = "31/12/" + year;
-        doanhThu = thongKe(d_begin, d_end + 1);
-        cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
-    }
+    // string temp;
+    // string d_begin, d_end;
+    // int ktra = 1, doanhThu;
+    // while(ktra){
+    //     ktra = 0;
+    //     xemDanhSachLuaChonXemDoanhThu();
+    //     cout<<"Vui long nhap lua chon: "<<endl;
+    //     temp = Utils::nhap(1, 2);
+    //     if(temp != "1" && temp != "2" && temp != "3"){
+    //         cout<<"Nhap sai, vui long nhap lai!"<<endl;
+    //         ktra = 1;
+    //     }
+    // }
+    // if(temp == "1"){
+    //     d_begin = Utils::nhapNgayThangNam("Nhap ngay thang nam theo dinh dang(dd/mm/yyyy): ");
+    //     doanhThu = thongKe(d_begin, d_begin+1);
+    //     cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
+    // }
+    // else if (temp == "2")
+    // {
+    //     int ktra;
+    //     string month, year, date;
+    //     ktra = 1;
+    //     while(ktra){
+    //         ktra = 0;
+    //         cout<<"Nhap thang muon xem (theo dinh dang mm/yyyy): ";
+    //         date = Utils::nhap(4, 8);
+    //         stringstream ss(date);
+    //         getline(ss, month, '/');
+    //         getline(ss, year, '/');
+    //         if(Utils::stringToInt(month) > 12 || Utils::stringToInt(month) < 1){
+    //             ktra = 1;
+    //         }
+    //         if(ktra){
+    //             system("clear");
+    //             cout<<"Nhap sai, vui long nhap lai!"<<endl;
+    //         }
+    //     }
+    //     d_begin = "01/" + month + "/" + year;
+    //     d_end = "31/" + month + "/" + year;
+    //     doanhThu = thongKe(d_begin, d_end + 1);
+    //     cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
+    // }
+    // else if(temp == "3"){
+    //     int ktra;
+    //     string year;
+    //     ktra = 1;
+    //     while(ktra){
+    //         ktra = 0;
+    //         cout<<"Nhap nam muon xem (theo dinh dang yyyy): ";
+    //         year = Utils::nhap(1, 5);
+    //         if(Utils::stringToInt(year) < 1900){
+    //             ktra = 1;
+    //         }
+    //         if(ktra){
+    //             system("clear");
+    //             cout<<"Nhap sai, vui long nhap lai!"<<endl;
+    //         }
+    //     }
+    //     d_begin = "01/01/" + year;
+    //     d_end = "31/12/" + year;
+    //     doanhThu = thongKe(d_begin, d_end + 1);
+    //     cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
+    // }
 }
 
 ostream &operator<<(ostream &out, QuanLi &ql) {

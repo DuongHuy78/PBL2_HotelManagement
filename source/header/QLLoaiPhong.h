@@ -12,7 +12,7 @@ public:
 
     void themLoaiPhong(LoaiPhong); 
     void xemLoaiPhong();
-    void suaThongTinLoaiPhong(const string&);
+    //void suaThongTinLoaiPhong(const string&);
     void xoaLoaiPhong(const string& );
 
     void capNhatFile(LoaiPhong*, string); 

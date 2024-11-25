@@ -18,7 +18,7 @@ public:
     void setMaPhong(string);
     void setLoaiPhong(string);
 
-    string capNhatThongTin();
+    //string capNhatThongTin();
     void xuatThongTin();
     
     friend ostream& operator<<(ostream&, const Phong&);

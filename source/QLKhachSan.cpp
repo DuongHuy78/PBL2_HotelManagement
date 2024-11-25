@@ -232,7 +232,6 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
-    // Thêm dòng này để pull lại, chả biết bị gì :V
     system("cls");
     quanLi.setDSLP(&QLLP);
     quanLi.setDSP(&QLP);
@@ -358,9 +357,95 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         cout << QLDP;
         system("pause");
     }
+    else if(choice == PRINT_DSLP) {
+        cout << QLLP;
+        system("pause");
+    }
+    else if(choice == PRINT_DSP) {
+        cout << QLP;
+        system("pause");
+    }
+    else if(choice == PRINT_DSKH_ID) {
+        string ID = Utils::inputWithCondition("Nhap ID khach hang: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        KhachHang *kh = QLKH.timKiemKhachHang(ID);
+        if(kh != nullptr) {
+            cout << *kh;
+        }
+        else {
+            Utils::outputData("Khong tim thay khach hang!\n", CONSOLE);
+        }
+        system("pause");
+    }
+    else if(choice == PRINT_DSDP_ID) {
+        string ID = Utils::inputWithCondition("Nhap ID dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        DatPhong *dp = QLDP.timKiemDatPhong(ID);
+        if(dp != nullptr) {
+            cout << *dp;
+        }
+        else {
+            Utils::outputData("Khong tim thay dat phong!\n", CONSOLE);
+        }
+        system("pause");
+    }
+    else if(choice == PRINT_DSKH_SDT) {
+        string SDT = Utils::inputWithCondition("Nhap so dien thoai khach hang: ", 1, 10, VIETNAM_PHONE_NUMBER);
+        KhachHang *kh = QLKH.timKiemKhachHangSDT(SDT);
+        if(kh != nullptr) {
+            cout << *kh;
+        }
+        else {
+            Utils::outputData("Khong tim thay khach hang!\n", CONSOLE);
+        }
+        system("pause");
+    }
+    else if(choice == PRINT_DSP_ID) {
+        string ID = Utils::inputWithCondition("Nhap ID phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        Phong *p = QLP.timPhong(ID);
+        if(p != nullptr) {
+            cout << *p;
+            Node<DatPhong> *dp = QLDP.getDanhSachDatPhong().begin();
+            while(dp != QLDP.getDanhSachDatPhong().end()) {
+                if(dp->data.getMaPhong() == ID) {
+                    if(dp->data.getNgayNhan() > time(0) && dp->data.getNgayTra() < time(0)) {
+                        cout << dp->data;
+                    }
+                }
+                dp = dp->next;
+            }
+        }
+    }
+    else if(choice == PRINT_DSP_LOAIPHONG) {
+        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
+        LoaiPhong *lp = QLLP.timLoaiPhong(loaiPhong);
+        if(lp == nullptr) {
+            Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
+            system("pause");
+            return;
+        }
+        Node<Phong> *p = QLP.getDanhSachPhong().begin();
+        while(p != QLP.getDanhSachPhong().end()) {
+            if(p->data.getLoaiPhong() != loaiPhong) {
+                p = p->next;
+                continue;
+            }
+            cout << p->data;
+            Node<DatPhong> *dp = QLDP.getDanhSachDatPhong().begin();
+            while(dp != QLDP.getDanhSachDatPhong().end()) {
+                if(dp->data.getMaPhong() == p->data.getMaPhong()) {
+                    if(dp->data.getNgayNhan() > time(0) && dp->data.getNgayTra() < time(0)) {
+                        cout << dp->data;
+                    }
+                }
+                dp = dp->next;
+            }
+            p = p->next;
+        }
+        system("pause");
+    }
     else if(choice == ADD_KHACHHANG) {
         KhachHang newKhachHang = QLKH.nhapThongTin();
         QLKH.themKhachHang(newKhachHang);
+        system("pause");
     }
 }
 

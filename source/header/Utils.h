@@ -58,6 +58,13 @@ enum user_option_value {
     USER_BOOK_ROOM,
     PRINT_DSKH,
     PRINT_DSDP,
+    PRINT_DSLP,
+    PRINT_DSP,
+    PRINT_DSKH_ID,
+    PRINT_DSDP_ID,
+    PRINT_DSKH_SDT,
+    PRINT_DSP_ID,
+    PRINT_DSP_LOAIPHONG,
     ADD_KHACHHANG,
 };
 
@@ -179,42 +186,6 @@ public:
     }
 
     /**
-     * khi dùng sl phải tăng thêm 1 vì còn ký tự '\0'     
-     * kytu:
-     * 1: Chỉ được nhập số.
-     * 2: Chỉ được nhập chữ và khoảng trắng. 
-     * 3: Được nhập số, chữ và khoảng trắng.
-     * 4: Được nhập số và ký tự " / ".
-     */
-    static string nhap(int kytu, int sl) { 
-         string temp = "";
-    int a = 0;
-    char ch;
-    if(kytu == 1 || kytu == 2 || kytu == 3 || kytu == 4) {
-        while (((ch = getch()) != '\r' && ch != '\n') || a <= 0) {
-            if(((kytu == 1 && isdigit(ch)) ||
-                (kytu == 2 && (isalpha(ch) || ch == ' ')) ||
-                (kytu == 3 && (isalpha(ch) || isdigit(ch))) ||
-                (kytu == 4 && (isdigit(ch) || ch == '/')) ||
-                (kytu == 5 && (isupper(ch) || isdigit(ch))) ||// kí tự là in hoa, chữ số
-                (kytu == 6 && (isalpha(ch) || isdigit(ch) || ch == ' ')  && a < sl - 1))) // ký tự, chữ số, có dấu cách   
-            {
-                cout << ch;
-                temp += ch;
-                a++;
-            }
-            else if (ch == '\b' && a > 0) {
-                cout << "\b \b";
-                temp.pop_back();
-                a--;
-            }
-        }
-        cout << endl;
-    }
-    return temp;
-}
-
-    /**
      * Hàm này dùng để lấy chuỗi con từ chuỗi s từ vị trí pos
      * cho đến khi gặp kí tự x
      */
@@ -307,142 +278,6 @@ public:
         if(tmp == "nam") return NAM;
         if(tmp == "nu") return NU;
         return UNDEFINED_GENDER;
-    }
-
-    static string nhapNgaySinh() {
-        string input;
-        int day, month, year;
-        int check;
-        int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  // Số ngày trong tháng
-
-        while (1) {  // Lặp lại nếu nhập sai
-            cout << "Nhap ngay thang nam sinh (theo dinh dang dd/mm/yyyy): ";
-            input = Utils::nhap(4, 11);  // Nhập ngày tháng năm sinh
-
-            // Tách chuỗi thành ngày, tháng, năm
-            stringstream ss(input);
-            string temp_day, temp_month, temp_year;
-
-            getline(ss, temp_day, '/');
-            getline(ss, temp_month, '/');
-            getline(ss, temp_year, '/');
-
-            // Chuyển chuỗi sang số nguyên
-            day = atoi(temp_day.c_str());
-            month = atoi(temp_month.c_str());
-            year = atoi(temp_year.c_str());
-
-            check = 1;
-
-            // Kiểm tra tháng và năm hợp lệ lớn 18 tuổi
-            // Khai báo biến tên là localTimeInfo
-            tm* localTimeInfo;
-            // Lấy thời gian hiện tại
-            time_t currentTime = time(nullptr);
-            localTimeInfo = localtime(&currentTime);
-            if (month <= 0 || month > 12 || year <= 1900 || year > localTimeInfo->tm_year + 1900 - 18) {
-                check = 0;
-            }
-            // Kiểm tra năm nhuận
-            if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-                if (month == 2 && (day > 29 || day <= 0)) {
-                    check = 0;
-                }
-            } else {
-                // Kiểm tra ngày hợp lệ
-                if (day <= 0 || day > maxDaysInMonth[month - 1]) {
-                    check = 0;
-                }
-            }
-
-            if (check != 1) {
-                std::cout << "Ban nhap sai, vui long nhap lai!\n";
-                continue;
-            }
-
-            return input;
-        }
-    }
-
-    static string NhapSoDienThoai() {
-        string temp = "";
-        char ch;
-        while (1) {
-            ch = getch();
-            if (isdigit(ch) && temp.length() <= 10) {
-                cout << ch;
-                temp += ch;
-            } 
-            else if (ch == '\b' && !temp.empty()) { // \b là ký tự backspace
-                cout << "\b \b";
-                temp.pop_back();
-            }
-            if(temp.length() == 10 && (ch  == '\r' || ch == '\n') )
-                break;
-        }
-        cout << endl;
-        return temp;
-    }
-    /**
-     * Hàm này để nhập ngày tháng năm tránh lỗi
-     */
-    static string nhapNgayThangNam(string tieuDe) {
-        string input;
-        int day, month, year;
-        int check;
-        int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};  // Số ngày trong tháng
-
-        while (1) {  // Lặp lại nếu nhập sai
-            cout << tieuDe;
-            input = Utils::nhap(4, 11);
-
-            // Tách chuỗi thành ngày, tháng, năm
-            stringstream ss(input);
-            string temp_day, temp_month, temp_year;
-            if(input.length() != 10 || input[2] != '/' || input[5] != '/')
-            {
-                cout << "Ban nhap sai, vui long nhap lai!\n";
-                continue;
-            }
-            getline(ss, temp_day, '/');
-            getline(ss, temp_month, '/');
-            getline(ss, temp_year, '/');
-
-            // Chuyển chuỗi sang số nguyên
-            day = atoi(temp_day.c_str());
-            month = atoi(temp_month.c_str());
-            year = atoi(temp_year.c_str());
-
-            check = 1;
-
-            // Khai báo biến tên là localTimeInfo
-            tm* localTimeInfo;
-            // Lấy thời gian hiện tại
-            time_t currentTime = time(nullptr);
-            localTimeInfo = localtime(&currentTime);
-            if (month <= 0 || month > 12 || year <= 1900 ) {
-                check = 0;
-            }
-            // Kiểm tra năm nhuận
-            if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-                if (month == 2 && (day > 29 || day <= 0)) {
-                    check = 0;
-                }
-            } else {
-                // Kiểm tra ngày hợp lệ
-                if (day <= 0 || day > maxDaysInMonth[month - 1]) {
-                    check = 0;
-                }
-            }
-
-            if (check != 1) {
-                system("cls");
-                std::cout << "Ban nhap sai, vui long nhap lai!\n";
-                continue;
-            }
-
-            return input;
-        }
     }
 
     static string inputWithCondition(string message, int minSize, int maxSize, condition_value condition) {
@@ -623,24 +458,22 @@ public:
     }
 
     static void wrapText(const string& text, int width, int indent) {
+        // Chinh sua de dung chung voi UI
         istringstream iss(text);
         string word;
         string line;
-        bool firstLine = true;
-
+        string result = "";
         while (iss >> word) {
             if (line.length() + word.length() + 1 > width) {
-                if (!firstLine) cout << setw(indent) << ""; // Thụt lề cho các dòng sau
-                cout << line << endl;
+                result += string(indent, ' ') + line + '\n';
                 line.clear();
-                firstLine = false;
             }
             line += (line.empty() ? "" : " ") + word;
         }
         if (!line.empty()) {
-            if (!firstLine) cout << setw(indent) << "";
-            cout << line << endl;
+            result += string(indent, ' ') + line + '\n';
         }
+        outputData(result, CONSOLE_OR_UI);
     }
     
     template<typename T>
