@@ -287,6 +287,6 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData(Utils::intToString(lp.giaPhong) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong: ", CONSOLE);
     Utils::outputData(lp.moTaPhong + "\n", CONSOLE_OR_UI);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("----------------------------------------\n", CONSOLE);
     return out;
 }

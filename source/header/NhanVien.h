@@ -6,19 +6,14 @@
 #include "QLDatPhong.h"
 class NhanVien: public NguoiDung {
     string IDNhanVien;
-    QLKhachHang *DSKH;
-    QLDatPhong *DSDP;
 public:
     NhanVien();
     NhanVien(string);
     ~NhanVien();
 
-    void setDSKH(QLKhachHang*);
-    void setDSDP(QLDatPhong*);
     string getIDNhanVien() const;
     void setIDNhanVien(string);
-    void themKhachHang();
-    void themDatPhong();
+
     user_option_value work();
     friend ostream& operator<<(ostream& out, const NhanVien&);
 };
