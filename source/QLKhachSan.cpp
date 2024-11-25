@@ -251,8 +251,6 @@ void QLKhachSan::work() {
                 while(!dangNhap()) {
                     Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
                 }
-                QLDP.setcurrentID(this->currentID);
-                QLDP.setRole(role);
             }
             else {
                 user_option_value choice = current_user->work();
