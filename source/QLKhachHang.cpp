@@ -53,7 +53,6 @@ string QLKhachHang::getMaxIDKhachHang() {
 }
 
 string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
-                                            //chứ ko lưu vào file
     string IDKhachHang = "";
     string maxID = this->getMaxIDKhachHang();
     if(maxID == "199999") {
