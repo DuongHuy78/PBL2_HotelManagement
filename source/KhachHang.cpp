@@ -163,7 +163,7 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData(kh.soDienThoai + "\n", CONSOLE_OR_UI);
     Utils::outputData("Gioi Tinh: ", CONSOLE);
     Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("----------------------------------------\n", CONSOLE);
     return out;
 }
 
