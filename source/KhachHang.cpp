@@ -51,14 +51,6 @@ bool KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
-bool KhachHang::setDSDP(QLDatPhong* QLDP) {
-    if(QLDP == nullptr) {
-        return false;
-    }
-    this->QLDP = *QLDP;
-    return true;
-}
-
 bool KhachHang::setIDKhachHang(string IDKhachHang) {
     if(Utils::isNumberOnly(IDKhachHang)) {
         this->IDKhachHang = IDKhachHang;
@@ -158,11 +150,6 @@ void KhachHang::suaThongTin() {
     }
 }
 
-void themDatPhong(){
-    DatPhong new_DP;
-    new_DP = QLDP.nhapThongTin();
-    QLDP.themDatPhong(new_DP);
-}
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("ID Khach Hang: ", CONSOLE);

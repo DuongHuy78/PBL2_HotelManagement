@@ -7,13 +7,6 @@ QLKhachHang::~QLKhachHang() {
     
 }
 
-void QLKhachHang::setDSDPChoKH(QLDatPhong *QLDP) {
-    Node<KhachHang> *p = DSKH.getHead()->next;
-    while(p != DSKH.getHead()) {
-        p->data.setDSDP(QLDP);
-        p = p->next;
-    }
-}
 
 void QLKhachHang::themKhachHang(KhachHang kh) {
     DSKH.add(kh);
