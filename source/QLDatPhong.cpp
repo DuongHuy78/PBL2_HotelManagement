@@ -48,7 +48,7 @@ DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
             return &p->data;
         p = p->next;
     }
-    return NULL;
+    return nullptr;
 }
 
 /**

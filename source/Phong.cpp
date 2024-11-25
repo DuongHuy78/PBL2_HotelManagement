@@ -36,11 +36,11 @@ void Phong::setLoaiPhong(string LP) {
     this->loaiPhong = LP;
 }
 
-string Phong::capNhatThongTin(){
-    cout << "Nhap Loai Phong: ";
-    string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
-    return tempStr;
-}
+// string Phong::capNhatThongTin(){
+//     cout << "Nhap Loai Phong: ";
+//     string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
+//     return tempStr;
+// }
 
 void Phong::xuatThongTin() {
     cout << left << setw(15) << maPhong << loaiPhong << endl;
@@ -48,12 +48,12 @@ void Phong::xuatThongTin() {
 }
 
 ostream& operator<<(ostream& os, const Phong& P) {
-    Utils::outputData("-----------THONG-TIN-PHONG---------\n", CONSOLE);
+    Utils::outputData("-----------THONG-TIN-PHONG-----------\n", CONSOLE);
     Utils::outputData("Ma Phong: ", CONSOLE);
     Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(P.loaiPhong + "\n", CONSOLE_OR_UI);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("-------------------------------------\n", CONSOLE);
     return os;
 }
 

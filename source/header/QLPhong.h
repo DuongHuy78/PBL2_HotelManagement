@@ -15,7 +15,7 @@ public:
     void themPhong(Phong);
     void taoPhongMoi(Phong);
     void xemPhong();
-    void suaThongTinPhong(const string&);
+    //void suaThongTinPhong(const string&);
     void xoaPhong(const string&);
 
     Phong *timPhong(string);

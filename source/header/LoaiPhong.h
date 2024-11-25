@@ -30,9 +30,9 @@ public:
     bool setGiaPhong(int);
     bool setMoTaPhong(string);
 
-    void NhapLoaiPhongMoi();
+    //void NhapLoaiPhongMoi();
     void menuCapNhat();
-    void capNhatThongTin();
+    //void capNhatThongTin();
     void xuatThongTin();
     
     friend ostream& operator<<(ostream& out, const LoaiPhong&);

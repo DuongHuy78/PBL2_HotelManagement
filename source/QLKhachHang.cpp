@@ -18,7 +18,17 @@ KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
             return &p->data;
         p = p->next;
     }
-    return NULL;
+    return nullptr;
+}
+
+KhachHang *QLKhachHang::timKiemKhachHangSDT(string SDT) {
+    Node<KhachHang> *p = DSKH.getHead()->next;
+    while(p != DSKH.getHead()) {
+        if(p->data.getSoDienThoai() == SDT) 
+            return &p->data;
+        p = p->next;
+    }
+    return nullptr;
 }
 
 void QLKhachHang::suaThongTin(string ID) {
