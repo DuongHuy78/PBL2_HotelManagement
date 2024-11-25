@@ -232,6 +232,7 @@ void QLKhachSan::outputDatPhong(string path) {
 }
 
 void QLKhachSan::work() {
+    // Thêm dòng này để pull lại, chả biết bị gì :V
     system("cls");
     quanLi.setDSLP(&QLLP);
     quanLi.setDSP(&QLP);
