@@ -79,6 +79,7 @@ void QLKhachHang::xoaKhachHang(KhachHang *kh) {
 }
 
 KhachHang QLKhachHang::nhapThongTin() {
+    system("cls");
     KhachHang newKH;
     string temp;
     temp = this->taoIDKhachHang();     //tạo ID khách hàng mới

@@ -25,8 +25,6 @@ QLKhachSan::QLKhachSan() {
     else {
         current_mode = CONSOLE;
     }
-    nhanVien.setDSKH(&QLKH);
-    nhanVien.setDSDP(&QLDP);
 }
 
 QLKhachSan::~QLKhachSan() {}
@@ -165,7 +163,6 @@ void QLKhachSan::inputPhong(string path) {
         maPhong     = Utils::getSubstringUntilX(line, index, ';');
         maLoaiPhong = Utils::getSubstringUntilX(line, index, '\n');
         Phong newPhong(maPhong, maLoaiPhong);
-        //cout << count << " " << newPhong;
         QLP.themPhong(newPhong);
         index = 0;
         ++count;
@@ -236,8 +233,6 @@ void QLKhachSan::outputDatPhong(string path) {
 
 void QLKhachSan::work() {
     system("cls");
-    nhanVien.setDSKH(&QLKH);
-    nhanVien.setDSDP(&QLDP);
     quanLi.setDSLP(&QLLP);
     quanLi.setDSP(&QLP);
     quanLi.setDSDP(&QLDP);
@@ -252,23 +247,16 @@ void QLKhachSan::work() {
         while(true) {
             system("cls");
             if(role == UNDEFINED_ROLE) {
-                cout << "Dang nhap de tiep tuc: " << endl;
+                Utils::outputData("---------------DANG-NHAP---------------\n", CONSOLE);
                 while(!dangNhap()) {
-                    cout << "Dang nhap that bai. Vui long thu lai." << endl;               
+                    Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
                 }
                 QLDP.setcurrentID(this->currentID);
                 QLDP.setRole(role);
             }
             else {
-                int choice = current_user->work();
-                if(choice == SIGN_OUT) {
-                    dangXuat();
-                }
-                else if(choice == USER_BOOK_ROOM) {
-                    bookingRoom();
-                    cout << QLDP;
-                    system("pause");
-                }
+                user_option_value choice = current_user->work();
+                requestHandling(choice);
             }
         }
     }
@@ -339,10 +327,40 @@ sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, s
     KhachHang newKhachHang(ID, Utils::trim(firstName) + " " + \
     Utils::trim(surname), Utils::stringToDate(birthday), "",  \
     Utils::stringToGender(gender));
-    cout << newKhachHang << endl;
     QLKH.themKhachHang(newKhachHang);
     QLTK.themTaiKhoan(TaiKhoan(ID, username, password));
     return SIGN_UP_SUCCESS;
+}
+
+void QLKhachSan::requestHandling(user_option_value choice) {
+    if(choice == CONTINUE) {
+        return;
+    }
+    else if(choice == SIGN_OUT) {
+        dangXuat();
+    }
+    else if(choice == USER_BOOK_ROOM) {
+        system("cls");
+        string ngayNhan, ngayTra, soLuongKhach;
+        LinkedList<Phong *> phongTrong;
+        LinkedList<loaiPhongAvailable> listlpa;
+        searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
+        bookingRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
+        Utils::outputData("Dat phong thanh cong!\n", CONSOLE);
+        system("pause");
+    }
+    else if(choice == PRINT_DSKH) {
+        cout << QLKH;
+        system("pause");
+    }
+    else if(choice == PRINT_DSDP) {
+        cout << QLDP;
+        system("pause");
+    }
+    else if(choice == ADD_KHACHHANG) {
+        KhachHang newKhachHang = QLKH.nhapThongTin();
+        QLKH.themKhachHang(newKhachHang);
+    }
 }
 
 /**
@@ -388,8 +406,7 @@ int soLuongKhach, LinkedList<Phong *> &phongTrong) {
     }
 }
 
-void QLKhachSan::bookingRoom() {
-    string ngayNhan, ngayTra;
+void QLKhachSan::searchTypeRoom(string &ngayNhan, string &ngayTra, string &soLuongKhach, LinkedList<Phong *> &phongTrong, LinkedList<loaiPhongAvailable> &listlpa) {
     while(true) {
         ngayNhan = Utils::inputWithCondition("Nhap ngay nhan(dd/mm/yyyy): ", 1, 10, DATE);
         ngayTra = Utils::inputWithCondition("Nhap ngay tra(dd/mm/yyyy): ", 1, 10, DATE);
@@ -403,38 +420,97 @@ void QLKhachSan::bookingRoom() {
         }
         break;
     }
-    
-    string soLuongKhach;
+
     soLuongKhach = Utils::inputWithCondition("Nhap so luong khach: ", 1, 2, NUMBER_ONLY);
-    LinkedList<Phong *> phongTrong;
     roomAvailability(Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), phongTrong);
+
+    Node<Phong *> *p = phongTrong.begin();
+    while(p != phongTrong.end()) {
+        bool found = false;
+        Node<loaiPhongAvailable> *lpa = listlpa.begin();
+        while(lpa != listlpa.end()) {
+            if(lpa->data.loaiphong->getLoaiPhong() == p->data->getLoaiPhong()) {
+                lpa->data.amount++;
+                found = true;
+                break;
+            }
+            lpa = lpa->next;
+        }
+        if(!found) {
+            loaiPhongAvailable newlpa;
+            newlpa.loaiphong = QLLP.timLoaiPhong(p->data->getLoaiPhong());
+            newlpa.amount = 1;
+            listlpa.add(newlpa);
+        }
+        p = p->next;
+    }
+}
+
+void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, const string &soLuongKhach, LinkedList<Phong *> &phongTrong, LinkedList<loaiPhongAvailable> &listlpa) {
     string maPhong;
     string loaiPhong;
-    bool roomNotFound = true;
-    while(roomNotFound) {
+    bool typeRoomNotFound = true;
+    while(typeRoomNotFound) {
+        system("cls");
         int count = 0;
-        cout << "Danh sach phong trong: " << endl;
-        Node<Phong *> *p = phongTrong.begin();
-        while(p != phongTrong.end()) {
-            cout << *p->data;
+        Utils::outputData("Danh sach loai phong co the dat:\n", CONSOLE);
+        Node<loaiPhongAvailable> *lpa = listlpa.begin();
+        while(lpa != listlpa.end()) {
+            cout << *(lpa->data.loaiphong);
+            Utils::outputData("So luong phong trong: ", CONSOLE);
+            Utils::outputData(lpa->data.amount, CONSOLE);
+            Utils::outputData("\n\n", CONSOLE);
             ++count;
-            p = p->next;
+            lpa = lpa->next;
         }
         if(count == 0) {
-            Utils::outputData("Khong co phong trong cho thoi gian nay!\n", CONSOLE_OR_UI);
+            Utils::outputData("Khong co loai phong nao phu hop!\n", CONSOLE);
+            system("pause");
             return;
+        }
+        loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
+        lpa = listlpa.begin();
+        while(lpa != listlpa.end()) {
+            if(lpa->data.loaiphong->getLoaiPhong() == loaiPhong) {
+                typeRoomNotFound = false;
+                break;
+            }
+            lpa = lpa->next;
+        }
+        if(typeRoomNotFound) {
+            Utils::outputData("Loai phong ban nhap khong nam trong danh sach!\n", CONSOLE);
+            system("pause");
+        }
+    }
+
+    bool roomNotFound = true;
+    while(roomNotFound) {
+        system("cls");
+        cout << *(QLLP.timLoaiPhong(loaiPhong));
+        Utils::outputData("Danh sach phong:\n", CONSOLE);
+        Node<Phong *> *p = phongTrong.begin();
+        while(p != phongTrong.end()) {
+            if(p->data->getLoaiPhong() == loaiPhong) {
+                Utils::outputData(p->data->getMaPhong() + "\n", CONSOLE);
+            }
+            p = p->next;
         }
         maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
         p = phongTrong.begin();
         while(p != phongTrong.end()) {
-            if(p->data->getMaPhong() == maPhong) {
+            if(p->data->getMaPhong() == maPhong && p->data->getLoaiPhong() == loaiPhong) {
                 roomNotFound = false;
-                loaiPhong = p->data->getLoaiPhong();
+                maPhong = p->data->getMaPhong();
                 break;
             }
             p = p->next;
         }
+        if(roomNotFound) {
+            Utils::outputData("Phong ban nhap khong nam trong danh sach!\n", CONSOLE);
+            system("pause");
+        }
     }
+
     int donGia = QLLP.getGiaPhong(loaiPhong);
     if(role == NHANVIEN) {
         KhachHang KH = QLKH.nhapThongTin();

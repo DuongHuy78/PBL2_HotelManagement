@@ -56,6 +56,9 @@ enum user_option_value {
     CONTINUE,
     SIGN_OUT,
     USER_BOOK_ROOM,
+    PRINT_DSKH,
+    PRINT_DSDP,
+    ADD_KHACHHANG,
 };
 
 extern stringstream UI_input_buffer;
@@ -560,7 +563,7 @@ public:
     }
 
     static bool isDate(const string &s) {
-        if(s.length() < 8) {
+        if(s.length() != 10) {
             return false;
         }
         int slashCount = 0;
@@ -580,6 +583,9 @@ public:
         day = getSubstringUntilX(s, pos, '/');
         month = getSubstringUntilX(s, pos, '/');
         year = getSubstringUntilX(s, pos, '\n');
+        if(day.size() != 2 || month.size() != 2 || year.size() != 4) {
+            return false;
+        }
         if(isNumberOnly(day) == false || isNumberOnly(month) == false || isNumberOnly(year) == false) {
             return false;
         }

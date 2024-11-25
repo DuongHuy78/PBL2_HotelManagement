@@ -11,30 +11,12 @@ NhanVien::NhanVien(string ID) {
     this->IDNhanVien = ID;
 }
 
-void NhanVien::setDSKH(QLKhachHang *DSKH) {
-    this->DSKH = DSKH;
-}
-
-void NhanVien::setDSDP(QLDatPhong *DSDP) {
-    this->DSDP = DSDP;
-}
-
 string NhanVien::getIDNhanVien() const {
     return this->IDNhanVien;
 }
 
 void NhanVien::setIDNhanVien(string ID) {
     this->IDNhanVien = ID;
-}
-
-void NhanVien::themKhachHang(){
-    KhachHang newKH = DSKH->nhapThongTin();
-    this->DSKH->themKhachHang(newKH);
-}
-
-void NhanVien::themDatPhong() {
-    // DatPhong newDP = DSDP->nhapThongTin();
-    // this->DSDP->themDatPhong(newDP);
 }
 
 ostream& operator<<(ostream& out, const NhanVien& nv) {
@@ -51,7 +33,8 @@ user_option_value NhanVien::work() {
     Utils::outputData("1. Them khach hang\n", CONSOLE);
     Utils::outputData("2. Them dat phong\n", CONSOLE);
     Utils::outputData("3. Danh sach khach hang\n", CONSOLE);
-    Utils::outputData("4. Dang xuat\n", CONSOLE);
+    Utils::outputData("4. Danh sach dat phong\n", CONSOLE);
+    Utils::outputData("5. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -64,18 +47,14 @@ user_option_value NhanVien::work() {
     int choice = Utils::stringToInt(choice_str);
     switch(choice) {
         case 1:
-            themKhachHang();
-            system("pause");
-            return CONTINUE;
+            return ADD_KHACHHANG;
         case 2:
-            themDatPhong();
-            system("pause");
-            return CONTINUE;
+            return USER_BOOK_ROOM;
         case 3:
-            cout << *DSKH;
-            system("pause");
-            return CONTINUE;
+            return PRINT_DSKH;
         case 4:
+            return PRINT_DSDP;
+        case 5:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);

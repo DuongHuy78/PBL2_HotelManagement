@@ -8,6 +8,10 @@
 #include "QLPhong.h"
 #include "QLTaiKhoan.h"
 #include "UI.h"
+struct loaiPhongAvailable {
+    LoaiPhong *loaiphong = nullptr;
+    int amount = 0;
+};
 
 class QLKhachSan {
     QLKhachHang QLKH;
@@ -41,7 +45,11 @@ public:
     void dangXuat();
     sign_up_return_value taoTaiKhoan(string, string, string, string, string, string);
 
+    void requestHandling(user_option_value);
+
     void roomAvailability(time_t, time_t, int, LinkedList<Phong *> &);
-    void bookingRoom();
+    void searchTypeRoom(string &, string &, string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
+    void bookingRoom(const string &, const string &, const string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
 };
+
 #endif
