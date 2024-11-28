@@ -278,6 +278,7 @@ user_option_value QuanLi::work() {
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+            system("pause");
             return CONTINUE;
     }    
 }

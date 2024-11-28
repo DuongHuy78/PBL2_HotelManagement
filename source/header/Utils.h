@@ -90,55 +90,6 @@ public:
         return n;
     }
 
-    static string timeToString(time_t t) {
-        struct tm *timeinfo = localtime(&t);
-        string buffer = "";
-        try {
-            if(timeinfo == NULL) {
-                throw runtime_error("Loi: khong the lay timeinfo.");
-            }
-            buffer += intToString(timeinfo->tm_hour) + ':'
-                + intToString(timeinfo->tm_min) + ':'
-                + intToString(timeinfo->tm_sec) + ' '
-                + intToString(timeinfo->tm_mday) + '/'
-                + intToString(timeinfo->tm_mon + 1) + '/'
-                + intToString(timeinfo->tm_year + 1900);
-        }
-        catch (const runtime_error &e){
-            cout << e.what() << endl;
-        }
-        catch (const exception &e) {
-            cout << e.what() << endl;
-        }
-        
-        return buffer;
-    }
-
-    /**
-     * Định dạng của chuỗi s: "HH-MM-SS DD/MM/YYYY"
-     */
-    static time_t stringToTime(string s) {
-        struct tm timeinfo;
-        try {
-            if(s.size() != 19) {
-                throw runtime_error("Loi: do dai thoi gian khong hop le.");
-            }
-            timeinfo.tm_hour = stringToInt(s.substr(0, 2));
-            timeinfo.tm_min = stringToInt(s.substr(3, 2));
-            timeinfo.tm_sec = stringToInt(s.substr(6, 2));
-            timeinfo.tm_mday = stringToInt(s.substr(9, 2));     
-            timeinfo.tm_mon = stringToInt(s.substr(12, 2)) - 1;    
-            timeinfo.tm_year = stringToInt(s.substr(15, 4)) - 1900;            
-        }
-        catch (const runtime_error& e) {
-            cout << e.what() << endl;
-        }
-        catch (const exception &e) {
-            cout << e.what() << endl;
-        }
-        return mktime(&timeinfo);
-    }
-
     static string dateToString(time_t t) {
         struct tm *timeinfo = localtime(&t);
         string buffer = "";
@@ -166,12 +117,33 @@ public:
     static time_t stringToDate(string s) {
         struct tm timeinfo;
         try {
-            if(s.size() != 10) {
-                throw runtime_error("Loi: do dai thoi gian khong hop le.");
+            int slashCount = 0;
+            for(int i = 0; i < s.size(); ++i) {
+                if(s[i] == '/') slashCount++;
             }
-            timeinfo.tm_mday = stringToInt(s.substr(0, 2));
-            timeinfo.tm_mon = stringToInt(s.substr(3, 2)) - 1;
-            timeinfo.tm_year = stringToInt(s.substr(6, 4)) - 1900;
+
+            if(slashCount != 2) {
+                throw runtime_error("Loi: sai dinh dang ngay thang.");
+            }
+
+            int st = 0;
+            string dstr = "", mstr = "", ystr = "";
+            dstr = getSubstringUntilX(s, st, '/');
+            mstr = getSubstringUntilX(s, st, '/');
+            ystr = getSubstringUntilX(s, st, '\n');
+
+            if(!isNumberOnly(dstr) || !isNumberOnly(mstr) || !isNumberOnly(ystr)) {
+                throw runtime_error("Loi: sai dinh dang ngay thang.");
+            }
+
+            int d = 0, m = 0, y = 0;
+            d = stringToInt(dstr);
+            m = stringToInt(mstr) - 1;
+            y = stringToInt(ystr) - 1900;
+
+            timeinfo.tm_mday = d;
+            timeinfo.tm_mon = m;
+            timeinfo.tm_year = y;
             timeinfo.tm_hour = 0;
             timeinfo.tm_min = 0;
             timeinfo.tm_sec = 0;
@@ -398,42 +370,52 @@ public:
     }
 
     static bool isDate(const string &s) {
-        if(s.length() != 10) {
-            return false;
-        }
-        int slashCount = 0;
-        for(int i = 0; i < s.size(); ++i) {
-            if(s[i] != '/' && !isdigit(s[i])) {
+        try {
+            int slashCount = 0;
+            for(int i = 0; i < s.size(); ++i) {
+                if(s[i] == '/') slashCount++;
+            }
+
+            if(slashCount != 2) {
+                throw runtime_error("Loi: sai dinh dang ngay thang.");
+            }
+
+            int st = 0;
+            string dstr = "", mstr = "", ystr = "";
+            dstr = getSubstringUntilX(s, st, '/');
+            mstr = getSubstringUntilX(s, st, '/');
+            ystr = getSubstringUntilX(s, st, '\n');
+
+            if(!isNumberOnly(dstr) || !isNumberOnly(mstr) || !isNumberOnly(ystr)) {
+                throw runtime_error("Loi: sai dinh dang ngay thang.");
+            }
+
+            int d = 0, m = 0, y = 0;
+            d = stringToInt(dstr);
+            m = stringToInt(mstr);
+            y = stringToInt(ystr);
+
+            if (m < 1 || m > 12) {
                 return false;
             }
-            if(s[i] == '/') {
-                slashCount++;
+
+            if (d < 1 || d > monthDays(m, y)) {
+                return false;
             }
+
+            if(y < 1900 || y > 9999) {
+                return false;
+            }
+
+            return true;
         }
-        if(slashCount != 2) {
-            return false;
+        catch (const runtime_error& e) {
+            cout << e.what() << endl;
         }
-        string day = "", month = "", year = "";
-        int pos = 0;
-        day = getSubstringUntilX(s, pos, '/');
-        month = getSubstringUntilX(s, pos, '/');
-        year = getSubstringUntilX(s, pos, '\n');
-        if(day.size() != 2 || month.size() != 2 || year.size() != 4) {
-            return false;
+        catch (const exception &e) {
+            cout << e.what() << endl;
         }
-        if(isNumberOnly(day) == false || isNumberOnly(month) == false || isNumberOnly(year) == false) {
-            return false;
-        }
-        int d = stringToInt(day);
-        int m = stringToInt(month);
-        int y = stringToInt(year);
-        if (m < 1 || m > 12) {
-            return false;
-        }
-        if (d < 1 || d > monthDays(m, y)) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     static bool isRoomType(const string &s) {

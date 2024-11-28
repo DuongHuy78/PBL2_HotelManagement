@@ -411,6 +411,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
                 dp = dp->next;
             }
         }
+        system("pause");
     }
     else if(choice == PRINT_DSP_LOAIPHONG) {
         string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);

@@ -199,6 +199,7 @@ user_option_value KhachHang::work() {
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+            system("pause");
             return CONTINUE;
     }
 }

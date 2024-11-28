@@ -266,7 +266,7 @@ void LoaiPhong::menuCapNhat(){
 // }
 
 // XUAT THONG TIN
-void LoaiPhong::xuatThongTin(){
+void LoaiPhong::xuatThongTin() {
     cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
     << setw(9) << dienTich << setw(13) << giaPhong; 
     Utils::wrapText(moTaPhong, 40, 65);
