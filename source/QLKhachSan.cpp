@@ -445,6 +445,62 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         QLKH.themKhachHang(newKhachHang);
         system("pause");
     }
+    else if(choice == ADD_PHONG){
+        Phong newPhong = QLP.nhapPhongMoi();
+        QLP.themPhong(newPhong);
+    }
+    else if(choice == UPDATE_PHONG){
+        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(loaiPhong);
+        if(P == nullptr) {
+            Utils::outputData("Khong tim thay phong!\n", CONSOLE);
+            system("pause");
+            return;
+        }
+        else{
+            P->capNhatThongTin();
+        }
+    }
+    else if(choice == DELETE_PHONG){
+        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(loaiPhong);
+        if(P == nullptr) {
+            Utils::outputData("Khong tim thay phong!\n", CONSOLE);
+            system("pause");
+            return;
+        }
+        else{
+            QLP.xoaPhong(loaiPhong);
+        }
+    }
+    else if(choice == ADD_LOAI_PHONG){
+        LoaiPhong newLP = QLLP.nhapLoaiPhongMoi();
+        QLLP.themLoaiPhong(newLP);
+    }
+    else if(choice == UPDATE_LOAIPHONG){
+        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        LoaiPhong *LP = QLLP.timLoaiPhong(loaiPhong);
+        if(LP == nullptr) {
+            Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
+            system("pause");
+            return;
+        }
+        else{
+            LP->capNhatThongTin();
+        }
+    }
+    else if(choice == DELETE_LOAIPHONG){
+        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        LoaiPhong *LP = QLLP.timLoaiPhong(loaiPhong);
+        if(LP == nullptr) {
+            Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
+            system("pause");
+            return;
+        }
+        else{
+            QLLP.xoaLoaiPhong(loaiPhong);
+        }
+    }
 }
 
 /**

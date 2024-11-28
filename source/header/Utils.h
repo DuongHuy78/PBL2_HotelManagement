@@ -66,6 +66,13 @@ enum user_option_value {
     PRINT_DSP_ID,
     PRINT_DSP_LOAIPHONG,
     ADD_KHACHHANG,
+    ADD_PHONG,
+    UPDATE_PHONG,
+    DELETE_PHONG,
+    ADD_LOAI_PHONG,
+    UPDATE_LOAIPHONG,
+    DELETE_LOAIPHONG,
+    PRINT_DOANH_THU,
 };
 
 extern stringstream UI_input_buffer;
@@ -280,6 +287,20 @@ public:
         return UNDEFINED_GENDER;
     }
 
+    /**
+     * Hàm này dùng để nhập dữ liệu từ người dùng
+     * condition gồm:
+     * GENDER: Nam hoặc Nu
+     * NUMBER_ONLY: Chỉ chứa số
+     * ALPHABET_ONLY: Chỉ chứa chữ cái
+     * ALPHABET_AND_NUMBER_ONLY: Chỉ chứa chữ cái và số
+     * ALPHABET_AND_SPACE_ONLY: Chỉ chứa chữ cái và khoảng trắng
+     * ALPHABET_AND_NUMBER_AND_SPACE_ONLY: Chỉ chứa chữ cái, số và khoảng trắng
+     * VIETNAM_PHONE_NUMBER: Số điện thoại Việt Nam
+     * DATE: Ngày tháng năm
+     * ROOM_TYPE: Loại phòng
+     * ROOM_BED_TYPE: Loại giường
+     */
     static string inputWithCondition(string message, int minSize, int maxSize, condition_value condition) {
         outputData(message, CONSOLE);
         string input;

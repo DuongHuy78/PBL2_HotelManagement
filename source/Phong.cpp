@@ -41,6 +41,54 @@ void Phong::setLoaiPhong(string LP) {
 //     string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
 //     return tempStr;
 // }
+Phong Phong::nhapPhongMoi() {
+    string temp;
+    Phong tempPhong;
+    Utils::inputData("Nhap Loai Phong: ", temp, 3, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
+    tempPhong.setLoaiPhong(temp);
+    Utils::inputData("Nhap Ma Phong: ", temp, 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+    tempPhong.setMaPhong(temp);
+    return *this;
+}
+
+void Phong::menuSuaThongTin() {
+    Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
+    Utils::outputData("1. Sua Loai Phong\n", CONSOLE);
+    Utils::outputData("2. Sua Ma Phong\n", CONSOLE);
+    Utils::outputData("3. Thoat\n", CONSOLE);
+    Utils::outputData("--------------------------------------\n", CONSOLE);
+}
+
+void Phong::capNhatThongTin(){
+    int choice;
+    string temp;
+    while (true) {
+        system("cls");
+        menuSuaThongTin();
+        choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
+        switch(choice) {
+            case 1:
+                temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_SPACE_ONLY);
+                tthis->setLoaiPhong(temp);
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 2:
+                temp = Utils::inputWithCondition("Sua Ma Phong: ", 1, MAX_MAPHONG, ALPHABET_AND_SPACE_ONLY);
+                this->setSoLuongKhach(Utils::stringToInt(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 3:
+                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
+                return;
+            default:
+                Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
+                system("pause");
+                break;
+        }  
+    }
+}
 
 void Phong::xuatThongTin() {
     cout << left << setw(15) << maPhong << loaiPhong << endl;
