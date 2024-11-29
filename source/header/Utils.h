@@ -9,6 +9,7 @@
 #include <cctype>
 #include <conio.h>
 #include <iomanip>
+#include "LinkedList.h"
 
 #define MAX_NAME 50
 using namespace std;
@@ -74,6 +75,7 @@ enum user_option_value {
     DELETE_LOAIPHONG,
     PRINT_DOANH_THU,
 };
+extern LinkedList<string> roomTypes;
 
 extern stringstream UI_input_buffer;
 extern stringstream UI_output_buffer;
@@ -458,11 +460,12 @@ public:
     }
 
     static bool isRoomType(const string &s) {
-        string roomTypes[] = {"S", "D", "D2", "T", "F", "F2"};
-        for (string roomType : roomTypes) {
-            if (s == "ST" + roomType || s == "VIP" + roomType) {
+        Node<string> *p = roomTypes.begin();
+        while(p != roomTypes.end()) {
+            if(s == p->data) {
                 return true;
             }
+            p = p->next;
         }
         return false;
     }

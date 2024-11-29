@@ -48,23 +48,23 @@ void QLPhong::AddRangePhong(string file) {
 }
 
 //update file
-void QLPhong::capNhatFile(Phong* head, string path){
-    ofstream inputFile(path);
-    if(!inputFile)
-        {
-            cout << "Khong the mo file de ghi!" << endl;
-            return;
-        }
-    Phong *p = head;
-    while( p != nullptr) 
-        {
-            inputFile << p->getMaPhong() << ";"; 
-            inputFile << p->getLoaiPhong() <<";";     
-            cout << endl;
-        }
-    inputFile.close();
-    cout << "Cap nhat phong.txt thanh cong!" << endl;
-}
+// void QLPhong::capNhatFile(Phong* head, string path){
+//     ofstream inputFile(path);
+//     if(!inputFile)
+//         {
+//             cout << "Khong the mo file de ghi!" << endl;
+//             return;
+//         }
+//     Phong *p = head;
+//     while( p != nullptr) 
+//         {
+//             inputFile << p->getMaPhong() << ";"; 
+//             inputFile << p->getLoaiPhong() <<";";     
+//             cout << endl;
+//         }
+//     inputFile.close();
+//     cout << "Cap nhat phong.txt thanh cong!" << endl;
+// }
     
 void QLPhong::xemPhong(){
     cout << "Day la danh sach phong cua Hotel Del Luna: "<< endl;
@@ -79,7 +79,7 @@ void QLPhong::xemPhong(){
 }
 
 //NEW PHÒNG
-void QLPhong::themPhong(Phong newPhong) {
+void QLPhong::themPhong(const Phong& newPhong) {
     this->DSP.add(newPhong);
 }
 
@@ -120,24 +120,19 @@ void QLPhong::xoaPhong(const string& MP){
 }
 
 
-// void QLPhong::suaThongTinPhong(const string& MP){
-//     Node<Phong> *p = DSP.begin();
-//     while ((p != DSP.end()))
-//     {
-//         if(p->data.getMaPhong() == MP)
-//             {
-//                 string tempStr = p->data.capNhatThongTin();
-//                 if(this->QLLP->timLoaiPhong(tempStr)!=nullptr)
-//                 {
-//                     p->data.setLoaiPhong(tempStr);
-//                 }
-//                 cout << "Da cap nhat thong tin Phong: " << MP << " thanh cong!" << endl;
-//                 return;
-//             }
-//         p = p -> next;
-//     } 
-//     cout << "Khong tim thay Phong!" << endl;
-// }
+void QLPhong::suaThongTin(const string& MP){
+    Node<Phong> *p = DSP.begin();
+    while ((p != DSP.end()))
+    {
+        if(p->data.getMaPhong() == MP)
+            {
+                p->data.capNhatThongTin();
+                cout << "Da cap nhat thong tin phong voi ID " << MP << " thanh cong!" << endl;
+            }
+        p = p -> next;
+    } 
+    cout << "Khong tim thay Phong!" << endl;
+}
 
 void QLPhong::setQLLP(QLLoaiPhong *QLLP) {
     this->QLLP = QLLP;
@@ -226,10 +221,19 @@ Phong *QLPhong::timPhong(string MP){
 //             } 
 //         } while(Choice!=5);
 // } 
-
-Phong QLPhong::timPhong(time_t, time_t) {
-    return Phong();
+Phong QLPhong::nhapThongTin() {
+    string temp;
+    Phong tempPhong;
+    temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+    tempPhong.setMaPhong(temp);
+    temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
+    tempPhong.setLoaiPhong(temp);
+    return tempPhong;
 }
+
+// Phong QLPhong::timPhong(time_t, time_t) {
+//     return Phong();
+// }
 
 LinkedList<Phong> &QLPhong::getDanhSachPhong() {
     return this->DSP;

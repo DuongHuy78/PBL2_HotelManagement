@@ -41,6 +41,7 @@ void QLKhachHang::suaThongTin(string ID) {
         }
         p = p->next;
     }
+    cout<<"Khong tim thay khach hang!"<<endl;
 }
 
 string QLKhachHang::getMaxIDKhachHang() {

@@ -18,7 +18,6 @@ public:
     void setMaPhong(string);
     void setLoaiPhong(string);
 
-    Phong nhapPhongMoi();
     void menuSuaThongTin();
     void capNhatThongTin();
     void xuatThongTin();

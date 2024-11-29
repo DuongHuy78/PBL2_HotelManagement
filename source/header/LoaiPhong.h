@@ -30,7 +30,7 @@ public:
     bool setGiaPhong(int);
     bool setMoTaPhong(string);
 
-    LoaiPhong nhapLoaiPhongMoi();
+    LoaiPhong nhapThongTin();
     void menuSuaThongTin();
     void capNhatThongTin();
     void xuatThongTin();

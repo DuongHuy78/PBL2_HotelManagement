@@ -446,7 +446,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         system("pause");
     }
     else if(choice == ADD_PHONG){
-        Phong newPhong = QLP.nhapPhongMoi();
+        Phong newPhong = QLP.nhapThongTin();
         QLP.themPhong(newPhong);
     }
     else if(choice == UPDATE_PHONG){
@@ -474,7 +474,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         }
     }
     else if(choice == ADD_LOAI_PHONG){
-        LoaiPhong newLP = QLLP.nhapLoaiPhongMoi();
+        LoaiPhong newLP = newLP.nhapThongTin();
         QLLP.themLoaiPhong(newLP);
     }
     else if(choice == UPDATE_LOAIPHONG){

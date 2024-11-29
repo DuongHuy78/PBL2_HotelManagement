@@ -65,7 +65,7 @@ string LoaiPhong::getMoTaPhong() const {
 
 // Setters
 bool LoaiPhong::setLoaiPhong(string LP){
-    if(Utils::isRoomType(LP)){
+    if(Utils::isAlphabetAndNumberOnly(LP)){
         this->loaiPhong = LP;
         return true;
     }
@@ -141,14 +141,14 @@ bool LoaiPhong::setMoTaPhong(string MTP) {
 //     return;
 // }
 
-LoaiPhong LoaiPhong::nhapLoaiPhongMoi() {
+LoaiPhong LoaiPhong::nhapThongTin() {
     string temp;
     LoaiPhong tempLoaiPhong;
     
-    temp = Utils::inputWithCondition("Nhap Loai Phong: ", 4, MAX_IDLOAIPHONG+1, ALPHABET_AND_NUMBER_ONLY);
+    temp = Utils::inputWithCondition("Nhap Loai Phong: ", 4, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
     tempLoaiPhong.setLoaiPhong(temp);
 
-    temp = Utils::inputWithCondition("Nhap Loai Giuong: ", 1, 3, NUMBER_ONLY);
+    temp = Utils::inputWithCondition("Nhap Loai Giuong: ", 1, 2, ROOM_BED_TYPE);
     tempLoaiPhong.setLoaiGiuong(stoi(temp));
 
     temp = Utils::inputWithCondition("Nhap So Luong Khach: ", 1, 2, NUMBER_ONLY);
