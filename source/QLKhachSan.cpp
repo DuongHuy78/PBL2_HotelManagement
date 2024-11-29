@@ -665,3 +665,18 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
         QLDP.themDatPhong(newDP);
     }
 }
+
+void QLKhachSan::list_Type_Room_Available() {
+    string ngayNhan, ngayTra, soLuongKhach;
+    LinkedList<Phong *> phongTrong;
+    LinkedList<loaiPhongAvailable> listlpa;
+    searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
+    Node<loaiPhongAvailable> *lpa = listlpa.begin();
+    while(lpa != listlpa.end()) {
+        cout << *(lpa->data.loaiphong);
+        Utils::outputData("So luong phong trong: ", CONSOLE);
+        Utils::outputData(Utils::intToString(lpa->data.amount) + "\n", CONSOLE_OR_UI);
+        Utils::outputData("\n\n", CONSOLE);
+        lpa = lpa->next;
+    }
+}
