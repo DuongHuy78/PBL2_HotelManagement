@@ -169,10 +169,10 @@ void QuanLi::xemDoanhThu() {
             while(true){
                 Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
                 Utils::inputData(date, CONSOLE_OR_UI);
-                if(date.size() != 7){
-                    ktra = 1;
+                if(date.size() != 8){           //dù có 7 ký tự nhưng đặt là 8 vì có thêm ký tự '\n'
                     break;
                 }
+                cout<<"Nhap sai, vui long nhap lai!"<<endl;
             }
             stringstream ss(date);
             getline(ss, month, '/');
@@ -262,6 +262,7 @@ user_option_value QuanLi::work() {
         case 8:
             return DELETE_PHONG;
         case 9:
+            system("clear");
             xemDoanhThu();
             system("pause");
             return CONTINUE;

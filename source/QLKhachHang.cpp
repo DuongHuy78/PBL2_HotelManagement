@@ -57,6 +57,7 @@ string QLKhachHang::getMaxIDKhachHang() {
 }
 
 string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
+    int i=6;  //độ dài chuỗi ID KH
     string IDKhachHang = "";
     string maxID = this->getMaxIDKhachHang();
     if(maxID == "199999") {
@@ -66,7 +67,12 @@ string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách
         string head = maxID.substr(0, 1);   //lấy số đầu
         string tail = maxID.substr(1);      //lấy số sau
         int num = stoi(tail) + 1;
-        IDKhachHang = head + to_string(num);
+        tail = Utils::intToString(num);
+        while(tail.size() < i-1) {      //điền số 0 vào đầu chuỗi
+            tail = "0" + tail;
+            cout<<tail<<endl;
+        }
+        IDKhachHang = head + tail;
     }
     return IDKhachHang;
 }
