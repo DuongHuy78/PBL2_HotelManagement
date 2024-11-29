@@ -455,7 +455,8 @@ public:
         if (!line.empty()) {
             result += string(indent, ' ') + line + '\n';
         }
-        outputData(result, CONSOLE_OR_UI);
+        outputData(result, CONSOLE);
+        outputData(text + "\n", UI_STREAM);
     }
     
     template<typename T>

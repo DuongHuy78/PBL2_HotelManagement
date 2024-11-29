@@ -50,6 +50,7 @@ public:
     void roomAvailability(time_t, time_t, int, LinkedList<Phong *> &);
     void searchTypeRoom(string &, string &, string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
     void bookingRoom(const string &, const string &, const string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
+    void list_Type_Room_Available();
 };
 
 #endif

@@ -415,6 +415,7 @@ Gnk_Textbox::Gnk_Textbox() {
 	this->on_select = false;
 	this->border = false;
 	this->border_color = Gnk_Color();
+	this->select_process = nullptr;
 }
 
 void Gnk_Textbox::setAppear(bool appear) {
@@ -888,8 +889,9 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
-	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
+
 	glEnable(GL_SCISSOR_TEST);
+	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
 
 	float prev_translate_X = gnk_Translate_X;
 	float prev_translate_Y = gnk_Translate_Y;
@@ -1440,6 +1442,26 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 	glDisable(GL_SCISSOR_TEST);
 }
 
+int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacing, int fontSize, text_align_value textAlign) {
+	std::stringstream ss(s);
+	std::string word;
+	std::string line;
+	int line_num = 0;
+	while (ss >> word) {
+		if (line.size() + word.size() + 1 > width) {
+			gnk_Text(line, P.translate(0.0f, -line_num * (fontSize + spacing)), fontSize);
+			line_num++;
+			line.clear();
+		}
+		line += (line.empty() ? "" : " ") + word;
+	}
+	if (!line.empty()) {
+		gnk_Text(line, P.translate(0.0f, -line_num * (fontSize + spacing)), fontSize);
+		line_num++;
+	}
+	return line_num * (fontSize + spacing);
+}
+
 void gnk_Load_Image(Gnk_Image &image, std::string imagePath) {
 	glGenTextures(1, &image.textureID);
 	stbi_set_flip_vertically_on_load(true);
@@ -1505,4 +1527,3 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
 	glDisable(GL_BLEND);
 }
-

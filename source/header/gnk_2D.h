@@ -2,6 +2,7 @@
 #define GNK_2D_H
 #include <iostream>
 #include <unordered_map>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -377,6 +378,7 @@ void gnk_Set_Character_Font(std::string);
 float gnk_Get_Text_Width(std::string, float);
 void gnk_Text(std::string, Gnk_Point, float);
 void gnk_Text_Limited(std::string, Gnk_Point, float, float, float, text_align_value);
+int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int, text_align_value = GNK_TEXT_LEFT);
 
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);
