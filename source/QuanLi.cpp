@@ -61,6 +61,7 @@ string operator+(const string &time,const int &n) {
     return dayStr;
 }
 void QuanLi::taoLoaiPhong() {
+    
     // LoaiPhong newLP;
     // newLP.NhapLoaiPhongMoi();
     // this->DSLP->themLoaiPhong(newLP);
@@ -76,12 +77,12 @@ void QuanLi::suaLoaiPhong(const string& maLoaiPhong) {
 }
 
 void QuanLi::xoaLoaiPhong(const string& maLoaiPhong) {
-    LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
-    if(LP == NULL) {
-        cout << "Khong tim thay loai phong!" << endl;
-        return;
-    }
-    DSLP->xoaLoaiPhong(maLoaiPhong);
+//     LoaiPhong *LP = DSLP->timLoaiPhong(maLoaiPhong);
+//     if(LP == NULL) {
+//         cout << "Khong tim thay loai phong!" << endl;
+//         return;
+//     }
+//     DSLP->xoaLoaiPhong(maLoaiPhong);
 }
 
 void QuanLi::taoPhong() {
@@ -100,12 +101,12 @@ void QuanLi::suaPhong(const string& maPhong) {
 }
 
 void QuanLi::xoaPhong(const string& maPhong){
-    Phong *P = DSP->timPhong(maPhong);
-    if(P == NULL) {
-        cout << "Khong tim thay loai phong!" << endl;
-        return;
-    }
-    DSP->xoaPhong(maPhong);
+    // Phong *P = DSP->timPhong(maPhong);
+    // if(P == NULL) {
+    //     cout << "Khong tim thay loai phong!" << endl;
+    //     return;
+    // }
+    // DSP->xoaPhong(maPhong);
 }
 
 /**
@@ -141,70 +142,74 @@ void QuanLi::xemDanhSachLuaChonXemDoanhThu(){
  * hàm này để xem doanh thu theo ngày, tháng, năm
  */
 void QuanLi::xemDoanhThu() {
-    // string temp;
-    // string d_begin, d_end;
-    // int ktra = 1, doanhThu;
-    // while(ktra){
-    //     ktra = 0;
-    //     xemDanhSachLuaChonXemDoanhThu();
-    //     cout<<"Vui long nhap lua chon: "<<endl;
-    //     temp = Utils::nhap(1, 2);
-    //     if(temp != "1" && temp != "2" && temp != "3"){
-    //         cout<<"Nhap sai, vui long nhap lai!"<<endl;
-    //         ktra = 1;
-    //     }
-    // }
-    // if(temp == "1"){
-    //     d_begin = Utils::nhapNgayThangNam("Nhap ngay thang nam theo dinh dang(dd/mm/yyyy): ");
-    //     doanhThu = thongKe(d_begin, d_begin+1);
-    //     cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
-    // }
-    // else if (temp == "2")
-    // {
-    //     int ktra;
-    //     string month, year, date;
-    //     ktra = 1;
-    //     while(ktra){
-    //         ktra = 0;
-    //         cout<<"Nhap thang muon xem (theo dinh dang mm/yyyy): ";
-    //         date = Utils::nhap(4, 8);
-    //         stringstream ss(date);
-    //         getline(ss, month, '/');
-    //         getline(ss, year, '/');
-    //         if(Utils::stringToInt(month) > 12 || Utils::stringToInt(month) < 1){
-    //             ktra = 1;
-    //         }
-    //         if(ktra){
-    //             system("clear");
-    //             cout<<"Nhap sai, vui long nhap lai!"<<endl;
-    //         }
-    //     }
-    //     d_begin = "01/" + month + "/" + year;
-    //     d_end = "31/" + month + "/" + year;
-    //     doanhThu = thongKe(d_begin, d_end + 1);
-    //     cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
-    // }
-    // else if(temp == "3"){
-    //     int ktra;
-    //     string year;
-    //     ktra = 1;
-    //     while(ktra){
-    //         ktra = 0;
-    //         cout<<"Nhap nam muon xem (theo dinh dang yyyy): ";
-    //         year = Utils::nhap(1, 5);
-    //         if(Utils::stringToInt(year) < 1900){
-    //             ktra = 1;
-    //         }
-    //         if(ktra){
-    //             system("clear");
-    //             cout<<"Nhap sai, vui long nhap lai!"<<endl;
-    //         }
-    //     }
-    //     d_begin = "01/01/" + year;
-    //     d_end = "31/12/" + year;
-    //     doanhThu = thongKe(d_begin, d_end + 1);
-    //     cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
-    // }
+    string temp;
+    string d_begin, d_end;
+    int ktra = 1, doanhThu;
+    while(ktra){
+        ktra = 0;
+        xemDanhSachLuaChonXemDoanhThu();
+        temp = Utils::inputWithCondition("Nhap lua chon: ", 1, 1, NUMBER_ONLY);
+        if(temp != "1" && temp != "2" && temp != "3"){
+            cout<<"Nhap sai, vui long nhap lai!"<<endl;
+            ktra = 1;
+        }
+    }
+    if(temp == "1"){
+        d_begin = Utils::inputWithCondition("Nhap ngay muon xem (theo dinh dang dd/mm/yyyy): ", 10, 10, DATE);
+        doanhThu = thongKe(d_begin, d_begin+1);
+        cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
+    }
+    else if (temp == "2")
+    {
+        int ktra;
+        string month, year, date;
+        ktra = 1;
+        while(ktra){
+            ktra = 0;
+            while(true){
+                Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
+                Utils::inputData(date, CONSOLE_OR_UI);
+                if(date.size() != 7){
+                    ktra = 1;
+                    break;
+                }
+            }
+            stringstream ss(date);
+            getline(ss, month, '/');
+            getline(ss, year, '/');
+            if(Utils::stringToInt(month) > 12 || Utils::stringToInt(month) < 1){
+                ktra = 1;
+            }
+            if(ktra){
+                system("clear");
+                cout<<"Nhap sai, vui long nhap lai!"<<endl;
+            }
+        }
+        d_begin = "01/" + month + "/" + year;
+        d_end = "31/" + month + "/" + year;
+        doanhThu = thongKe(d_begin, d_end + 1);
+        cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
+    }
+    else if(temp == "3"){
+        int ktra;
+        string year;
+        ktra = 1;
+        while(ktra){
+            ktra = 0;
+            year = Utils::inputWithCondition("Nhap nam muon xem (theo dinh dang yyyy): ", 4, 4, NUMBER_ONLY);
+            if(Utils::stringToInt(year) < 1900){
+                ktra = 1;
+            }
+            if(ktra){
+                system("clear");
+                cout<<"Nhap sai, vui long nhap lai!"<<endl;
+            }
+        }
+        d_begin = "01/01/" + year;
+        d_end = "31/12/" + year;
+        doanhThu = thongKe(d_begin, d_end + 1);
+        cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
+    }
 }
 
 ostream &operator<<(ostream &out, QuanLi &ql) {
@@ -219,13 +224,15 @@ user_option_value QuanLi::work() {
     system("cls");
     Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("1. Tao loai phong\n", CONSOLE);
-    Utils::outputData("2. Sua loai phong\n", CONSOLE);
-    Utils::outputData("3. Xoa loai phong\n", CONSOLE);
-    Utils::outputData("4. Tao phong\n", CONSOLE);
-    Utils::outputData("5. Sua phong\n", CONSOLE);
-    Utils::outputData("6. Xoa phong\n", CONSOLE);
-    Utils::outputData("7. Xem doanh thu\n", CONSOLE);
-    Utils::outputData("8. Dang xuat\n", CONSOLE);
+    Utils::outputData("2. Xem danh sach loai phong\n", CONSOLE);
+    Utils::outputData("3. Sua loai phong\n", CONSOLE);
+    Utils::outputData("4. Xoa loai phong\n", CONSOLE);
+    Utils::outputData("5. Tao phong\n", CONSOLE);
+    Utils::outputData("6. Xem danh sach phong\n", CONSOLE);
+    Utils::outputData("7. Sua phong\n", CONSOLE);
+    Utils::outputData("8. Xoa phong\n", CONSOLE);
+    Utils::outputData("9. Xem doanh thu\n", CONSOLE);
+    Utils::outputData("10. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -239,46 +246,83 @@ user_option_value QuanLi::work() {
     string maLoaiPhong, maPhong;
     switch(choice) {
         case 1:
-            taoLoaiPhong();
-            system("pause");
-            return CONTINUE;
+            return ADD_LOAI_PHONG;
         case 2:
-            Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
-            Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
-            suaLoaiPhong(maLoaiPhong);
-            system("pause");
-            return CONTINUE;
+            return PRINT_DSLP;
         case 3:
-            Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
-            Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
-            xoaLoaiPhong(maLoaiPhong);
-            system("pause");
-            return CONTINUE;
+            return UPDATE_LOAIPHONG;
         case 4:
-            taoPhong();
-            system("pause");
-            return CONTINUE;
+            return DELETE_LOAIPHONG;
         case 5:
-            Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
-            Utils::inputData(maPhong, CONSOLE_OR_UI);
-            suaPhong(maPhong);
-            system("pause");
-            return CONTINUE;
+            return ADD_PHONG;
         case 6:
-            Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
-            Utils::inputData(maPhong, CONSOLE_OR_UI);
-            xoaPhong(maPhong);
-            system("pause");
-            return CONTINUE;
+            return PRINT_DSP;
         case 7:
+            return UPDATE_PHONG;
+        case 8:
+            return DELETE_PHONG;
+        case 9:
             xemDoanhThu();
             system("pause");
             return CONTINUE;
-        case 8:
+        case 10:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
             system("pause");
             return CONTINUE;
     }    
+    // string choice_str;
+    // Utils::outputData("Hay nhap lua chon: ", CONSOLE);
+    // Utils::inputData(choice_str, CONSOLE_OR_UI);
+    // if(Utils::isNumberOnly(choice_str) == false) {
+    //     Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+    //     return CONTINUE;
+    // }
+    // int choice = Utils::stringToInt(choice_str);
+    // string maLoaiPhong, maPhong;
+    // switch(choice) {
+    //     case 1:
+    //         taoLoaiPhong();
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 2:
+    //         Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
+    //         Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
+    //         suaLoaiPhong(maLoaiPhong);
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 3:
+    //         Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
+    //         Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
+    //         xoaLoaiPhong(maLoaiPhong);
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 4:
+    //         taoPhong();
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 5:
+    //         Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
+    //         Utils::inputData(maPhong, CONSOLE_OR_UI);
+    //         suaPhong(maPhong);
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 6:
+    //         Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
+    //         Utils::inputData(maPhong, CONSOLE_OR_UI);
+    //         xoaPhong(maPhong);
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 7:
+    //         xemDoanhThu();
+    //         system("pause");
+    //         return CONTINUE;
+    //     case 8:
+    //         return SIGN_OUT;
+    //     default:
+    //         Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
+    //         return CONTINUE;
+    // }    
+
 }

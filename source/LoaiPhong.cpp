@@ -65,7 +65,7 @@ string LoaiPhong::getMoTaPhong() const {
 
 // Setters
 bool LoaiPhong::setLoaiPhong(string LP){
-    if(Utils::isRoomType(LP)){
+    if(Utils::isAlphabetAndNumberOnly(LP)){
         this->loaiPhong = LP;
         return true;
     }
@@ -141,8 +141,33 @@ bool LoaiPhong::setMoTaPhong(string MTP) {
 //     return;
 // }
 
+LoaiPhong LoaiPhong::nhapThongTin() {
+    string temp;
+    LoaiPhong tempLoaiPhong;
+    
+    temp = Utils::inputWithCondition("Nhap Loai Phong: ", 4, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
+    tempLoaiPhong.setLoaiPhong(temp);
+
+    temp = Utils::inputWithCondition("Nhap Loai Giuong: ", 1, 2, ROOM_BED_TYPE);
+    tempLoaiPhong.setLoaiGiuong(stoi(temp));
+
+    temp = Utils::inputWithCondition("Nhap So Luong Khach: ", 1, 2, NUMBER_ONLY);
+    tempLoaiPhong.setSoLuongKhach(stoi(temp));
+
+    temp = Utils::inputWithCondition("Nhap Dien Tich: ", 1, 3, NUMBER_ONLY);
+    tempLoaiPhong.setDienTich(stoi(temp));
+
+    temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 7, NUMBER_ONLY);
+    tempLoaiPhong.setGiaPhong(stoi(temp));
+
+    temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
+    setMoTaPhong(temp);
+    Utils::outputData("Tao loai phong thanh cong!\n", CONSOLE);
+    system("pause");
+    return tempLoaiPhong;
+}
 //MENU
-void LoaiPhong::menuCapNhat(){
+void LoaiPhong::menuSuaThongTin(){
     cout << "1. Sua Loai Giuong: " << endl;
     cout << "2. Sua So Luong Khach: " << endl;
     cout << "3. Sua Dien Tich: " << endl;
@@ -150,6 +175,55 @@ void LoaiPhong::menuCapNhat(){
     cout << "5. Sua Mo Ta Phong: " << endl;
     cout << "6. Thoat Chinh Sua Loai Phong!" << endl;
     cout << "Hay Nhap Lua Chon: ";
+}
+
+void LoaiPhong::capNhatThongTin(){
+    int choice;
+    string temp;
+    while (true) {
+        system("cls");
+        menuSuaThongTin();
+        choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
+        switch(choice) {
+            case 1:
+                temp = Utils::inputWithCondition("Sua Loai Giuong: ", 1, 2, ALPHABET_AND_SPACE_ONLY);
+                this->setLoaiGiuong(Utils::stringToInt(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 2:
+                temp = Utils::inputWithCondition("Sua So Luong Khach: ", 1, 2, NUMBER_ONLY);
+                this->setSoLuongKhach(Utils::stringToInt(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 3:
+                temp = Utils::inputWithCondition("Sua Dien Tich: ", 1, 2, NUMBER_ONLY);
+                this->setDienTich(Utils::stringToInt(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 4:
+                temp = Utils::inputWithCondition("Sua Gia: ", 1, 3, NUMBER_ONLY);
+                this->setGiaPhong(Utils::stringToInt(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 5:
+                temp = Utils::inputWithCondition("Sua Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
+                this->setMoTaPhong(temp);
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                system("pause");
+                break;
+            case 6:
+                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
+                return;
+            default:
+                Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
+                system("pause");
+                break;
+        }  
+    }
 }
 // HÀM SỬA THÔNG TIN LOẠI PHÒNG (loaiphong.txt)
 // void LoaiPhong::capNhatThongTin() 
@@ -264,6 +338,7 @@ void LoaiPhong::menuCapNhat(){
 //         }
 //     }
 // }
+
 
 // XUAT THONG TIN
 void LoaiPhong::xuatThongTin() {

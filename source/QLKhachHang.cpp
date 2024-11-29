@@ -7,6 +7,7 @@ QLKhachHang::~QLKhachHang() {
     
 }
 
+
 void QLKhachHang::themKhachHang(KhachHang kh) {
     DSKH.add(kh);
 }
@@ -40,6 +41,7 @@ void QLKhachHang::suaThongTin(string ID) {
         }
         p = p->next;
     }
+    cout<<"Khong tim thay khach hang!"<<endl;
 }
 
 string QLKhachHang::getMaxIDKhachHang() {
@@ -55,7 +57,6 @@ string QLKhachHang::getMaxIDKhachHang() {
 }
 
 string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
-                                            //chứ ko lưu vào file
     string IDKhachHang = "";
     string maxID = this->getMaxIDKhachHang();
     if(maxID == "199999") {
