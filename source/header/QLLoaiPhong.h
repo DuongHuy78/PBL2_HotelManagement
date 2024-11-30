@@ -10,14 +10,13 @@ public:
 
     void AddRangeLoaiPhong(string);
 
-    void themLoaiPhong(LoaiPhong); 
+    void themLoaiPhong(const LoaiPhong&); 
     void xemLoaiPhong();
-    //void suaThongTinLoaiPhong(const string&);
+    void suaThongTin(const string&);
     void xoaLoaiPhong(const string& );
 
     void capNhatFile(LoaiPhong*, string); 
     LoaiPhong *timLoaiPhong(string);
-    void QLLoaiPhong_Choice();
     int soLuongKhach(string);
     int getGiaPhong(string);
 

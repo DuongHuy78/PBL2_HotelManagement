@@ -51,7 +51,6 @@ bool KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
-
 bool KhachHang::setIDKhachHang(string IDKhachHang) {
     if(Utils::isNumberOnly(IDKhachHang)) {
         this->IDKhachHang = IDKhachHang;

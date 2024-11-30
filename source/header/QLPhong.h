@@ -12,18 +12,19 @@ public:
 
     void AddRangePhong(string); // đọc dữ liệu đầu vào và trả về danh sách phòng
 
-    void themPhong(Phong);
-    void taoPhongMoi(Phong);
+    void themPhong(const Phong&);
+    // void taoPhongMoi(Phong);
     void xemPhong();
-    //void suaThongTinPhong(const string&);
+    void suaThongTin(const string&);
     void xoaPhong(const string&);
 
+    Phong nhapThongTin();
     Phong *timPhong(string);
-    void capNhatFile(Phong*, string);
+    // void capNhatFile(Phong*, string);
     void setQLLP(QLLoaiPhong *QLLP);
-    void QLPhong_Choice();
+    // void QLPhong_Choice();
 
-    Phong timPhong(time_t, time_t);
+    // Phong timPhong(time_t, time_t);
     LinkedList<Phong> &getDanhSachPhong();
     Node<Phong> *getHead();
 

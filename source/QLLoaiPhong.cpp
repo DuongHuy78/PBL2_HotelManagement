@@ -1,8 +1,9 @@
 #include "./header./QLLoaiPhong.h"
 #include <bits/stdc++.h>
-
+LinkedList<string> roomTypes;
 QLLoaiPhong::QLLoaiPhong()
 {
+
 }
 
 QLLoaiPhong::~QLLoaiPhong()
@@ -68,7 +69,8 @@ void QLLoaiPhong::capNhatFile(LoaiPhong* head, string path){
     cout << "Cap nhat loaiphong.txt thanh cong!" << endl;
 }
 
-void QLLoaiPhong::themLoaiPhong(LoaiPhong NewLP){
+void QLLoaiPhong::themLoaiPhong(const LoaiPhong& NewLP){
+    roomTypes.add(NewLP.getLoaiPhong());
     (this->DSLP).add(NewLP);
 }
 
@@ -88,20 +90,20 @@ void QLLoaiPhong::xemLoaiPhong(){
       }
 }
 
-// void QLLoaiPhong::suaThongTinLoaiPhong(const string& IDLoaiPhong){
-//     Node<LoaiPhong> *p = DSLP.begin();
-//     while ((p != DSLP.end()))
-//     {
-//         if(p->data.getLoaiPhong() == IDLoaiPhong)
-//             {
-//                 p->data.capNhatThongTin();
-//                 cout << "Da cap nhat thong tin loai phong voi ID " << IDLoaiPhong << " thanh cong!" << endl;
-//                 return;
-//             }
-//         p = p -> next;
-//     } 
-//     cout << "Khong tim thay Loai Phong!" << endl;
-// }
+void QLLoaiPhong::suaThongTin(const string& IDLoaiPhong){
+    Node<LoaiPhong> *p = DSLP.begin();
+    while ((p != DSLP.end()))
+    {
+        if(p->data.getLoaiPhong() == IDLoaiPhong)
+            {
+                p->data.capNhatThongTin();
+                cout << "Da cap nhat thong tin loai phong voi ID " << IDLoaiPhong << " thanh cong!" << endl;
+                return;
+            }
+        p = p -> next;
+    } 
+    cout << "Khong tim thay Loai Phong!" << endl;
+}
 
 
 void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
