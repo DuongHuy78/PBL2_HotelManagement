@@ -169,8 +169,7 @@ void QuanLi::xemDoanhThu() {
             while(true){
                 Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
                 Utils::inputData(date, CONSOLE_OR_UI);
-                if(date.size() != 7){
-                    ktra = 1;
+                if(date.size() != 8){   //7 nhưng thêm ký tự \n vào cuối chuỗi
                     break;
                 }
             }
