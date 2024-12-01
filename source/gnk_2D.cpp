@@ -418,6 +418,29 @@ Gnk_Textbox::Gnk_Textbox() {
 	this->select_process = nullptr;
 }
 
+Gnk_Textbox::Gnk_Textbox(Gnk_Textbox &textbox) {
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->border = textbox.border;
+	this->border_color = textbox.border_color;
+	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
+}
+
 void Gnk_Textbox::setAppear(bool appear) {
 	this->appear = appear;
 }
@@ -639,6 +662,7 @@ Gnk_Textbox_Password::Gnk_Textbox_Password(Gnk_Textbox_Password &textbox) {
 	this->text_align = textbox.text_align;
 	this->on_select = textbox.on_select;
 	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
 }
 
 void Gnk_Textbox_Password::draw() {
@@ -652,6 +676,61 @@ void Gnk_Textbox_Password::draw() {
 }
 
 void Gnk_Textbox_Password::display() {
+	if(!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+// Textbox Keep Placeholder Definition
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder() 
+	: Gnk_Textbox() {
+}
+
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder(Gnk_Textbox &textbox) 
+	: Gnk_Textbox(textbox) {
+}
+
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder(Gnk_Textbox_Keep_Placeholder &textbox) {
+	this->appear = textbox.appear;
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
+}
+
+void Gnk_Textbox_Keep_Placeholder::draw() {
+	if(!appear) return;
+	this->text = this->text.substr(0, maxLength);
+	std::string newText = this->text;
+	int newMaxLength = this->maxLength;
+	//if(this->text != "") {
+		this->text = this->placeholder + ": " + this->text;
+		this->maxLength = this->placeholder.size() + 2 + newMaxLength;
+	//}
+	Gnk_Textbox::draw();
+	this->text = newText;
+	this->maxLength = newMaxLength;
+}
+
+void Gnk_Textbox_Keep_Placeholder::display() {
 	if(!appear) return;
 	if(on_select && select_process != nullptr) {
 		select_effect();
@@ -708,6 +787,12 @@ void Gnk_Frame::setScrollbar(Gnk_Scrollbar *scrollbar) {
 
 void Gnk_Frame::display() {
 	if (process != nullptr) this->process(this);
+}
+
+void Gnk_Frame::clear_Textbox() {
+	for(auto &it:textboxList) {
+		it.second->text = "";
+	}
 }
 
 // Scrollbar Definition------------------------------------------------------
@@ -918,7 +1003,9 @@ void Gnk_List_Object::draw() {
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
-	scrollbar.display();
+	if(this->getGroupHeight() < this->group_height) {
+		scrollbar.display();
+	}
 	gnk_Translate_X = prev_translate_X;
 	gnk_Translate_Y = prev_translate_Y;
 	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
@@ -928,10 +1015,12 @@ void Gnk_List_Object::draw() {
 	glDisable(GL_SCISSOR_TEST);
 	glPopAttrib();
 
-	gnk_Set_Object_Color(border_color);
-	gnk_Set_Line_Width(2.0f);
-	gnk_Rectangle(A, B, false);
-	gnk_Set_Line_Width(1.0f);
+	if(border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rectangle(A, B, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 }
 
 // -Variable Declaration-----------------------------------------------------
