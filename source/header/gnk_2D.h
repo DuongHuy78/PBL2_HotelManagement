@@ -382,4 +382,6 @@ int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int, text_alig
 
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);
+bool gnk_Point_In_Rectangle(Gnk_Point, Gnk_Point, Gnk_Point);
+void gnk_Scissor_2_object(Gnk_Point, Gnk_Point, Gnk_Point, Gnk_Point);
 #endif

@@ -25,6 +25,9 @@ string check_out_date_str = ""; // 30/11/2024
 string number_of_guest_str = "";
 vector<room_type> room_list;
 role_value current_role = KHACHHANG;
+Gnk_Color light_yellow(255, 236, 200);
+Gnk_Color light_yellow2(253, 247, 228);
+Gnk_Color black(0, 0, 0);
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
@@ -197,7 +200,8 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 		(sign_up.textboxList["year_textbox"])->text,
 		gender,
 		(sign_up.textboxList["username_textbox"])->text,
-		(sign_up.textboxList["password_textbox"])->text);
+		(sign_up.textboxList["password_textbox"])->text
+	);
 	if(res == SIGN_UP_BLANK_INFO) {
 		cout << "Blank info" << endl;
 	}
@@ -207,7 +211,6 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 	else if(res == SIGN_UP_SUCCESS) {
 		current_frame = LOGIN_FRAME;
 	}
-
 }
 
 void sign_up_frame_toggle_click(Gnk_Button *button) {
@@ -260,7 +263,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	frame->buttonList["booking_button"]->display();
 	if(option == SEARCH_ROOM) {
 		// Search box
-		gnk_Set_Object_Color(Gnk_Color(253, 247, 228));
+		gnk_Set_Object_Color(light_yellow2);
 		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f);
 		gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
 		frame->textboxList["check_in_textbox"]->display();
@@ -268,13 +271,28 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		frame->textboxList["number_of_guest_textbox"]->display();
 		
 		frame->buttonList["lookup"]->display();
-		//gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
 		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 		gnk_Set_Line_Width(2.0f);
 		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
 		gnk_Set_Line_Width(1.0f);
 
 		frame->listObjectList["search_room_list"]->draw();
+	}
+	else if(option == BOOKING_INFORMATION) {
+		// Booking information
+	}
+	else if(option == PROFILE) {
+		gnk_Set_Object_Color(black);
+		gnk_Rectangle(Gnk_Point(530.0f, 100.0f), Gnk_Point(1500.0f, 700.0f), false);
+		gnk_Set_Object_Color(light_yellow2);
+		gnk_Rectangle(Gnk_Point(530.0f, 100.0f), Gnk_Point(1500.0f, 700.0f));
+		gnk_Set_Object_Color(black);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("My Profile", Gnk_Point(530.0f, 710.0f), 970.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		
+	}
+	else if(option == BOOKING) {
+		// Booking
 	}
 }
 
@@ -358,6 +376,12 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 		}
 		list->setGroupHeight(list->toNextObject()*room_list.size());
 		for(int i = 0; i < room_list.size(); i++) {
+			GLint scissorBox[4];
+			glGetIntegerv(GL_SCISSOR_BOX, scissorBox);
+			gnk_Scissor_2_object(
+			Gnk_Point(gnk_Translate_X, gnk_Translate_Y - i * list->toNextObject()),
+			Gnk_Point(gnk_Translate_X + list->object_width, gnk_Translate_Y - i * list->toNextObject() + list->object_height),
+			list->A, list->B);
 			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
 			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(980.0f, 300.0f - i * list->toNextObject()));
 			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
@@ -371,8 +395,8 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Set_Line_Width(2.0f);
 			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(940.0f, 120.0f - i * list->toNextObject()));
 			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 55, 10, 24);
-			//gnk_Text("Mo Ta: " + room_list[i].description, Gnk_Point(340.0f, 100.0f - i * list->toNextObject()), 24.0f);
-			//gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
+			glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		}
 	}
 }
@@ -598,7 +622,7 @@ void guest_frame_init() {
 
 	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
 	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
-	guest_frame_search_room_button->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_search_room_button->setColor(light_yellow2);
 	guest_frame_search_room_button->setText("Search room");
 	guest_frame_search_room_button->setTextFont("helvetica");
 	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
@@ -625,7 +649,7 @@ void guest_frame_init() {
 
 	Gnk_Textbox *guest_frame_check_in_textbox = new Gnk_Textbox();
 	guest_frame_check_in_textbox->setRange(Gnk_Point(630.0f, 700.0f), Gnk_Point(860.0f, 760.0f));
-	guest_frame_check_in_textbox->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_check_in_textbox->setColor(light_yellow2);
 	guest_frame_check_in_textbox->setTextFont("helvetica");
 	guest_frame_check_in_textbox->setFontSize(24.0f);
 	guest_frame_check_in_textbox->setTextColor(Gnk_Color(17, 17, 17));
@@ -650,7 +674,7 @@ void guest_frame_init() {
 	Gnk_List_Object *group = new Gnk_List_Object();
 	group->setRange(Gnk_Point(480.0f, 0.0f), Gnk_Point(1550.0f, 680.0f));
 	group->setCurrentPos(group->getGroupHeight());
-	group->setObjectWidth(950);
+	group->setObjectWidth(980);
 	group->setObjectHeight(300);
 	group->setObjectStartPosition(Gnk_Point(50.0f, 340.0f));
 	group->setObjectSpace(50);
@@ -663,7 +687,7 @@ void guest_frame_init() {
 	guest_frame_lookup_button_image->setRange(Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
 	guest_frame_lookup_button_image->setImage(&gnk_Image_List["search_icon"]);
 	guest_frame_lookup_button_image->setClickProcess(guest_frame_lookup_button_image_click);
-	guest_frame_lookup_button_image->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_lookup_button_image->setColor(light_yellow2);
 
 	guest.addButton("logout_button", guest_frame_logout_button);
 	guest.addButton("search_room_button", guest_frame_search_room_button);

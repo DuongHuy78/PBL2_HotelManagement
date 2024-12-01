@@ -889,7 +889,8 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
-
+	
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
 
@@ -925,6 +926,7 @@ void Gnk_List_Object::draw() {
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 	glDisable(GL_SCISSOR_TEST);
+	glPopAttrib();
 
 	gnk_Set_Object_Color(border_color);
 	gnk_Set_Line_Width(2.0f);
@@ -1416,7 +1418,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 	if (maxHeight > height)
 		maxHeight = height;
 
-	glEnable(GL_SCISSOR_TEST);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width, height);
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
@@ -1440,6 +1442,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 		);
 	}
 	glDisable(GL_SCISSOR_TEST);
+	glPopAttrib();
 }
 
 int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacing, int fontSize, text_align_value textAlign) {
@@ -1526,4 +1529,38 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
 	glDisable(GL_BLEND);
+}
+
+bool gnk_Point_In_Rectangle(Gnk_Point A, Gnk_Point B, Gnk_Point X) {
+	if(X.x >= A.x && X.y >= A.y && X.x <= B.x && X.y <= B.y) return true;
+	return false;
+}
+
+void gnk_Scissor_2_object(Gnk_Point A, Gnk_Point B, Gnk_Point C, Gnk_Point D) {
+	Gnk_Point point_list[16];
+	float x_values[4] = {A.x, B.x, C.x, D.x};
+	float y_values[4] = {A.y, B.y, C.y, D.y};
+	int t = 0;
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; ++j) {
+			Gnk_Point X(x_values[i], y_values[j]);
+			if(gnk_Point_In_Rectangle(A, B, X) && gnk_Point_In_Rectangle(C, D, X)) {
+				point_list[t] = X;
+				t++;
+			}
+		}
+	}
+	if(t >= 4) {
+		int min_x = point_list[0].x;
+		int min_y = point_list[0].y;
+		int max_x = point_list[0].x;
+		int max_y = point_list[0].y;
+		for(int i = 0; i < 4; i++) {
+			if(point_list[i].x < min_x) min_x = point_list[i].x;
+			if(point_list[i].y < min_y) min_y = point_list[i].y;
+			if(point_list[i].x > max_x) max_x = point_list[i].x;
+			if(point_list[i].y > max_y) max_y = point_list[i].y;
+		}
+		glScissor(min_x, min_y, max_x - min_x, max_y - min_y);
+	}
 }
