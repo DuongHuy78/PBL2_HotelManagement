@@ -74,6 +74,7 @@ enum user_option_value {
     UPDATE_LOAIPHONG,
     DELETE_LOAIPHONG,
     PRINT_DOANH_THU,
+    PRINT_KHACHHANG,
 };
 extern LinkedList<string> roomTypes;
 

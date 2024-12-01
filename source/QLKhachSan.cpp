@@ -502,6 +502,10 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             QLLP.xoaLoaiPhong(loaiPhong);
         }
     }
+    else if(choice == PRINT_KHACHHANG) {
+        KhachHang *kh = (KhachHang *)current_user;
+        cout << *kh;
+    }
 }
 
 /**

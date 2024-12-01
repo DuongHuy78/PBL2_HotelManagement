@@ -1,5 +1,5 @@
 #include "header/UI.h"
-frame_num_value current_frame = GUEST_FRAME;
+frame_num_value current_frame = LOGIN_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 option_value option = DEFAULT_OPTION;
 QLKhachSan *current_Data = nullptr;
@@ -25,6 +25,17 @@ string check_out_date_str = "";
 string number_of_guest_str = "";
 vector<room_type> room_list;
 role_value current_role = KHACHHANG;
+struct guest_profile {
+	string ID;
+	string name;
+	string date_of_birth;
+	string phone_number;
+	gender_value gender;
+
+	string username;
+	string password;
+};
+guest_profile current_guest_profile;
 // ---------------------------------------------------------
 Gnk_Color light_yellow(255, 236, 200);
 Gnk_Color light_yellow2(253, 247, 228);
@@ -120,6 +131,23 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
 	if(current_Data->dangNhap()) {
 		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
+		current_Data->requestHandling(PRINT_KHACHHANG);
+		string gender;
+		getline(UI_output_buffer, current_guest_profile.ID);
+		getline(UI_output_buffer, current_guest_profile.name);
+		getline(UI_output_buffer, current_guest_profile.date_of_birth);
+		getline(UI_output_buffer, current_guest_profile.phone_number);
+		getline(UI_output_buffer, gender);
+		current_guest_profile.gender = Utils::stringToGender(gender);
+		current_guest_profile.username = (login.textboxList["username_textbox"])->text;
+		current_guest_profile.password = (login.textboxList["password_textbox"])->text;
+		cout << current_guest_profile.ID << endl;
+		cout << current_guest_profile.name << endl;
+		cout << current_guest_profile.date_of_birth << endl;
+		cout << current_guest_profile.phone_number << endl;
+		cout << Utils::genderToString(current_guest_profile.gender) << endl;
+		cout << current_guest_profile.username << endl;
+		cout << current_guest_profile.password << endl;
 	}
 	else {
 		login_failed = true;
@@ -255,7 +283,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 
 	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
 	gnk_Set_Character_Font("helvetica");
-	gnk_Text("Hello, nguyen nhat king", Gnk_Point(430.0f, 830.0f), 24.0f);
+	gnk_Text("Have a great day and enjoy your stay!", Gnk_Point(430.0f, 830.0f), 24.0f);
 
 	frame->buttonList["logout_button"]->display();
 	frame->buttonList["search_room_button"]->display();
@@ -289,13 +317,37 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	}
 	else if(option == PROFILE) {
 		gnk_Set_Object_Color(black);
-		gnk_Rectangle(Gnk_Point(530.0f, 100.0f), Gnk_Point(1500.0f, 700.0f), false);
+		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f), false);
 		gnk_Set_Object_Color(light_yellow2);
-		gnk_Rectangle(Gnk_Point(530.0f, 100.0f), Gnk_Point(1500.0f, 700.0f));
+		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f));
+
 		gnk_Set_Object_Color(black);
 		gnk_Set_Character_Font("helvetica-bold");
 		gnk_Text_Limited("My Profile", Gnk_Point(530.0f, 710.0f), 970.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
 		
+		if(current_guest_profile.gender == NAM) {
+			gnk_Image(gnk_Image_List["man_icon"], Gnk_Point(560.0f, 370.0f), Gnk_Point(860.0f, 670.0f));
+		}
+		if(current_guest_profile.gender == NU) {
+			gnk_Image(gnk_Image_List["woman_icon"], Gnk_Point(560.0f, 370.0f), Gnk_Point(860.0f, 670.0f));
+		}
+
+		gnk_Set_Object_Color(Gnk_Color(254, 249, 242));
+		gnk_Rounded_Rectangle(Gnk_Point(560.0f, 280.0f), Gnk_Point(860.0f, 340.0f), 20.0f);
+		gnk_Set_Object_Color(Gnk_Color(64, 64, 64));
+		gnk_Text_Limited(current_guest_profile.username, Gnk_Point(560.0f, 294.0f), 300.0f, 40.0f, 24.0f, GNK_TEXT_CENTER);
+
+		gnk_Text("ID:", Gnk_Point(940.0f, 600.0f), 24.0f);
+		gnk_Text("Name:", Gnk_Point(940.0f, 550.0f), 24.0f);
+		gnk_Text("Date of birth:", Gnk_Point(940.0f, 500.0f), 24.0f);
+		gnk_Text("Phone number:", Gnk_Point(940.0f, 450.0f), 24.0f);
+		gnk_Text("Gender:", Gnk_Point(940.0f, 400.0f), 24.0f);
+
+		gnk_Text(current_guest_profile.ID, Gnk_Point(1140.0f, 600.0f), 24.0f);
+		gnk_Text(current_guest_profile.name, Gnk_Point(1140.0f, 550.0f), 24.0f);
+		gnk_Text(current_guest_profile.date_of_birth, Gnk_Point(1140.0f, 500.0f), 24.0f);
+		gnk_Text(current_guest_profile.phone_number, Gnk_Point(1140.0f, 450.0f), 24.0f);
+		gnk_Text(Utils::genderToString(current_guest_profile.gender), Gnk_Point(1140.0f, 400.0f), 24.0f);
 	}
 	else if(option == BOOKING) {
 		// Booking
@@ -723,6 +775,8 @@ void UI_init() {
 	gnk_Image_List.addImage("user_icon", "image/user_icon.png");
 	gnk_Image_List.addImage("password_icon", "image/password_icon.png");
 	gnk_Image_List.addImage("search_icon", "image/search_icon.png");
+	gnk_Image_List.addImage("man_icon", "image/man_icon.png");
+	gnk_Image_List.addImage("woman_icon", "image/woman_icon.png");
 	login_frame_init();
 	sign_up_frame_init();
 	guest_frame_init();
