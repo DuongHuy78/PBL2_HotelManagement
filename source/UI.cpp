@@ -24,7 +24,6 @@ string check_in_date_str = "";
 string check_out_date_str = "";
 string number_of_guest_str = "";
 vector<room_type> room_list;
-role_value current_role = KHACHHANG;
 struct guest_profile {
 	string ID;
 	string name;
@@ -130,24 +129,19 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	UI_input_buffer << (login.textboxList["username_textbox"])->text << endl;
 	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
 	if(current_Data->dangNhap()) {
-		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
-		current_Data->requestHandling(PRINT_KHACHHANG);
-		string gender;
-		getline(UI_output_buffer, current_guest_profile.ID);
-		getline(UI_output_buffer, current_guest_profile.name);
-		getline(UI_output_buffer, current_guest_profile.date_of_birth);
-		getline(UI_output_buffer, current_guest_profile.phone_number);
-		getline(UI_output_buffer, gender);
-		current_guest_profile.gender = Utils::stringToGender(gender);
-		current_guest_profile.username = (login.textboxList["username_textbox"])->text;
-		current_guest_profile.password = (login.textboxList["password_textbox"])->text;
-		cout << current_guest_profile.ID << endl;
-		cout << current_guest_profile.name << endl;
-		cout << current_guest_profile.date_of_birth << endl;
-		cout << current_guest_profile.phone_number << endl;
-		cout << Utils::genderToString(current_guest_profile.gender) << endl;
-		cout << current_guest_profile.username << endl;
-		cout << current_guest_profile.password << endl;
+		if(current_Data->getCurrentRole() == KHACHHANG) {
+			current_frame = GUEST_FRAME;
+			current_Data->requestHandling(PRINT_KHACHHANG);
+			string gender;
+			getline(UI_output_buffer, current_guest_profile.ID);
+			getline(UI_output_buffer, current_guest_profile.name);
+			getline(UI_output_buffer, current_guest_profile.date_of_birth);
+			getline(UI_output_buffer, current_guest_profile.phone_number);
+			getline(UI_output_buffer, gender);
+			current_guest_profile.gender = Utils::stringToGender(gender);
+			current_guest_profile.username = (login.textboxList["username_textbox"])->text;
+			current_guest_profile.password = (login.textboxList["password_textbox"])->text;
+		}
 	}
 	else {
 		login_failed = true;

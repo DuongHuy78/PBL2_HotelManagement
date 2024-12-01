@@ -684,3 +684,7 @@ void QLKhachSan::list_Type_Room_Available() {
         lpa = lpa->next;
     }
 }
+
+role_value QLKhachSan::getCurrentRole() {
+    return role;
+}
