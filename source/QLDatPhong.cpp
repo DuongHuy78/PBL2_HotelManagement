@@ -74,7 +74,7 @@ string QLDatPhong::taoMaDatPhong(){
     string MDPNew;
     Node<DatPhong> *p = DSDP.getHead()->next;
     if (this->getMaxMaDatPhong() == "99999") {
-        MDPNew = "000001";
+        MDPNew = "00001";
     }
     else{
         MDPNew = Utils::intToString(Utils::stringToInt(getMaxMaDatPhong()) + 1);

@@ -211,7 +211,23 @@ void QLKhachSan::inputDatPhong(string path) {
 
 
 void QLKhachSan::outputTaiKhoan(string path) {
-    
+    // ofstream fo(path,ios::out | ios::trunc);
+    // if(!fo.is_open()) {
+    //     cerr << "Khong the doc file::" << path << endl;
+    //     return;
+    // }
+
+    Node<TaiKhoan> *temp = QLTK.getDanhSachTaiKhoan().getHead()->next;
+    while(temp != QLTK.getDanhSachTaiKhoan().getHead()){
+        // fo<<temp->data.getUsername()<<";"
+        //     <<temp->data.getPassword()<<";"
+        //     <<temp->data.getID()
+        //     <<endl;
+        cout<<temp->data.getID()<<";"
+            <<endl;
+        temp = temp->next;
+    }
+    // fo.close();
 }
 
 void QLKhachSan::outputKhachHang(string path) {
@@ -335,6 +351,11 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         return;
     }
     else if(choice == SIGN_OUT) {
+        this->outputTaiKhoan("./data/tai_khoan.txt");
+        this->outputDatPhong("./data/dat_phong.txt");
+        this->outputKhachHang("./data/khach_hang.txt");
+        this->outputLoaiPhong("./data/loaiphong.txt");
+        this->outputPhong("./data/phong.txt");
         dangXuat();
     }
     else if(choice == USER_BOOK_ROOM) {

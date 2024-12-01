@@ -284,6 +284,7 @@ void guest_frame_logout_button_click(Gnk_Button *button) {
 	buttonText->color = color - Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
+	current_Data->requestHandling(SIGN_OUT);
 	current_frame = LOGIN_FRAME;
 }
 
