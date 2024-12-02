@@ -51,6 +51,8 @@ void guest_frame_profile_button_click(Gnk_Button *);
 void guest_frame_booking_button_click(Gnk_Button *);
 void guest_frame_search_room_list_process(Gnk_List_Object *);
 void guest_frame_lookup_button_image_click(Gnk_Button *);
+void guest_frame_change_frofile_button_click(Gnk_Button *);
+void guest_frame_save_profile_button_click(Gnk_Button *);
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();

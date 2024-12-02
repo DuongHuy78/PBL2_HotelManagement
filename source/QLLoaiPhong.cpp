@@ -150,7 +150,7 @@ LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
 //             case 1:
 //             {
 //                 xemLoaiPhong();
-//                 system("pause");
+//                 Utils::pauseConsole();
 //                 system("cls");     
 //                 break;
 //             }
@@ -163,7 +163,7 @@ LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
 //                 themLoaiPhong(NewLP);
 //                 cout << "Them Loai Phong thanh cong!" << endl;
 //                 capNhatFile(DSLP, "./data/loaiphong.txt");
-//                 system("pause");
+//                 Utils::pauseConsole();
 //                 system("cls");
 //                 break;
 //             }
@@ -175,7 +175,7 @@ LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
 //                 IDLoaiPhong_Sua = Utils::nhap(5,MAX_IDLOAIPHONG+1);
 //                 suaThongTinLoaiPhong(IDLoaiPhong_Sua);
 //                 capNhatFile(DSLP, "./data/loaiphong.txt");
-//                 system("pause");
+//                 Utils::pauseConsole();
 //                 system("cls");
 //                 break;    
 //             }
@@ -187,7 +187,7 @@ LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
 //                 IDLoaiPhong_Xoa = Utils::nhap(5,MAX_IDLOAIPHONG+1);
 //                 xoaLoaiPhong(IDLoaiPhong_Xoa);
 //                 capNhatFile(DSLP, "./data/loaiphong.txt");
-//                 system("pause");
+//                 Utils::pauseConsole();
 //                 system("cls");
 //                 break;    
 //             }

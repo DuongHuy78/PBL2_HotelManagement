@@ -112,6 +112,10 @@ KhachHang QLKhachHang::nhapThongTin() {
     return newKH;
 }
 
+LinkedList<KhachHang> &QLKhachHang::getDanhSachKhachHang() {
+    return DSKH;
+}
+
 ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-KHACH-HANG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach khach hang: \n", CONSOLE);

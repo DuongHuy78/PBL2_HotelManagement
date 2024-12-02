@@ -15,7 +15,7 @@ QLKhachSan::QLKhachSan() {
     cout << "Ban co muon su dung giao dien do hoa khong? (Y/N): ";
     string choice;
     cin >> choice;
-    // cin.ignore();
+    cin.ignore();
     if(choice == "Y") {
         UI_enable = true;
         current_mode = UI_STREAM;
@@ -211,11 +211,35 @@ void QLKhachSan::inputDatPhong(string path) {
 
 
 void QLKhachSan::outputTaiKhoan(string path) {
-    
+    ofstream fo(path);
+    if(!fo.is_open()) {
+        cerr << "Khong the mo file::" << path << endl;
+    }
+    int count = 0;
+    Node<TaiKhoan> *temp = QLTK.getDanhSachTaiKhoan().getHead()->next;
+    while(temp != QLTK.getDanhSachTaiKhoan().getHead()) {
+        fo << temp->data.getUsername() << "," << temp->data.getPassword() << "," << temp->data.getID() << endl;
+        temp = temp->next;
+        count++;
+    }
+    fo.close();
+    cout << "Da xuat du lieu cua " << count << " tai khoan ra file: " << path << endl;
 }
 
 void QLKhachSan::outputKhachHang(string path) {
-
+    ofstream fo(path);
+    if(!fo.is_open()) {
+        cerr << "Khong the mo file::" << path << endl;
+    }
+    int count = 0;
+    Node<KhachHang> *temp = QLKH.getDanhSachKhachHang().getHead()->next;
+    while(temp != QLKH.getDanhSachKhachHang().getHead()) {
+        fo << temp->data.getIDKhachHang() << "," << temp->data.getHoTen() << "," << Utils::dateToString(temp->data.getNgaySinh()) << "," << temp->data.getSoDienThoai() << "," << Utils::genderToString(temp->data.getGioiTinh()) << endl;
+        temp = temp->next;
+        count++;
+    }
+    fo.close();
+    cout << "Da xuat du lieu cua " << count << " khach hang ra file: " << path << endl;
 }
 
 void QLKhachSan::outputLoaiPhong(string path) {
@@ -345,23 +369,23 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         bookingRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         Utils::outputData("Dat phong thanh cong!\n", CONSOLE);
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSKH) {
         cout << QLKH;
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSDP) {
         cout << QLDP;
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSLP) {
         cout << QLLP;
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSP) {
         cout << QLP;
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSKH_ID) {
         string ID = Utils::inputWithCondition("Nhap ID khach hang: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
@@ -372,7 +396,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         else {
             Utils::outputData("Khong tim thay khach hang!\n", CONSOLE);
         }
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSDP_ID) {
         string ID = Utils::inputWithCondition("Nhap ID dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
@@ -383,7 +407,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         else {
             Utils::outputData("Khong tim thay dat phong!\n", CONSOLE);
         }
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSKH_SDT) {
         string SDT = Utils::inputWithCondition("Nhap so dien thoai khach hang: ", 1, 10, VIETNAM_PHONE_NUMBER);
@@ -394,7 +418,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         else {
             Utils::outputData("Khong tim thay khach hang!\n", CONSOLE);
         }
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSP_ID) {
         string ID = Utils::inputWithCondition("Nhap ID phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
@@ -411,14 +435,14 @@ void QLKhachSan::requestHandling(user_option_value choice) {
                 dp = dp->next;
             }
         }
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == PRINT_DSP_LOAIPHONG) {
         string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
         LoaiPhong *lp = QLLP.timLoaiPhong(loaiPhong);
         if(lp == nullptr) {
             Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         Node<Phong> *p = QLP.getDanhSachPhong().begin();
@@ -439,12 +463,12 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             }
             p = p->next;
         }
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == ADD_KHACHHANG) {
         KhachHang newKhachHang = QLKH.nhapThongTin();
         QLKH.themKhachHang(newKhachHang);
-        system("pause");
+        Utils::pauseConsole();
     }
     else if(choice == ADD_PHONG){
         Phong newPhong = QLP.nhapThongTin();
@@ -455,7 +479,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Phong *P = QLP.timPhong(loaiPhong);
         if(P == nullptr) {
             Utils::outputData("Khong tim thay phong!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         else{
@@ -467,7 +491,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Phong *P = QLP.timPhong(loaiPhong);
         if(P == nullptr) {
             Utils::outputData("Khong tim thay phong!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         else{
@@ -483,7 +507,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         LoaiPhong *LP = QLLP.timLoaiPhong(loaiPhong);
         if(LP == nullptr) {
             Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         else{
@@ -495,7 +519,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         LoaiPhong *LP = QLLP.timLoaiPhong(loaiPhong);
         if(LP == nullptr) {
             Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         else{
@@ -505,6 +529,11 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     else if(choice == PRINT_KHACHHANG) {
         KhachHang *kh = (KhachHang *)current_user;
         cout << *kh;
+    }
+    else if(choice == CHANGE_PROFILE) {
+        KhachHang *kh = (KhachHang *)current_user;
+        kh->suaThongTin();
+        Utils::pauseConsole();
     }
 }
 
@@ -610,7 +639,7 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
         }
         if(count == 0) {
             Utils::outputData("Khong co loai phong nao phu hop!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return;
         }
         loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
@@ -624,7 +653,7 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
         }
         if(typeRoomNotFound) {
             Utils::outputData("Loai phong ban nhap khong nam trong danh sach!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
         }
     }
 
@@ -652,7 +681,7 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
         }
         if(roomNotFound) {
             Utils::outputData("Phong ban nhap khong nam trong danh sach!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
         }
     }
 

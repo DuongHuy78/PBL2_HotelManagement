@@ -75,6 +75,7 @@ enum user_option_value {
     DELETE_LOAIPHONG,
     PRINT_DOANH_THU,
     PRINT_KHACHHANG,
+    CHANGE_PROFILE,
 };
 extern LinkedList<string> roomTypes;
 
@@ -523,5 +524,12 @@ public:
             }
         }
     }
+
+    static void pauseConsole() {
+    if(current_mode == CONSOLE) {
+        cout << "Nhan phim bat ky de tiep tuc...";
+        cin.get();
+    }
+}
 };
 #endif

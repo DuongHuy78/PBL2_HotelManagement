@@ -163,7 +163,7 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
     setMoTaPhong(temp);
     Utils::outputData("Tao loai phong thanh cong!\n", CONSOLE);
-    system("pause");
+    Utils::pauseConsole();
     return tempLoaiPhong;
 }
 //MENU
@@ -189,38 +189,38 @@ void LoaiPhong::capNhatThongTin(){
                 temp = Utils::inputWithCondition("Sua Loai Giuong: ", 1, 2, ALPHABET_AND_SPACE_ONLY);
                 this->setLoaiGiuong(Utils::stringToInt(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 2:
                 temp = Utils::inputWithCondition("Sua So Luong Khach: ", 1, 2, NUMBER_ONLY);
                 this->setSoLuongKhach(Utils::stringToInt(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 3:
                 temp = Utils::inputWithCondition("Sua Dien Tich: ", 1, 2, NUMBER_ONLY);
                 this->setDienTich(Utils::stringToInt(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 4:
                 temp = Utils::inputWithCondition("Sua Gia: ", 1, 3, NUMBER_ONLY);
                 this->setGiaPhong(Utils::stringToInt(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 5:
                 temp = Utils::inputWithCondition("Sua Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
                 this->setMoTaPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 6:
                 Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
             default:
                 Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
         }  
     }
@@ -244,14 +244,14 @@ void LoaiPhong::capNhatThongTin(){
 //                     tempStr = (Utils::nhap(1,3));
 //                     if (tempStr == "Error"){
 //                         cout << "Error : loi me roi\n";
-//                         system("pause");
+//                         Utils::pauseConsole();
 //                         system("cls");
 //                         break;
 //                     }
 //                     temp = stoi(tempStr);
 //                     this->setLoaiGiuong(temp);
 //                     cout << "Cap Nhat Loai Giuong Thanh Cong!" << endl;
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     break;
 //                 }
@@ -261,14 +261,14 @@ void LoaiPhong::capNhatThongTin(){
 //                     tempStr = (Utils::nhap(1,2));
 //                     if (tempStr == "Error"){
 //                         cout << "Error : loi me roi\n";
-//                         system("pause");
+//                         Utils::pauseConsole();
 //                         system("cls");
 //                         break;
 //                     }
 //                     temp = stoi(tempStr);
 //                     this->setSoLuongKhach(temp);
 //                     cout << "Cap Nhat So Luong Khach Thanh Cong!";
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     break;
 //                 }
@@ -278,14 +278,14 @@ void LoaiPhong::capNhatThongTin(){
 //                     tempStr = (Utils::nhap(1,4));
 //                     if (tempStr == "Error"){
 //                         cout << "Error : loi me roi\n";
-//                         system("pause");
+//                         Utils::pauseConsole();
 //                         system("cls");
 //                         break;
 //                     }
 //                     temp = stoi(tempStr);
 //                     this->setDienTich(temp);
 //                     cout << "Cap Nhat Dien Tich Thanh Cong!";
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     break;
 //                 }
@@ -295,14 +295,14 @@ void LoaiPhong::capNhatThongTin(){
 //                     tempStr = (Utils::nhap(1,9));
 //                     if (tempStr == "Error"){
 //                         cout << "Error : loi me roi\n";
-//                         system("pause");
+//                         Utils::pauseConsole();
 //                         system("cls");
 //                         break;
 //                     }
 //                     temp = stoi(tempStr);
 //                     this->setGiaPhong(temp);
 //                     cout << "Cap Nhat Gia Thanh Cong!";
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     break;
 //                 }
@@ -312,13 +312,13 @@ void LoaiPhong::capNhatThongTin(){
 //                     tempStr = (Utils::nhap(6,100));
 //                     if (tempStr == "Error"){
 //                         cout << "Error : loi me roi\n";
-//                         system("pause");
+//                         Utils::pauseConsole();
 //                         system("cls");
 //                         break;
 //                     }
 //                     this->setMoTaPhong(tempStr);
 //                     cout << "Cap Nhat Mo Ta Phong Thanh Cong!";
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     break;
 //                 }
@@ -329,7 +329,7 @@ void LoaiPhong::capNhatThongTin(){
 //                 }
 //             default: 
 //                 {
-//                     system("pause");
+//                     Utils::pauseConsole();
 //                     system("cls");
 //                     cout << "Lua chon khong hop le." << endl;
 //                     cout<< "Vui long chon lai!" << endl;

@@ -18,7 +18,7 @@ public:
     string getHoTen() const;
     time_t getNgaySinh() const;
     string getSoDienThoai() const;
-    bool getGioiTinh() const; 
+    gender_value getGioiTinh() const; 
 
     bool setIDKhachHang(string);
     bool setHoTen(string);
