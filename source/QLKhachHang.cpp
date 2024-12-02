@@ -68,7 +68,7 @@ string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách
         string tail = maxID.substr(1);      //lấy số sau
         int num = stoi(tail) + 1;
         tail = Utils::intToString(num);
-        for(int i=0; i<(5-tail.size()); i++) {
+        while(tail.length() < size-1) {
             tail = "0" + tail;
         }
         IDKhachHang = head + tail;
@@ -109,6 +109,10 @@ KhachHang QLKhachHang::nhapThongTin() {
 
     Utils::outputData("Nhap du lieu khach hang thanh cong!\n", CONSOLE);
     return newKH;
+}
+
+LinkedList<KhachHang> &QLKhachHang::getDSKH() {
+    return DSKH;
 }
 
 ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {

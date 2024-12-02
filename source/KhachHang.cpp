@@ -150,6 +150,10 @@ void KhachHang::suaThongTin() {
     }
 }
 
+void KhachHang::LichSuDatPhong() {
+    Utils::outputData("Lich su dat phong cua khach hang: \n", CONSOLE);
+}    
+
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
@@ -172,7 +176,8 @@ user_option_value KhachHang::work() {
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);
     Utils::outputData("3. Dat Phong\n", CONSOLE);
-    Utils::outputData("4. Dang xuat\n", CONSOLE);
+    Utils::outputData("4. Lich su dat phong\n", CONSOLE);
+    Utils::outputData("5. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -195,6 +200,8 @@ user_option_value KhachHang::work() {
         case 3:
             return USER_BOOK_ROOM;
         case 4:
+            return USER_BOOK_ROOM_HISTORY;
+        case 5:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);

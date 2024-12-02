@@ -239,9 +239,6 @@ LinkedList<Phong> &QLPhong::getDanhSachPhong() {
     return this->DSP;
 }
 
-Node<Phong> *QLPhong::getHead() {
-    return this->DSP.getHead();
-}
 
 ostream &operator<<(ostream &os, QLPhong &qlPhong) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-PHONG-----------------\n", CONSOLE);

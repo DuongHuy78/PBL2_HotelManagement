@@ -19,13 +19,13 @@ void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
     this->DSKH = DSKH;
 }
 
-void QLDatPhong::setcurrentID(string ID) {
-    this->currentID = ID;
-}
+// void QLDatPhong::setcurrentID(string ID) {
+//     this->currentID = ID;
+// }
 
-void QLDatPhong::setRole(role_value role) {
-    this->role = role;
-}
+// void QLDatPhong::setRole(role_value role) {
+//     this->role = role;
+//}
 void QLDatPhong::themDatPhong(DatPhong DP) {
     DSDP.add(DP);
 }
@@ -50,6 +50,7 @@ DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
     }
     return nullptr;
 }
+
 
 /**
  * @brief Lấy mã đặt phòng lớn nhất
@@ -89,6 +90,7 @@ string QLDatPhong::taoMaDatPhong(){
 Node<DatPhong> *QLDatPhong::getHead() {
     return this->DSDP.getHead();
 }
+
 LinkedList<DatPhong> &QLDatPhong::getDanhSachDatPhong() {
     return this->DSDP;
 }

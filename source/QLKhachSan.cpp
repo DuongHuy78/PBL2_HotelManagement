@@ -51,8 +51,8 @@ void QLKhachSan::inputTaiKhoan(string path) {
     while(!fi.eof()) {
         getline(fi, line);
         if(line == "") break;
-        username = Utils::getSubstringUntilX(line, index, ',');
-        password = Utils::getSubstringUntilX(line, index, ',');
+        username = Utils::getSubstringUntilX(line, index, ';');
+        password = Utils::getSubstringUntilX(line, index, ';');
         ID       = Utils::getSubstringUntilX(line, index, '\n');
         TaiKhoan newTaiKhoan(ID, username, password);
         QLTK.themTaiKhoan(newTaiKhoan);
@@ -90,10 +90,10 @@ void QLKhachSan::inputKhachHang(string path) {
     while(!fi.eof()) {
         getline(fi, line);
         if(line == "") break;
-        ID       = Utils::getSubstringUntilX(line, index, ',');
-        name     = Utils::getSubstringUntilX(line, index, ',');
-        birthday = Utils::getSubstringUntilX(line, index, ',');
-        phone    = Utils::getSubstringUntilX(line, index, ',');
+        ID       = Utils::getSubstringUntilX(line, index, ';');
+        name     = Utils::getSubstringUntilX(line, index, ';');
+        birthday = Utils::getSubstringUntilX(line, index, ';');
+        phone    = Utils::getSubstringUntilX(line, index, ';');
         gender   = Utils::getSubstringUntilX(line, index, '\n');
         KhachHang newKhachHang(ID, name, Utils::stringToDate(Utils::trim(birthday)), phone, Utils::stringToGender(gender));
         QLKH.themKhachHang(newKhachHang);
@@ -191,12 +191,12 @@ void QLKhachSan::inputDatPhong(string path) {
     while(!fi.eof()) {
         getline(fi, line);
         if(line == "") break;
-        string maDatPhong   = Utils::getSubstringUntilX(line, index, ',');
-        string maPhong      = Utils::getSubstringUntilX(line, index, ',');
-        string IDKhachHang  = Utils::getSubstringUntilX(line, index, ',');
-        string ngayNhan     = Utils::getSubstringUntilX(line, index, ',');
-        string ngayTra      = Utils::getSubstringUntilX(line, index, ',');
-        string soLuongKhach = Utils::getSubstringUntilX(line, index, ',');
+        string maDatPhong   = Utils::getSubstringUntilX(line, index, ';');
+        string maPhong      = Utils::getSubstringUntilX(line, index, ';');
+        string IDKhachHang  = Utils::getSubstringUntilX(line, index, ';');
+        string ngayNhan     = Utils::getSubstringUntilX(line, index, ';');
+        string ngayTra      = Utils::getSubstringUntilX(line, index, ';');
+        string soLuongKhach = Utils::getSubstringUntilX(line, index, ';');
         string donGia       = Utils::getSubstringUntilX(line, index, '\n');
         DatPhong newDatPhong(maDatPhong, maPhong, IDKhachHang, 
         Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), 
@@ -211,40 +211,101 @@ void QLKhachSan::inputDatPhong(string path) {
 
 
 void QLKhachSan::outputTaiKhoan(string path) {
-    // ofstream fo(path,ios::out | ios::trunc);
-    // if(!fo.is_open()) {
-    //     cerr << "Khong the doc file::" << path << endl;
-    //     return;
-    // }
+    ofstream fo(path,ios::out | ios::trunc);
+    if(!fo.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+        return;
+    }
 
-    Node<TaiKhoan> *temp = QLTK.getDanhSachTaiKhoan().getHead()->next;
-    while(temp != QLTK.getDanhSachTaiKhoan().getHead()){
-        // fo<<temp->data.getUsername()<<";"
-        //     <<temp->data.getPassword()<<";"
-        //     <<temp->data.getID()
-        //     <<endl;
-        cout<<temp->data.getID()<<";"
+    Node<TaiKhoan> *temp = QLTK.getDSTK().getHead()->next;
+    while(temp != QLTK.getDSTK().getHead()){
+        fo<<temp->data.getUsername()<<";"
+            <<temp->data.getPassword()<<";"
+            <<temp->data.getID()
             <<endl;
         temp = temp->next;
     }
-    // fo.close();
+    fo.close();
 }
 
 void QLKhachSan::outputKhachHang(string path) {
+    ofstream fo(path,ios::out | ios::trunc);
+    if(!fo.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+        return;
+    }
 
+    Node<KhachHang> *temp = QLKH.getDSKH().getHead()->next;
+    while(temp != QLKH.getDSKH().getHead()){
+        fo<<temp->data.getIDKhachHang()<<";"
+            <<temp->data.getHoTen()<<";"
+            <<Utils::dateToString(temp->data.getNgaySinh())<<";"
+            <<temp->data.getSoDienThoai()<<";"
+            <<temp->data.getGioiTinh()
+            <<endl;
+        temp = temp->next;
+    }
+    fo.close();
 }
 
 void QLKhachSan::outputLoaiPhong(string path) {
+    ofstream fo(path,ios::out | ios::trunc);
+    if(!fo.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+        return;
+    }
 
+    Node<LoaiPhong> *temp = QLLP.getDSLP().getHead()->next;
+    while(temp != QLLP.getDSLP().getHead()){
+        fo<<temp->data.getLoaiPhong()<<";"
+            <<temp->data.getLoaiGiuong()<<";"
+            <<temp->data.getSoLuongKhach()<<";"
+            <<temp->data.getDienTich()<<";"
+            <<temp->data.getGiaPhong()<<";"
+            <<temp->data.getMoTaPhong()
+            <<endl;
+        temp = temp->next;
+    }
+    fo.close();
 }
 
 void QLKhachSan::outputPhong(string path) {
+    ofstream fo(path,ios::out | ios::trunc);
+    if(!fo.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+        return;
+    }
 
+    Node<Phong> *temp = QLP.getDanhSachPhong().getHead()->next;
+    while(temp != QLP.getDanhSachPhong().getHead()){
+        fo<<temp->data.getMaPhong()<<";"
+            <<temp->data.getLoaiPhong()
+            <<endl;
+        temp = temp->next;
+    }
+    fo.close();
 }
 
 void QLKhachSan::outputDatPhong(string path) {
-    
+    ofstream fo(path,ios::out | ios::trunc);
+    if(!fo.is_open()) {
+        cerr << "Khong the doc file::" << path << endl;
+        return;
+    }
 
+    Node<DatPhong> *temp = QLDP.getDanhSachDatPhong().getHead()->next;
+    while(temp != QLDP.getDanhSachDatPhong().getHead()){
+        fo<<temp->data.getMaDatPhong()<<";"
+            <<temp->data.getMaPhong()<<";"
+            <<temp->data.getIDKhachHang()<<";"
+            <<Utils::dateToString(temp->data.getNgayNhan())<<";"
+            <<Utils::dateToString(temp->data.getNgayTra())<<";"
+            <<temp->data.getSoLuongKhach()<<";"
+            <<temp->data.getDonGia()
+            <<endl;
+        temp = temp->next;
+    }
+    fo.close();
 }
 
 void QLKhachSan::work() {
@@ -307,7 +368,8 @@ bool QLKhachSan::dangNhap() {
         role = KHACHHANG;
         if(QLKH.timKiemKhachHang(ID) != nullptr) {
             // QLDP.setcurrentID(this->currentID);
-            QLDP.setRole(role);
+            // QLDP.setRole(role);
+            this->currentID = ID;
             current_user = QLKH.timKiemKhachHang(ID);
             return true;
         }
@@ -329,7 +391,7 @@ sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, s
     if(firstName == "" || surname == "" || birthday == "" || gender == "" || username == "" || password == "") {
         return SIGN_UP_BLANK_INFO;
     }
-    LinkedList<TaiKhoan> &DSTK = QLTK.getDanhSachTaiKhoan();
+    LinkedList<TaiKhoan> &DSTK = QLTK.getDSTK();
     Node<TaiKhoan> *p = DSTK.begin();
     while(p != DSTK.end()) {
         if(p->data.getUsername() == username) {
@@ -465,6 +527,18 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     else if(choice == ADD_KHACHHANG) {
         KhachHang newKhachHang = QLKH.nhapThongTin();
         QLKH.themKhachHang(newKhachHang);
+        system("pause");
+    }
+    else if(choice == USER_BOOK_ROOM_HISTORY){
+        system("clear");
+        string ID = this->currentID;
+        Node<DatPhong> *p = QLDP.getDanhSachDatPhong().getHead()->next;
+        while (p != QLDP.getDanhSachDatPhong().getHead()) {
+            if(p->data.getIDKhachHang() == ID) {
+                cout<<p->data;
+            }
+            p = p->next;
+        }
         system("pause");
     }
     else if(choice == ADD_PHONG){

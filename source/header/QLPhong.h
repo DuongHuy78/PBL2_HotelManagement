@@ -23,10 +23,7 @@ public:
     // void capNhatFile(Phong*, string);
     void setQLLP(QLLoaiPhong *QLLP);
     // void QLPhong_Choice();
-
-    // Phong timPhong(time_t, time_t);
     LinkedList<Phong> &getDanhSachPhong();
-    Node<Phong> *getHead();
 
     friend ostream& operator<<(ostream&, QLPhong&);
 };
