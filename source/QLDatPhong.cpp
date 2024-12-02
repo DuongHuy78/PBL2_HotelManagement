@@ -19,13 +19,6 @@ void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
     this->DSKH = DSKH;
 }
 
-// void QLDatPhong::setcurrentID(string ID) {
-//     this->currentID = ID;
-// }
-
-// void QLDatPhong::setRole(role_value role) {
-//     this->role = role;
-//}
 void QLDatPhong::themDatPhong(DatPhong DP) {
     DSDP.add(DP);
 }
@@ -91,7 +84,7 @@ Node<DatPhong> *QLDatPhong::getHead() {
     return this->DSDP.getHead();
 }
 
-LinkedList<DatPhong> &QLDatPhong::getDanhSachDatPhong() {
+LinkedList<DatPhong> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 

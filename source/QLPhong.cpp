@@ -16,9 +16,6 @@ void QLPhong::AddRangePhong(string file) {
         return;
     }
 
-    // cout << "Day la danh sach phong cua chung toi: "<< endl;
-    // cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
-    // cout << string(24, '-') << endl;
     int count = 0;
     string line; 
     while(getline(inputFile, line)) {
@@ -47,24 +44,6 @@ void QLPhong::AddRangePhong(string file) {
     cout << "Da nhap du lieu cua " << count << " phong tu file: " << file << endl;
 }
 
-//update file
-// void QLPhong::capNhatFile(Phong* head, string path){
-//     ofstream inputFile(path);
-//     if(!inputFile)
-//         {
-//             cout << "Khong the mo file de ghi!" << endl;
-//             return;
-//         }
-//     Phong *p = head;
-//     while( p != nullptr) 
-//         {
-//             inputFile << p->getMaPhong() << ";"; 
-//             inputFile << p->getLoaiPhong() <<";";     
-//             cout << endl;
-//         }
-//     inputFile.close();
-//     cout << "Cap nhat phong.txt thanh cong!" << endl;
-// }
     
 void QLPhong::xemPhong(){
     cout << "Day la danh sach phong cua Hotel Del Luna: "<< endl;
@@ -139,11 +118,7 @@ Phong QLPhong::nhapThongTin() {
     return tempPhong;
 }
 
-// Phong QLPhong::timPhong(time_t, time_t) {
-//     return Phong();
-// }
-
-LinkedList<Phong> &QLPhong::getDanhSachPhong() {
+LinkedList<Phong> &QLPhong::getDSP() {
     return this->DSP;
 }
 

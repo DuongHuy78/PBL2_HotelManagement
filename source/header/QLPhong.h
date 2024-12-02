@@ -20,10 +20,8 @@ public:
 
     Phong nhapThongTin();
     Phong *timPhong(string);
-    // void capNhatFile(Phong*, string);
     void setQLLP(QLLoaiPhong *QLLP);
-    // void QLPhong_Choice();
-    LinkedList<Phong> &getDanhSachPhong();
+    LinkedList<Phong> &getDSP();
 
     friend ostream& operator<<(ostream&, QLPhong&);
 };
