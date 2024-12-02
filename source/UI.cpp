@@ -403,6 +403,7 @@ void guest_frame_search_room_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->clear_Textbox();
 	search_room_list_enable = false;
 	room_list_init = false;
+	current_frame->listObjectList["search_room_list"]->setAppear(false);
 	option = SEARCH_ROOM;
 }
 
@@ -467,6 +468,7 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			room_list_init = true;
 		}
 		list->setGroupHeight(list->toNextObject()*room_list.size());
+		list->numOfObject = room_list.size();
 		for(int i = 0; i < room_list.size(); i++) {
 			GLint scissorBox[4];
 			glGetIntegerv(GL_SCISSOR_BOX, scissorBox);
@@ -503,10 +505,12 @@ void guest_frame_lookup_button_image_click(Gnk_Button *button) {
 		cout << "Check in date: " << check_in_date_str << endl;
 		cout << "Check out date: " << check_out_date_str << endl;
 		cout << "Number of guest: " << number_of_guest_str << endl;
+		current_frame->listObjectList["search_room_list"]->setAppear(true);
 		search_room_list_enable = true;
 		room_list_init = false;
 	}
 	else {
+		current_frame->listObjectList["search_room_list"]->setAppear(false);
 		cout << "Invalid date" << endl;
 		search_room_list_enable = false;
 	}

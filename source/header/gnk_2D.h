@@ -276,6 +276,7 @@ public:
 class Gnk_List_Object {
 	void (*draw_process)(Gnk_List_Object *);
 public:
+	int numOfObject;
 	int currentPos;
 	bool appear = true;
 	Gnk_Point A;
@@ -290,7 +291,10 @@ public:
 	bool border = false;
 	Gnk_Color border_color;
 
+	std::unordered_map<std::string, Gnk_Button *> buttonList;
+
 	Gnk_List_Object();
+	~Gnk_List_Object();
 	void setRange(Gnk_Point, Gnk_Point);
 	void setCurrentPos(int);
 	void setDrawProcess(void (*)(Gnk_List_Object *));
@@ -307,6 +311,7 @@ public:
 	int toNextObject();
 	void process();	
 	void draw();
+	void virtual_button_process();
 };
 
 class Gnk_Frame {

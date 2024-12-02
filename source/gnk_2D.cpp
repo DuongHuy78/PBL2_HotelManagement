@@ -893,12 +893,17 @@ void Gnk_Scrollbar::process() {
 
 // Group Draw Object Definition
 Gnk_List_Object::Gnk_List_Object() {
+	this->numOfObject = 0;
 	this->group_height = 0;
 	this->object_height = 0;
 	this->object_width = 0;
 	this->object_start_position = Gnk_Point();
 	this->object_space = 0;
 	this->draw_process = nullptr;
+}
+
+Gnk_List_Object::~Gnk_List_Object() {
+	delete virtual_button;
 }
 
 void Gnk_List_Object::setRange(Gnk_Point A, Gnk_Point B) {
@@ -1021,6 +1026,15 @@ void Gnk_List_Object::draw() {
 		gnk_Rectangle(A, B, false);
 		gnk_Set_Line_Width(1.0f);
 	}
+}
+
+void Gnk_List_Object::virtual_button_process() {
+	if(!appear) return;
+	std::cout << "numOfObject: " << numOfObject << std::endl;
+	// Gnk_Point prev_A = A;
+	// Gnk_Point prev_B = B;
+	// for(int i = 0; i < )
+	// A.translate(0.0f, -)
 }
 
 // -Variable Declaration-----------------------------------------------------
