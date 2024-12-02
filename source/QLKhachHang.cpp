@@ -57,7 +57,6 @@ string QLKhachHang::getMaxIDKhachHang() {
 }
 
 string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách lấy ID khách hàng cuối cùng tăng lên 1
-    int size = 6;
     string IDKhachHang = "";
     string maxID = this->getMaxIDKhachHang();
     if(maxID == "199999") {
@@ -67,11 +66,7 @@ string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách
         string head = maxID.substr(0, 1);   //lấy số đầu
         string tail = maxID.substr(1);      //lấy số sau
         int num = stoi(tail) + 1;
-        tail = Utils::intToString(num);
-        while(tail.length() < size-1) {
-            tail = "0" + tail;
-        }
-        IDKhachHang = head + tail;
+        IDKhachHang = head + to_string(num);
     }
     return IDKhachHang;
 }
@@ -109,10 +104,6 @@ KhachHang QLKhachHang::nhapThongTin() {
 
     Utils::outputData("Nhap du lieu khach hang thanh cong!\n", CONSOLE);
     return newKH;
-}
-
-LinkedList<KhachHang> &QLKhachHang::getDSKH() {
-    return DSKH;
 }
 
 ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {

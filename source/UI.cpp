@@ -1,5 +1,5 @@
 #include "header/UI.h"
-frame_num_value current_frame = GUEST_FRAME;
+frame_num_value current_frame = LOGIN_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 option_value option = DEFAULT_OPTION;
 QLKhachSan *current_Data = nullptr;
@@ -20,11 +20,26 @@ struct room_type {
 	string description;
 	string amount;
 };
-string check_in_date_str = ""; // 29/11/2024
-string check_out_date_str = ""; // 30/11/2024
+string check_in_date_str = "";
+string check_out_date_str = "";
 string number_of_guest_str = "";
 vector<room_type> room_list;
-role_value current_role = KHACHHANG;
+struct guest_profile {
+	string ID;
+	string name;
+	string date_of_birth;
+	string phone_number;
+	gender_value gender;
+
+	string username;
+	string password;
+};
+guest_profile current_guest_profile;
+bool edit_profile = false;
+// ---------------------------------------------------------
+Gnk_Color light_yellow(255, 236, 200);
+Gnk_Color light_yellow2(253, 247, 228);
+Gnk_Color black(0, 0, 0);
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
@@ -42,8 +57,33 @@ void button_hover_type_2(Gnk_Button *button) {
 	buttonText->text_color = color;
 }
 
+void button_hover_type_3(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color + Gnk_Color(20, 20, 20);
+	buttonText->draw();
+	buttonText->color = color;
+}
+
 void textbox_select_type1(Gnk_Textbox *textbox) {
 	gnk_Set_Object_Color(Gnk_Color(74, 98, 138));
+	gnk_Set_Line_Width(3.0f);
+	gnk_Line(
+		Gnk_Point(
+			textbox->A.x + textbox->paddingX,
+			textbox->A.y - 5.0f
+		),
+		Gnk_Point(
+			textbox->B.x - textbox->paddingX,
+			textbox->A.y - 5.0f
+		)
+	);
+	gnk_Set_Line_Width(1.0f);
+	textbox->draw();
+}
+
+void textbox_select_type3(Gnk_Textbox *textbox) {
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
 	gnk_Set_Line_Width(3.0f);
 	gnk_Line(
 		Gnk_Point(
@@ -115,7 +155,19 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	UI_input_buffer << (login.textboxList["username_textbox"])->text << endl;
 	UI_input_buffer << (login.textboxList["password_textbox"])->text << endl;
 	if(current_Data->dangNhap()) {
-		if(current_role == KHACHHANG) current_frame = GUEST_FRAME;
+		if(current_Data->getCurrentRole() == KHACHHANG) {
+			current_frame = GUEST_FRAME;
+			current_Data->requestHandling(PRINT_KHACHHANG);
+			string gender;
+			getline(UI_output_buffer, current_guest_profile.ID);
+			getline(UI_output_buffer, current_guest_profile.name);
+			getline(UI_output_buffer, current_guest_profile.date_of_birth);
+			getline(UI_output_buffer, current_guest_profile.phone_number);
+			getline(UI_output_buffer, gender);
+			current_guest_profile.gender = Utils::stringToGender(gender);
+			current_guest_profile.username = (login.textboxList["username_textbox"])->text;
+			current_guest_profile.password = (login.textboxList["password_textbox"])->text;
+		}
 	}
 	else {
 		login_failed = true;
@@ -197,7 +249,8 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 		(sign_up.textboxList["year_textbox"])->text,
 		gender,
 		(sign_up.textboxList["username_textbox"])->text,
-		(sign_up.textboxList["password_textbox"])->text);
+		(sign_up.textboxList["password_textbox"])->text
+	);
 	if(res == SIGN_UP_BLANK_INFO) {
 		cout << "Blank info" << endl;
 	}
@@ -207,7 +260,6 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 	else if(res == SIGN_UP_SUCCESS) {
 		current_frame = LOGIN_FRAME;
 	}
-
 }
 
 void sign_up_frame_toggle_click(Gnk_Button *button) {
@@ -251,7 +303,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 
 	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
 	gnk_Set_Character_Font("helvetica");
-	gnk_Text("Hello, nguyen nhat king", Gnk_Point(430.0f, 830.0f), 24.0f);
+	gnk_Text("Have a great day and enjoy your stay!", Gnk_Point(430.0f, 830.0f), 24.0f);
 
 	frame->buttonList["logout_button"]->display();
 	frame->buttonList["search_room_button"]->display();
@@ -260,21 +312,76 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	frame->buttonList["booking_button"]->display();
 	if(option == SEARCH_ROOM) {
 		// Search box
-		gnk_Set_Object_Color(Gnk_Color(253, 247, 228));
-		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f);
+		gnk_Set_Object_Color(light_yellow2);
+		gnk_Rounded_Rectangle(Gnk_Point(490.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), 30.0f);
+		// Vẽ các textbox
 		gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
 		frame->textboxList["check_in_textbox"]->display();
 		frame->textboxList["check_out_textbox"]->display();
 		frame->textboxList["number_of_guest_textbox"]->display();
-		
 		frame->buttonList["lookup"]->display();
-		//gnk_Image(gnk_Image_List["search_icon"], Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
+		// Vẽ list phòng
+		frame->listObjectList["search_room_list"]->draw();
+		// Vẽ cái đường viền
 		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 		gnk_Set_Line_Width(2.0f);
-		gnk_Rounded_Rectangle(Gnk_Point(590.0f, 700.0f), Gnk_Point(1420.0f, 760.0f), 30.0f, false);
+		gnk_Rounded_Rectangle(Gnk_Point(490.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), 30.0f, false);
+		gnk_Line(Gnk_Point(825.0f, 700.0f), Gnk_Point(825.0f, 760.0f));
+		gnk_Line(Gnk_Point(1135.0f, 700.0f), Gnk_Point(1135.0f, 760.0f));
+		gnk_Line(Gnk_Point(1445.0f, 700.0f), Gnk_Point(1445.0f, 760.0f));
+		gnk_Line(Gnk_Point(430.0f, 680.0f), Gnk_Point(1600.0f, 680.0f));
 		gnk_Set_Line_Width(1.0f);
+	}
+	else if(option == BOOKING_INFORMATION) {
+		// Booking information
+	}
+	else if(option == PROFILE) {
+		gnk_Set_Object_Color(black);
+		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f), false);
+		gnk_Set_Object_Color(light_yellow2);
+		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f));
 
-		frame->listObjectList["search_room_list"]->draw();
+		gnk_Set_Object_Color(black);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("My Profile", Gnk_Point(530.0f, 710.0f), 970.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		
+		if(current_guest_profile.gender == NAM) {
+			gnk_Image(gnk_Image_List["man_icon"], Gnk_Point(560.0f, 370.0f), Gnk_Point(860.0f, 670.0f));
+		}
+		if(current_guest_profile.gender == NU) {
+			gnk_Image(gnk_Image_List["woman_icon"], Gnk_Point(560.0f, 370.0f), Gnk_Point(860.0f, 670.0f));
+		}
+
+		gnk_Set_Object_Color(Gnk_Color(254, 249, 242));
+		gnk_Rounded_Rectangle(Gnk_Point(560.0f, 280.0f), Gnk_Point(860.0f, 340.0f), 20.0f);
+		gnk_Set_Object_Color(Gnk_Color(64, 64, 64));
+		gnk_Text_Limited(current_guest_profile.username, Gnk_Point(560.0f, 294.0f), 300.0f, 40.0f, 24.0f, GNK_TEXT_CENTER);
+
+		gnk_Text("ID:", Gnk_Point(940.0f, 600.0f), 24.0f);
+		gnk_Text("Name:", Gnk_Point(940.0f, 550.0f), 24.0f);
+		gnk_Text("Date of birth:", Gnk_Point(940.0f, 500.0f), 24.0f);
+		gnk_Text("Phone number:", Gnk_Point(940.0f, 450.0f), 24.0f);
+		gnk_Text("Gender:", Gnk_Point(940.0f, 400.0f), 24.0f);
+		gnk_Text(current_guest_profile.ID, Gnk_Point(1140.0f, 600.0f), 24.0f);
+		if(edit_profile) {
+			frame->textboxList["profile_name_textbox"]->text = Utils::chuanHoaTen(frame->textboxList["profile_name_textbox"]->text);
+			frame->textboxList["profile_name_textbox"]->display();
+			frame->textboxList["profile_date_of_birth_textbox"]->display();
+			frame->textboxList["profile_phone_number_textbox"]->display();
+			frame->textboxList["profile_gender_textbox"]->display();
+			frame->buttonList["save_profile_button"]->display();
+		}
+		else {
+			gnk_Set_Object_Color(Gnk_Color(64, 64, 64));
+			gnk_Text(current_guest_profile.name, Gnk_Point(1140.0f, 550.0f), 24.0f);
+			gnk_Text(current_guest_profile.date_of_birth, Gnk_Point(1140.0f, 500.0f), 24.0f);
+			gnk_Text(current_guest_profile.phone_number, Gnk_Point(1140.0f, 450.0f), 24.0f);
+			gnk_Text(Utils::genderToString(current_guest_profile.gender), Gnk_Point(1140.0f, 400.0f), 24.0f);
+		}
+		frame->buttonList["change_profile_button"]->display();
+	}
+	else if(option == BOOKING) {
+		// Booking
 	}
 }
 
@@ -294,6 +401,9 @@ void guest_frame_search_room_button_click(Gnk_Button *button) {
 	buttonText->color = color - Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
+	gnk_Current_Frame->clear_Textbox();
+	search_room_list_enable = false;
+	room_list_init = false;
 	option = SEARCH_ROOM;
 }
 
@@ -359,10 +469,16 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 		}
 		list->setGroupHeight(list->toNextObject()*room_list.size());
 		for(int i = 0; i < room_list.size(); i++) {
+			GLint scissorBox[4];
+			glGetIntegerv(GL_SCISSOR_BOX, scissorBox);
+			gnk_Scissor_2_object(
+			Gnk_Point(gnk_Translate_X, gnk_Translate_Y - i * list->toNextObject()),
+			Gnk_Point(gnk_Translate_X + list->object_width, gnk_Translate_Y - i * list->toNextObject() + list->object_height),
+			list->A, list->B);
 			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
-			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(980.0f, 300.0f - i * list->toNextObject()));
+			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
 			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
-			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(300.0f, 300.0f - i * list->toNextObject()));
+			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_height, 300.0f - i * list->toNextObject()));
 			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 			gnk_Text("Loai Phong: " + room_list[i].type, Gnk_Point(340.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Loai Giuong: " + room_list[i].bed_type, Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
@@ -370,15 +486,16 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Text("Dien Tich: " + room_list[i].area, Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Gia: " + room_list[i].price, Gnk_Point(340.0f, 130.0f - i * list->toNextObject()), 24.0f);
 			gnk_Set_Line_Width(2.0f);
-			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(940.0f, 120.0f - i * list->toNextObject()));
-			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 55, 10, 24);
-			//gnk_Text("Mo Ta: " + room_list[i].description, Gnk_Point(340.0f, 100.0f - i * list->toNextObject()), 24.0f);
-			//gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
+			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(1030.0f, 120.0f - i * list->toNextObject()));
+			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
+			gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
+			glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		}
 	}
 }
 
 void guest_frame_lookup_button_image_click(Gnk_Button *button) {
+	gnk_Current_Frame->listObjectList["search_room_list"]->currentPos = gnk_Current_Frame->listObjectList["search_room_list"]->getGroupHeight();
 	check_in_date_str = gnk_Current_Frame->textboxList["check_in_textbox"]->text;
 	check_out_date_str = gnk_Current_Frame->textboxList["check_out_textbox"]->text;
 	number_of_guest_str = gnk_Current_Frame->textboxList["number_of_guest_textbox"]->text;
@@ -395,6 +512,49 @@ void guest_frame_lookup_button_image_click(Gnk_Button *button) {
 		search_room_list_enable = false;
 	}
 	button->draw();
+}
+
+void guest_frame_change_frofile_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color + Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+	edit_profile = true;
+	button->setAppear(false);
+	gnk_Current_Frame->buttonList["save_profile_button"]->setAppear(true);
+	gnk_Current_Frame->textboxList["profile_name_textbox"]->text = current_guest_profile.name;
+	gnk_Current_Frame->textboxList["profile_date_of_birth_textbox"]->text = current_guest_profile.date_of_birth;
+	gnk_Current_Frame->textboxList["profile_phone_number_textbox"]->text = current_guest_profile.phone_number;
+	gnk_Current_Frame->textboxList["profile_gender_textbox"]->text = Utils::genderToString(current_guest_profile.gender);
+}
+
+void guest_frame_save_profile_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color + Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+	edit_profile = false;
+	button->setAppear(false);
+	gnk_Current_Frame->buttonList["change_profile_button"]->setAppear(true);
+	current_guest_profile.name = gnk_Current_Frame->textboxList["profile_name_textbox"]->text;
+	current_guest_profile.date_of_birth = gnk_Current_Frame->textboxList["profile_date_of_birth_textbox"]->text;
+	current_guest_profile.phone_number = gnk_Current_Frame->textboxList["profile_phone_number_textbox"]->text;
+	current_guest_profile.gender = Utils::stringToGender(gnk_Current_Frame->textboxList["profile_gender_textbox"]->text);
+	
+	UI_input_buffer.clear();
+	UI_output_buffer.clear();
+	UI_input_buffer << 1 << endl;
+	UI_input_buffer << current_guest_profile.name << endl;
+	UI_input_buffer << 2 << endl;
+	UI_input_buffer << current_guest_profile.date_of_birth << endl;
+	UI_input_buffer << 3 << endl;
+	UI_input_buffer << current_guest_profile.phone_number << endl;
+	UI_input_buffer << 4 << endl;
+	UI_input_buffer << Utils::genderToString(current_guest_profile.gender) << endl;
+	UI_input_buffer << 5 << endl;
+	current_Data->requestHandling(CHANGE_PROFILE);
 }
 
 Gnk_Frame guest(guest_frame_draw);
@@ -599,7 +759,7 @@ void guest_frame_init() {
 
 	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
 	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
-	guest_frame_search_room_button->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_search_room_button->setColor(light_yellow2);
 	guest_frame_search_room_button->setText("Search room");
 	guest_frame_search_room_button->setTextFont("helvetica");
 	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
@@ -624,9 +784,9 @@ void guest_frame_init() {
 	guest_frame_booking_button->setText("Booking");
 	guest_frame_booking_button->setClickProcess(guest_frame_booking_button_click);
 
-	Gnk_Textbox *guest_frame_check_in_textbox = new Gnk_Textbox();
-	guest_frame_check_in_textbox->setRange(Gnk_Point(630.0f, 700.0f), Gnk_Point(860.0f, 760.0f));
-	guest_frame_check_in_textbox->setColor(Gnk_Color(253, 247, 228));
+	Gnk_Textbox_Keep_Placeholder *guest_frame_check_in_textbox = new Gnk_Textbox_Keep_Placeholder();
+	guest_frame_check_in_textbox->setRange(Gnk_Point(520.0f, 700.0f), Gnk_Point(820.0f, 760.0f));
+	guest_frame_check_in_textbox->setColor(light_yellow2);
 	guest_frame_check_in_textbox->setTextFont("helvetica");
 	guest_frame_check_in_textbox->setFontSize(24.0f);
 	guest_frame_check_in_textbox->setTextColor(Gnk_Color(17, 17, 17));
@@ -639,32 +799,73 @@ void guest_frame_init() {
 	guest_frame_check_in_textbox->setTextAlign(GNK_TEXT_LEFT);
 	guest_frame_check_in_textbox->setMaxLength(10);
 
-	Gnk_Textbox *guest_frame_check_out_textbox = new Gnk_Textbox(*guest_frame_check_in_textbox);
-	guest_frame_check_out_textbox->setRange(Gnk_Point(860.0f, 700.0f), Gnk_Point(1090.0f, 760.0f));
+	Gnk_Textbox_Keep_Placeholder *guest_frame_check_out_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
+	guest_frame_check_out_textbox->setRange(Gnk_Point(830.0f, 700.0f), Gnk_Point(1130.0f, 760.0f));
 	guest_frame_check_out_textbox->setPlaceholder("Check out");
 
-	Gnk_Textbox *guest_frame_number_of_guest_textbox = new Gnk_Textbox(*guest_frame_check_in_textbox);
-	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1090.0f, 700.0f), Gnk_Point(1320.0f, 760.0f));
+	Gnk_Textbox_Keep_Placeholder *guest_frame_number_of_guest_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
+	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1140.0f, 700.0f), Gnk_Point(1440.0f, 760.0f));
 	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
 	Gnk_List_Object *group = new Gnk_List_Object();
-	group->setRange(Gnk_Point(480.0f, 0.0f), Gnk_Point(1550.0f, 680.0f));
+	group->setRange(Gnk_Point(430.0f, 0.0f), Gnk_Point(1600.0f, 680.0f));
 	group->setCurrentPos(group->getGroupHeight());
-	group->setObjectWidth(950);
+	group->setObjectWidth(1050);
 	group->setObjectHeight(300);
 	group->setObjectStartPosition(Gnk_Point(50.0f, 340.0f));
 	group->setObjectSpace(50);
-	group->setGroupHeight(0);
-	group->setBorder(true);
-	group->setBorderColor(Gnk_Color(26, 26, 29));
+	group->setGroupHeight(680);
 	group->setDrawProcess(guest_frame_search_room_list_process);
 
 	Gnk_Button_With_Image *guest_frame_lookup_button_image = new Gnk_Button_With_Image();
-	guest_frame_lookup_button_image->setRange(Gnk_Point(1330.0f, 700.0f), Gnk_Point(1390.0f, 760.0f));
+	guest_frame_lookup_button_image->setRange(Gnk_Point(1460.0f, 710.0f), Gnk_Point(1500.0f, 750.0f));
 	guest_frame_lookup_button_image->setImage(&gnk_Image_List["search_icon"]);
 	guest_frame_lookup_button_image->setClickProcess(guest_frame_lookup_button_image_click);
-	guest_frame_lookup_button_image->setColor(Gnk_Color(253, 247, 228));
+	guest_frame_lookup_button_image->setColor(light_yellow2);
+
+	Gnk_Button_With_Text *guest_frame_change_profile_button = new Gnk_Button_With_Text();
+	guest_frame_change_profile_button->setRange(Gnk_Point(1340.0f, 30.0f), Gnk_Point(1560.0f, 100.0f));
+	guest_frame_change_profile_button->setColor(Gnk_Color(26, 26, 29));
+	guest_frame_change_profile_button->setText("Change profile");
+	guest_frame_change_profile_button->setTextFont("helvetica-bold");
+	guest_frame_change_profile_button->setFontSize(24.0f);
+	guest_frame_change_profile_button->setTextAlign(GNK_TEXT_CENTER);
+	guest_frame_change_profile_button->setTextColor(Gnk_Color(255, 255, 255));
+	guest_frame_change_profile_button->setRadius(20.0f);
+	guest_frame_change_profile_button->setBorder(true);
+	guest_frame_change_profile_button->setHoverProcess(button_hover_type_3);
+	guest_frame_change_profile_button->setClickProcess(guest_frame_change_frofile_button_click);
+
+	Gnk_Button_With_Text *guest_frame_save_profile_button = new Gnk_Button_With_Text(*guest_frame_change_profile_button);
+	guest_frame_save_profile_button->setRange(Gnk_Point(1340.0f, 30.0f), Gnk_Point(1560.0f, 100.0f));
+	guest_frame_save_profile_button->setText("Save profile");
+	guest_frame_save_profile_button->setClickProcess(guest_frame_save_profile_button_click);
+
+	Gnk_Textbox *guest_frame_profile_name_textbox = new Gnk_Textbox();
+	guest_frame_profile_name_textbox->setRange(Gnk_Point(1140.0f, 540.0f), Gnk_Point(1440.0f, 580.0f));
+	guest_frame_profile_name_textbox->setColor(light_yellow2);
+	guest_frame_profile_name_textbox->setBorderRadius(0.0f);
+	guest_frame_profile_name_textbox->setTextFont("helvetica");
+	guest_frame_profile_name_textbox->setFontSize(24.0f);
+	guest_frame_profile_name_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	guest_frame_profile_name_textbox->setPaddingX(0.0f);
+	guest_frame_profile_name_textbox->setPaddingY(0.0f);
+	guest_frame_profile_name_textbox->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_profile_name_textbox->setSelectProcess(textbox_select_type3);
+	guest_frame_profile_name_textbox->setMaxLength(50);
+
+	Gnk_Textbox *guest_frame_profile_date_of_birth_textbox = new Gnk_Textbox(*guest_frame_profile_name_textbox);
+	guest_frame_profile_date_of_birth_textbox->setRange(Gnk_Point(1140.0f, 490.0f), Gnk_Point(1440.0f, 530.0f));
+	guest_frame_profile_date_of_birth_textbox->setMaxLength(10);
+
+	Gnk_Textbox *guest_frame_profile_phone_number_textbox = new Gnk_Textbox(*guest_frame_profile_name_textbox);
+	guest_frame_profile_phone_number_textbox->setRange(Gnk_Point(1140.0f, 440.0f), Gnk_Point(1440.0f, 480.0f));
+	guest_frame_profile_phone_number_textbox->setMaxLength(10);
+
+	Gnk_Textbox *guest_frame_profile_gender_textbox = new Gnk_Textbox(*guest_frame_profile_name_textbox);
+	guest_frame_profile_gender_textbox->setRange(Gnk_Point(1140.0f, 390.0f), Gnk_Point(1440.0f, 430.0f));
+	guest_frame_profile_gender_textbox->setMaxLength(3);
 
 	guest.addButton("logout_button", guest_frame_logout_button);
 	guest.addButton("search_room_button", guest_frame_search_room_button);
@@ -676,7 +877,12 @@ void guest_frame_init() {
 	guest.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
 	guest.addTextbox("number_of_guest_textbox", guest_frame_number_of_guest_textbox);
 	guest.addListObject("search_room_list", group);
-	
+	guest.addButton("change_profile_button", guest_frame_change_profile_button);
+	guest.addButton("save_profile_button", guest_frame_save_profile_button);
+	guest.addTextbox("profile_name_textbox", guest_frame_profile_name_textbox);
+	guest.addTextbox("profile_date_of_birth_textbox", guest_frame_profile_date_of_birth_textbox);
+	guest.addTextbox("profile_phone_number_textbox", guest_frame_profile_phone_number_textbox);
+	guest.addTextbox("profile_gender_textbox", guest_frame_profile_gender_textbox);
 }
 
 void UI_init() {
@@ -693,6 +899,8 @@ void UI_init() {
 	gnk_Image_List.addImage("user_icon", "image/user_icon.png");
 	gnk_Image_List.addImage("password_icon", "image/password_icon.png");
 	gnk_Image_List.addImage("search_icon", "image/search_icon.png");
+	gnk_Image_List.addImage("man_icon", "image/man_icon.png");
+	gnk_Image_List.addImage("woman_icon", "image/woman_icon.png");
 	login_frame_init();
 	sign_up_frame_init();
 	guest_frame_init();

@@ -47,7 +47,7 @@ string KhachHang::getSoDienThoai() const {
     return this->soDienThoai;
 }
 
-bool KhachHang::getGioiTinh() const {
+gender_value KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
@@ -119,32 +119,32 @@ void KhachHang::suaThongTin() {
                 Utils::chuanHoaTen(temp);
                 this->setHoTen(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 2:
                 temp = Utils::inputWithCondition("Nhap ngay sinh moi: ", 1, 10, DATE);
                 this->setNgaySinh(Utils::stringToDate(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 3:
                 temp = Utils::inputWithCondition("Nhap so dien thoai moi: ", 1, 10, VIETNAM_PHONE_NUMBER);
                 this->setSoDienThoai(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
             break;
             case 4:
                 temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
                 this->setGioiTinh(Utils::stringToGender(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
             break;
             case 5:
                 Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
             default:
                 Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
         }  
     }
@@ -190,12 +190,10 @@ user_option_value KhachHang::work() {
     int choice = Utils::stringToInt(choice_str);
     switch(choice) {
         case 1:
-            suaThongTin();
-            system("pause");
-            return CONTINUE;
+            return CHANGE_PROFILE;
         case 2:
             cout << *this;
-            system("pause");
+            Utils::pauseConsole();
             return CONTINUE;
         case 3:
             return USER_BOOK_ROOM;
@@ -205,7 +203,7 @@ user_option_value KhachHang::work() {
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return CONTINUE;
     }
 }

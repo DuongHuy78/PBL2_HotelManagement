@@ -8,7 +8,10 @@ int main() {
     db.inputLoaiPhong("data/loaiphong.txt");
     db.inputPhong("data/phong.txt");
     db.inputDatPhong("data/dat_phong.txt");
-    system("pause");
+    Utils::pauseConsole();
     db.work();
+    cout << "Saving data..." << endl;
+    db.outputTaiKhoan("data/tai_khoan.txt");
+    db.outputKhachHang("data/khach_hang.txt");
     return 0;
 }

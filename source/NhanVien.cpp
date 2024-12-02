@@ -80,7 +80,7 @@ user_option_value NhanVien::work() {
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return CONTINUE;
     }
 }

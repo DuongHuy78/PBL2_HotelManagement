@@ -169,9 +169,10 @@ void QuanLi::xemDoanhThu() {
             while(true){
                 Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
                 Utils::inputData(date, CONSOLE_OR_UI);
-                if(date.size() != 8){   //7 nhưng thêm ký tự \n vào cuối chuỗi
+                if(date.size() != 8){           //dù có 7 ký tự nhưng đặt là 8 vì có thêm ký tự '\n'
                     break;
                 }
+                cout<<"Nhap sai, vui long nhap lai!"<<endl;
             }
             stringstream ss(date);
             getline(ss, month, '/');
@@ -261,14 +262,15 @@ user_option_value QuanLi::work() {
         case 8:
             return DELETE_PHONG;
         case 9:
+            system("clear");
             xemDoanhThu();
-            system("pause");
+            Utils::pauseConsole();
             return CONTINUE;
         case 10:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);
-            system("pause");
+            Utils::pauseConsole();
             return CONTINUE;
     }    
     // string choice_str;
@@ -283,39 +285,39 @@ user_option_value QuanLi::work() {
     // switch(choice) {
     //     case 1:
     //         taoLoaiPhong();
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 2:
     //         Utils::outputData("Nhap ma loai phong can sua: ", CONSOLE);
     //         Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
     //         suaLoaiPhong(maLoaiPhong);
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 3:
     //         Utils::outputData("Nhap ma loai phong can xoa: ", CONSOLE);
     //         Utils::inputData(maLoaiPhong, CONSOLE_OR_UI);
     //         xoaLoaiPhong(maLoaiPhong);
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 4:
     //         taoPhong();
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 5:
     //         Utils::outputData("Nhap ma phong can sua: ", CONSOLE);
     //         Utils::inputData(maPhong, CONSOLE_OR_UI);
     //         suaPhong(maPhong);
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 6:
     //         Utils::outputData("Nhap ma phong can xoa: ", CONSOLE);
     //         Utils::inputData(maPhong, CONSOLE_OR_UI);
     //         xoaPhong(maPhong);
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 7:
     //         xemDoanhThu();
-    //         system("pause");
+    //         Utils::pauseConsole();
     //         return CONTINUE;
     //     case 8:
     //         return SIGN_OUT;

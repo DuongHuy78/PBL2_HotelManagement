@@ -66,20 +66,20 @@ void Phong::capNhatThongTin(){
                 temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
                 this->setLoaiPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 2:
                 temp = Utils::inputWithCondition("Sua Ma Phong: ", 1, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
                 this->setMaPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
             case 3:
                 Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
             default:
                 Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
-                system("pause");
+                Utils::pauseConsole();
                 break;
         }  
     }

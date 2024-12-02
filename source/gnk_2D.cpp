@@ -418,6 +418,29 @@ Gnk_Textbox::Gnk_Textbox() {
 	this->select_process = nullptr;
 }
 
+Gnk_Textbox::Gnk_Textbox(Gnk_Textbox &textbox) {
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->border = textbox.border;
+	this->border_color = textbox.border_color;
+	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
+}
+
 void Gnk_Textbox::setAppear(bool appear) {
 	this->appear = appear;
 }
@@ -639,6 +662,7 @@ Gnk_Textbox_Password::Gnk_Textbox_Password(Gnk_Textbox_Password &textbox) {
 	this->text_align = textbox.text_align;
 	this->on_select = textbox.on_select;
 	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
 }
 
 void Gnk_Textbox_Password::draw() {
@@ -652,6 +676,61 @@ void Gnk_Textbox_Password::draw() {
 }
 
 void Gnk_Textbox_Password::display() {
+	if(!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
+}
+
+// Textbox Keep Placeholder Definition
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder() 
+	: Gnk_Textbox() {
+}
+
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder(Gnk_Textbox &textbox) 
+	: Gnk_Textbox(textbox) {
+}
+
+Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder(Gnk_Textbox_Keep_Placeholder &textbox) {
+	this->appear = textbox.appear;
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
+}
+
+void Gnk_Textbox_Keep_Placeholder::draw() {
+	if(!appear) return;
+	this->text = this->text.substr(0, maxLength);
+	std::string newText = this->text;
+	int newMaxLength = this->maxLength;
+	//if(this->text != "") {
+		this->text = this->placeholder + ": " + this->text;
+		this->maxLength = this->placeholder.size() + 2 + newMaxLength;
+	//}
+	Gnk_Textbox::draw();
+	this->text = newText;
+	this->maxLength = newMaxLength;
+}
+
+void Gnk_Textbox_Keep_Placeholder::display() {
 	if(!appear) return;
 	if(on_select && select_process != nullptr) {
 		select_effect();
@@ -708,6 +787,12 @@ void Gnk_Frame::setScrollbar(Gnk_Scrollbar *scrollbar) {
 
 void Gnk_Frame::display() {
 	if (process != nullptr) this->process(this);
+}
+
+void Gnk_Frame::clear_Textbox() {
+	for(auto &it:textboxList) {
+		it.second->text = "";
+	}
 }
 
 // Scrollbar Definition------------------------------------------------------
@@ -889,7 +974,8 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
-
+	
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(A.x + gnk_Translate_X, A.y + gnk_Translate_Y, getGroupWidth(), getGroupHeight());
 
@@ -917,7 +1003,9 @@ void Gnk_List_Object::draw() {
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
-	scrollbar.display();
+	if(this->getGroupHeight() < this->group_height) {
+		scrollbar.display();
+	}
 	gnk_Translate_X = prev_translate_X;
 	gnk_Translate_Y = prev_translate_Y;
 	gnk_Projection = glm::ortho(0.0f, gnk_Width, 0.0f, gnk_Height);
@@ -925,11 +1013,14 @@ void Gnk_List_Object::draw() {
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
 	glDisable(GL_SCISSOR_TEST);
+	glPopAttrib();
 
-	gnk_Set_Object_Color(border_color);
-	gnk_Set_Line_Width(2.0f);
-	gnk_Rectangle(A, B, false);
-	gnk_Set_Line_Width(1.0f);
+	if(border) {
+		gnk_Set_Object_Color(border_color);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rectangle(A, B, false);
+		gnk_Set_Line_Width(1.0f);
+	}
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -1416,7 +1507,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 	if (maxHeight > height)
 		maxHeight = height;
 
-	glEnable(GL_SCISSOR_TEST);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width, height);
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
@@ -1440,6 +1531,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 		);
 	}
 	glDisable(GL_SCISSOR_TEST);
+	glPopAttrib();
 }
 
 int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacing, int fontSize, text_align_value textAlign) {
@@ -1526,4 +1618,38 @@ void gnk_Image(Gnk_Image &image, Gnk_Point A, Gnk_Point B) {
 	
 	glUniform1i(glGetUniformLocation(gnk_Shader.ID, "mode"), 0);
 	glDisable(GL_BLEND);
+}
+
+bool gnk_Point_In_Rectangle(Gnk_Point A, Gnk_Point B, Gnk_Point X) {
+	if(X.x >= A.x && X.y >= A.y && X.x <= B.x && X.y <= B.y) return true;
+	return false;
+}
+
+void gnk_Scissor_2_object(Gnk_Point A, Gnk_Point B, Gnk_Point C, Gnk_Point D) {
+	Gnk_Point point_list[16];
+	float x_values[4] = {A.x, B.x, C.x, D.x};
+	float y_values[4] = {A.y, B.y, C.y, D.y};
+	int t = 0;
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; ++j) {
+			Gnk_Point X(x_values[i], y_values[j]);
+			if(gnk_Point_In_Rectangle(A, B, X) && gnk_Point_In_Rectangle(C, D, X)) {
+				point_list[t] = X;
+				t++;
+			}
+		}
+	}
+	if(t >= 4) {
+		int min_x = point_list[0].x;
+		int min_y = point_list[0].y;
+		int max_x = point_list[0].x;
+		int max_y = point_list[0].y;
+		for(int i = 0; i < 4; i++) {
+			if(point_list[i].x < min_x) min_x = point_list[i].x;
+			if(point_list[i].y < min_y) min_y = point_list[i].y;
+			if(point_list[i].x > max_x) max_x = point_list[i].x;
+			if(point_list[i].y > max_y) max_y = point_list[i].y;
+		}
+		glScissor(min_x, min_y, max_x - min_x, max_y - min_y);
+	}
 }

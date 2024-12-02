@@ -17,7 +17,6 @@ public:
 
     void capNhatFile(LoaiPhong*, string); 
     LoaiPhong *timLoaiPhong(string);
-    // void QLLoaiPhong_Choice();
     int soLuongKhach(string);
     int getGiaPhong(string);
     LinkedList<LoaiPhong>& getDSLP();

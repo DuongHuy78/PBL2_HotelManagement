@@ -198,6 +198,7 @@ public:
 	Gnk_Color border_color;
 	int maxLength = GNK_TEXT_MAX_LENGTH;
 	Gnk_Textbox();
+	Gnk_Textbox(Gnk_Textbox&);
 	void setAppear(bool);
 	void setRange(Gnk_Point, Gnk_Point);
 	void setColor(Gnk_Color);
@@ -230,6 +231,15 @@ public:
 	Gnk_Textbox_Password();
 	Gnk_Textbox_Password(Gnk_Textbox&);
 	Gnk_Textbox_Password(Gnk_Textbox_Password&);
+	virtual void draw();
+	virtual void display();
+};
+
+class Gnk_Textbox_Keep_Placeholder: public Gnk_Textbox {
+public:
+	Gnk_Textbox_Keep_Placeholder();
+	Gnk_Textbox_Keep_Placeholder(Gnk_Textbox&);
+	Gnk_Textbox_Keep_Placeholder(Gnk_Textbox_Keep_Placeholder&);
 	virtual void draw();
 	virtual void display();
 };
@@ -314,6 +324,7 @@ public:
 	void addListObject(std::string, Gnk_List_Object *);
 	void setScrollbar(Gnk_Scrollbar*);
 	void display();
+	void clear_Textbox();
 };
 
 // -Variable Declaration-----------------------------------------------------
@@ -382,4 +393,6 @@ int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int, text_alig
 
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);
+bool gnk_Point_In_Rectangle(Gnk_Point, Gnk_Point, Gnk_Point);
+void gnk_Scissor_2_object(Gnk_Point, Gnk_Point, Gnk_Point, Gnk_Point);
 #endif
