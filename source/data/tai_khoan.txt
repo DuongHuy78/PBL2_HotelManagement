@@ -50,4 +50,6 @@ levanminh_100049;password123;100049
 nguyenthinhu_100050;password123;100050
 nhanvien;password123;200001
 quanly;password123;300001
-HuyDuong;password123;100051
+HuyDuong;123;100051
+HUYDuong;123;100052
+HUYHUY;123;100053
