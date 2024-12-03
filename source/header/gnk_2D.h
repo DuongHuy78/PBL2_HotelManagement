@@ -276,6 +276,7 @@ public:
 class Gnk_List_Object {
 	void (*draw_process)(Gnk_List_Object *);
 public:
+	int numOfObject;
 	int currentPos;
 	bool appear = true;
 	Gnk_Point A;
@@ -290,7 +291,15 @@ public:
 	bool border = false;
 	Gnk_Color border_color;
 
+	struct virtual_button {
+		Gnk_Button *button;
+		int index_on_click;
+		int index_on_hover;
+	};
+	std::vector<virtual_button> buttonList;
+
 	Gnk_List_Object();
+	~Gnk_List_Object();
 	void setRange(Gnk_Point, Gnk_Point);
 	void setCurrentPos(int);
 	void setDrawProcess(void (*)(Gnk_List_Object *));
@@ -307,6 +316,8 @@ public:
 	int toNextObject();
 	void process();	
 	void draw();
+	void virtual_button_process();
+	void addButton(Gnk_Button *);
 };
 
 class Gnk_Frame {
@@ -366,7 +377,7 @@ bool gnk_Shader_Init(std::string, std::string);
 void gnk_Texture_Buffer_Init();
 void gnk_Initialize(float, float, std::string, std::string, std::string);
 
-void gnk_Set_Object_Color(Gnk_Color);
+void gnk_Set_Object_Color(Gnk_Color, float = 1.0f);
 void gnk_Set_Background_Color(Gnk_Color);
 void gnk_Set_Line_Width(float);
 
