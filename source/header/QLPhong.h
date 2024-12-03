@@ -25,7 +25,7 @@ public:
     // void QLPhong_Choice();
 
     // Phong timPhong(time_t, time_t);
-    LinkedList<Phong> &getDanhSachPhong();
+    LinkedList<Phong> &getDSP();
     Node<Phong> *getHead();
 
     friend ostream& operator<<(ostream&, QLPhong&);

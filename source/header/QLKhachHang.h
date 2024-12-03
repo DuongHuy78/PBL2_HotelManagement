@@ -17,7 +17,7 @@ public:
     KhachHang *timKiemKhachHangSDT(string); // Tìm kiếm theo số điện thoại
     KhachHang nhapThongTin();
 
-    LinkedList<KhachHang> &getDanhSachKhachHang();
+    LinkedList<KhachHang> &getDSKH();
     
     friend ostream& operator<<(ostream&, const QLKhachHang&);
 };

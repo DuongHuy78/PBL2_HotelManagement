@@ -132,13 +132,13 @@ void KhachHang::suaThongTin() {
                 this->setSoDienThoai(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
-            break;
+                break;
             case 4:
                 temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
                 this->setGioiTinh(Utils::stringToGender(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
-            break;
+                break;
             case 5:
                 Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
@@ -172,7 +172,8 @@ user_option_value KhachHang::work() {
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);
     Utils::outputData("3. Dat Phong\n", CONSOLE);
-    Utils::outputData("4. Dang xuat\n", CONSOLE);
+    Utils::outputData("4. Lich su dat phong\n", CONSOLE);
+    Utils::outputData("5. Dang xuat\n", CONSOLE);
     Utils::outputData("-----------------------------\n", CONSOLE);
 
     string choice_str;
@@ -193,6 +194,8 @@ user_option_value KhachHang::work() {
         case 3:
             return USER_BOOK_ROOM;
         case 4:
+            return USER_BOOK_ROOM_HISTORY;
+        case 5:
             return SIGN_OUT;
         default:
             Utils::outputData("Lua chon khong hop le!\n", CONSOLE);

@@ -212,6 +212,10 @@ int QLLoaiPhong::getGiaPhong(string maLoaiPhong) {
     return timLoaiPhong(maLoaiPhong)->getGiaPhong();
 } 
 
+LinkedList<LoaiPhong>& QLLoaiPhong::getDSLP() {
+    return DSLP;
+}
+
 ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-LOAI-PHONG----------------\n", CONSOLE);
     Utils::outputData("Danh sach loai phong: \n", CONSOLE);

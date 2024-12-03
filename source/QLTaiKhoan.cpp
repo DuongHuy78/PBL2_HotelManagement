@@ -46,7 +46,7 @@ TaiKhoan *QLTaiKhoan::getTaiKhoanByID(string ID) {
     return NULL;
 }
 
-LinkedList<TaiKhoan> &QLTaiKhoan::getDanhSachTaiKhoan() {
+LinkedList<TaiKhoan> &QLTaiKhoan::getDSTK() {
     return DSTK;
 }
 

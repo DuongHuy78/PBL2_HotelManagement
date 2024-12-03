@@ -57,6 +57,7 @@ enum user_option_value {
     CONTINUE,
     SIGN_OUT,
     USER_BOOK_ROOM,
+    USER_BOOK_ROOM_HISTORY,
     PRINT_DSKH,
     PRINT_DSDP,
     PRINT_DSLP,

@@ -28,7 +28,7 @@ public:
     string taoMaDatPhong();
 
     Node<DatPhong> *getHead();
-    LinkedList<DatPhong> &getDanhSachDatPhong();
+    LinkedList<DatPhong> &getDSDP();
     //void roomAvailability(time_t, time_t, int, LinkedList<Phong>&);
     //DatPhong nhapThongTin();
     

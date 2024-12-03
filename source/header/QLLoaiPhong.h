@@ -19,6 +19,7 @@ public:
     LoaiPhong *timLoaiPhong(string);
     int soLuongKhach(string);
     int getGiaPhong(string);
+    LinkedList<LoaiPhong>& getDSLP();
 
     friend ostream& operator<<(ostream&, const QLLoaiPhong&);
 };

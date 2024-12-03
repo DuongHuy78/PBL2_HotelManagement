@@ -143,7 +143,7 @@ Phong QLPhong::nhapThongTin() {
 //     return Phong();
 // }
 
-LinkedList<Phong> &QLPhong::getDanhSachPhong() {
+LinkedList<Phong> &QLPhong::getDSP() {
     return this->DSP;
 }
 

@@ -13,5 +13,8 @@ int main() {
     cout << "Saving data..." << endl;
     db.outputTaiKhoan("data/tai_khoan.txt");
     db.outputKhachHang("data/khach_hang.txt");
+    db.outputLoaiPhong("data/loaiphong.txt");
+    db.outputPhong("data/phong.txt");
+    db.outputDatPhong("data/dat_phong.txt");
     return 0;
 }

@@ -112,7 +112,7 @@ KhachHang QLKhachHang::nhapThongTin() {
     return newKH;
 }
 
-LinkedList<KhachHang> &QLKhachHang::getDanhSachKhachHang() {
+LinkedList<KhachHang> &QLKhachHang::getDSKH() {
     return DSKH;
 }
 

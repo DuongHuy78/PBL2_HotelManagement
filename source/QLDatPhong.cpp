@@ -89,7 +89,8 @@ string QLDatPhong::taoMaDatPhong(){
 Node<DatPhong> *QLDatPhong::getHead() {
     return this->DSDP.getHead();
 }
-LinkedList<DatPhong> &QLDatPhong::getDanhSachDatPhong() {
+
+LinkedList<DatPhong> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 

@@ -14,7 +14,7 @@ public:
     void suaThongTinTaiKhoan(string);
     string kiemTraTaiKhoan(string, string);
     TaiKhoan *getTaiKhoanByID(string);
-    LinkedList<TaiKhoan> &getDanhSachTaiKhoan();
+    LinkedList<TaiKhoan> &getDSTK();
 
     friend ostream& operator<<(ostream&, const QLTaiKhoan&);
 };

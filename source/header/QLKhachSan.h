@@ -23,6 +23,7 @@ class QLKhachSan {
     NhanVien nhanVien;
     QuanLi quanLi;
     NguoiDung *current_user = nullptr;
+    string currentID = "";
 public:
     QLKhachSan();
     ~QLKhachSan();
