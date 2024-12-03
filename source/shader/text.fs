@@ -3,7 +3,7 @@ in vec2 TexCoords;
 out vec4 color;
 
 uniform sampler2D text;
-uniform vec3 textColor;
+uniform vec4 textColor;
 uniform int mode;      
 uniform int nrChannels;
 // mode = 0: normal render, 
@@ -12,11 +12,11 @@ uniform int nrChannels;
 
 void main() {    
     if(mode == 0) {
-        color = vec4(textColor, 1.0);
+        color = vec4(textColor);
     }
     else if(mode == 1) {
         vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);
-        color = vec4(textColor, 1.0) * sampled;
+        color = vec4(textColor) * sampled;
     }
     else if(mode == 2) {
         if(nrChannels == 1) {

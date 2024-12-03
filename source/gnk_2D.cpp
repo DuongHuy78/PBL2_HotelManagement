@@ -209,9 +209,11 @@ void Gnk_Button::process() {
 		if (xpos - gnk_Translate_X >= A.x && xpos - gnk_Translate_X <= B.x && 
 		ypos - gnk_Translate_Y >= A.y && ypos - gnk_Translate_Y <= B.y) {
 			onClick = true;
+			onHover = true;
 		}
 		else {
 			onClick = false;
+			onHover = false;
 		}
 	}
 	else if (xpos - gnk_Translate_X >= A.x && xpos - gnk_Translate_X <= B.x && 
@@ -718,6 +720,7 @@ Gnk_Textbox_Keep_Placeholder::Gnk_Textbox_Keep_Placeholder(Gnk_Textbox_Keep_Plac
 
 void Gnk_Textbox_Keep_Placeholder::draw() {
 	if(!appear) return;
+	if(this->text.size() > maxLength)
 	this->text = this->text.substr(0, maxLength);
 	std::string newText = this->text;
 	int newMaxLength = this->maxLength;
@@ -903,7 +906,12 @@ Gnk_List_Object::Gnk_List_Object() {
 }
 
 Gnk_List_Object::~Gnk_List_Object() {
-	delete virtual_button;
+	for(auto &it:buttonList) {
+		if(it.button != nullptr) {
+			delete it.button;
+			it.button = nullptr;
+		}
+	}
 }
 
 void Gnk_List_Object::setRange(Gnk_Point A, Gnk_Point B) {
@@ -1030,11 +1038,37 @@ void Gnk_List_Object::draw() {
 
 void Gnk_List_Object::virtual_button_process() {
 	if(!appear) return;
-	std::cout << "numOfObject: " << numOfObject << std::endl;
-	// Gnk_Point prev_A = A;
-	// Gnk_Point prev_B = B;
-	// for(int i = 0; i < )
-	// A.translate(0.0f, -)
+	for(auto &it : buttonList) {
+		if(it.button != nullptr) {
+			it.index_on_click = -1;
+			it.index_on_hover = -1;
+			Gnk_Point prev_A = it.button->A;
+			Gnk_Point prev_B = it.button->B;
+			for(int i = 0; i < numOfObject; ++i) {
+				it.button->A = prev_A.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
+				it.button->B = prev_B.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
+				it.button->onClick = false;
+				it.button->onHover = false;
+				it.button->process();
+				if(it.button->onClick) {
+					it.index_on_click = i;
+				}
+				if(it.button->onHover) {
+					it.index_on_hover = i;
+				}
+			}
+			it.button->A = prev_A;
+			it.button->B = prev_B;
+		}
+	}
+}
+
+void Gnk_List_Object::addButton(Gnk_Button *button) {
+	virtual_button newVirtualButton;
+	newVirtualButton.button = button;
+	newVirtualButton.index_on_click = -1;
+	newVirtualButton.index_on_hover = -1;
+	buttonList.push_back(newVirtualButton);
 }
 
 // -Variable Declaration-----------------------------------------------------
@@ -1078,6 +1112,11 @@ static void gnk_Cursor_Position_Callback(GLFWwindow* window, double xpos, double
 			gnk_Current_Frame->scrollbar->process();
 		}
 	}
+	for(auto &it: gnk_Current_Frame->listObjectList) {
+		if(it.second != nullptr) {
+			it.second->virtual_button_process();
+		}
+	}
 }
 
 void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int mods) {
@@ -1101,6 +1140,9 @@ void gnk_Mouse_Button_Callback(GLFWwindow* window, int button, int action, int m
 		}
 		if (gnk_Current_Frame->scrollbar != nullptr) {
 			gnk_Current_Frame->scrollbar->process();
+		}
+		for (auto &it: gnk_Current_Frame->listObjectList) {
+			it.second->virtual_button_process();
 		}
 		gnk_Mouse_Ignore = true;
 	}
@@ -1135,6 +1177,11 @@ void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
 			it.second->currentPos += yoffset * gnk_Scroll_Speed;
 			if (it.second->currentPos > it.second->getGroupHeight()) it.second->currentPos = it.second->getGroupHeight();
 			if (it.second->currentPos < 2 * it.second->getGroupHeight() - it.second->group_height) it.second->currentPos = 2 * it.second->getGroupHeight() - it.second->group_height;
+			for(auto &it: gnk_Current_Frame->listObjectList) {
+				if(it.second != nullptr) {
+					it.second->virtual_button_process();
+				}
+			}
 			return;
 		}
 	}
@@ -1152,6 +1199,15 @@ void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
 	gnk_Projection = glm::translate(gnk_Projection, glm::vec3(gnk_Translate_X, gnk_Translate_Y, 0.0f));
 	glUniformMatrix4fv(glGetUniformLocation(gnk_Shader.ID, "projection"),
 		1, GL_FALSE, glm::value_ptr(gnk_Projection));
+
+	for(auto &it: gnk_Current_Frame->buttonList) {
+		if(it.second != nullptr) {
+			it.second->process();
+		}
+		if (gnk_Current_Frame->scrollbar != nullptr) {
+			gnk_Current_Frame->scrollbar->process();
+		}
+	}
 }
 
 void gnk_Key_Callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -1241,10 +1297,10 @@ void gnk_Initialize(float width, float height, std::string title, std::string ve
 	gnk_Frame_Position = gnk_Height;
 }
 
-void gnk_Set_Object_Color(Gnk_Color color) {
+void gnk_Set_Object_Color(Gnk_Color color, float alpha) {
 	gnk_Shader.use();
-	glUniform3f(glGetUniformLocation(gnk_Shader.ID, "textColor"),
-		color.red, color.green, color.blue);
+	glUniform4f(glGetUniformLocation(gnk_Shader.ID, "textColor"),
+		color.red, color.green, color.blue, alpha);
 }
 
 void gnk_Set_Background_Color(Gnk_Color color) {

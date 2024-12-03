@@ -23,6 +23,9 @@ struct room_type {
 string check_in_date_str = "";
 string check_out_date_str = "";
 string number_of_guest_str = "";
+int index_selected_room = -1;
+int index_hover_room = -1;
+int index_booking = -1;
 vector<room_type> room_list;
 struct guest_profile {
 	string ID;
@@ -309,7 +312,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	frame->buttonList["search_room_button"]->display();
 	frame->buttonList["booking_infomation_button"]->display();
 	frame->buttonList["profile_button"]->display();
-	frame->buttonList["booking_button"]->display();
+	// frame->buttonList["booking_button"]->display();
 	if(option == SEARCH_ROOM) {
 		// Search box
 		gnk_Set_Object_Color(light_yellow2);
@@ -382,6 +385,22 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	}
 	else if(option == BOOKING) {
 		// Booking
+		if(index_booking != -1) {
+			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+			gnk_Rectangle(Gnk_Point(480.0f, 440.0f), Gnk_Point(1530.0f, 740.0f));
+			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
+			gnk_Rectangle(Gnk_Point(480.0f, 440.0f), Gnk_Point(780.0f, 740.0f));
+			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+			gnk_Text("Loai Phong: " + room_list[index_booking].type, Gnk_Point(820.0f, 690.0f), 24.0f);
+			gnk_Text("Loai Giuong: " + room_list[index_booking].bed_type, Gnk_Point(820.0f, 660.0f), 24.0f);
+			gnk_Text("So Nguoi: " + room_list[index_booking].number_of_guest, Gnk_Point(820.0f, 630.0f), 24.0f);
+			gnk_Text("Dien Tich: " + room_list[index_booking].area, Gnk_Point(820.0f, 600.0f), 24.0f);
+			gnk_Text("Gia: " + room_list[index_booking].price, Gnk_Point(820.0f, 570.0f), 24.0f);
+			gnk_Set_Line_Width(2.0f);
+			gnk_Line(Gnk_Point(820.0f, 560.0f), Gnk_Point(1510.0f, 560.0f));
+			gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 530.0f), 64, 10, 24);
+			gnk_Text("So Luong: " + room_list[index_booking].amount, Gnk_Point(1360.0f, 690.0f), 24.0f);
+		}
 	}
 }
 
@@ -403,7 +422,7 @@ void guest_frame_search_room_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->clear_Textbox();
 	search_room_list_enable = false;
 	room_list_init = false;
-	current_frame->listObjectList["search_room_list"]->setAppear(false);
+	gnk_Current_Frame->listObjectList["search_room_list"]->setAppear(false);
 	option = SEARCH_ROOM;
 }
 
@@ -425,14 +444,15 @@ void guest_frame_profile_button_click(Gnk_Button *button) {
 	option = PROFILE;
 }
 
-void guest_frame_booking_button_click(Gnk_Button *button) {
-	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
-	Gnk_Color color = buttonText->color;
-	buttonText->color = color - Gnk_Color(40, 40, 40);
-	buttonText->draw();
-	buttonText->color = color;
-	option = BOOKING;
-}
+// void guest_frame_booking_button_click(Gnk_Button *button) {
+// 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+// 	Gnk_Color color = buttonText->color;
+// 	buttonText->color = color - Gnk_Color(40, 40, 40);
+// 	buttonText->draw();
+// 	buttonText->color = color;
+// 	index_booking = -1;
+// 	option = BOOKING;
+// }
 
 void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 	if(search_room_list_enable) {
@@ -469,6 +489,34 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 		}
 		list->setGroupHeight(list->toNextObject()*room_list.size());
 		list->numOfObject = room_list.size();
+		for(auto &it : list->buttonList) {
+			if(it.button != nullptr) {
+				Gnk_Point prev_A = it.button->A;
+				Gnk_Point prev_B = it.button->B;
+				for(int i = 0; i < list->numOfObject; ++i) {
+					it.button->A = prev_A.translate(0.0f, - i * list->toNextObject());
+					it.button->B = prev_B.translate(0.0f, - i * list->toNextObject());
+					if(it.index_on_click == i) {
+						index_selected_room = i;
+						it.button->onClick = true;
+					}
+					else {
+						it.button->onClick = false;
+					}
+					if(it.index_on_hover == i) {
+						index_hover_room = i;
+						it.button->onHover = true;
+					}
+					else {
+						it.button->onHover = false;
+					}
+					it.button->display();
+				}
+				it.index_on_click = -1;
+				it.button->A = prev_A;
+				it.button->B = prev_B;
+			}
+		}
 		for(int i = 0; i < room_list.size(); i++) {
 			GLint scissorBox[4];
 			glGetIntegerv(GL_SCISSOR_BOX, scissorBox);
@@ -490,8 +538,24 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(1030.0f, 120.0f - i * list->toNextObject()));
 			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
 			gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
+			if(index_hover_room == i) {
+				gnk_Set_Object_Color(Gnk_Color(0, 0, 0), 0.2f);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
+				glDisable(GL_BLEND);
+			}
+			if(index_selected_room == i) {
+				gnk_Set_Object_Color(Gnk_Color(0, 0, 0), 0.4f);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
+				glDisable(GL_BLEND);
+			}
 			glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
 		}
+		index_selected_room = -1;
+		index_hover_room = -1;
 	}
 }
 
@@ -505,12 +569,12 @@ void guest_frame_lookup_button_image_click(Gnk_Button *button) {
 		cout << "Check in date: " << check_in_date_str << endl;
 		cout << "Check out date: " << check_out_date_str << endl;
 		cout << "Number of guest: " << number_of_guest_str << endl;
-		current_frame->listObjectList["search_room_list"]->setAppear(true);
+		gnk_Current_Frame->listObjectList["search_room_list"]->setAppear(true);
 		search_room_list_enable = true;
 		room_list_init = false;
 	}
 	else {
-		current_frame->listObjectList["search_room_list"]->setAppear(false);
+		gnk_Current_Frame->listObjectList["search_room_list"]->setAppear(false);
 		cout << "Invalid date" << endl;
 		search_room_list_enable = false;
 	}
@@ -558,6 +622,14 @@ void guest_frame_save_profile_button_click(Gnk_Button *button) {
 	UI_input_buffer << Utils::genderToString(current_guest_profile.gender) << endl;
 	UI_input_buffer << 5 << endl;
 	current_Data->requestHandling(CHANGE_PROFILE);
+}
+
+void guest_frame_select_type_room_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	buttonText->draw();
+	std::cout << "Select type room: " << index_selected_room << std::endl;
+	index_booking = index_selected_room;
+	option = BOOKING;
 }
 
 Gnk_Frame guest(guest_frame_draw);
@@ -782,10 +854,10 @@ void guest_frame_init() {
 	guest_frame_profile_button->setText("Profile");
 	guest_frame_profile_button->setClickProcess(guest_frame_profile_button_click);
 
-	Gnk_Button_With_Text *guest_frame_booking_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
-	guest_frame_booking_button->setRange(Gnk_Point(40.0f, 380.0f), Gnk_Point(400.0f, 460.0f));
-	guest_frame_booking_button->setText("Booking");
-	guest_frame_booking_button->setClickProcess(guest_frame_booking_button_click);
+	// Gnk_Button_With_Text *guest_frame_booking_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
+	// guest_frame_booking_button->setRange(Gnk_Point(40.0f, 380.0f), Gnk_Point(400.0f, 460.0f));
+	// guest_frame_booking_button->setText("Booking");
+	// guest_frame_booking_button->setClickProcess(guest_frame_booking_button_click);
 
 	Gnk_Textbox_Keep_Placeholder *guest_frame_check_in_textbox = new Gnk_Textbox_Keep_Placeholder();
 	guest_frame_check_in_textbox->setRange(Gnk_Point(520.0f, 700.0f), Gnk_Point(820.0f, 760.0f));
@@ -811,6 +883,12 @@ void guest_frame_init() {
 	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
+	Gnk_Button *guest_frame_select_type_room_button = new Gnk_Button();
+	guest_frame_select_type_room_button->setRange(Gnk_Point(0.0f, 0.0f), Gnk_Point(1050.0f, 300.0f));
+	guest_frame_select_type_room_button->setColor(Gnk_Color(255, 255, 255));
+	guest_frame_select_type_room_button->setHoverProcess(button_hover_type_1);
+	guest_frame_select_type_room_button->setClickProcess(guest_frame_select_type_room_button_click);
+
 	Gnk_List_Object *group = new Gnk_List_Object();
 	group->setRange(Gnk_Point(430.0f, 0.0f), Gnk_Point(1600.0f, 680.0f));
 	group->setCurrentPos(group->getGroupHeight());
@@ -820,6 +898,7 @@ void guest_frame_init() {
 	group->setObjectSpace(50);
 	group->setGroupHeight(680);
 	group->setDrawProcess(guest_frame_search_room_list_process);
+	group->addButton(guest_frame_select_type_room_button);
 
 	Gnk_Button_With_Image *guest_frame_lookup_button_image = new Gnk_Button_With_Image();
 	guest_frame_lookup_button_image->setRange(Gnk_Point(1460.0f, 710.0f), Gnk_Point(1500.0f, 750.0f));
@@ -874,7 +953,7 @@ void guest_frame_init() {
 	guest.addButton("search_room_button", guest_frame_search_room_button);
 	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
 	guest.addButton("profile_button", guest_frame_profile_button);
-	guest.addButton("booking_button", guest_frame_booking_button);
+	//guest.addButton("booking_button", guest_frame_booking_button);
 	guest.addButton("lookup", guest_frame_lookup_button_image);
 	guest.addTextbox("check_in_textbox", guest_frame_check_in_textbox);
 	guest.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
