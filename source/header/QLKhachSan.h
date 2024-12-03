@@ -22,8 +22,8 @@ class QLKhachSan {
     role_value role = UNDEFINED_ROLE;    
     NhanVien nhanVien;
     QuanLi quanLi;
-    string currentID; 
     NguoiDung *current_user = nullptr;
+    string currentID = "";
 public:
     QLKhachSan();
     ~QLKhachSan();

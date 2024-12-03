@@ -19,6 +19,13 @@ void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
     this->DSKH = DSKH;
 }
 
+void QLDatPhong::setcurrentID(string ID) {
+    this->currentID = ID;
+}
+
+void QLDatPhong::setRole(role_value role) {
+    this->role = role;
+}
 void QLDatPhong::themDatPhong(DatPhong DP) {
     DSDP.add(DP);
 }
@@ -44,7 +51,6 @@ DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
     return nullptr;
 }
 
-
 /**
  * @brief Lấy mã đặt phòng lớn nhất
  * Nếu danh sách rỗng thì trả về 00000
@@ -68,7 +74,7 @@ string QLDatPhong::taoMaDatPhong(){
     string MDPNew;
     Node<DatPhong> *p = DSDP.getHead()->next;
     if (this->getMaxMaDatPhong() == "99999") {
-        MDPNew = "00001";
+        MDPNew = "000001";
     }
     else{
         MDPNew = Utils::intToString(Utils::stringToInt(getMaxMaDatPhong()) + 1);

@@ -132,13 +132,13 @@ void KhachHang::suaThongTin() {
                 this->setSoDienThoai(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
-            break;
+                break;
             case 4:
                 temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
                 this->setGioiTinh(Utils::stringToGender(temp));
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
-            break;
+                break;
             case 5:
                 Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
                 return;
@@ -149,10 +149,6 @@ void KhachHang::suaThongTin() {
         }  
     }
 }
-
-void KhachHang::LichSuDatPhong() {
-    Utils::outputData("Lich su dat phong cua khach hang: \n", CONSOLE);
-}    
 
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
