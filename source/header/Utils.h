@@ -456,9 +456,9 @@ public:
     }
 
     static bool isRoomBedType(const string &str) {
-        int s = stringToInt(str);
-        int roomBedTypes[] = {1, 2, 12};
-        for (int roomBedType : roomBedTypes) {
+        string s = str;
+        string roomBedTypes[] = {"Single", "Double", "SingleDouble", "DoubleSingle"};
+        for (string roomBedType : roomBedTypes) {
             if (s == roomBedType) {
                 return true;
             }
@@ -527,10 +527,26 @@ public:
     }
 
     static void pauseConsole() {
-    if(current_mode == CONSOLE) {
-        cout << "Nhan phim bat ky de tiep tuc...";
-        cin.get();
+        if(current_mode == CONSOLE) {
+            cout << "Nhan phim bat ky de tiep tuc...";
+            cin.get();
+        }
     }
-}
+
+    /**
+     * hàm này để chuyển số nguyên thành chuỗi có dấu chấm phân cách hàng nghìn
+     * vd: 1000000 -> 1.000.000
+     */
+    static void chuanHoaSo(string &n) {
+        string last, temp;
+        while(n[0] == '0') {
+            n.erase(0, 1);
+        }
+        if (n.size() > 3) {
+            for (int i = n.size() - 3; i > 0; i -= 3) {
+                n.insert(i, ".");
+            }
+        }
+    }
 };
 #endif

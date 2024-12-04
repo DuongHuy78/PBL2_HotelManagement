@@ -8,14 +8,11 @@ public:
     QLLoaiPhong();
     ~QLLoaiPhong();
 
-    void AddRangeLoaiPhong(string);
-
     void themLoaiPhong(const LoaiPhong&); 
     void xemLoaiPhong();
     void suaThongTin(const string&);
     void xoaLoaiPhong(const string& );
 
-    void capNhatFile(LoaiPhong*, string); 
     LoaiPhong *timLoaiPhong(string);
     int soLuongKhach(string);
     int getGiaPhong(string);
