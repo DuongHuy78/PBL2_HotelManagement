@@ -119,28 +119,6 @@ bool LoaiPhong::setMoTaPhong(string MTP) {
     return true;
 }
 
-//NEW LOAIPHONG
-// void LoaiPhong::NhapLoaiPhongMoi() {
-//     cout << "Nhap Loai Phong: ";
-//     this->loaiPhong = Utils::nhap(5,MAX_IDLOAIPHONG+1);
-
-//     cout << "Nhap Loai Giuong: ";
-//     this->loaiGiuong =  stoi(Utils::nhap(1,3));
-
-//     cout << "Nhap So Luong Khach: ";
-//     this->soLuongKhach = stoi(Utils::nhap(1,2)); // tối đa 8 người -> 2 ký tự + 1 ký tự /0
-
-//     cout << "Nhap Dien Tich: ";
-//     this->dienTich = stoi(Utils::nhap(1,3));
-
-//     cout << "Nhap Gia Phong: ";
-//     this->giaPhong = stoi(Utils::nhap(1,8));
-
-//     cout << "Nhap Mo Ta Phong: ";
-//     this->moTaPhong = Utils::nhap(3,150);
-//     return;
-// }
-
 LoaiPhong LoaiPhong::nhapThongTin() {
     string temp;
     LoaiPhong tempLoaiPhong;
@@ -225,128 +203,14 @@ void LoaiPhong::capNhatThongTin(){
         }  
     }
 }
-// HÀM SỬA THÔNG TIN LOẠI PHÒNG (loaiphong.txt)
-// void LoaiPhong::capNhatThongTin() 
-// {
-//     //Xử lý từng lựa chọn của người dùng
-//     int choice;
-//     int temp;
-//     string tempStr;
-//     while (true)
-//     {
-//         menuCapNhat();
-//         choice = stoi(Utils::nhap(1,2));
-//         switch(choice)
-//         {
-//             case 1: 
-//                 {
-//                     cout << "Nhap Loai Giuong(1/2/12): ";
-//                     tempStr = (Utils::nhap(1,3));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setLoaiGiuong(temp);
-//                     cout << "Cap Nhat Loai Giuong Thanh Cong!" << endl;
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 2: 
-//                 {
-//                     cout << "Nhap So Luong Khach: ";
-//                     tempStr = (Utils::nhap(1,2));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setSoLuongKhach(temp);
-//                     cout << "Cap Nhat So Luong Khach Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 3: 
-//                 {
-//                     cout << "Nhap Dien Tich: ";
-//                     tempStr = (Utils::nhap(1,4));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setDienTich(temp);
-//                     cout << "Cap Nhat Dien Tich Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 4: 
-//                 {
-//                     cout << "Nhap Gia: ";
-//                     tempStr = (Utils::nhap(1,9));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setGiaPhong(temp);
-//                     cout << "Cap Nhat Gia Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 5: 
-//                 {
-//                     cout << "Nhap Mo Ta";
-//                     tempStr = (Utils::nhap(6,100));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     this->setMoTaPhong(tempStr);
-//                     cout << "Cap Nhat Mo Ta Phong Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 6: 
-//                 {
-//                     cout << "Ban dang thoat khoi chuc nang chinh sua loai phong......" << endl;
-//                     return ;
-//                 }
-//             default: 
-//                 {
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     cout << "Lua chon khong hop le." << endl;
-//                     cout<< "Vui long chon lai!" << endl;
-//                     break;
-//                 }
-//         }
-//     }
-// }
-
 
 // XUAT THONG TIN
-void LoaiPhong::xuatThongTin() {
-    cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
-    << setw(9) << dienTich << setw(13) << giaPhong; 
-    Utils::wrapText(moTaPhong, 40, 65);
-    cout << string(105, '-') << endl;
-}   
+// void LoaiPhong::xuatThongTin() {
+//     cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
+//     << setw(9) << dienTich << setw(13) << giaPhong; 
+//     Utils::wrapText(moTaPhong, 40, 65);
+//     cout << string(105, '-') << endl;
+// }   
 
 ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("-----------THONG-TIN-LOAI-PHONG---------\n", CONSOLE);
@@ -357,9 +221,9 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Dien Tich: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.dienTich) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::intToString(lp.dienTich) + " m2\n", CONSOLE_OR_UI);
     Utils::outputData("Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.giaPhong) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::intToString(lp.giaPhong) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);

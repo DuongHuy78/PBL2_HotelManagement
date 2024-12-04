@@ -33,7 +33,7 @@ public:
     LoaiPhong nhapThongTin();
     void menuSuaThongTin();
     void capNhatThongTin();
-    void xuatThongTin();
+    //void xuatThongTin();
     
     friend ostream& operator<<(ostream& out, const LoaiPhong&);
 };

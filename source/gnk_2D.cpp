@@ -798,6 +798,30 @@ void Gnk_Frame::clear_Textbox() {
 	}
 }
 
+void Gnk_Frame::disable_all_button() {
+	for(auto &it:buttonList) {
+		it.second->setAppear(false);
+	}
+}
+
+void Gnk_Frame::disable_all_textbox() {
+	for(auto &it:textboxList) {
+		it.second->setAppear(false);
+	}
+}
+
+void Gnk_Frame::disable_all_listObject() {
+	for(auto &it:listObjectList) {
+		it.second->setAppear(false);
+	}
+}
+
+void Gnk_Frame::disable_all() {
+	disable_all_button();
+	disable_all_textbox();
+	disable_all_listObject();
+}
+
 // Scrollbar Definition------------------------------------------------------
 Gnk_Scrollbar::Gnk_Scrollbar() {
 	this->maxHeight = 0;
@@ -1042,23 +1066,32 @@ void Gnk_List_Object::virtual_button_process() {
 		if(it.button != nullptr) {
 			it.index_on_click = -1;
 			it.index_on_hover = -1;
-			Gnk_Point prev_A = it.button->A;
-			Gnk_Point prev_B = it.button->B;
-			for(int i = 0; i < numOfObject; ++i) {
-				it.button->A = prev_A.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
-				it.button->B = prev_B.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
-				it.button->onClick = false;
-				it.button->onHover = false;
-				it.button->process();
-				if(it.button->onClick) {
-					it.index_on_click = i;
+		}
+	}
+	double xpos, ypos;
+	glfwGetCursorPos(gnk_Window, &xpos, &ypos);
+	ypos = gnk_Height - ypos;
+	if(xpos >= this->A.x && xpos <= this->B.x && ypos >= this->A.y && ypos <= this->B.y) {
+		for(auto &it : buttonList) {
+			if(it.button != nullptr) {
+				Gnk_Point prev_A = it.button->A;
+				Gnk_Point prev_B = it.button->B;
+				for(int i = 0; i < numOfObject; ++i) {
+					it.button->A = prev_A.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
+					it.button->B = prev_B.translate(this->A.x + this->object_start_position.x, this->A.y + this->object_start_position.y + getGroupHeight() - currentPos - i * toNextObject());
+					it.button->onClick = false;
+					it.button->onHover = false;
+					it.button->process();
+					if(it.button->onClick) {
+						it.index_on_click = i;
+					}
+					if(it.button->onHover) {
+						it.index_on_hover = i;
+					}
 				}
-				if(it.button->onHover) {
-					it.index_on_hover = i;
-				}
+				it.button->A = prev_A;
+				it.button->B = prev_B;
 			}
-			it.button->A = prev_A;
-			it.button->B = prev_B;
 		}
 	}
 }
@@ -1168,12 +1201,16 @@ void gnk_Character_Callback(GLFWwindow* window, unsigned int codepoint) {
 }
 
 void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
+	bool stop = false;
 	for(auto &it: gnk_Current_Frame->listObjectList) {
 		double xpos, ypos;
 		glfwGetCursorPos(gnk_Window, &xpos, &ypos);
 		ypos = gnk_Height - ypos;
 		if (xpos - gnk_Translate_X >= it.second->A.x && xpos - gnk_Translate_X <= it.second->B.x &&
 			ypos - gnk_Translate_Y >= it.second->A.y && ypos - gnk_Translate_Y <= it.second->B.y) {
+			if(it.second->currentPos + yoffset * gnk_Scroll_Speed <= it.second->getGroupHeight()) {
+				stop = true;
+			}
 			it.second->currentPos += yoffset * gnk_Scroll_Speed;
 			if (it.second->currentPos > it.second->getGroupHeight()) it.second->currentPos = it.second->getGroupHeight();
 			if (it.second->currentPos < 2 * it.second->getGroupHeight() - it.second->group_height) it.second->currentPos = 2 * it.second->getGroupHeight() - it.second->group_height;
@@ -1182,9 +1219,10 @@ void gnk_Scroll_Callback(GLFWwindow* window, double xoffset, double yoffset) {
 					it.second->virtual_button_process();
 				}
 			}
-			return;
 		}
 	}
+	
+	if(stop) return;
 
 	if(gnk_Current_Frame->scrollbar == nullptr) return;
 	gnk_Current_Frame->scrollbar->currentPos += yoffset * gnk_Scroll_Speed;

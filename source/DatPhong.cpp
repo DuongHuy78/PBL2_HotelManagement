@@ -260,7 +260,7 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(dp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Don Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(dp.donGia) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::intToString(dp.donGia) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("---------------------------------------\n", CONSOLE);
     return out;
 }

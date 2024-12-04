@@ -74,21 +74,21 @@ void QLLoaiPhong::themLoaiPhong(const LoaiPhong& NewLP){
     (this->DSLP).add(NewLP);
 }
 
-void QLLoaiPhong::xemLoaiPhong(){
-    cout << "DANH SACH LOAI PHONG CUA KHACH SAN CHUNG TOI:\n" << endl;
-    cout << left << setw(12) << "LoaiPhong" << setw(13) << "LoaiGiuong" << setw(15) << "SoLuongKhach" 
-         << setw(13) << "DienTich" << setw(25) << "Gia" << "MoTaPhong" << endl;
-    // Đặt chiều rộng của cột = setw() để tạo khoảng cách đều giữa các cột.
-    // left: Đảm bảo văn bản được căn trái.
-    cout << string(105, '-') << endl; 
-    // Tạo một đường kẻ ngang để phân cách tiêu đề bảng với dữ liệu
+// void QLLoaiPhong::xemLoaiPhong(){
+//     cout << "DANH SACH LOAI PHONG CUA KHACH SAN CHUNG TOI:\n" << endl;
+//     cout << left << setw(12) << "LoaiPhong" << setw(13) << "LoaiGiuong" << setw(15) << "SoLuongKhach" 
+//          << setw(13) << "DienTich" << setw(25) << "Gia" << "MoTaPhong" << endl;
+//     // Đặt chiều rộng của cột = setw() để tạo khoảng cách đều giữa các cột.
+//     // left: Đảm bảo văn bản được căn trái.
+//     cout << string(105, '-') << endl; 
+//     // Tạo một đường kẻ ngang để phân cách tiêu đề bảng với dữ liệu
 
-      Node<LoaiPhong> *p = DSLP.begin();
-      while(p != DSLP.end()){
-        p->data.xuatThongTin();
-        p = p -> next;
-      }
-}
+//       Node<LoaiPhong> *p = DSLP.begin();
+//       while(p != DSLP.end()){
+//         p->data.xuatThongTin();
+//         p = p -> next;
+//       }
+// }
 
 void QLLoaiPhong::suaThongTin(const string& IDLoaiPhong){
     Node<LoaiPhong> *p = DSLP.begin();

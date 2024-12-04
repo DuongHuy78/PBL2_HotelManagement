@@ -139,10 +139,6 @@ Phong QLPhong::nhapThongTin() {
     return tempPhong;
 }
 
-// Phong QLPhong::timPhong(time_t, time_t) {
-//     return Phong();
-// }
-
 LinkedList<Phong> &QLPhong::getDSP() {
     return this->DSP;
 }

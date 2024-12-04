@@ -11,7 +11,7 @@ public:
     void AddRangeLoaiPhong(string);
 
     void themLoaiPhong(const LoaiPhong&); 
-    void xemLoaiPhong();
+    //void xemLoaiPhong();
     void suaThongTin(const string&);
     void xoaLoaiPhong(const string& );
 
