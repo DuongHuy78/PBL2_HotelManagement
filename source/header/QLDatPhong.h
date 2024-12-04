@@ -26,11 +26,10 @@ public:
     DatPhong *timKiemDatPhong(string);
     string getMaxMaDatPhong();
     string taoMaDatPhong();
-
+    
     Node<DatPhong> *getHead();
     LinkedList<DatPhong> &getDSDP();
-    //void roomAvailability(time_t, time_t, int, LinkedList<Phong>&);
-    //DatPhong nhapThongTin();
+    int tongTien(string, string, string, string );
     
     friend ostream& operator<<(ostream&, const QLDatPhong&);
 };

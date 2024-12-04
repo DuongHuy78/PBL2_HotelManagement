@@ -7,64 +7,6 @@ QLPhong::QLPhong() {
 QLPhong::~QLPhong() {
 
 }
-
-// HÀM THÊM CÁC LPHÒNG vào DSP (LinkedList)
-void QLPhong::AddRangePhong(string file) {
-    ifstream inputFile(file);
-    if(!inputFile.is_open()) {
-        cout << "Error: Could not open file." << endl;
-        return;
-    }
-
-    // cout << "Day la danh sach phong cua chung toi: "<< endl;
-    // cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
-    // cout << string(24, '-') << endl;
-    int count = 0;
-    string line; 
-    while(getline(inputFile, line)) {
-        // cout << line << endl;
-        string str[2]; // chua hai truong : maphong va loaiphong
-        string r = "";
-        int c = 0; 
-        for(int i = 0; i < line.size(); i++)
-        {
-            if(line[i] == ';')
-            {
-                str[c++] = r;  // Lưu giá trị r vào str[c] và tăng c
-                r = ""; // Reset r về chuỗi rỗng để chuẩn bị cho trường mới
-            }
-            else r += line[i];
-        }
-        if(r.size() > 0)
-        {
-            str[c++] = r;
-        }       
-        Phong A(str[0], str[1]);
-        (this->DSP).add(A); // mỗi khi vòng lặp while kết thúc, một đối tượng loại phòng nới sẽ được tạo ra  và thêm vào DSLP
-        count++;
-    }
-    inputFile.close();
-    cout << "Da nhap du lieu cua " << count << " phong tu file: " << file << endl;
-}
-
-//update file
-// void QLPhong::capNhatFile(Phong* head, string path){
-//     ofstream inputFile(path);
-//     if(!inputFile)
-//         {
-//             cout << "Khong the mo file de ghi!" << endl;
-//             return;
-//         }
-//     Phong *p = head;
-//     while( p != nullptr) 
-//         {
-//             inputFile << p->getMaPhong() << ";"; 
-//             inputFile << p->getLoaiPhong() <<";";     
-//             cout << endl;
-//         }
-//     inputFile.close();
-//     cout << "Cap nhat phong.txt thanh cong!" << endl;
-// }
     
 void QLPhong::xemPhong(){
     cout << "Day la danh sach phong cua Hotel Del Luna: "<< endl;
@@ -91,6 +33,7 @@ void QLPhong::xoaPhong(const string& MP){
             {
                 DSP.remove(p);
                 cout << "Da xoa Phong voi ID: " << MP << endl;
+                Utils::pauseConsole();
                 return;
             }
         p = p -> next;
@@ -143,9 +86,9 @@ LinkedList<Phong> &QLPhong::getDSP() {
     return this->DSP;
 }
 
-Node<Phong> *QLPhong::getHead() {
-    return this->DSP.getHead();
-}
+// Node<Phong> *QLPhong::getHead() {
+//     return this->DSP.getHead();
+// }
 
 ostream &operator<<(ostream &os, QLPhong &qlPhong) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-PHONG-----------------\n", CONSOLE);
