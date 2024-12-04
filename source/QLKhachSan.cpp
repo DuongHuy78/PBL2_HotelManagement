@@ -19,7 +19,6 @@ QLKhachSan::QLKhachSan() {
     if(choice == "Y") {
         UI_enable = true;
         current_mode = UI_STREAM;
-        UI_init();
         current_Data = this;
     }
     else {
@@ -779,6 +778,32 @@ void QLKhachSan::list_Type_Room_Available() {
         Utils::outputData(Utils::intToString(lpa->data.amount) + "\n", CONSOLE_OR_UI);
         Utils::outputData("\n\n", CONSOLE);
         lpa = lpa->next;
+    }
+}
+
+void QLKhachSan::list_Room_Available() {
+    string ngayNhan, ngayTra, soLuongKhach;
+    LinkedList<Phong *> phongTrong;
+    LinkedList<loaiPhongAvailable> listlpa;
+    searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
+    string loaiPhong;
+    loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
+    Utils::outputData("Danh sach phong:\n", CONSOLE);
+    Node<Phong *> *p = phongTrong.begin();
+    while(p != phongTrong.end()) {
+        if(p->data->getLoaiPhong() == loaiPhong) {
+            Utils::outputData(p->data->getMaPhong() + "\n", CONSOLE_OR_UI);
+        }
+        p = p->next;
+    }
+}
+
+void QLKhachSan::list_all_type_room() {
+    LinkedList<LoaiPhong> &DSLP = QLLP.getDSLP();
+    Node<LoaiPhong> *p = DSLP.begin();
+    while(p != DSLP.end()) {
+        Utils::outputData(p->data.getLoaiPhong() + "\n", CONSOLE_OR_UI);
+        p = p->next;
     }
 }
 

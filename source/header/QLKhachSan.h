@@ -51,6 +51,8 @@ public:
     void searchTypeRoom(string &, string &, string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
     void bookingRoom(const string &, const string &, const string &, LinkedList<Phong *> &, LinkedList<loaiPhongAvailable> &);
     void list_Type_Room_Available();
+    void list_Room_Available();
+    void list_all_type_room();
     role_value getCurrentRole();
 };
 

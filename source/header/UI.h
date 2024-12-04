@@ -15,6 +15,8 @@ enum option_value {
 	BOOKING_INFORMATION,
 	PROFILE,
 	BOOKING,
+	BOOKING_PART_2,
+	BOOKING_DONE,
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;
@@ -54,6 +56,9 @@ void guest_frame_lookup_button_image_click(Gnk_Button *);
 void guest_frame_change_frofile_button_click(Gnk_Button *);
 void guest_frame_save_profile_button_click(Gnk_Button *);
 void guest_frame_select_type_room_button_click(Gnk_Button *);
+void guest_frame_back_to_search_room_button_click(Gnk_Button *);
+void guest_frame_continue_booking_button_click(Gnk_Button *);
+void guest_frame_confirm_booking_button_click(Gnk_Button *);
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();

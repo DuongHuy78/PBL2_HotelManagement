@@ -8,7 +8,11 @@ int main() {
     db.inputLoaiPhong("data/loaiphong.txt");
     db.inputPhong("data/phong.txt");
     db.inputDatPhong("data/dat_phong.txt");
-    Utils::pauseConsole();
+    cout << "Nhan phim bat ky de tiep tuc...";
+    cin.get();
+    if(current_mode == UI_STREAM) {
+        UI_init();
+    }
     db.work();
     cout << "Saving data..." << endl;
     db.outputTaiKhoan("data/tai_khoan.txt");
@@ -16,5 +20,7 @@ int main() {
     db.outputLoaiPhong("data/loaiphong.txt");
     db.outputPhong("data/phong.txt");
     db.outputDatPhong("data/dat_phong.txt");
+    cout << "Nhan phim bat ky de tiep tuc...";
+    cin.get();
     return 0;
 }
