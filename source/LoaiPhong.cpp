@@ -75,13 +75,15 @@ bool LoaiPhong::setLoaiPhong(string LP){
 }
 
 bool LoaiPhong::setLoaiGiuong(int LG) {
-    if(Utils::isRoomBedType(Utils::intToString(LG))){
-        this->loaiGiuong = LG;
-        return true;
-    }
-    else {
+    int s = LG;
+        int roomBedTypes[] = {1, 2, 12};
+        for (int roomBedType : roomBedTypes) {
+            if (s == roomBedType) {
+                this->loaiGiuong = LG;
+                return true;
+            }
+        }
         return false;
-    }
 }
 
 bool LoaiPhong::setSoLuongKhach(int SLK) {
@@ -148,17 +150,20 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Loai Phong: ", 4, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
     tempLoaiPhong.setLoaiPhong(temp);
 
-    temp = Utils::inputWithCondition("Nhap Loai Giuong: ", 1, 2, ROOM_BED_TYPE);
-    tempLoaiPhong.setLoaiGiuong(stoi(temp));
+    temp = Utils::inputWithCondition("Nhap Loai Giuong (Single,Double,SingleDouble): ", 6, 12, ROOM_BED_TYPE);
+    if(temp == "Single") temp = "1";
+    else if(temp == "Double") temp = "2";
+    else if(temp == "SingleDouble" || temp == "DoubleSingle")temp = "12";
+    tempLoaiPhong.setLoaiGiuong(Utils::stringToInt(temp));
 
     temp = Utils::inputWithCondition("Nhap So Luong Khach: ", 1, 2, NUMBER_ONLY);
-    tempLoaiPhong.setSoLuongKhach(stoi(temp));
+    tempLoaiPhong.setSoLuongKhach(Utils::stringToInt(temp));
 
     temp = Utils::inputWithCondition("Nhap Dien Tich: ", 1, 3, NUMBER_ONLY);
-    tempLoaiPhong.setDienTich(stoi(temp));
+    tempLoaiPhong.setDienTich(Utils::stringToInt(temp));
 
     temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 7, NUMBER_ONLY);
-    tempLoaiPhong.setGiaPhong(stoi(temp));
+    tempLoaiPhong.setGiaPhong(Utils::stringToInt(temp));
 
     temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
     setMoTaPhong(temp);
@@ -168,13 +173,12 @@ LoaiPhong LoaiPhong::nhapThongTin() {
 }
 //MENU
 void LoaiPhong::menuSuaThongTin(){
-    cout << "1. Sua Loai Giuong: " << endl;
-    cout << "2. Sua So Luong Khach: " << endl;
+    cout << "1. Sua Loai Giuong " << endl;
+    cout << "2. Sua So Luong Khach " << endl;
     cout << "3. Sua Dien Tich: " << endl;
-    cout << "4. Sua Gia: " << endl;
-    cout << "5. Sua Mo Ta Phong: " << endl;
-    cout << "6. Thoat Chinh Sua Loai Phong!" << endl;
-    cout << "Hay Nhap Lua Chon: ";
+    cout << "4. Sua Gia " << endl;
+    cout << "5. Sua Mo Ta Phong " << endl;
+    cout << "6. Thoat Chinh Sua Loai Phong" << endl;
 }
 
 void LoaiPhong::capNhatThongTin(){
@@ -186,37 +190,40 @@ void LoaiPhong::capNhatThongTin(){
         choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
         switch(choice) {
             case 1:
-                temp = Utils::inputWithCondition("Sua Loai Giuong: ", 1, 2, ALPHABET_AND_SPACE_ONLY);
-                this->setLoaiGiuong(Utils::stringToInt(temp));
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                temp = Utils::inputWithCondition("Sua Loai Giuong: ", 6, 12, ROOM_BED_TYPE);
+                if(temp == "Single") temp = "1";
+                else if(temp == "Double") temp = "2";
+                else if(temp == "SingleDouble" || temp == "DoubleSingle")temp = "12";
+                this->setLoaiGiuong(stoi(temp));
+                Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 2:
                 temp = Utils::inputWithCondition("Sua So Luong Khach: ", 1, 2, NUMBER_ONLY);
                 this->setSoLuongKhach(Utils::stringToInt(temp));
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 3:
                 temp = Utils::inputWithCondition("Sua Dien Tich: ", 1, 2, NUMBER_ONLY);
                 this->setDienTich(Utils::stringToInt(temp));
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 4:
                 temp = Utils::inputWithCondition("Sua Gia: ", 1, 3, NUMBER_ONLY);
                 this->setGiaPhong(Utils::stringToInt(temp));
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 5:
                 temp = Utils::inputWithCondition("Sua Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
                 this->setMoTaPhong(temp);
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 6:
-                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
+                Utils::outputData("Thoat khoi chuc nang sua thong tin\n", CONSOLE);
                 return;
             default:
                 Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
@@ -225,135 +232,30 @@ void LoaiPhong::capNhatThongTin(){
         }  
     }
 }
-// HÀM SỬA THÔNG TIN LOẠI PHÒNG (loaiphong.txt)
-// void LoaiPhong::capNhatThongTin() 
-// {
-//     //Xử lý từng lựa chọn của người dùng
-//     int choice;
-//     int temp;
-//     string tempStr;
-//     while (true)
-//     {
-//         menuCapNhat();
-//         choice = stoi(Utils::nhap(1,2));
-//         switch(choice)
-//         {
-//             case 1: 
-//                 {
-//                     cout << "Nhap Loai Giuong(1/2/12): ";
-//                     tempStr = (Utils::nhap(1,3));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setLoaiGiuong(temp);
-//                     cout << "Cap Nhat Loai Giuong Thanh Cong!" << endl;
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 2: 
-//                 {
-//                     cout << "Nhap So Luong Khach: ";
-//                     tempStr = (Utils::nhap(1,2));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setSoLuongKhach(temp);
-//                     cout << "Cap Nhat So Luong Khach Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 3: 
-//                 {
-//                     cout << "Nhap Dien Tich: ";
-//                     tempStr = (Utils::nhap(1,4));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setDienTich(temp);
-//                     cout << "Cap Nhat Dien Tich Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 4: 
-//                 {
-//                     cout << "Nhap Gia: ";
-//                     tempStr = (Utils::nhap(1,9));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     temp = stoi(tempStr);
-//                     this->setGiaPhong(temp);
-//                     cout << "Cap Nhat Gia Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 5: 
-//                 {
-//                     cout << "Nhap Mo Ta";
-//                     tempStr = (Utils::nhap(6,100));
-//                     if (tempStr == "Error"){
-//                         cout << "Error : loi me roi\n";
-//                         Utils::pauseConsole();
-//                         system("cls");
-//                         break;
-//                     }
-//                     this->setMoTaPhong(tempStr);
-//                     cout << "Cap Nhat Mo Ta Phong Thanh Cong!";
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     break;
-//                 }
-//             case 6: 
-//                 {
-//                     cout << "Ban dang thoat khoi chuc nang chinh sua loai phong......" << endl;
-//                     return ;
-//                 }
-//             default: 
-//                 {
-//                     Utils::pauseConsole();
-//                     system("cls");
-//                     cout << "Lua chon khong hop le." << endl;
-//                     cout<< "Vui long chon lai!" << endl;
-//                     break;
-//                 }
-//         }
-//     }
-// }
-
 
 // XUAT THONG TIN
 void LoaiPhong::xuatThongTin() {
-    cout << left << setw(16) << loaiPhong << setw(14) << loaiGiuong << setw(13) << soLuongKhach
+    string temp;
+    if(loaiGiuong == 1) temp = "Single";
+    else if(loaiGiuong == 2) temp = "Double";
+    else if(loaiGiuong == 12) temp = "SingleDouble";
+    cout << left << setw(16) << loaiPhong << setw(14) << temp << setw(13) << soLuongKhach
     << setw(9) << dienTich << setw(13) << giaPhong; 
     Utils::wrapText(moTaPhong, 40, 65);
     cout << string(105, '-') << endl;
 }   
 
 ostream& operator<<(ostream& out, const LoaiPhong& lp) {
+    string temp;
+    if(lp.loaiGiuong == 1) temp = "Single";
+    else if(lp.loaiGiuong == 2) temp = "Double";
+    else if(lp.loaiGiuong == 12) temp = "SingleDouble";
+
     Utils::outputData("-----------THONG-TIN-LOAI-PHONG---------\n", CONSOLE);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(lp.loaiPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Giuong: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.loaiGiuong) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(temp + "\n", CONSOLE_OR_UI);
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Dien Tich: ", CONSOLE);

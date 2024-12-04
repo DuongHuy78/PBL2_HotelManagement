@@ -94,6 +94,23 @@ LinkedList<DatPhong> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
+int QLDatPhong::tongTien(string NgayNhan, string NgayTra, string MaPhong, string IDKH) {
+    int sum = 0;
+    int soNgay = (Utils::stringToDate(NgayTra)-Utils::stringToDate(NgayNhan))/86400;
+    Node<DatPhong> *p = DSDP.getHead()->next;
+    while(p != DSDP.getHead()){
+        if(p->data.getMaPhong() == MaPhong 
+            && p->data.getIDKhachHang() == IDKH
+            && Utils::dateToString(p->data.getNgayNhan()) == NgayNhan
+            && Utils::dateToString(p->data.getNgayTra()) == NgayTra) {
+                sum = (DSLP->timLoaiPhong(DSP->timPhong(MaPhong)->getLoaiPhong()))->getGiaPhong() 
+                    * soNgay;
+        }
+        p = p->next;
+    }
+    return sum;
+}
+
 ostream &operator<<(ostream &os, const QLDatPhong &ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach dat phong: \n", CONSOLE);

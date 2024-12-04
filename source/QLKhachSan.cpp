@@ -130,7 +130,12 @@ void QLKhachSan::inputLoaiPhong(string path) {
         dienTich        = Utils::getSubstringUntilX(line, index, ';');
         giaPhong        = Utils::getSubstringUntilX(line, index, ';');
         moTaPhong       = Utils::getSubstringUntilX(line, index, '\n');
-        LoaiPhong newLoaiPhong(maLoaiPhong, Utils::stringToInt(loaiGiuong), Utils::stringToInt(soLuongKhach), Utils::stringToInt(dienTich), Utils::stringToInt(giaPhong), moTaPhong);
+        LoaiPhong newLoaiPhong(maLoaiPhong, 
+            Utils::stringToInt(loaiGiuong), 
+            Utils::stringToInt(soLuongKhach), 
+            Utils::stringToInt(dienTich), 
+            Utils::stringToInt(giaPhong), 
+            moTaPhong);
         QLLP.themLoaiPhong(newLoaiPhong);
         index = 0;
         ++count;
@@ -528,7 +533,6 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     else if(choice == USER_BOOK_ROOM_HISTORY){
         system("cls");
         string ID = currentID;
-        cout<<ID<<endl;
         Node<DatPhong> *dp = QLDP.getDSDP().getHead()->next;
         while(dp != QLDP.getDSDP().getHead()) {
             if(dp->data.getIDKhachHang() == ID) {
@@ -541,12 +545,14 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     else if(choice == ADD_PHONG){
         Phong newPhong = QLP.nhapThongTin();
         QLP.themPhong(newPhong);
+        Utils::outputData("Tao phong "<<newPhong.getMaPhong()<<" thanh cong!\n", CONSOLE);
+        Utils::pauseConsole();
     }
     else if(choice == UPDATE_PHONG){
         string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
         Phong *P = QLP.timPhong(loaiPhong);
         if(P == nullptr) {
-            Utils::outputData("Khong tim thay phong!\n", CONSOLE);
+            Utils::outputData("Khong tim thay phong"<<loaiPhong<<"!\n", CONSOLE);
             Utils::pauseConsole();
             return;
         }
@@ -568,6 +574,15 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     }
     else if(choice == ADD_LOAI_PHONG){
         LoaiPhong newLP = newLP.nhapThongTin();
+        Node<LoaiPhong> *p = QLLP.getDSLP().begin();
+        while(p != QLLP.getDSLP().end()) {
+            if(p->data.getLoaiPhong() == newLP.getLoaiPhong()) {
+                Utils::outputData("Loai phong da ton tai!\n", CONSOLE);
+                Utils::pauseConsole();
+                return;
+            }
+            p = p->next;
+        }
         QLLP.themLoaiPhong(newLP);
     }
     else if(choice == UPDATE_LOAIPHONG){
@@ -580,6 +595,9 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         }
         else{
             LP->capNhatThongTin();
+            system("cls");
+            Utils::outputData("Loai phong da duoc cap nhat!\n", CONSOLE);
+            Utils::pauseConsole();
         }
     }
     else if(choice == DELETE_LOAIPHONG){
