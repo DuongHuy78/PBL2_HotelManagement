@@ -7,8 +7,11 @@ enum frame_num_value {
 	GUEST_FRAME,
 	LOGIN_FRAME,
 	FORGOT_PASSWORD_FRAME,
-	SIGN_UP_FRAME
+	SIGN_UP_FRAME,
+	STAFF_FRAME,
+	ADMIN_FRAME,
 };
+
 enum option_value {
 	DEFAULT_OPTION,
 	SEARCH_ROOM,
@@ -46,7 +49,7 @@ void sign_up_frame_toggle_click(Gnk_Button*);
 extern Gnk_Frame sign_up;
 // ---------------------------------------------------------
 void guest_frame_draw(Gnk_Frame *) ;
-void guest_frame_logout_button_click(Gnk_Button *);
+void logout_button_click(Gnk_Button *);
 void guest_frame_search_room_button_click(Gnk_Button *);
 void guest_frame_booking_infomation_button_click(Gnk_Button *);
 void guest_frame_profile_button_click(Gnk_Button *);
@@ -59,10 +62,19 @@ void guest_frame_back_to_search_room_button_click(Gnk_Button *);
 void guest_frame_continue_booking_button_click(Gnk_Button *);
 void guest_frame_confirm_booking_button_click(Gnk_Button *);
 void guest_frame_history_list_process(Gnk_List_Object *);
+extern Gnk_Frame guest;
+// ---------------------------------------------------------
+void staff_frame_draw(Gnk_Frame *);
+extern Gnk_Frame staff;
+// ---------------------------------------------------------
+void admin_frame_draw(Gnk_Frame *);
+extern Gnk_Frame admin;
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();
 void guest_frame_init();
+void staff_frame_init();
+void admin_frame_init();
 void UI_init();
 void frame_Space();
 #endif
