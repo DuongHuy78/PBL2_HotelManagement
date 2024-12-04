@@ -782,6 +782,23 @@ void QLKhachSan::list_Type_Room_Available() {
     }
 }
 
+void QLKhachSan::list_Room_Available() {
+    string ngayNhan, ngayTra, soLuongKhach;
+    LinkedList<Phong *> phongTrong;
+    LinkedList<loaiPhongAvailable> listlpa;
+    searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
+    string loaiPhong;
+    loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, 7, ALPHABET_AND_NUMBER_ONLY);
+    Utils::outputData("Danh sach phong:\n", CONSOLE);
+    Node<Phong *> *p = phongTrong.begin();
+    while(p != phongTrong.end()) {
+        if(p->data->getLoaiPhong() == loaiPhong) {
+            Utils::outputData(p->data->getMaPhong() + "\n", CONSOLE_OR_UI);
+        }
+        p = p->next;
+    }
+}
+
 role_value QLKhachSan::getCurrentRole() {
     return role;
 }
