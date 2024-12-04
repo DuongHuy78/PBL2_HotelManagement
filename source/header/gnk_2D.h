@@ -336,6 +336,10 @@ public:
 	void setScrollbar(Gnk_Scrollbar*);
 	void display();
 	void clear_Textbox();
+	void disable_all_button();
+	void disable_all_textbox();
+	void disable_all_listObject();
+	void disable_all();
 };
 
 // -Variable Declaration-----------------------------------------------------

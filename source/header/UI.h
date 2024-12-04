@@ -50,7 +50,6 @@ void guest_frame_logout_button_click(Gnk_Button *);
 void guest_frame_search_room_button_click(Gnk_Button *);
 void guest_frame_booking_infomation_button_click(Gnk_Button *);
 void guest_frame_profile_button_click(Gnk_Button *);
-// void guest_frame_booking_button_click(Gnk_Button *);
 void guest_frame_search_room_list_process(Gnk_List_Object *);
 void guest_frame_lookup_button_image_click(Gnk_Button *);
 void guest_frame_change_frofile_button_click(Gnk_Button *);
@@ -59,6 +58,7 @@ void guest_frame_select_type_room_button_click(Gnk_Button *);
 void guest_frame_back_to_search_room_button_click(Gnk_Button *);
 void guest_frame_continue_booking_button_click(Gnk_Button *);
 void guest_frame_confirm_booking_button_click(Gnk_Button *);
+void guest_frame_history_list_process(Gnk_List_Object *);
 // ---------------------------------------------------------
 void login_frame_init();
 void sign_up_frame_init();

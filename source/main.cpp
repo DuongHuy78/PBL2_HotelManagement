@@ -20,7 +20,5 @@ int main() {
     db.outputLoaiPhong("data/loaiphong.txt");
     db.outputPhong("data/phong.txt");
     db.outputDatPhong("data/dat_phong.txt");
-    cout << "Nhan phim bat ky de tiep tuc...";
-    cin.get();
     return 0;
 }

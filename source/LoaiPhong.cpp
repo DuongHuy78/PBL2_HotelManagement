@@ -121,28 +121,6 @@ bool LoaiPhong::setMoTaPhong(string MTP) {
     return true;
 }
 
-//NEW LOAIPHONG
-// void LoaiPhong::NhapLoaiPhongMoi() {
-//     cout << "Nhap Loai Phong: ";
-//     this->loaiPhong = Utils::nhap(5,MAX_IDLOAIPHONG+1);
-
-//     cout << "Nhap Loai Giuong: ";
-//     this->loaiGiuong =  stoi(Utils::nhap(1,3));
-
-//     cout << "Nhap So Luong Khach: ";
-//     this->soLuongKhach = stoi(Utils::nhap(1,2)); // tối đa 8 người -> 2 ký tự + 1 ký tự /0
-
-//     cout << "Nhap Dien Tich: ";
-//     this->dienTich = stoi(Utils::nhap(1,3));
-
-//     cout << "Nhap Gia Phong: ";
-//     this->giaPhong = stoi(Utils::nhap(1,8));
-
-//     cout << "Nhap Mo Ta Phong: ";
-//     this->moTaPhong = Utils::nhap(3,150);
-//     return;
-// }
-
 LoaiPhong LoaiPhong::nhapThongTin() {
     string temp;
     LoaiPhong tempLoaiPhong;
@@ -234,16 +212,16 @@ void LoaiPhong::capNhatThongTin(){
 }
 
 // XUAT THONG TIN
-void LoaiPhong::xuatThongTin() {
-    string temp;
-    if(loaiGiuong == 1) temp = "Single";
-    else if(loaiGiuong == 2) temp = "Double";
-    else if(loaiGiuong == 12) temp = "SingleDouble";
-    cout << left << setw(16) << loaiPhong << setw(14) << temp << setw(13) << soLuongKhach
-    << setw(9) << dienTich << setw(13) << giaPhong; 
-    Utils::wrapText(moTaPhong, 40, 65);
-    cout << string(105, '-') << endl;
-}   
+// void LoaiPhong::xuatThongTin() {
+//     string temp;
+//     if(loaiGiuong == 1) temp = "Single";
+//     else if(loaiGiuong == 2) temp = "Double";
+//     else if(loaiGiuong == 12) temp = "SingleDouble";
+//     cout << left << setw(16) << loaiPhong << setw(14) << temp << setw(13) << soLuongKhach
+//     << setw(9) << dienTich << setw(13) << giaPhong; 
+//     Utils::wrapText(moTaPhong, 40, 65);
+//     cout << string(105, '-') << endl;
+// }   
 
 ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     string temp;
@@ -259,9 +237,9 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Dien Tich: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.dienTich) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::intToString(lp.dienTich) + " m2\n", CONSOLE_OR_UI);
     Utils::outputData("Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.giaPhong) + "\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::intToString(lp.giaPhong) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);

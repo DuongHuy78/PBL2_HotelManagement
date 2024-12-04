@@ -530,13 +530,36 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         QLKH.themKhachHang(newKhachHang);
         Utils::pauseConsole();
     }
-    else if(choice == USER_BOOK_ROOM_HISTORY){
+    else if(choice == USER_BOOK_ROOM_HISTORY) {
         system("cls");
         string ID = currentID;
         Node<DatPhong> *dp = QLDP.getDSDP().getHead()->next;
         while(dp != QLDP.getDSDP().getHead()) {
             if(dp->data.getIDKhachHang() == ID) {
-                cout << dp->data;
+                Utils::outputData("-----------LICH-SU-DAT-PHONG---------\n", CONSOLE);
+                Utils::outputData("Ma Dat Phong: ", CONSOLE);
+                Utils::outputData(dp->data.getMaDatPhong() + "\n", CONSOLE_OR_UI);
+                Node<Phong> *p = QLP.getDSP().begin();
+                while(p != QLP.getDSP().end()) {
+                    if(p->data.getMaPhong() == dp->data.getMaPhong()) {
+                        Utils::outputData("Loai phong: ", CONSOLE);
+                        Utils::outputData(p->data.getLoaiPhong() + "\n", CONSOLE_OR_UI);
+                    }
+                    p = p->next;
+                }
+                Utils::outputData("Ma Phong: ", CONSOLE);
+                Utils::outputData(dp->data.getMaPhong() + "\n", CONSOLE_OR_UI);
+                Utils::outputData("Ngay Nhan: ", CONSOLE);
+                Utils::outputData(Utils::dateToString(dp->data.getNgayNhan()) + "\n", CONSOLE_OR_UI);
+                Utils::outputData("Ngay Tra: ", CONSOLE);
+                Utils::outputData(Utils::dateToString(dp->data.getNgayTra()) + "\n", CONSOLE_OR_UI);
+                Utils::outputData("So Luong Khach: ", CONSOLE);
+                Utils::outputData(Utils::intToString(dp->data.getSoLuongKhach()) + "\n", CONSOLE_OR_UI);
+                Utils::outputData("Gia Phong: ", CONSOLE);
+                Utils::outputData(Utils::intToString(dp->data.getDonGia()) + " VND\n", CONSOLE_OR_UI);
+                Utils::outputData("Tong Tien: ", CONSOLE);
+                Utils::outputData("0 VND\n", CONSOLE_OR_UI);
+                Utils::outputData("-------------------------------------\n", CONSOLE);
             }
             dp = dp->next;
         }
