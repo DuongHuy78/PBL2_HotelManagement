@@ -412,6 +412,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
 			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
 			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+			gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
 			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 			gnk_Text("Loai Phong: " + room_list[index_booking].type, Gnk_Point(820.0f, 650.0f), 24.0f);
 			gnk_Text("Loai Giuong: " + room_list[index_booking].bed_type, Gnk_Point(820.0f, 620.0f), 24.0f);
@@ -454,6 +455,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
 		gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
 		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
 		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 		gnk_Text("Loai Phong: " + room_list[index_booking].type, Gnk_Point(820.0f, 650.0f), 24.0f);
 		gnk_Text("Loai Giuong: " + room_list[index_booking].bed_type, Gnk_Point(820.0f, 620.0f), 24.0f);
@@ -608,6 +610,7 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
 			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
 			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_height, 300.0f - i * list->toNextObject()));
+			gnk_Image(gnk_Image_List[room_list[i].type], Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(300.0f, 300.0f - i * list->toNextObject()));
 			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
 			gnk_Text("Loai Phong: " + room_list[i].type, Gnk_Point(340.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Loai Giuong: " + room_list[i].bed_type, Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
@@ -1165,6 +1168,21 @@ void UI_init() {
 	gnk_Image_List.addImage("search_icon", "image/search_icon.png");
 	gnk_Image_List.addImage("man_icon", "image/man_icon.png");
 	gnk_Image_List.addImage("woman_icon", "image/woman_icon.png");
+
+	UI_input_buffer.clear();
+	UI_output_buffer.clear();
+	current_Data->list_all_type_room();
+
+	string type_room;
+	while(getline(UI_output_buffer, type_room)) {
+		try {
+			gnk_Image_List.addImage(type_room, "image/LoaiPhong/" + type_room + ".jpg");
+		}
+		catch(...) {
+			cout << "Error: " << type_room << endl;
+		}
+	}
+
 	login_frame_init();
 	sign_up_frame_init();
 	guest_frame_init();

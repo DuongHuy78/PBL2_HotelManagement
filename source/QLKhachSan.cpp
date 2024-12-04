@@ -19,7 +19,6 @@ QLKhachSan::QLKhachSan() {
     if(choice == "Y") {
         UI_enable = true;
         current_mode = UI_STREAM;
-        UI_init();
         current_Data = this;
     }
     else {
@@ -795,6 +794,15 @@ void QLKhachSan::list_Room_Available() {
         if(p->data->getLoaiPhong() == loaiPhong) {
             Utils::outputData(p->data->getMaPhong() + "\n", CONSOLE_OR_UI);
         }
+        p = p->next;
+    }
+}
+
+void QLKhachSan::list_all_type_room() {
+    LinkedList<LoaiPhong> &DSLP = QLLP.getDSLP();
+    Node<LoaiPhong> *p = DSLP.begin();
+    while(p != DSLP.end()) {
+        Utils::outputData(p->data.getLoaiPhong() + "\n", CONSOLE_OR_UI);
         p = p->next;
     }
 }
