@@ -12,6 +12,8 @@
 #include "LinkedList.h"
 
 #define MAX_NAME 50
+#define SIZE_ID_USER 6
+#define SIZE_ID_DP 5
 using namespace std;
 
 enum role_value {

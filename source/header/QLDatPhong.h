@@ -29,7 +29,7 @@ public:
     
     Node<DatPhong> *getHead();
     LinkedList<DatPhong> &getDSDP();
-    int tongTien(string, string, string, string );
+    int tongTien(const DatPhong &);
     
     friend ostream& operator<<(ostream&, const QLDatPhong&);
 };

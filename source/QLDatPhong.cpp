@@ -94,20 +94,11 @@ LinkedList<DatPhong> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
-int QLDatPhong::tongTien(string NgayNhan, string NgayTra, string MaPhong, string IDKH) {
+int QLDatPhong::tongTien(const DatPhong &DP) {
     int sum = 0;
-    int soNgay = (Utils::stringToDate(NgayTra)-Utils::stringToDate(NgayNhan))/86400;
+    int soNgay = (DP.getNgayTra() - DP.getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
     Node<DatPhong> *p = DSDP.getHead()->next;
-    while(p != DSDP.getHead()){
-        if(p->data.getMaPhong() == MaPhong 
-            && p->data.getIDKhachHang() == IDKH
-            && Utils::dateToString(p->data.getNgayNhan()) == NgayNhan
-            && Utils::dateToString(p->data.getNgayTra()) == NgayTra) {
-                sum = (DSLP->timLoaiPhong(DSP->timPhong(MaPhong)->getLoaiPhong()))->getGiaPhong() 
-                    * soNgay;
-        }
-        p = p->next;
-    }
+    sum = (DSLP->timLoaiPhong(DSP->timPhong(DP.getMaPhong())->getLoaiPhong()))->getGiaPhong() * soNgay;
     return sum;
 }
 

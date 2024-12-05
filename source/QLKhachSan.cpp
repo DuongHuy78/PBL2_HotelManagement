@@ -362,7 +362,6 @@ bool QLKhachSan::dangNhap() {
     Utils::outputData("Password: ", CONSOLE);
     Utils::inputData(password, CONSOLE_OR_UI);
     string ID = QLTK.kiemTraTaiKhoan(username, password);
-    currentID = ID;
     if(ID != "") {
         if(ID == quanLi.getIDQuanLi()) {
             role = QUANLI;
@@ -426,6 +425,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         string ngayNhan, ngayTra, soLuongKhach;
         LinkedList<Phong *> phongTrong;
         LinkedList<loaiPhongAvailable> listlpa;
+
         searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         bookingRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         Utils::outputData("Dat phong thanh cong!\n", CONSOLE);
@@ -532,7 +532,8 @@ void QLKhachSan::requestHandling(user_option_value choice) {
     }
     else if(choice == USER_BOOK_ROOM_HISTORY) {
         system("cls");
-        string ID = currentID;
+        KhachHang *KH = (KhachHang *)current_user;
+        string ID = KH->getIDKhachHang();
         Node<DatPhong> *dp = QLDP.getDSDP().getHead()->next;
         while(dp != QLDP.getDSDP().getHead()) {
             if(dp->data.getIDKhachHang() == ID) {
@@ -558,7 +559,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
                 Utils::outputData("Gia Phong: ", CONSOLE);
                 Utils::outputData(Utils::intToString(dp->data.getDonGia()) + " VND\n", CONSOLE_OR_UI);
                 Utils::outputData("Tong Tien: ", CONSOLE);
-                Utils::outputData("0 VND\n", CONSOLE_OR_UI);
+                Utils::outputData(Utils::intToString(QLDP.tongTien(dp->data)) + " VND\n", CONSOLE_OR_UI);
                 Utils::outputData("-------------------------------------\n", CONSOLE);
             }
             dp = dp->next;
@@ -793,16 +794,52 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
         }
     }
 
-    int donGia = QLLP.getGiaPhong(loaiPhong);
     if(role == NHANVIEN) {
-        KhachHang KH = QLKH.nhapThongTin();
-        QLKH.themKhachHang(KH);
-        DatPhong newDP(QLDP.taoMaDatPhong(), maPhong, KH.getIDKhachHang(), Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), donGia);
+        string ID, temp;
+        while(1){
+            Utils::outputData("1. Khach hang da co tai khoan \n", CONSOLE);
+            Utils::outputData("2. Khach hang chua co tai khoan \n", CONSOLE);
+            temp = Utils::inputWithCondition("Nhap lua chon: ",1,1,NUMBER_ONLY);
+            if(temp == "1"){
+                ID = Utils::inputWithCondition("Nhap ID cua KHACH HANG: ",SIZE_ID_USER-1,SIZE_ID_USER,NUMBER_ONLY);
+                KhachHang *p = QLKH.timKiemKhachHang(ID);
+                if(p == nullptr){
+                    Utils::outputData("Khong ton tai ID khach hang!",CONSOLE);
+                    Utils::pauseConsole();
+                    continue;
+                }
+                break;
+            }
+            else if(temp == "2"){
+                KhachHang KH = QLKH.nhapThongTin();
+                QLKH.themKhachHang(KH);
+                ID = KH.getIDKhachHang();
+                break;
+            }
+            system("cls");
+            Utils::outputData("Da co sai sot vui long nhap lai!",CONSOLE);
+        }
+        DatPhong newDP(QLDP.taoMaDatPhong(), 
+            maPhong, 
+            ID, 
+            Utils::stringToDate(ngayNhan), 
+            Utils::stringToDate(ngayTra), 
+            Utils::stringToInt(soLuongKhach), 
+            1);         // chọn 1 số bất kỳ lớn hơn 0 để tạo đơn giá
+            cout<<QLDP.tongTien(newDP)<<endl;
+        newDP.setDonGia(QLDP.tongTien(newDP));
         QLDP.themDatPhong(newDP);
     }
     else if(role == KHACHHANG) {
         KhachHang *KH = (KhachHang *)current_user;
-        DatPhong newDP(QLDP.taoMaDatPhong(), maPhong, KH->getIDKhachHang(), Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), donGia);
+        DatPhong newDP(QLDP.taoMaDatPhong(), 
+            maPhong, 
+            KH->getIDKhachHang(), 
+            Utils::stringToDate(ngayNhan), 
+            Utils::stringToDate(ngayTra), 
+            Utils::stringToInt(soLuongKhach), 
+            1);     // chọn 1 số bất kỳ lớn hơn 0 để tạo đơn giá
+        newDP.setDonGia(QLDP.tongTien(newDP));
         QLDP.themDatPhong(newDP);
     }
 }
