@@ -190,6 +190,12 @@ void login_frame_login_button_click(Gnk_Button *button) {
 			current_guest_profile.username = (login.textboxList["username_textbox"])->text;
 			current_guest_profile.password = (login.textboxList["password_textbox"])->text;
 		}
+		else if(current_Data->getCurrentRole() == NHANVIEN) {
+			current_frame = STAFF_FRAME;
+		}
+		else if(current_Data->getCurrentRole() == QUANLI) {
+			current_frame = ADMIN_FRAME;
+		}
 	}
 	else {
 		login_failed = true;
@@ -536,7 +542,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	}
 }
 
-void guest_frame_logout_button_click(Gnk_Button *button) {
+void logout_button_click(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
 	Gnk_Color color = buttonText->color;
 	buttonText->color = color - Gnk_Color(40, 40, 40);
@@ -890,6 +896,64 @@ void guest_frame_history_list_process(Gnk_List_Object *list) {
 }
 
 Gnk_Frame guest(guest_frame_draw);
+// ---------------------------------------------------------
+void staff_frame_draw(Gnk_Frame *frame) {
+	frame->disable_all();
+	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Line_Width(2.0f);
+	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
+	gnk_Set_Character_Font("helvetica-bold");
+	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
+
+	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Character_Font("helvetica");
+	gnk_Text("Welcome, Hotel Del Luna's Staff!", Gnk_Point(430.0f, 830.0f), 24.0f);
+	
+	frame->buttonList["logout_button"]->setAppear(true);
+	frame->buttonList["logout_button"]->display();
+
+}
+
+Gnk_Frame staff(staff_frame_draw);
+// ---------------------------------------------------------
+void admin_frame_draw(Gnk_Frame *frame) {
+	frame->disable_all();
+	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Line_Width(2.0f);
+	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
+
+	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
+	gnk_Set_Character_Font("helvetica-bold");
+	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
+
+	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Character_Font("helvetica");
+	gnk_Text("Welcome, Hotel Del Luna's Admin!", Gnk_Point(430.0f, 830.0f), 24.0f);
+	
+	frame->buttonList["logout_button"]->setAppear(true);
+	frame->buttonList["logout_button"]->display();
+
+}
+
+Gnk_Frame admin(admin_frame_draw);
 
 // ---------------------------------------------------------
 void login_frame_init() {
@@ -1074,30 +1138,20 @@ void sign_up_frame_init() {
 }
 
 void guest_frame_init() {
-	Gnk_Button_With_Text *guest_frame_logout_button = new Gnk_Button_With_Text();
-	guest_frame_logout_button->setRange(Gnk_Point(1380.0f, 820.0f), Gnk_Point(1540.0f, 880.0f));
-	guest_frame_logout_button->setColor(Gnk_Color(255, 236, 200));
-	guest_frame_logout_button->setText("Logout");
-	guest_frame_logout_button->setTextFont("helvetica-bold");
-	guest_frame_logout_button->setFontSize(24.0f);
-	guest_frame_logout_button->setTextColor(Gnk_Color(34, 40, 49));
-	guest_frame_logout_button->setPaddingX(0.0f);
-	guest_frame_logout_button->setPaddingY(0.0f);
-	guest_frame_logout_button->setTextAlign(GNK_TEXT_CENTER);
-	guest_frame_logout_button->border_radius = 10.0f;
-	guest_frame_logout_button->setHoverProcess(button_hover_type_1);
-	guest_frame_logout_button->setClickProcess(guest_frame_logout_button_click);
-
-	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
+	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text();
 	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
 	guest_frame_search_room_button->setColor(light_yellow2);
 	guest_frame_search_room_button->setText("Search room");
 	guest_frame_search_room_button->setTextFont("helvetica");
+	guest_frame_search_room_button->setFontSize(24.0f);
 	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
 	guest_frame_search_room_button->setHoverProcess(button_hover_type_1);
 	guest_frame_search_room_button->setClickProcess(nullptr);
 	guest_frame_search_room_button->setTextAlign(GNK_TEXT_LEFT);
 	guest_frame_search_room_button->setPaddingX(30.0f);
+	guest_frame_search_room_button->setPaddingY(0.0f);
+	guest_frame_search_room_button->setRadius(10.0f);
+	guest_frame_search_room_button->setHoverProcess(button_hover_type_1);
 	guest_frame_search_room_button->setClickProcess(guest_frame_search_room_button_click);
 
 	Gnk_Button_With_Text *guest_frame_booking_infomation_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
@@ -1227,8 +1281,6 @@ void guest_frame_init() {
 	guest_frame_room_choice_textbox->setPlaceholder("Room choice");
 	guest_frame_room_choice_textbox->setSelectProcess(textbox_select_type3);
 
-
-	guest.addButton("logout_button", guest_frame_logout_button);
 	guest.addButton("search_room_button", guest_frame_search_room_button);
 	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
 	guest.addButton("profile_button", guest_frame_profile_button);
@@ -1248,6 +1300,13 @@ void guest_frame_init() {
 	guest.addButton("continue_booking_button", guest_frame_continue_booking_button);
 	guest.addTextbox("room_choice_textbox", guest_frame_room_choice_textbox);
 	guest.addButton("confirm_booking_button", guest_frame_confirm_booking_button);
+}
+
+void staff_frame_init() {
+}
+
+void admin_frame_init() {
+
 }
 
 void UI_init() {
@@ -1285,6 +1344,29 @@ void UI_init() {
 	login_frame_init();
 	sign_up_frame_init();
 	guest_frame_init();
+	staff_frame_init();
+	admin_frame_init();
+
+	Gnk_Button_With_Text *guest_frame_logout_button = new Gnk_Button_With_Text();
+	guest_frame_logout_button->setRange(Gnk_Point(1380.0f, 820.0f), Gnk_Point(1540.0f, 880.0f));
+	guest_frame_logout_button->setColor(Gnk_Color(255, 236, 200));
+	guest_frame_logout_button->setText("Logout");
+	guest_frame_logout_button->setTextFont("helvetica-bold");
+	guest_frame_logout_button->setFontSize(24.0f);
+	guest_frame_logout_button->setTextColor(Gnk_Color(34, 40, 49));
+	guest_frame_logout_button->setPaddingX(0.0f);
+	guest_frame_logout_button->setPaddingY(0.0f);
+	guest_frame_logout_button->setTextAlign(GNK_TEXT_CENTER);
+	guest_frame_logout_button->setRadius(10.0f);
+	guest_frame_logout_button->setHoverProcess(button_hover_type_1);
+	guest_frame_logout_button->setClickProcess(logout_button_click);
+
+	Gnk_Button_With_Text *staff_frame_logout_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
+	Gnk_Button_With_Text *admin_frame_logout_button = new Gnk_Button_With_Text(*guest_frame_logout_button);
+
+	guest.addButton("logout_button", guest_frame_logout_button);
+	staff.addButton("logout_button", staff_frame_logout_button);
+	admin.addButton("logout_button", admin_frame_logout_button);
 }
 
 void frame_Space() {
@@ -1310,6 +1392,12 @@ void frame_Space() {
 		option = DEFAULT_OPTION;
 		guest.clear_Textbox();
 	}
+	else if(current_frame == STAFF_FRAME) {
+		staff.clear_Textbox();
+	}
+	else if(current_frame == ADMIN_FRAME) {
+		admin.clear_Textbox();
+	}
 	switch (current_frame) {
 	case GUEST_FRAME:
 		gnk_Set_Current_Frame(guest);
@@ -1319,6 +1407,12 @@ void frame_Space() {
 		break;
 	case SIGN_UP_FRAME:
 		gnk_Set_Current_Frame(sign_up);
+		break;
+	case STAFF_FRAME:
+		gnk_Set_Current_Frame(staff);
+		break;
+	case ADMIN_FRAME:
+		gnk_Set_Current_Frame(admin);
 		break;
 	default:
 		gnk_Set_Current_Frame(gnk_Default_Frame);
