@@ -239,7 +239,7 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("Dien Tich: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.dienTich) + " m2\n", CONSOLE_OR_UI);
     Utils::outputData("Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.giaPhong) + " VND\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::chuanHoaSo(Utils::intToString(lp.giaPhong)) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);

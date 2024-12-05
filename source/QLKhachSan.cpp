@@ -557,9 +557,9 @@ void QLKhachSan::requestHandling(user_option_value choice) {
                 Utils::outputData("So Luong Khach: ", CONSOLE);
                 Utils::outputData(Utils::intToString(dp->data.getSoLuongKhach()) + "\n", CONSOLE_OR_UI);
                 Utils::outputData("Gia Phong: ", CONSOLE);
-                Utils::outputData(Utils::intToString(dp->data.getDonGia()) + " VND\n", CONSOLE_OR_UI);
+                Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp->data.getDonGia())) + " VND\n", CONSOLE_OR_UI);
                 Utils::outputData("Tong Tien: ", CONSOLE);
-                Utils::outputData(Utils::intToString(QLDP.tongTien(dp->data)) + " VND\n", CONSOLE_OR_UI);
+                Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp->data.tongTien())) + " VND\n", CONSOLE_OR_UI);
                 Utils::outputData("-------------------------------------\n", CONSOLE);
             }
             dp = dp->next;
@@ -796,21 +796,21 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
 
     if(role == NHANVIEN) {
         string ID, temp;
-        while(1){
+        while(1) {
             Utils::outputData("1. Khach hang da co tai khoan \n", CONSOLE);
             Utils::outputData("2. Khach hang chua co tai khoan \n", CONSOLE);
-            temp = Utils::inputWithCondition("Nhap lua chon: ",1,1,NUMBER_ONLY);
-            if(temp == "1"){
-                ID = Utils::inputWithCondition("Nhap ID cua KHACH HANG: ",SIZE_ID_USER-1,SIZE_ID_USER,NUMBER_ONLY);
+            temp = Utils::inputWithCondition("Nhap lua chon: ", 1, 1, NUMBER_ONLY);
+            if(temp == "1") {
+                ID = Utils::inputWithCondition("Nhap ID cua KHACH HANG: ", SIZE_ID_USER - 1 , SIZE_ID_USER ,NUMBER_ONLY);
                 KhachHang *p = QLKH.timKiemKhachHang(ID);
-                if(p == nullptr){
-                    Utils::outputData("Khong ton tai ID khach hang!",CONSOLE);
+                if(p == nullptr) {
+                    Utils::outputData("Khong ton tai ID khach hang!", CONSOLE);
                     Utils::pauseConsole();
                     continue;
                 }
                 break;
             }
-            else if(temp == "2"){
+            else if(temp == "2") {
                 KhachHang KH = QLKH.nhapThongTin();
                 QLKH.themKhachHang(KH);
                 ID = KH.getIDKhachHang();
@@ -819,27 +819,28 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
             system("cls");
             Utils::outputData("Da co sai sot vui long nhap lai!",CONSOLE);
         }
-        DatPhong newDP(QLDP.taoMaDatPhong(), 
+        DatPhong newDP(
+            QLDP.taoMaDatPhong(), 
             maPhong, 
             ID, 
             Utils::stringToDate(ngayNhan), 
             Utils::stringToDate(ngayTra), 
             Utils::stringToInt(soLuongKhach), 
-            1);         // chọn 1 số bất kỳ lớn hơn 0 để tạo đơn giá
-            cout<<QLDP.tongTien(newDP)<<endl;
-        newDP.setDonGia(QLDP.tongTien(newDP));
+            QLLP.timLoaiPhong(loaiPhong)->getGiaPhong()
+        );
         QLDP.themDatPhong(newDP);
     }
     else if(role == KHACHHANG) {
         KhachHang *KH = (KhachHang *)current_user;
-        DatPhong newDP(QLDP.taoMaDatPhong(), 
+        DatPhong newDP(
+            QLDP.taoMaDatPhong(), 
             maPhong, 
             KH->getIDKhachHang(), 
             Utils::stringToDate(ngayNhan), 
             Utils::stringToDate(ngayTra), 
             Utils::stringToInt(soLuongKhach), 
-            1);     // chọn 1 số bất kỳ lớn hơn 0 để tạo đơn giá
-        newDP.setDonGia(QLDP.tongTien(newDP));
+            QLLP.timLoaiPhong(loaiPhong)->getGiaPhong()
+        );
         QLDP.themDatPhong(newDP);
     }
 }

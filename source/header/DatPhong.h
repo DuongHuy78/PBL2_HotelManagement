@@ -23,6 +23,8 @@ public:
     int getSoLuongKhach() const;
     int getDonGia() const;
 
+    int tongTien();
+
     bool setMaDatPhong(string);
     bool setMaPhong(string);
     bool setIDKhachHang(string);

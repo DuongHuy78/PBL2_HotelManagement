@@ -233,6 +233,13 @@ bool DatPhong::setDonGia(int Gia) {
     }
 }
 
+int DatPhong::tongTien() {
+    int sum = 0;
+    int soNgay = (this->getNgayTra() - this->getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
+    sum = this->getDonGia() * soNgay;
+    return sum;
+}
+
 /**
  * @brief Hiển thị thông tin đặt phòng.
  * 
@@ -260,7 +267,7 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(dp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Don Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(dp.donGia) + " VND\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp.donGia)) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("---------------------------------------\n", CONSOLE);
     return out;
 }

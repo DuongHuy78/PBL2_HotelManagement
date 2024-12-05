@@ -94,14 +94,6 @@ LinkedList<DatPhong> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
-int QLDatPhong::tongTien(const DatPhong &DP) {
-    int sum = 0;
-    int soNgay = (DP.getNgayTra() - DP.getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
-    Node<DatPhong> *p = DSDP.getHead()->next;
-    sum = (DSLP->timLoaiPhong(DSP->timPhong(DP.getMaPhong())->getLoaiPhong()))->getGiaPhong() * soNgay;
-    return sum;
-}
-
 ostream &operator<<(ostream &os, const QLDatPhong &ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach dat phong: \n", CONSOLE);

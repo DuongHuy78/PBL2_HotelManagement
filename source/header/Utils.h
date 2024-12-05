@@ -539,16 +539,28 @@ public:
      * hàm này để chuyển số nguyên thành chuỗi có dấu chấm phân cách hàng nghìn
      * vd: 1000000 -> 1.000.000
      */
-    static void chuanHoaSo(string &n) {
+    static string chuanHoaSo(const string &n) {
+        string res = n;
         string last, temp;
-        while(n[0] == '0') {
-            n.erase(0, 1);
+        while(res[0] == '0') {
+            res.erase(0, 1);
         }
-        if (n.size() > 3) {
-            for (int i = n.size() - 3; i > 0; i -= 3) {
-                n.insert(i, ".");
+        if (res.size() > 3) {
+            for (int i = res.size() - 3; i > 0; i -= 3) {
+                res.insert(i, ".");
             }
         }
+        return res;
+    }
+
+    static int getOnlyNumber(string s) {
+        int res = 0;
+        for (char c : s) {
+            if (isdigit(c)) {
+                res = res * 10 + c - '0';
+            }
+        }
+        return res;
     }
 };
 #endif
