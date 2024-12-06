@@ -20,6 +20,12 @@ enum option_value {
 	BOOKING,
 	BOOKING_PART_2,
 	BOOKING_DONE,
+	
+	STAFF_BOOKING_INFO,
+	STAFF_GUEST_INFO,
+	STAFF_TYPE_ROOM_INFO,
+	STAFF_ROOM_INFO,
+	STAFF_CREATE_GUEST,
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;

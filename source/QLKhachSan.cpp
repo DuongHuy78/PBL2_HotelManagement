@@ -889,3 +889,7 @@ void QLKhachSan::list_all_type_room() {
 role_value QLKhachSan::getCurrentRole() {
     return role;
 }
+
+bool QLKhachSan::GuestExist(string ID) {
+    return this->QLKH.timKiemKhachHang(ID) != nullptr;
+}

@@ -7,11 +7,24 @@ QLKhachHang::~QLKhachHang() {
     
 }
 
-
+/**
+ * @brief Thêm khách hàng vào danh sách khách hàng.
+ * 
+ * @param kh Khách hàng cần thêm.
+ * 
+ * @return void
+ */
 void QLKhachHang::themKhachHang(KhachHang kh) {
     DSKH.add(kh);
 }
 
+/**
+ * @brief Tìm kiếm khách hàng theo ID.
+ * 
+ * @param ID ID của khách hàng cần tìm.
+ * 
+ * @return Con trỏ đến khách hàng nếu tìm thấy, ngược lại trả về nullptr.
+ */
 KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
     Node<KhachHang> *p = DSKH.getHead()->next;
     while(p != DSKH.getHead()) {
@@ -22,6 +35,13 @@ KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
     return nullptr;
 }
 
+/**
+ * @brief Tìm kiếm khách hàng theo số điện thoại.
+ * 
+ * @param SDT Số điện thoại của khách hàng cần tìm.
+ * 
+ * @return Con trỏ đến khách hàng nếu tìm thấy, ngược lại trả về nullptr.
+ */
 KhachHang *QLKhachHang::timKiemKhachHangSDT(string SDT) {
     Node<KhachHang> *p = DSKH.getHead()->next;
     while(p != DSKH.getHead()) {

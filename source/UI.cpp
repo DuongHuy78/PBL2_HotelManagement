@@ -31,6 +31,48 @@ struct history_booking {
 	string price_per_night;
 	string total_price;
 };
+
+struct booking_info {
+	string ID;
+	string roomtype;
+	string roomID;
+	string guestID;
+	string check_in_date;
+	string check_out_date;
+	string number_of_guest;
+	string price_per_night;
+	string total_price;
+};
+
+struct guest_info {
+	string ID;
+	string name;
+	string date_of_birth;
+	string phone_number;
+	string gender;
+};
+
+struct room_info {
+	string ID;
+	string type;
+	string bed_type;
+	string number_of_guest;
+	string area;
+	string price;
+	string description;
+};
+
+struct type_room_info {
+	string type;
+	string bed_type;
+	string number_of_guest;
+	string area;
+	string price;
+	string description;
+	string amount;
+};
+
+
 vector<history_booking> history_booking_list;
 bool history_list_enable = false;
 bool history_list_init = false;
@@ -57,6 +99,9 @@ struct guest_profile {
 };
 guest_profile current_guest_profile;
 bool edit_profile = false;
+bool staff_booking_guest_ID_not_exist = false;
+string booking_total_price = "";
+string staff_booking_guest_ID = "";
 // ---------------------------------------------------------
 Gnk_Color C_1A1A1D(26, 26, 29);
 Gnk_Color H_000000(0, 0, 0);
@@ -548,7 +593,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Text("Ma phong: ", Gnk_Point(510.0f, 200.0f), 24.0f);
 		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
 		gnk_Text("Tong tien:" , Gnk_Point(510.0f, 170.0f), 24.0f);
-		gnk_Text("0 VND", Gnk_Point(720.0f, 170.0f), 24.0f);
+		gnk_Text(booking_total_price, Gnk_Point(720.0f, 170.0f), 24.0f);
 
 		frame->buttonList["back_to_search_room_button"]->setAppear(true);
 		frame->buttonList["confirm_booking_button"]->setAppear(true);
@@ -797,6 +842,7 @@ void guest_frame_select_type_room_button_click(Gnk_Button *button) {
 		first = false;
 	}
 	gnk_Current_Frame->clear_Textbox();
+	staff_booking_guest_ID_not_exist = false;
 	option = BOOKING;
 }
 
@@ -812,6 +858,7 @@ void guest_frame_back_to_search_room_button_click(Gnk_Button *button) {
 	}	
 	else if(option == BOOKING_PART_2) {
 		gnk_Current_Frame->clear_Textbox();
+		staff_booking_guest_ID_not_exist = false;
 		option = BOOKING;
 	}
 }
@@ -830,11 +877,40 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 			break;
 		}
 	}
-	if(check) {
-		option = BOOKING_PART_2;
+	
+	if(current_Data->getCurrentRole() == KHACHHANG) {
+		if(check) {
+			DatPhong dp("0", string("0"), string("0"), 
+			Utils::stringToDate(check_in_date_str), 
+			Utils::stringToDate(check_out_date_str), 
+			Utils::stringToInt(number_of_guest_str), 
+			Utils::getOnlyNumber(room_list[index_booking].price));
+			booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
+
+			option = BOOKING_PART_2;
+		}
+		else {
+			cout << "Invalid room choice" << endl;
+		}
 	}
-	else {
-		cout << "Invalid room choice" << endl;
+	else if(current_Data->getCurrentRole() == NHANVIEN) {
+		if(check) {
+			if(current_Data->GuestExist(gnk_Current_Frame->textboxList["guest_ID_textbox"]->text)) {
+				DatPhong dp("0", string("0"), string("0"), 
+				Utils::stringToDate(check_in_date_str), 
+				Utils::stringToDate(check_out_date_str), 
+				Utils::stringToInt(number_of_guest_str), 
+				Utils::getOnlyNumber(room_list[index_booking].price));
+				booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
+				option = BOOKING_PART_2;
+			}
+			else {
+				staff_booking_guest_ID_not_exist = true;
+			}
+		}
+		else {
+			cout << "Invalid room choice" << endl;
+		}
 	}
 }
 
@@ -847,11 +923,23 @@ void guest_frame_confirm_booking_button_click(Gnk_Button *button) {
 
 	UI_input_buffer.clear();
 	UI_output_buffer.clear();
-	UI_input_buffer << check_in_date_str << endl;
-	UI_input_buffer << check_out_date_str << endl;
-	UI_input_buffer << number_of_guest_str << endl;
-	UI_input_buffer << room_list[index_booking].type << endl;
-	UI_input_buffer << room_choice << endl;
+	if(current_Data->getCurrentRole() == KHACHHANG) {
+		UI_input_buffer << check_in_date_str << endl;
+		UI_input_buffer << check_out_date_str << endl;
+		UI_input_buffer << number_of_guest_str << endl;
+		UI_input_buffer << room_list[index_booking].type << endl;
+		UI_input_buffer << room_choice << endl;
+	}
+	else if(current_Data->getCurrentRole() == NHANVIEN) {
+		UI_input_buffer << check_in_date_str << endl;
+		UI_input_buffer << check_out_date_str << endl;
+		UI_input_buffer << number_of_guest_str << endl;
+		UI_input_buffer << room_list[index_booking].type << endl;
+		UI_input_buffer << room_choice << endl;
+		UI_input_buffer << "1" << endl;
+		UI_input_buffer << gnk_Current_Frame->textboxList["guest_ID_textbox"]->text << endl;
+	}
+	else return;
 	current_Data->requestHandling(USER_BOOK_ROOM);
 	option = BOOKING_DONE;
 }
@@ -1042,6 +1130,11 @@ void staff_frame_draw(Gnk_Frame *frame) {
 			frame->buttonList["continue_booking_button"]->display();
 			frame->textboxList["room_choice_textbox"]->display();
 			frame->textboxList["guest_ID_textbox"]->display();
+
+			if(staff_booking_guest_ID_not_exist) {
+				gnk_Set_Object_Color(H_FF0000);
+				gnk_Text("Guest ID not exist", Gnk_Point(1040.0f, 180.0f), 24.0f);
+			}
 		}
 	}
 	else if(option == BOOKING_PART_2) {
@@ -1089,7 +1182,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		gnk_Text("Ma phong: ", Gnk_Point(510.0f, 200.0f), 24.0f);
 		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
 		gnk_Text("Tong tien:" , Gnk_Point(510.0f, 170.0f), 24.0f);
-		gnk_Text("0 VND", Gnk_Point(720.0f, 170.0f), 24.0f);
+		gnk_Text(booking_total_price, Gnk_Point(720.0f, 170.0f), 24.0f);
 
 		frame->buttonList["back_to_search_room_button"]->setAppear(true);
 		frame->buttonList["confirm_booking_button"]->setAppear(true);
