@@ -2,10 +2,12 @@
 #define NHANVIEN_H
 #include "NguoiDung.h"
 #include "Utils.h"
-#include "QLKhachHang.h"
-#include "QLDatPhong.h"
+// #include "QLKhachHang.h"
+// #include "QLDatPhong.h"
+#include "TaiKhoan.h"
+class TaiKhoan;
 class NhanVien: public NguoiDung {
-    string IDNhanVien;
+    void setTaiKhoan(TaiKhoan *);
 public:
     NhanVien();
     NhanVien(string);
@@ -16,5 +18,6 @@ public:
 
     user_option_value work();
     friend ostream& operator<<(ostream& out, const NhanVien&);
+    friend TaiKhoan;
 };
 #endif

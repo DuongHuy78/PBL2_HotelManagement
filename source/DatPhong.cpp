@@ -7,8 +7,8 @@
  */
 DatPhong::DatPhong() {
     this->maDatPhong    = "";
-    this->maPhong       = "";
-    this->IDKhachHang   = "";
+    this->phong         = nullptr;
+    this->khachHang     = nullptr;
     this->ngayNhan      = 0;
     this->ngayTra       = 0;
     this->soLuongKhach  = 0;
@@ -19,25 +19,21 @@ DatPhong::DatPhong() {
  * @brief Hàm khởi tạo cho lớp DatPhong.
  * 
  * @param MDP Mã đặt phòng.
- * @param MP Mã phòng.
- * @param MKH Mã khách hàng.
  * @param NNhan Ngày nhận phòng (kiểu time_t).
  * @param NTra Ngày trả phòng (kiểu time_t).
  * @param SL Số lượng khách.
  * @param Gia Đơn giá.
  */
-DatPhong::DatPhong(string MDP, string MP, string MKH, time_t NNhan, time_t NTra, int SL, int Gia) {
+DatPhong::DatPhong(string MDP, time_t NNhan, time_t NTra, int SL, int Gia) {
     this->maDatPhong    = "";
-    this->maPhong       = "";
-    this->IDKhachHang   = "";
+    this->phong         = nullptr;
+    this->khachHang     = nullptr;
     this->ngayNhan      = 0;
     this->ngayTra       = 0;
     this->soLuongKhach  = 0;
     this->donGia        = 0;
     
     setMaDatPhong(MDP);
-    setMaPhong(MP);
-    setIDKhachHang(MKH);
     setNgayNhanAndNgayTra(NNhan, NTra);
     setSoLuongKhach(SL);
     setDonGia(Gia);
@@ -50,8 +46,8 @@ DatPhong::DatPhong(string MDP, string MP, string MKH, time_t NNhan, time_t NTra,
  */
 DatPhong::DatPhong(const DatPhong &other) {
     this->maDatPhong    = other.maDatPhong;
-    this->maPhong       = other.maPhong;
-    this->IDKhachHang   = other.IDKhachHang;
+    this->phong         = other.phong;
+    this->khachHang     = other.khachHang;
     this->ngayNhan      = other.ngayNhan;
     this->ngayTra       = other.ngayTra;
     this->soLuongKhach  = other.soLuongKhach;
@@ -70,21 +66,21 @@ string DatPhong::getMaDatPhong() const {
 } 
 
 /**
- * @brief Lấy mã phòng.
+ * @brief Lấy phòng.
  * 
- * @return Mã phòng dưới dạng chuỗi.
+ * @return Phong* con trỏ trỏ tới phòng.
  */
-string DatPhong::getMaPhong() const {
-    return this->maPhong;
+Phong *DatPhong::getPhong() const {
+    return this->phong;
 }
 
 /**
- * @brief Lấy mã khách hàng.
+ * @brief Lấy khách hàng.
  * 
- * @return Mã khách hàng dưới dạng chuỗi.
+ * @return KhachHang* con trỏ trỏ tới khách hàng.
  */
-string DatPhong::getIDKhachHang() const {
-    return this->IDKhachHang;
+KhachHang *DatPhong::getKhachHang() const {
+    return this->khachHang;
 }
 
 /**
@@ -130,49 +126,33 @@ int DatPhong::getDonGia() const {
  * 
  * @param MDP Mã đặt phòng mới.
  */
-bool DatPhong::setMaDatPhong(string MDP) {
+void DatPhong::setMaDatPhong(string MDP) {
     if(Utils::isNumberOnly(MDP)) {
         this->maDatPhong = MDP;
-        return true;
     } else {
-        cerr << "DatPhong::setMaDatPhong::Ma dat phong khong hop le!" << endl;
-        return false;
+        throw "DatPhong::setMaDatPhong::Ma dat phong khong hop le!";
     }
 }
 
 /**
- * @brief Thiết lập mã phòng.
+ * @brief Thiết lập phòng.
  * 
- * Phương thức này sẽ gán giá trị mã phòng cho thuộc tính maPhong của đối tượng DatPhong.
- * 
- * @param MP Mã phòng mới.
+ * Phương thức này sẽ gán 1 con trỏ Phong* cho thuộc tính phong của đối tượng DatPhong.
  */
-bool DatPhong::setMaPhong(string MP) {
-    if(Utils::isAlphabetAndNumberOnly(MP)) {
-        this->maPhong = Utils::toUpper(MP);
-        return true;
-    } else {
-        cerr << "DatPhong::setMaPhong::Ma phong khong hop le!" << endl;
-        return false;
-    }
+void DatPhong::setPhong(Phong *phong) {
+    this->phong = phong;
+    phong->themDatPhong(this);
 }
 
 /**
- * @brief Thiết lập mã khách hàng.
+ * @brief Thiết lập khách hàng.
  * 
- * Phương thức này sẽ gán giá trị mã khách hàng cho thuộc tính IDKhachHang của đối tượng DatPhong.
- * 
- * @param MKH Mã khách hàng mới.
+ * Phương thức này sẽ gán 1 con trỏ KhachHang* cho thuộc tính khachHang của đối tượng DatPhong.
  */
-bool DatPhong::setIDKhachHang(string MKH) {
-    if(Utils::isNumberOnly(MKH)) {
-        this->IDKhachHang = MKH;
-        return true;
-    } else {
-        cerr << "DatPhong::setIDKhachHang::ID khach hang khong hop le!" << endl;
-        return false;
-    }
-}
+void DatPhong::setKhachHang(KhachHang *khachHang) {
+    this->khachHang = khachHang;
+    khachHang->themDatPhong(this);
+}  
 
 /**
  * @brief Thiết lập ngày nhận, trả phòng.
@@ -182,20 +162,16 @@ bool DatPhong::setIDKhachHang(string MKH) {
  * @param NNhan Ngày nhận phòng mới.
  * @param NTra Ngày trả phòng mới.
  */
-bool DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
+void DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
     if(Utils::isDate(Utils::dateToString(NNhan)) && 
        Utils::isDate(Utils::dateToString(NTra))) {
         if(NNhan < NTra) {
             this->ngayNhan = NNhan;
             this->ngayTra = NTra;
-            return true;
         }
-        return false;
+        throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhan phai nho hon ngay!";
     } else {
-        cerr << "DatPhong::setNgayNhanAndNgayTra::Ngay nhan hoac ngay tra khong hop le!" << endl;
-        cerr << "NNhan: " << Utils::dateToString(NNhan) << endl;
-        cerr << "NTra: " << Utils::dateToString(NTra) << endl;
-        return false;
+        throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhap khong hop le!";
     }
 }
 
@@ -206,13 +182,11 @@ bool DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
  * 
  * @param SL Số lượng khách mới.
  */
-bool DatPhong::setSoLuongKhach(int SL) {
+void DatPhong::setSoLuongKhach(int SL) {
     if(SL > 0) {
         this->soLuongKhach = SL;
-        return true;
     } else {
-        cerr << "DatPhong::setSoLuongKhach::So luong khach khong hop le!" << endl;
-        return false;
+        throw "DatPhong::setSoLuongKhach::So luong khach khong hop le!";
     }
 }
 
@@ -223,16 +197,19 @@ bool DatPhong::setSoLuongKhach(int SL) {
  * 
  * @param Gia Đơn giá mới.
  */
-bool DatPhong::setDonGia(int Gia) {
+void DatPhong::setDonGia(int Gia) {
     if(Gia > 0) {
         this->donGia = Gia;
-        return true;
     } else {
-        cerr << "DatPhong::setDonGia::Don gia khong hop le!" << endl;
-        return false;
+        throw "DatPhong::setDonGia::Don gia khong hop le!";
     }
 }
 
+/**
+ * @brief Tính tổng tiền.
+ * 
+ * Phương thức này sẽ tính tổng tiền của đơn đặt phòng dựa trên số ngày thuê và đơn giá.
+ */
 int DatPhong::tongTien() {
     int sum = 0;
     int soNgay = (this->getNgayTra() - this->getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
@@ -257,9 +234,9 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData("Ma Dat Phong: ", CONSOLE);
     Utils::outputData(dp.maDatPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ma Phong: ", CONSOLE);
-    Utils::outputData(dp.maPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData(dp.phong->getMaPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
-    Utils::outputData(dp.IDKhachHang + "\n", CONSOLE_OR_UI);
+    Utils::outputData(dp.khachHang->getIDKhachHang() + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ngay Nhan: ", CONSOLE);
     Utils::outputData(Utils::dateToString(dp.ngayNhan) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ngay Tra: ", CONSOLE);

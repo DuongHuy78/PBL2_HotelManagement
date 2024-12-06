@@ -48,6 +48,11 @@ void TaiKhoan::setID(string ID) {
     this->ID = ID;
 }
 
+void TaiKhoan::setNguoiDung(NguoiDung* nguoiDung) {
+    this->nguoiDung = nguoiDung;
+    nguoiDung->setTaiKhoan(this);
+}
+
 role_value TaiKhoan::getRole() const {
     if(this->ID[0] == '1') return KHACHHANG;
     if(this->ID[0] == '2') return NHANVIEN;

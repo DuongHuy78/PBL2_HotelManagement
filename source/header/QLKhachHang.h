@@ -8,7 +8,7 @@ public:
     QLKhachHang();
     ~QLKhachHang();
 
-    void themKhachHang(KhachHang);
+    void themKhachHang(const KhachHang &);
     void suaThongTin(string);
     void xoaKhachHang(KhachHang *); 
     string getMaxIDKhachHang();         // Lấy ID khách hàng lớn nhat để tạo ID mới

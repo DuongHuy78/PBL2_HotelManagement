@@ -32,7 +32,7 @@ LoaiPhong::LoaiPhong(const LoaiPhong& other) {
     this->dienTich = other.dienTich;
     this->giaPhong = other.giaPhong;
     this->moTaPhong = other.moTaPhong;
-
+    this->soLuongKhach = other.soLuongKhach;
 }
 LoaiPhong::~LoaiPhong() {}
 
@@ -62,8 +62,6 @@ string LoaiPhong::getMoTaPhong() const {
     return this->moTaPhong;
 }
 
-
-// Setters
 bool LoaiPhong::setLoaiPhong(string LP){
     if(Utils::isAlphabetAndNumberOnly(LP)){
         this->loaiPhong = LP;
@@ -119,6 +117,10 @@ bool LoaiPhong::setGiaPhong(int GP) {
 bool LoaiPhong::setMoTaPhong(string MTP) {
     this->moTaPhong = MTP;
     return true;
+}
+
+void LoaiPhong::themPhong(Phong *phong) {
+    this->danhSachPhong.add(phong);
 }
 
 LoaiPhong LoaiPhong::nhapThongTin() {

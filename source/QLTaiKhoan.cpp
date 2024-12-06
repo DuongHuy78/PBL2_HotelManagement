@@ -8,13 +8,13 @@ QLTaiKhoan::~QLTaiKhoan() {
 
 }
 
-void QLTaiKhoan::themTaiKhoan(TaiKhoan tk) {
+void QLTaiKhoan::themTaiKhoan(const TaiKhoan &tk) {
     DSTK.add(tk);
 }
 
 void QLTaiKhoan::xoaTaiKhoan(TaiKhoan *tk) {
-    Node<TaiKhoan> *p = DSTK.getHead();
-    while(p != DSTK.getHead()) {
+    Node<TaiKhoan> *p = DSTK.end();
+    while(p != DSTK.end()) {
         if(&p->data == tk) {
             DSTK.remove(p);
             return;
@@ -28,8 +28,8 @@ void QLTaiKhoan::suaThongTinTaiKhoan(string ID) {
 }
 
 string QLTaiKhoan::kiemTraTaiKhoan(string username, string pass) {
-    Node<TaiKhoan> *p = DSTK.getHead()->next;
-    while(p != DSTK.getHead()) {
+    Node<TaiKhoan> *p = DSTK.begin();
+    while(p != DSTK.end()) {
         if(p->data.getUsername() == username 
         && p->data.getPassword() == pass) return p->data.getID();
         p = p->next;
@@ -38,8 +38,8 @@ string QLTaiKhoan::kiemTraTaiKhoan(string username, string pass) {
 }
 
 TaiKhoan *QLTaiKhoan::getTaiKhoanByID(string ID) {
-    Node<TaiKhoan> *p = DSTK.getHead();
-    while(p != DSTK.getHead()) {
+    Node<TaiKhoan> *p = DSTK.end();
+    while(p != DSTK.end()) {
         if(p->data.getID() == ID) return &p->data;
         p = p->next;
     }

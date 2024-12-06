@@ -1,6 +1,12 @@
 #include "./header/QuanLi.h"
-QuanLi::QuanLi() {
 
+void QuanLi::setTaiKhoan(TaiKhoan *tk) {
+    this->taiKhoan = tk;
+}
+
+QuanLi::QuanLi() {
+    this->ID = "";
+    this->taiKhoan = nullptr;
 }
 
 QuanLi::~QuanLi() {
@@ -8,24 +14,24 @@ QuanLi::~QuanLi() {
 }
 
 string QuanLi::getIDQuanLi() const {
-    return this->IDQuanLi;
+    return this->ID;
 }
 
 void QuanLi::setIDQuanLi(string ID) {
-    this->IDQuanLi = ID;
+    this->ID = ID;
 }
 
-void QuanLi::setDSLP(QLLoaiPhong* DSLP) {
-    this->DSLP = DSLP;
-}
+// void QuanLi::setDSLP(QLLoaiPhong* DSLP) {
+//     this->DSLP = DSLP;
+// }
 
-void QuanLi::setDSP(QLPhong* DSP) {
-    this->DSP = DSP;
-}
+// void QuanLi::setDSP(QLPhong* DSP) {
+//     this->DSP = DSP;
+// }
 
-void QuanLi::setDSDP(QLDatPhong* DSDP) {
-    this->DSDP = DSDP;
-}
+// void QuanLi::setDSDP(QLDatPhong* DSDP) {
+//     this->DSDP = DSDP;
+// }
 
 string operator+(const string &time,const int &n) {
     int day, month, year;
@@ -112,26 +118,26 @@ void QuanLi::xoaPhong(const string& maPhong){
 /**
  * hàm này để tính doanh thu từ ngày bắt đầu đến ngày kết thúc
  */
-int QuanLi::thongKe(string t_begin, string t_end) {
-    int doanhThu = 0;
-    time_t timeBegin = Utils::stringToDate(t_begin);
-    time_t timeEnd = Utils::stringToDate(t_end);
+// int QuanLi::thongKe(string t_begin, string t_end) {
+//     int doanhThu = 0;
+//     time_t timeBegin = Utils::stringToDate(t_begin);
+//     time_t timeEnd = Utils::stringToDate(t_end);
     
-    Node<DatPhong>* curr = DSDP->getHead()->next;
-    while(curr != DSDP->getHead()) {
-        time_t ngayNhan = curr->data.getNgayNhan();
-        time_t ngayTra = curr->data.getNgayTra();
+//     Node<DatPhong>* curr = DSDP->begin();
+//     while(curr != DSDP->end()) {
+//         time_t ngayNhan = curr->data.getNgayNhan();
+//         time_t ngayTra = curr->data.getNgayTra();
         
-        // Kiểm tra nếu thời gian đặt phòng nằm trong khoảng cần thống kê
-        if(!(ngayTra < timeBegin || ngayNhan > timeEnd)) {
-            doanhThu += curr->data.getDonGia();
-        }
+//         // Kiểm tra nếu thời gian đặt phòng nằm trong khoảng cần thống kê
+//         if(!(ngayTra < timeBegin || ngayNhan > timeEnd)) {
+//             doanhThu += curr->data.getDonGia();
+//         }
         
-        curr = curr->next;
-    }
+//         curr = curr->next;
+//     }
     
-    return doanhThu;
-}
+//     return doanhThu;
+// }
 void QuanLi::xemDanhSachLuaChonXemDoanhThu(){
     cout<<"1. XEM DOANH THU THEO NGAY."<<endl;
     cout<<"2. XEM DOANH THU THEO THANG."<<endl;
@@ -156,7 +162,7 @@ void QuanLi::xemDoanhThu() {
     }
     if(temp == "1"){
         d_begin = Utils::inputWithCondition("Nhap ngay muon xem (theo dinh dang dd/mm/yyyy): ", 10, 10, DATE);
-        doanhThu = thongKe(d_begin, d_begin+1);
+        // doanhThu = thongKe(d_begin, d_begin+1);
         cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
     }
     else if (temp == "2")
@@ -187,7 +193,7 @@ void QuanLi::xemDoanhThu() {
         }
         d_begin = "01/" + month + "/" + year;
         d_end = "31/" + month + "/" + year;
-        doanhThu = thongKe(d_begin, d_end + 1);
+        // doanhThu = thongKe(d_begin, d_end + 1);
         cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
     }
     else if(temp == "3"){
@@ -207,7 +213,7 @@ void QuanLi::xemDoanhThu() {
         }
         d_begin = "01/01/" + year;
         d_end = "31/12/" + year;
-        doanhThu = thongKe(d_begin, d_end + 1);
+        // doanhThu = thongKe(d_begin, d_end + 1);
         cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
     }
 }
@@ -215,7 +221,7 @@ void QuanLi::xemDoanhThu() {
 ostream &operator<<(ostream &out, QuanLi &ql) {
     Utils::outputData("-----------THONG-TIN-QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("ID quan li: ", CONSOLE);
-    Utils::outputData(ql.IDQuanLi + "\n", CONSOLE_OR_UI);
+    Utils::outputData(ql.ID + "\n", CONSOLE_OR_UI);
     Utils::outputData("--------------------------------------\n", CONSOLE);
     return out;
 }

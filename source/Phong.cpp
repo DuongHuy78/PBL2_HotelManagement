@@ -1,13 +1,17 @@
 #include "./header/Phong.h"
 
-Phong::Phong() {
-    this->maPhong = "";
-    this->loaiPhong = "";
+void Phong::themDatPhong(DatPhong *DP) {
+    this->danhSachDatPhong.add(DP);
 }
 
-Phong::Phong(string MaPhong, string LoaiPhong){
+Phong::Phong() {
+    this->maPhong = "";
+    this->loaiPhong = nullptr;
+}
+
+Phong::Phong(string MaPhong){
     this->maPhong = MaPhong;
-    this->loaiPhong = LoaiPhong;
+    this->loaiPhong = nullptr;
 }
 
 Phong::Phong(const Phong& other){
@@ -23,7 +27,7 @@ string Phong::getMaPhong() const {
     return this->maPhong;
 }
 
-string Phong::getLoaiPhong() const {
+LoaiPhong *Phong::getLoaiPhong() const {
     return this->loaiPhong;
 }
 
@@ -32,12 +36,9 @@ void Phong::setMaPhong(string MP){
     this->maPhong = MP;
 }
 
-void Phong::setLoaiPhong(string LP) {
-    if (!Utils::isRoomType(LP)) {
-        Utils::outputData("Loai phong khong hop le!\n", CONSOLE);
-        return;
-    }
+void Phong::setLoaiPhong(LoaiPhong *LP){
     this->loaiPhong = LP;
+    LP->themPhong(this);
 }
 
 // string Phong::capNhatThongTin(){
@@ -64,7 +65,7 @@ void Phong::capNhatThongTin(){
         switch(choice) {
             case 1:
                 temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
-                this->setLoaiPhong(temp);
+                //this->setLoaiPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
@@ -95,7 +96,7 @@ ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData("Ma Phong: ", CONSOLE);
     Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
-    Utils::outputData(P.loaiPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData(P.getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("-------------------------------------\n", CONSOLE);
     return os;
 }

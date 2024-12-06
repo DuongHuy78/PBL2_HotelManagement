@@ -8,14 +8,26 @@ template <class T> class LinkedList {
 public:
     LinkedList();
     ~LinkedList();
-    void add(T data);
+    void add(const T &data);
+    void remove(int index);
     void remove(Node<T>* node);
-    void display();
-    Node<T>* getHead();
+    // void display();
     int getSize();
-    // Phương thức duyệt
-    Node<T>* begin() const;   // Trả về head->next
-    Node<T>* end() const;     // Trả về head
+
+    bool isEmpty();
+
+    // Trả về phần tử ở vị trí index
+    T &elementAt(int);
+
+    bool contains(T data);
+    bool contains(Node<T>* node);
+
+    // Trả về head->next
+    Node<T>* begin() const;   
+    // Trả về head
+    Node<T>* end() const;   
+    // Trả về head->prev
+    Node<T>* last() const;
 };
 
 template <class T> LinkedList<T>::LinkedList() {
@@ -36,13 +48,35 @@ template <class T> LinkedList<T>::~LinkedList() {
     delete this->head;
 }
 
-template <class T> void LinkedList<T>::add(T data) {
+/**
+ * @brief Thêm một phần tử vào cuối danh sách.
+ */
+template <class T> void LinkedList<T>::add(const T &data) {
     Node<T>* newNode = new Node<T>(data);
     newNode->next = this->head;
     newNode->prev = this->head->prev;
     this->head->prev->next = newNode;
     this->head->prev = newNode;
     ++this->size;
+}
+
+template <class T> void LinkedList<T>::remove(int pos) {
+    if(pos < 0 || pos >= this->size) {
+        return;
+    }
+    int index = 0;
+    Node<T> *temp = this->begin();
+    while(temp != this->end()) {
+        if(index == pos) {
+            temp->prev->next = temp->next;
+            temp->next->prev = temp->prev;
+            delete temp;
+            --this->size;
+            return;
+        }
+        index++;
+        temp = temp->next;
+    }
 }
 
 template <class T> void LinkedList<T>::remove(Node<T>* node) {
@@ -52,13 +86,13 @@ template <class T> void LinkedList<T>::remove(Node<T>* node) {
     --this->size;
 }
 
-template <class T> void LinkedList<T>::display() {
-    Node<T> *temp = this->head->next;
-    while(temp != this->head) {
-        cout << temp->data << endl; // nay thi phai dung da nang hoa toan tu nay!!
-        temp = temp->next;
-    }
-}
+// template <class T> void LinkedList<T>::display() {
+//     Node<T> *temp = this->head->next;
+//     while(temp != this->head) {
+//         cout << temp->data << endl; // nay thi phai dung da nang hoa toan tu nay!!
+//         temp = temp->next;
+//     }
+// }
 
 template <class T> Node<T>* LinkedList<T>::begin() const {
     return head->next; 
@@ -68,12 +102,50 @@ template <class T> Node<T>* LinkedList<T>::end() const {
     return head; 
 }
 
-template <class T> Node<T>* LinkedList<T>::getHead() {
-    return this->head;
+template <class T> Node<T>* LinkedList<T>::last() const {
+    return head->prev; 
 }
 
 template <class T> int LinkedList<T>::getSize() {
     return this->size;
+}
+
+template <class T> bool LinkedList<T>::isEmpty() {
+    return this->size == 0;
+}
+
+template <class T> T &LinkedList<T>::elementAt(int index) {
+    int i = 0;
+    Node<T> *temp = this->begin();
+    while(temp != this->end()) {
+        if(i == index) {
+            return temp->data;
+        }
+        ++i;
+        temp = temp->next;
+    }
+}
+
+template <class T> bool LinkedList<T>::contains(T data) {
+    Node<T> *temp = this->begin();
+    while(temp != this->end()) {
+        if(temp->data == data) {
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
+}
+
+template <class T> bool LinkedList<T>::contains(Node<T>* node) {
+    Node<T> *temp = this->begin();
+    while(temp != this->end()) {
+        if(temp == node) {
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
 }
 
 #endif

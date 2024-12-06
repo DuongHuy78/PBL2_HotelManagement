@@ -9,7 +9,7 @@ public:
     QLTaiKhoan();
     ~QLTaiKhoan();
 
-    void themTaiKhoan(TaiKhoan);
+    void themTaiKhoan(const TaiKhoan &tk);
     void xoaTaiKhoan(TaiKhoan *);
     void suaThongTinTaiKhoan(string);
     string kiemTraTaiKhoan(string, string);

@@ -1,6 +1,12 @@
 #include "./header/NhanVien.h"
+
+void NhanVien::setTaiKhoan(TaiKhoan *tk) {
+    this->taiKhoan = tk;
+}
+
 NhanVien::NhanVien() {
-    IDNhanVien = "";
+    this->ID = "";
+    this->taiKhoan = nullptr;
 }
 
 NhanVien::~NhanVien() {
@@ -8,21 +14,22 @@ NhanVien::~NhanVien() {
 }
 
 NhanVien::NhanVien(string ID) {
-    this->IDNhanVien = ID;
+    this->ID = ID;
+    this->taiKhoan = nullptr;
 }
 
 string NhanVien::getIDNhanVien() const {
-    return this->IDNhanVien;
+    return this->ID;
 }
 
 void NhanVien::setIDNhanVien(string ID) {
-    this->IDNhanVien = ID;
+    this->ID = ID;
 }
 
 ostream& operator<<(ostream& out, const NhanVien& nv) {
     Utils::outputData("-----------THONG-TIN-NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("ID Nhan Vien: ", CONSOLE);
-    Utils::outputData(nv.IDNhanVien + "\n", CONSOLE_OR_UI);
+    Utils::outputData(nv.ID + "\n", CONSOLE_OR_UI);
     Utils::outputData("--------------------------------------\n", CONSOLE);
     return out;
 }

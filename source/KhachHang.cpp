@@ -1,18 +1,20 @@
 #include "./header/KhachHang.h"
 
 KhachHang::KhachHang() {
-    this->IDKhachHang = "";   
+    this->ID = "";
     this->hoTen = "";
     this->ngaySinh = 0;
     this->soDienThoai = "";
     this->gioiTinh = UNDEFINED_GENDER;
+    this->taiKhoan = nullptr;
 }
 KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string soDienThoai, gender_value gioiTinh) {
-    this->IDKhachHang = "";   
+    this->ID = "";
     this->hoTen = "";
     this->ngaySinh = 0;
     this->soDienThoai = "";
     this->gioiTinh = UNDEFINED_GENDER;
+    this->taiKhoan = nullptr;
     
     setIDKhachHang(IDKhachHang);
     setHoTen(hoTen);
@@ -22,17 +24,18 @@ KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string s
 }
 
 KhachHang::KhachHang(const KhachHang& KhachHang) {
-    this->IDKhachHang = KhachHang.IDKhachHang;
+    this->ID = KhachHang.ID;
     this->hoTen = KhachHang.hoTen;
     this->ngaySinh = KhachHang.ngaySinh;
     this->soDienThoai = KhachHang.soDienThoai;
     this->gioiTinh = KhachHang.gioiTinh;
+    this->taiKhoan = KhachHang.taiKhoan;
 }
 
 KhachHang::~KhachHang() {}
 
 string KhachHang::getIDKhachHang() const {
-    return this->IDKhachHang;
+    return this->ID;
 }
 
 string KhachHang::getHoTen() const {
@@ -51,9 +54,21 @@ gender_value KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
+// LinkedList<DatPhong *> &KhachHang::getDanhSachDatPhong() const {
+//     return this->danhSachDatPhong;
+// }
+
+void KhachHang::themDatPhong(DatPhong *dp) {
+    danhSachDatPhong.add(dp);
+}
+
+void KhachHang::setTaiKhoan(TaiKhoan *tk) {
+    this->taiKhoan = tk;
+}   
+
 bool KhachHang::setIDKhachHang(string IDKhachHang) {
     if(Utils::isNumberOnly(IDKhachHang)) {
-        this->IDKhachHang = IDKhachHang;
+        this->ID = IDKhachHang;
         return true;
     }
     else {
@@ -153,7 +168,7 @@ void KhachHang::suaThongTin() {
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
-    Utils::outputData(kh.IDKhachHang + "\n", CONSOLE_OR_UI);
+    Utils::outputData(kh.ID + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ho Ten: ", CONSOLE);
     Utils::outputData(kh.hoTen + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ngay Sinh: ", CONSOLE);

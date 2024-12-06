@@ -880,7 +880,7 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 	
 	if(current_Data->getCurrentRole() == KHACHHANG) {
 		if(check) {
-			DatPhong dp("0", string("0"), string("0"), 
+			DatPhong dp("0", 
 			Utils::stringToDate(check_in_date_str), 
 			Utils::stringToDate(check_out_date_str), 
 			Utils::stringToInt(number_of_guest_str), 
@@ -896,7 +896,7 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 	else if(current_Data->getCurrentRole() == NHANVIEN) {
 		if(check) {
 			if(current_Data->GuestExist(gnk_Current_Frame->textboxList["guest_ID_textbox"]->text)) {
-				DatPhong dp("0", string("0"), string("0"), 
+				DatPhong dp("0",
 				Utils::stringToDate(check_in_date_str), 
 				Utils::stringToDate(check_out_date_str), 
 				Utils::stringToInt(number_of_guest_str), 
