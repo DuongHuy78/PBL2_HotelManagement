@@ -251,10 +251,10 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData("-----------THONG-TIN-DAT-PHONG---------\n", CONSOLE);
     Utils::outputData("Ma Dat Phong: ", CONSOLE);
     Utils::outputData(dp.maDatPhong + "\n", CONSOLE_OR_UI);
-    Utils::outputData("Ma Phong: ", CONSOLE);
-    Utils::outputData(dp.phong->getMaPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(dp.phong->getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Ma Phong: ", CONSOLE);
+    Utils::outputData(dp.phong->getMaPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
     Utils::outputData(dp.khachHang->getIDKhachHang() + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ngay Nhan: ", CONSOLE);

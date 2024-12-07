@@ -606,30 +606,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Node<DatPhong *> *dp = QLDP.getDSDP().begin();
         while(dp != QLDP.getDSDP().end()) {
             if(dp->data->getKhachHang()->getIDKhachHang() == ID) {
-                Utils::outputData("-----------LICH-SU-DAT-PHONG---------\n", CONSOLE);
-                Utils::outputData("Ma Dat Phong: ", CONSOLE);
-                Utils::outputData(dp->data->getMaDatPhong() + "\n", CONSOLE_OR_UI);
-                Node<Phong *> *p = QLP.getDSP().begin();
-                while(p != QLP.getDSP().end()) {
-                    if(p->data->getMaPhong() == dp->data->getPhong()->getMaPhong()) {
-                        Utils::outputData("Loai phong: ", CONSOLE);
-                        Utils::outputData(p->data->getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
-                    }
-                    p = p->next;
-                }
-                Utils::outputData("Ma Phong: ", CONSOLE);
-                Utils::outputData(dp->data->getPhong()->getMaPhong() + "\n", CONSOLE_OR_UI);
-                Utils::outputData("Ngay Nhan: ", CONSOLE);
-                Utils::outputData(Utils::dateToString(dp->data->getNgayNhan()) + "\n", CONSOLE_OR_UI);
-                Utils::outputData("Ngay Tra: ", CONSOLE);
-                Utils::outputData(Utils::dateToString(dp->data->getNgayTra()) + "\n", CONSOLE_OR_UI);
-                Utils::outputData("So Luong Khach: ", CONSOLE);
-                Utils::outputData(Utils::intToString(dp->data->getSoLuongKhach()) + "\n", CONSOLE_OR_UI);
-                Utils::outputData("Gia Phong: ", CONSOLE);
-                Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp->data->getDonGia())) + " VND\n", CONSOLE_OR_UI);
-                Utils::outputData("Tong Tien: ", CONSOLE);
-                Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp->data->tongTien())) + " VND\n", CONSOLE_OR_UI);
-                Utils::outputData("-------------------------------------\n", CONSOLE);
+                cout << *dp->data;
             }
             dp = dp->next;
         }
