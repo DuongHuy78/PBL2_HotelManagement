@@ -10,15 +10,11 @@ class QLDatPhong {
     // QLLoaiPhong* DSLP; // Danh sach loai phong
     // QLPhong* DSP; // Danh sach phong
     // QLKhachHang* DSKH; // Danh sach khach hang
-    // string currentID;
-    // role_value role;
 public:
     ~QLDatPhong();
     // void setDSLP(QLLoaiPhong*);
     // void setDSP(QLPhong*);
     // void setDSKH(QLKhachHang*);
-    // void setcurrentID(string);
-    // void setRole(role_value);
 
     void themDatPhong(DatPhong *);
     void xoaDatPhong(DatPhong *);

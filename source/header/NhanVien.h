@@ -2,8 +2,6 @@
 #define NHANVIEN_H
 #include "NguoiDung.h"
 #include "Utils.h"
-// #include "QLKhachHang.h"
-// #include "QLDatPhong.h"
 #include "TaiKhoan.h"
 class TaiKhoan;
 class NhanVien: public NguoiDung {
