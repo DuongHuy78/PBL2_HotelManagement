@@ -122,16 +122,16 @@ KhachHang QLKhachHang::nhapThongTin() {
     Utils::outputData("Nhap thong tin khach hang: \n", CONSOLE);
     temp = Utils::inputWithCondition("Nhap ho ten: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
     newKH.setHoTen(Utils::chuanHoaTen(temp));
-    
+    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap ngay sinh (dd/mm/yyyy): ", 1, 10, DATE);
     newKH.setNgaySinh(Utils::stringToDate(temp));
-
+    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap So dien thoai: ", 1, 10, VIETNAM_PHONE_NUMBER);
     newKH.setSoDienThoai(temp);
-
+    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
     newKH.setGioiTinh(Utils::stringToGender(temp));
-
+    cout << temp << endl;
     Utils::outputData("Nhap du lieu khach hang thanh cong!\n", CONSOLE);
     return newKH;
 }

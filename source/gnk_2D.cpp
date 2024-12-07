@@ -997,7 +997,6 @@ int Gnk_List_Object::toNextObject() {
 
 void Gnk_List_Object::process() {
 	if(!appear) return;
-
 }
 
 void Gnk_List_Object::draw() {
