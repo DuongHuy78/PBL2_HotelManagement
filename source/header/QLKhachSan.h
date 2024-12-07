@@ -53,6 +53,9 @@ public:
     void list_all_type_room();
     role_value getCurrentRole();
     bool GuestExist(string);
+    void xemDanhSachLuaChonXemDoanhThu();
+    int thongKe(string, string);
+    // friend string operator+(const string& ,const int& );
 };
 
 #endif
