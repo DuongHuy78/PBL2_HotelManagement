@@ -28,7 +28,7 @@ public:
     time_t getNgayTra() const;
     int getSoLuongKhach() const;
     int getDonGia() const;
-    int tongTien();
+    int tongTien() const;
 
     void setMaDatPhong(string);
     void setPhong(Phong *);

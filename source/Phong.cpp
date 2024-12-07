@@ -26,7 +26,7 @@ Phong::Phong(string MaPhong){
 /**
  * @brief Hàm sao chép cho lớp Phong.
  */
-Phong::Phong(const Phong& other){
+Phong::Phong(const Phong& other) {
     this->maPhong = other.maPhong;
     this->loaiPhong = other.loaiPhong;
 }

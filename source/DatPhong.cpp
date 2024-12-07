@@ -228,7 +228,7 @@ void DatPhong::setDonGia(int Gia) {
  * 
  * Phương thức này sẽ tính tổng tiền của đơn đặt phòng dựa trên số ngày thuê và đơn giá.
  */
-int DatPhong::tongTien() {
+int DatPhong::tongTien() const{
     int sum = 0;
     int soNgay = (this->getNgayTra() - this->getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
     sum = this->getDonGia() * soNgay;
@@ -253,6 +253,8 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData(dp.maDatPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ma Phong: ", CONSOLE);
     Utils::outputData(dp.phong->getMaPhong() + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Loai Phong: ", CONSOLE);
+    Utils::outputData(dp.phong->getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
     Utils::outputData(dp.khachHang->getIDKhachHang() + "\n", CONSOLE_OR_UI);
     Utils::outputData("Ngay Nhan: ", CONSOLE);
@@ -263,6 +265,8 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData(Utils::intToString(dp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Don Gia: ", CONSOLE);
     Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp.donGia)) + " VND\n", CONSOLE_OR_UI);
+    Utils::outputData("Tong Tien: ", CONSOLE);
+    Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("---------------------------------------\n", CONSOLE);
     return out;
 }

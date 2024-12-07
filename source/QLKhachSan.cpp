@@ -322,7 +322,7 @@ void QLKhachSan::outputPhong(string path) {
     Node<Phong *> *temp = QLP.getDSP().begin();
     while(temp != QLP.getDSP().end()) {
         fo << temp->data->getMaPhong() << ";" 
-            << temp->data->getLoaiPhong() 
+            << temp->data->getLoaiPhong()->getLoaiPhong()
             << endl;
         temp = temp->next;
         count++;
@@ -495,7 +495,6 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         string ngayNhan, ngayTra, soLuongKhach;
         LinkedList<Phong *> phongTrong;
         LinkedList<loaiPhongAvailable> listlpa;
-
         searchTypeRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         bookingRoom(ngayNhan, ngayTra, soLuongKhach, phongTrong, listlpa);
         Utils::outputData("Dat phong thanh cong!\n", CONSOLE);
@@ -738,7 +737,6 @@ void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate, int s
         }        
         p = p->next;
     }
-
     Node<Phong *> *p2 = QLP.getDSP().begin();
     while(p2 != QLP.getDSP().end()) {
         string maPhong = p2->data->getMaPhong();
@@ -752,7 +750,7 @@ void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate, int s
             p3 = p3->next;
         }
 
-        if(isAvailable && QLLP.soLuongKhach(p2->data->getLoaiPhong()->getLoaiPhong()) >= soLuongKhach) {
+        if(isAvailable && p2->data->getLoaiPhong()->getSoLuongKhach() >= soLuongKhach) {
             phongTrong.add(p2->data);
         }
         p2 = p2->next;
@@ -773,7 +771,6 @@ void QLKhachSan::searchTypeRoom(string &ngayNhan, string &ngayTra, string &soLuo
         }
         break;
     }
-
     soLuongKhach = Utils::inputWithCondition("Nhap so luong khach: ", 1, 2, NUMBER_ONLY);
     roomAvailability(Utils::stringToDate(ngayNhan), Utils::stringToDate(ngayTra), Utils::stringToInt(soLuongKhach), phongTrong);
 
@@ -897,6 +894,8 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
             QLLP.timLoaiPhong(loaiPhong)->getGiaPhong()
         );
         QLDP.themDatPhong(newDP);
+        newDP->setPhong(QLP.timPhong(maPhong));
+        newDP->setKhachHang(QLKH.timKiemKhachHang(ID));
     }
     else if(role == KHACHHANG) {
         KhachHang *KH = (KhachHang *)current_user;
@@ -908,6 +907,8 @@ void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, cons
             QLLP.timLoaiPhong(loaiPhong)->getGiaPhong()
         );
         QLDP.themDatPhong(newDP);
+        newDP->setPhong(QLP.timPhong(maPhong));
+        newDP->setKhachHang(KH);
     }
 }
 
