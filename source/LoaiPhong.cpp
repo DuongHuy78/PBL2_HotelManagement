@@ -280,16 +280,11 @@ void LoaiPhong::capNhatThongTin(){
  * @brief In thông tin loại phòng.
  */
 ostream& operator<<(ostream& out, const LoaiPhong& lp) {
-    string temp;
-    if(lp.loaiGiuong == 1) temp = "Single";
-    else if(lp.loaiGiuong == 2) temp = "Double";
-    else if(lp.loaiGiuong == 12) temp = "SingleDouble";
-
     Utils::outputData("-----------THONG-TIN-LOAI-PHONG---------\n", CONSOLE);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(lp.loaiPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Giuong: ", CONSOLE);
-    Utils::outputData(temp + "\n", CONSOLE_OR_UI);
+    Utils::outputData(lp.getLoaiGiuongStr() + "\n", CONSOLE_OR_UI);
     Utils::outputData("So Luong Khach: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.soLuongKhach) + "\n", CONSOLE_OR_UI);
     Utils::outputData("Dien Tich: ", CONSOLE);
@@ -299,7 +294,7 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData("So luong phong: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.danhSachPhong.getSize()) + "\n", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.danhSachPhong.getSize()) + "\n", CONSOLE_OR_UI);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);
     return out;
 }

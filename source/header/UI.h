@@ -26,6 +26,7 @@ enum option_value {
 	STAFF_TYPE_ROOM_INFO,
 	STAFF_ROOM_INFO,
 	STAFF_CREATE_GUEST,
+	STAFF_CREATE_GUEST_DONE,
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;
@@ -77,11 +78,12 @@ void staff_frame_guest_infomation_button_click(Gnk_Button *);
 void staff_frame_type_room_infomation_button_click(Gnk_Button *);
 void staff_frame_room_information_button_click(Gnk_Button *);
 void staff_frame_create_guest_button_click(Gnk_Button *);
+
 void staff_frame_booking_info_list_process(Gnk_List_Object *);
 void staff_frame_guest_info_list_process(Gnk_List_Object *);
 void staff_frame_type_room_info_list_process(Gnk_List_Object *);
 void staff_frame_room_info_list_process(Gnk_List_Object *);
-
+void staff_frame_create_guest_button_click_2(Gnk_Button *);
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *);
 extern Gnk_Frame admin;
