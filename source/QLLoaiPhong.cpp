@@ -6,8 +6,12 @@ QLLoaiPhong::QLLoaiPhong()
 
 }
 
-QLLoaiPhong::~QLLoaiPhong()
-{
+QLLoaiPhong::~QLLoaiPhong() {
+    Node<LoaiPhong *> *p = DSLP.begin();
+    while(p != DSLP.end()) {
+        delete p->data;
+        p = p->next;
+    }
 }
 
 // HÀM THÊM CÁC LOẠI PHÒNG vào DSLP (LinkedList)
@@ -46,9 +50,9 @@ QLLoaiPhong::~QLLoaiPhong()
 //     return; 
 // }
 
-void QLLoaiPhong::themLoaiPhong(const LoaiPhong& NewLP){
-    roomTypes.add(NewLP.getLoaiPhong());
-    (this->DSLP).add(NewLP);
+void QLLoaiPhong::themLoaiPhong(LoaiPhong *NewLP){
+    roomTypes.add(NewLP->getLoaiPhong());
+    DSLP.add(NewLP);
 }
 
 // void QLLoaiPhong::xemLoaiPhong(){
@@ -68,12 +72,12 @@ void QLLoaiPhong::themLoaiPhong(const LoaiPhong& NewLP){
 // }
 
 void QLLoaiPhong::suaThongTin(const string& IDLoaiPhong){
-    Node<LoaiPhong> *p = DSLP.begin();
+    Node<LoaiPhong *> *p = DSLP.begin();
     while ((p != DSLP.end()))
     {
-        if(p->data.getLoaiPhong() == IDLoaiPhong)
+        if(p->data->getLoaiPhong() == IDLoaiPhong)
             {
-                p->data.capNhatThongTin();
+                p->data->capNhatThongTin();
                 cout << "Da cap nhat thong tin loai phong voi ID " << IDLoaiPhong << " thanh cong!" << endl;
                 return;
             }
@@ -84,10 +88,10 @@ void QLLoaiPhong::suaThongTin(const string& IDLoaiPhong){
 
 
 void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
-    Node<LoaiPhong> *p = DSLP.begin();
+    Node<LoaiPhong *> *p = DSLP.begin();
     while( p != DSLP.end())
     {
-        if(p->data.getLoaiPhong() == IDLoaiPhong)
+        if(p->data->getLoaiPhong() == IDLoaiPhong)
             {
                 DSLP.remove(p);
                 cout << "Da xoa Loai Phong voi ID: " << IDLoaiPhong << endl;
@@ -99,10 +103,10 @@ void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
 }
 
 LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){
-    Node<LoaiPhong> *p = DSLP.begin();
+    Node<LoaiPhong *> *p = DSLP.begin();
     while(p != DSLP.end()) {
-        if(p->data.getLoaiPhong() == IDLoaiPhong) {
-            return &p->data;
+        if(p->data->getLoaiPhong() == IDLoaiPhong) {
+            return p->data;
         }
         p = p -> next;
     }
@@ -118,16 +122,16 @@ int QLLoaiPhong::getGiaPhong(string maLoaiPhong) {
     return timLoaiPhong(maLoaiPhong)->getGiaPhong();
 } 
 
-LinkedList<LoaiPhong>& QLLoaiPhong::getDSLP() {
+LinkedList<LoaiPhong *>& QLLoaiPhong::getDSLP() {
     return DSLP;
 }
 
 ostream& operator<<(ostream& os, const QLLoaiPhong& ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-LOAI-PHONG----------------\n", CONSOLE);
     Utils::outputData("Danh sach loai phong: \n", CONSOLE);
-    Node<LoaiPhong> *p = ql.DSLP.begin();
-    while(p != ql.DSLP.end()){
-        os << p->data;
+    Node<LoaiPhong *> *p = ql.DSLP.begin();
+    while(p != ql.DSLP.end()) {
+        os << *p->data;
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }

@@ -4,17 +4,17 @@
 #include "TaiKhoan.h"
 #include "LinkedList.h"
 class QLTaiKhoan {
-    LinkedList<TaiKhoan> DSTK; // Danh sach tai khoan
+    LinkedList<TaiKhoan *> DSTK; // Danh sach tai khoan
 public:
     QLTaiKhoan();
     ~QLTaiKhoan();
 
-    void themTaiKhoan(const TaiKhoan &tk);
+    void themTaiKhoan(TaiKhoan *tk);
     void xoaTaiKhoan(TaiKhoan *);
     void suaThongTinTaiKhoan(string);
     string kiemTraTaiKhoan(string, string);
     TaiKhoan *getTaiKhoanByID(string);
-    LinkedList<TaiKhoan> &getDSTK();
+    LinkedList<TaiKhoan *> &getDSTK();
 
     friend ostream& operator<<(ostream&, const QLTaiKhoan&);
 };

@@ -4,13 +4,13 @@
 #include "QLLoaiPhong.h"
 #include "LinkedList.h"
 class QLPhong {
-    LinkedList<Phong> DSP; // Danh sach phong
+    LinkedList<Phong *> DSP; // Danh sach phong
     QLLoaiPhong *QLLP;
 public:
     QLPhong();
     ~QLPhong();
 
-    void themPhong(const Phong&);
+    void themPhong(Phong *);
     void xemPhong();
     void suaThongTin(const string&);
     void xoaPhong(const string&);
@@ -18,7 +18,7 @@ public:
     Phong nhapThongTin();
     Phong *timPhong(string);
     void setQLLP(QLLoaiPhong *QLLP);
-    LinkedList<Phong> &getDSP();
+    LinkedList<Phong *> &getDSP();
     // Node<Phong> *getHead();
 
     friend ostream& operator<<(ostream&, QLPhong&);

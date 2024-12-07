@@ -4,7 +4,11 @@ QLDatPhong::QLDatPhong() {
 }
 
 QLDatPhong::~QLDatPhong() {
-    
+    Node<DatPhong *> *p = DSDP.begin();
+    while(p != DSDP.end()) {
+        delete p->data;
+        p = p->next;
+    }
 }
 
 // void QLDatPhong::setDSLP(QLLoaiPhong *DSLP) {
@@ -26,14 +30,14 @@ QLDatPhong::~QLDatPhong() {
 // void QLDatPhong::setRole(role_value role) {
 //     this->role = role;
 // }
-void QLDatPhong::themDatPhong(const DatPhong &DP) {
+void QLDatPhong::themDatPhong(DatPhong *DP) {
     DSDP.add(DP);
 }
 
 void QLDatPhong::xoaDatPhong(DatPhong *DP) {
-    Node<DatPhong> *p = DSDP.begin();
+    Node<DatPhong *> *p = DSDP.begin();
     while(p != DSDP.end()) {
-        if(&p->data == DP) {
+        if(p->data == DP) {
             DSDP.remove(p);
             return;
         }
@@ -42,10 +46,10 @@ void QLDatPhong::xoaDatPhong(DatPhong *DP) {
 }
 
 DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
-    Node<DatPhong> *p = DSDP.begin();
+    Node<DatPhong *> *p = DSDP.begin();
     while(p != DSDP.end()) {
-        if(p->data.getMaDatPhong() == MDP) 
-            return &p->data;
+        if(p->data->getMaDatPhong() == MDP) 
+            return p->data;
         p = p->next;
     }
     return nullptr;
@@ -57,12 +61,12 @@ DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
  */
 string QLDatPhong::getMaxMaDatPhong() {
     string MDP;
-    Node<DatPhong> *p = DSDP.begin();
+    Node<DatPhong *> *p = DSDP.begin();
     if(p == DSDP.end()) {
         MDP = "00000";
     }
     else{
-        MDP = p->prev->prev->data.getMaDatPhong();
+        MDP = p->prev->prev->data->getMaDatPhong();
     }
     return MDP;
 }
@@ -72,7 +76,6 @@ string QLDatPhong::getMaxMaDatPhong() {
  */
 string QLDatPhong::taoMaDatPhong(){
     string MDPNew;
-    Node<DatPhong> *p = DSDP.begin();
     if (this->getMaxMaDatPhong() == "99999") {
         MDPNew = "000001";
     }
@@ -86,16 +89,16 @@ string QLDatPhong::taoMaDatPhong(){
     return MDPNew;
 }
 
-LinkedList<DatPhong> &QLDatPhong::getDSDP() {
+LinkedList<DatPhong *> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
 ostream &operator<<(ostream &os, const QLDatPhong &ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach dat phong: \n", CONSOLE);
-    Node<DatPhong> *p = ql.DSDP.begin();
+    Node<DatPhong *> *p = ql.DSDP.begin();
     while(p != ql.DSDP.end()) {
-        os << p->data;
+        os << *p->data;
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }

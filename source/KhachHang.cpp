@@ -178,6 +178,11 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("Gioi Tinh: ", CONSOLE);
     Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
     Utils::outputData("----------------------------------------\n", CONSOLE);
+    Node<DatPhong *> *dp = kh.danhSachDatPhong.begin();
+    while(dp != kh.danhSachDatPhong.end()) {
+        out << *dp->data;
+        dp = dp->next;
+    }
     return out;
 }
 

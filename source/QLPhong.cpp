@@ -5,7 +5,11 @@ QLPhong::QLPhong() {
 }
 
 QLPhong::~QLPhong() {
-
+    Node<Phong *> *p = DSP.begin();
+    while(p != DSP.end()) {
+        delete p->data;
+        p = p->next;
+    }
 }
     
 void QLPhong::xemPhong(){
@@ -13,24 +17,22 @@ void QLPhong::xemPhong(){
     cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
     cout << string(24, '-') << endl;
 
-    Node<Phong> *p = DSP.begin();
+    Node<Phong *> *p = DSP.begin();
       while(p != DSP.end()){
-        p->data.xuatThongTin();
+        p->data->xuatThongTin();
         p = p -> next;
       }
 }
 
 //NEW PHÒNG
-void QLPhong::themPhong(const Phong& newPhong) {
+void QLPhong::themPhong(Phong *newPhong) {
     this->DSP.add(newPhong);
 }
 
 void QLPhong::xoaPhong(const string& MP){
-    Node<Phong> *p = DSP.begin();
-    while( p != DSP.end())
-    {
-        if(p->data.getMaPhong() == MP)
-            {
+    Node<Phong *> *p = DSP.begin();
+    while( p != DSP.end()) {
+        if(p->data->getMaPhong() == MP) {
                 DSP.remove(p);
                 cout << "Da xoa Phong voi ID: " << MP << endl;
                 Utils::pauseConsole();
@@ -43,12 +45,11 @@ void QLPhong::xoaPhong(const string& MP){
 
 
 void QLPhong::suaThongTin(const string& MP){
-    Node<Phong> *p = DSP.begin();
-    while ((p != DSP.end()))
-    {
-        if(p->data.getMaPhong() == MP)
+    Node<Phong *> *p = DSP.begin();
+    while (p != DSP.end()) {
+        if(p->data->getMaPhong() == MP)
             {
-                p->data.capNhatThongTin();
+                p->data->capNhatThongTin();
                 cout << "Da cap nhat thong tin phong voi ID " << MP << " thanh cong!" << endl;
             }
         p = p -> next;
@@ -61,15 +62,14 @@ void QLPhong::setQLLP(QLLoaiPhong *QLLP) {
 }
 
 Phong *QLPhong::timPhong(string MP){
-    Node<Phong> *p = DSP.begin();
+    Node<Phong *> *p = DSP.begin();
     while(p != DSP.end()){
-        if(p->data.getMaPhong() == MP)
-            {
-               return &p->data;
-            }
+        if(p->data->getMaPhong() == MP) {
+            return p->data;
+        }
         p = p -> next;
     }
-    return NULL;
+    return nullptr;
 }
 
 Phong QLPhong::nhapThongTin() {
@@ -82,7 +82,7 @@ Phong QLPhong::nhapThongTin() {
     return tempPhong;
 }
 
-LinkedList<Phong> &QLPhong::getDSP() {
+LinkedList<Phong *> &QLPhong::getDSP() {
     return this->DSP;
 }
 
@@ -93,9 +93,9 @@ LinkedList<Phong> &QLPhong::getDSP() {
 ostream &operator<<(ostream &os, QLPhong &qlPhong) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach phong: \n", CONSOLE);
-    Node<Phong> *p = qlPhong.DSP.begin();
+    Node<Phong *> *p = qlPhong.DSP.begin();
     while (p != qlPhong.DSP.end()) {
-        os << p->data;
+        os << *p->data;
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }

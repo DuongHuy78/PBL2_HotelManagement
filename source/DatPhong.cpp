@@ -127,10 +127,15 @@ int DatPhong::getDonGia() const {
  * @param MDP Mã đặt phòng mới.
  */
 void DatPhong::setMaDatPhong(string MDP) {
-    if(Utils::isNumberOnly(MDP)) {
-        this->maDatPhong = MDP;
-    } else {
-        throw "DatPhong::setMaDatPhong::Ma dat phong khong hop le!";
+    try {
+        if(Utils::isNumberOnly(MDP)) {
+            this->maDatPhong = MDP;
+        } else {
+            throw "DatPhong::setMaDatPhong::Ma dat phong khong hop le!";
+        }
+    }
+    catch(const char *msg) {
+        cerr << msg << endl;
     }
 }
 
@@ -163,15 +168,20 @@ void DatPhong::setKhachHang(KhachHang *khachHang) {
  * @param NTra Ngày trả phòng mới.
  */
 void DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
-    if(Utils::isDate(Utils::dateToString(NNhan)) && 
-       Utils::isDate(Utils::dateToString(NTra))) {
-        if(NNhan < NTra) {
-            this->ngayNhan = NNhan;
-            this->ngayTra = NTra;
+    try {
+        if(Utils::isDate(Utils::dateToString(NNhan)) && 
+        Utils::isDate(Utils::dateToString(NTra))) {
+            if(NNhan < NTra) {
+                this->ngayNhan = NNhan;
+                this->ngayTra = NTra;
+            }
+            else throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhan phai nho hon ngay tra!";
+        } else {
+            throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhap khong hop le!";
         }
-        throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhan phai nho hon ngay!";
-    } else {
-        throw "DatPhong::setNgayNhanAndNgayTra::Ngay nhap khong hop le!";
+    }
+    catch(const char *msg) {
+        cerr << msg << endl;
     }
 }
 
@@ -183,10 +193,15 @@ void DatPhong::setNgayNhanAndNgayTra(time_t NNhan, time_t NTra) {
  * @param SL Số lượng khách mới.
  */
 void DatPhong::setSoLuongKhach(int SL) {
-    if(SL > 0) {
-        this->soLuongKhach = SL;
-    } else {
-        throw "DatPhong::setSoLuongKhach::So luong khach khong hop le!";
+    try {
+        if(SL > 0) {
+            this->soLuongKhach = SL;
+        } else {
+            throw "DatPhong::setSoLuongKhach::So luong khach khong hop le!";
+        }
+    }
+    catch(const char *msg) {
+        cerr << msg << endl;
     }
 }
 
@@ -198,10 +213,15 @@ void DatPhong::setSoLuongKhach(int SL) {
  * @param Gia Đơn giá mới.
  */
 void DatPhong::setDonGia(int Gia) {
-    if(Gia > 0) {
-        this->donGia = Gia;
-    } else {
-        throw "DatPhong::setDonGia::Don gia khong hop le!";
+    try {
+        if(Gia > 0) {
+            this->donGia = Gia;
+        } else {
+            throw "DatPhong::setDonGia::Don gia khong hop le!";
+        }
+    }
+    catch(const char *msg) {
+        cerr << msg << endl;
     }
 }
 

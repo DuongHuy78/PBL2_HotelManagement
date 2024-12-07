@@ -3,12 +3,12 @@
 #include "LoaiPhong.h"
 #include "LinkedList.h"
 class QLLoaiPhong {
-    LinkedList<LoaiPhong> DSLP; 
+    LinkedList<LoaiPhong *> DSLP; 
 public:
     QLLoaiPhong();
     ~QLLoaiPhong();
 
-    void themLoaiPhong(const LoaiPhong&); 
+    void themLoaiPhong(LoaiPhong *); 
     //void xemLoaiPhong();
     void suaThongTin(const string&);
     void xoaLoaiPhong(const string& );
@@ -16,7 +16,7 @@ public:
     LoaiPhong *timLoaiPhong(string);
     int soLuongKhach(string);
     int getGiaPhong(string);
-    LinkedList<LoaiPhong>& getDSLP();
+    LinkedList<LoaiPhong *>& getDSLP();
 
     friend ostream& operator<<(ostream&, const QLLoaiPhong&);
 };

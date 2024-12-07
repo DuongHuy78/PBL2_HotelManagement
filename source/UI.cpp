@@ -59,7 +59,6 @@ struct room_info {
 	string number_of_guest;
 	string area;
 	string price;
-	string description;
 };
 
 struct type_room_info {
