@@ -11,26 +11,6 @@ QLDatPhong::~QLDatPhong() {
     }
 }
 
-// void QLDatPhong::setDSLP(QLLoaiPhong *DSLP) {
-//     this->DSLP = DSLP;
-// }
-
-// void QLDatPhong::setDSP(QLPhong *DSP) {
-//     this->DSP = DSP;
-// }
-
-// void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
-//     this->DSKH = DSKH;
-// }
-
-// void QLDatPhong::setcurrentID(string ID) {
-//     this->currentID = ID;
-// }
-
-// void QLDatPhong::setRole(role_value role) {
-//     this->role = role;
-// }
-
 /**
  * @brief Thêm đặt phòng.
  */

@@ -55,7 +55,6 @@ public:
     bool GuestExist(string);
     void xemDanhSachLuaChonXemDoanhThu();
     int thongKe(string, string);
-    // friend string operator+(const string& ,const int& );
 };
 
 #endif
