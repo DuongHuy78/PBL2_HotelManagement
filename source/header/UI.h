@@ -77,6 +77,10 @@ void staff_frame_guest_infomation_button_click(Gnk_Button *);
 void staff_frame_type_room_infomation_button_click(Gnk_Button *);
 void staff_frame_room_information_button_click(Gnk_Button *);
 void staff_frame_create_guest_button_click(Gnk_Button *);
+void staff_frame_booking_info_list_process(Gnk_List_Object *);
+void staff_frame_guest_info_list_process(Gnk_List_Object *);
+void staff_frame_type_room_info_list_process(Gnk_List_Object *);
+void staff_frame_room_info_list_process(Gnk_List_Object *);
 
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *);

@@ -21,6 +21,7 @@ public:
 
     string getLoaiPhong() const; // mã loại phòng
     int getLoaiGiuong() const; // 1, 2, 12
+    string getLoaiGiuongStr() const;
     int getSoLuongKhach() const; 
     int getGiaPhong() const;
     int getDienTich() const;

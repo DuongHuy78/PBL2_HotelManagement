@@ -58,6 +58,16 @@ int LoaiPhong::getLoaiGiuong() const {
 }
 
 /**
+ * @brief Lấy loại giường dưới dạng chuỗi.
+ */
+string LoaiPhong::getLoaiGiuongStr() const {
+    if(this->loaiGiuong == 1) return "Single";
+    if(this->loaiGiuong == 2) return "Double";
+    if(this->loaiGiuong == 12) return "SingleDouble";
+    return "";
+}
+
+/**
  * @brief Lấy số lượng khách.
  */
 int LoaiPhong::getSoLuongKhach() const {
@@ -288,6 +298,8 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData(Utils::chuanHoaSo(Utils::intToString(lp.giaPhong)) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
+    Utils::outputData("So luong phong: ", CONSOLE);
+    Utils::outputData(Utils::intToString(lp.danhSachPhong.getSize()) + "\n", CONSOLE);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);
     return out;
 }

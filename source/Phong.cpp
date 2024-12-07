@@ -26,7 +26,7 @@ Phong::Phong(string MaPhong){
 /**
  * @brief Hàm sao chép cho lớp Phong.
  */
-Phong::Phong(const Phong& other){
+Phong::Phong(const Phong& other) {
     this->maPhong = other.maPhong;
     this->loaiPhong = other.loaiPhong;
 }
@@ -114,6 +114,14 @@ ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
     Utils::outputData(P.getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Loai Giuong: ", CONSOLE);
+    Utils::outputData(P.getLoaiPhong()->getLoaiGiuongStr() + "\n", CONSOLE_OR_UI);
+    Utils::outputData("So Luong Khach: ", CONSOLE);
+    Utils::outputData(Utils::intToString(P.getLoaiPhong()->getSoLuongKhach()) + "\n", CONSOLE_OR_UI);
+    Utils::outputData("Dien Tich: ", CONSOLE);
+    Utils::outputData(Utils::intToString(P.getLoaiPhong()->getDienTich()) + " m2\n", CONSOLE_OR_UI);
+    Utils::outputData("Don gia: ", CONSOLE);
+    Utils::outputData(Utils::chuanHoaSo(Utils::intToString(P.getLoaiPhong()->getGiaPhong())) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("-------------------------------------\n", CONSOLE);
     return os;
 }
