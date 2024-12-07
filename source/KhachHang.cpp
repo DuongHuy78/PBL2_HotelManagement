@@ -1,5 +1,10 @@
 #include "./header/KhachHang.h"
 
+/**
+ * @brief Hàm khởi tạo mặc định cho lớp KhachHang.
+ * 
+ * Hàm này sẽ khởi tạo một đối tượng KhachHang với các giá trị mặc định.
+ */
 KhachHang::KhachHang() {
     this->ID = "";
     this->hoTen = "";
@@ -8,6 +13,17 @@ KhachHang::KhachHang() {
     this->gioiTinh = UNDEFINED_GENDER;
     this->taiKhoan = nullptr;
 }
+
+/**
+ * @brief Hàm khởi tạo cho lớp KhachHang.
+ * 
+ * @param IDKhachHang Mã khách hàng.
+ * @param hoTen Họ tên.
+ * @param ngaySinh Ngày sinh.
+ * @param soDienThoai Số điện thoại.
+ * @param gioiTinh Giới tính.
+ * 
+ */
 KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string soDienThoai, gender_value gioiTinh) {
     this->ID = "";
     this->hoTen = "";
@@ -23,6 +39,9 @@ KhachHang::KhachHang(string IDKhachHang, string hoTen, time_t ngaySinh, string s
     setGioiTinh(gioiTinh);
 }
 
+/**
+ * @brief Hàm sao chép cho lớp KhachHang.
+ */
 KhachHang::KhachHang(const KhachHang& KhachHang) {
     this->ID = KhachHang.ID;
     this->hoTen = KhachHang.hoTen;
@@ -34,38 +53,58 @@ KhachHang::KhachHang(const KhachHang& KhachHang) {
 
 KhachHang::~KhachHang() {}
 
+/**
+ * @brief Lấy mã khách hàng.
+ */
 string KhachHang::getIDKhachHang() const {
     return this->ID;
 }
 
+/**
+ * @brief Lấy họ tên.
+ */
 string KhachHang::getHoTen() const {
     return this->hoTen;
 }
 
+/**
+ * @brief Lấy ngày sinh.
+ */
 time_t KhachHang::getNgaySinh() const {
     return this->ngaySinh;
 }
 
+/**
+ * @brief Lấy số điện thoại.
+ */
 string KhachHang::getSoDienThoai() const {
     return this->soDienThoai;
 }
 
+/**
+ * @brief Lấy giới tính.
+ */
 gender_value KhachHang::getGioiTinh() const {
     return this->gioiTinh;
 } 
 
-// LinkedList<DatPhong *> &KhachHang::getDanhSachDatPhong() const {
-//     return this->danhSachDatPhong;
-// }
-
+/**
+ * @brief Lấy danh sách đặt phòng.
+ */
 void KhachHang::themDatPhong(DatPhong *dp) {
     danhSachDatPhong.add(dp);
 }
 
+/**
+ * @brief Thiết lập tài khoản.
+ */
 void KhachHang::setTaiKhoan(TaiKhoan *tk) {
     this->taiKhoan = tk;
 }   
 
+/**
+ * @brief Thiết lập mã khách hàng.
+ */
 bool KhachHang::setIDKhachHang(string IDKhachHang) {
     if(Utils::isNumberOnly(IDKhachHang)) {
         this->ID = IDKhachHang;
@@ -76,6 +115,9 @@ bool KhachHang::setIDKhachHang(string IDKhachHang) {
     }
 }
 
+/**
+ * @brief Thiết lập họ tên.
+ */
 bool KhachHang::setHoTen(string hoTen) {
     if(Utils::isAlphabetAndSpaceOnly(hoTen)) {
         this->hoTen = hoTen;
@@ -86,6 +128,9 @@ bool KhachHang::setHoTen(string hoTen) {
     }
 }
 
+/**
+ * @brief Thiết lập ngày sinh.
+ */
 bool KhachHang::setNgaySinh(time_t ngaySinh) {
     if(Utils::isDate(Utils::dateToString(ngaySinh))) {
         this->ngaySinh = ngaySinh;
@@ -96,6 +141,9 @@ bool KhachHang::setNgaySinh(time_t ngaySinh) {
     }
 }
 
+/**
+ * @brief Thiết lập số điện thoại.
+ */
 bool KhachHang::setSoDienThoai(string soDienThoai) {
     if(Utils::isVietNamPhoneNumber(soDienThoai)) {
         this->soDienThoai = soDienThoai;
@@ -106,12 +154,18 @@ bool KhachHang::setSoDienThoai(string soDienThoai) {
     }
 }
 
+/**
+ * @brief Thiết lập giới tính.
+ */
 bool KhachHang::setGioiTinh(gender_value gioiTinh) {
     this->gioiTinh = gioiTinh;
     return true;
 } 
 
-void KhachHang::menuSuaThongTin() {        //in menu sửa thông tin
+/**
+ * @brief In menu sửa thông tin.
+ */
+void KhachHang::menuSuaThongTin() {
     Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
     Utils::outputData("1. Sua Ho Ten\n", CONSOLE);
     Utils::outputData("2. Sua Ngay Sinh\n", CONSOLE);
@@ -121,6 +175,9 @@ void KhachHang::menuSuaThongTin() {        //in menu sửa thông tin
     Utils::outputData("--------------------------------------\n", CONSOLE);
 }
 
+/**
+ * @brief Sửa thông tin.
+ */
 void KhachHang::suaThongTin() {
     int choice;
     string temp;
@@ -165,6 +222,16 @@ void KhachHang::suaThongTin() {
     }
 }
 
+/**
+ * @brief In thông tin khách hàng.
+ * 
+ * Hàm này sẽ in ra các thông tin chi tiết của một khách hàng bao gồm:
+ * - ID Khách hàng
+ * - Họ tên
+ * - Ngày sinh
+ * - Số điện thoại
+ * - Giới tính
+ */
 ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("-----------THONG-TIN-KHACH-HANG---------\n", CONSOLE);
     Utils::outputData("ID Khach Hang: ", CONSOLE);
@@ -178,11 +245,6 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData("Gioi Tinh: ", CONSOLE);
     Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
     Utils::outputData("----------------------------------------\n", CONSOLE);
-    Node<DatPhong *> *dp = kh.danhSachDatPhong.begin();
-    while(dp != kh.danhSachDatPhong.end()) {
-        out << *dp->data;
-        dp = dp->next;
-    }
     return out;
 }
 

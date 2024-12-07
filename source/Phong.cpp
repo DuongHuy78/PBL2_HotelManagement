@@ -41,12 +41,6 @@ void Phong::setLoaiPhong(LoaiPhong *LP){
     LP->themPhong(this);
 }
 
-// string Phong::capNhatThongTin(){
-//     cout << "Nhap Loai Phong: ";
-//     string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
-//     return tempStr;
-// }
-
 void Phong::menuSuaThongTin() {
     Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
     Utils::outputData("1. Sua Loai Phong\n", CONSOLE);
