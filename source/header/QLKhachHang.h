@@ -3,12 +3,11 @@
 #include "KhachHang.h"
 #include "LinkedList.h"
 class QLKhachHang {
-    LinkedList<KhachHang> DSKH; // Danh sach khach hang
+    LinkedList<KhachHang *> DSKH; // Danh sach khach hang
 public:
-    QLKhachHang();
     ~QLKhachHang();
 
-    void themKhachHang(KhachHang);
+    void themKhachHang(KhachHang *);
     void suaThongTin(string);
     void xoaKhachHang(KhachHang *); 
     string getMaxIDKhachHang();         // Lấy ID khách hàng lớn nhat để tạo ID mới
@@ -17,7 +16,7 @@ public:
     KhachHang *timKiemKhachHangSDT(string); // Tìm kiếm theo số điện thoại
     KhachHang nhapThongTin();
 
-    LinkedList<KhachHang> &getDSKH();
+    LinkedList<KhachHang *> &getDSKH();
     
     friend ostream& operator<<(ostream&, const QLKhachHang&);
 };

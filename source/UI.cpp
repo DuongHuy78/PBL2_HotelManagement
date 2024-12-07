@@ -31,6 +31,47 @@ struct history_booking {
 	string price_per_night;
 	string total_price;
 };
+
+struct booking_info {
+	string ID;
+	string roomtype;
+	string roomID;
+	string guestID;
+	string check_in_date;
+	string check_out_date;
+	string number_of_guest;
+	string price_per_night;
+	string total_price;
+};
+
+struct guest_info {
+	string ID;
+	string name;
+	string date_of_birth;
+	string phone_number;
+	string gender;
+};
+
+struct room_info {
+	string ID;
+	string type;
+	string bed_type;
+	string number_of_guest;
+	string area;
+	string price;
+};
+
+struct type_room_info {
+	string type;
+	string bed_type;
+	string number_of_guest;
+	string area;
+	string price;
+	string description;
+	string amount;
+};
+
+
 vector<history_booking> history_booking_list;
 bool history_list_enable = false;
 bool history_list_init = false;
@@ -57,10 +98,24 @@ struct guest_profile {
 };
 guest_profile current_guest_profile;
 bool edit_profile = false;
+bool staff_booking_guest_ID_not_exist = false;
+string booking_total_price = "";
+string staff_booking_guest_ID = "";
 // ---------------------------------------------------------
-Gnk_Color light_yellow(255, 236, 200);
-Gnk_Color light_yellow2(253, 247, 228);
-Gnk_Color black(0, 0, 0);
+Gnk_Color C_1A1A1D(26, 26, 29);
+Gnk_Color H_000000(0, 0, 0);
+Gnk_Color H_222831(34, 40, 49);
+Gnk_Color H_404040(64, 64, 64);
+Gnk_Color H_46507F(70, 80, 127);
+Gnk_Color H_5A6493(90, 100, 147);
+Gnk_Color H_7E7E81(126, 126, 129);
+Gnk_Color H_C8C8C8(200, 200, 200);
+Gnk_Color H_FFECB8(250, 235, 205);
+Gnk_Color H_F3F2F2(243, 242, 242);
+Gnk_Color H_F7C873(247, 200, 115);
+Gnk_Color H_FF0000(255, 0, 0);
+Gnk_Color H_FFFFFF(255, 255, 255);
+
 // ---------------------------------------------------------
 void button_hover_type_1(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
@@ -73,7 +128,7 @@ void button_hover_type_1(Gnk_Button *button) {
 void button_hover_type_2(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
 	Gnk_Color color = buttonText->text_color;
-	buttonText->text_color = Gnk_Color(90, 100, 147);
+	buttonText->text_color = H_5A6493;
 	buttonText->draw();
 	buttonText->text_color = color;
 }
@@ -87,7 +142,7 @@ void button_hover_type_3(Gnk_Button *button) {
 }
 
 void textbox_select_type1(Gnk_Textbox *textbox) {
-	gnk_Set_Object_Color(Gnk_Color(74, 98, 138));
+	gnk_Set_Object_Color(H_46507F);
 	gnk_Set_Line_Width(3.0f);
 	gnk_Line(
 		Gnk_Point(
@@ -104,7 +159,7 @@ void textbox_select_type1(Gnk_Textbox *textbox) {
 }
 
 void textbox_select_type3(Gnk_Textbox *textbox) {
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Set_Line_Width(3.0f);
 	gnk_Line(
 		Gnk_Point(
@@ -122,7 +177,7 @@ void textbox_select_type3(Gnk_Textbox *textbox) {
 
 void textbox_select_type2(Gnk_Textbox *textbox) {
 	textbox->draw();
-	gnk_Set_Object_Color(Gnk_Color(74, 98, 138));
+	gnk_Set_Object_Color(H_46507F);
 	gnk_Set_Line_Width(3.0f);
 	gnk_Rounded_Rectangle(textbox->A, textbox->B, textbox->border_radius, false);
 	gnk_Set_Line_Width(1.0f);
@@ -130,16 +185,16 @@ void textbox_select_type2(Gnk_Textbox *textbox) {
 
 // ---------------------------------------------------------
 void login_frame_draw(Gnk_Frame *frame) {
-	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+	gnk_Set_Background_Color(H_F3F2F2);
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(H_FFFFFF);
 	gnk_Rectangle(Gnk_Point(695.0f, 135.0f), Gnk_Point(1235.0f, 765.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(30, 30, 30));
+	gnk_Set_Object_Color(C_1A1A1D);
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(740.0f, 640.0f), 40.0f);
 
-	gnk_Set_Object_Color(Gnk_Color(60, 60, 60));
+	gnk_Set_Object_Color(H_404040);
 	gnk_Set_Character_Font("helvetica");
 	gnk_Text("Welcome back! ", Gnk_Point(740.0f, 580.0f), 24.0f);
 	gnk_Text("Don't have an account? ", Gnk_Point(740.0f, 185.0f), 24.0f);
@@ -160,7 +215,7 @@ void login_frame_draw(Gnk_Frame *frame) {
 	}
 
 	if(login_failed) {
-		gnk_Set_Object_Color(Gnk_Color(255, 0, 0));
+		gnk_Set_Object_Color(H_FF0000);
 		gnk_Set_Character_Font("helvetica");
 		gnk_Text("Username or password is incorrect !!", Gnk_Point(740.0f, 310.0f), 24.0f);
 	}
@@ -179,6 +234,7 @@ void login_frame_login_button_click(Gnk_Button *button) {
 	if(current_Data->dangNhap()) {
 		if(current_Data->getCurrentRole() == KHACHHANG) {
 			current_frame = GUEST_FRAME;
+			option = DEFAULT_OPTION;
 			current_Data->requestHandling(PRINT_KHACHHANG);
 			string gender;
 			getline(UI_output_buffer, current_guest_profile.ID);
@@ -192,9 +248,11 @@ void login_frame_login_button_click(Gnk_Button *button) {
 		}
 		else if(current_Data->getCurrentRole() == NHANVIEN) {
 			current_frame = STAFF_FRAME;
+			option = DEFAULT_OPTION;
 		}
 		else if(current_Data->getCurrentRole() == QUANLI) {
 			current_frame = ADMIN_FRAME;
+			option = DEFAULT_OPTION;
 		}
 	}
 	else {
@@ -205,7 +263,7 @@ void login_frame_login_button_click(Gnk_Button *button) {
 void login_frame_forgotten_password_button_click(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
 	Gnk_Color color = buttonText->text_color;
-	buttonText->text_color = Gnk_Color(70, 80, 127);
+	buttonText->text_color = H_46507F;
 	buttonText->draw();
 	buttonText->text_color = color;
 	//current_frame = FORGOT_PASSWORD_FRAME;
@@ -214,7 +272,7 @@ void login_frame_forgotten_password_button_click(Gnk_Button *button) {
 void login_frame_sign_up_button_click(Gnk_Button *button) {
 	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
 	Gnk_Color color = buttonText->text_color;
-	buttonText->text_color = Gnk_Color(70, 80, 127);
+	buttonText->text_color = H_46507F;
 	buttonText->draw();
 	buttonText->text_color = color;
 	current_frame = SIGN_UP_FRAME;
@@ -223,16 +281,16 @@ void login_frame_sign_up_button_click(Gnk_Button *button) {
 Gnk_Frame login(login_frame_draw);
 // ---------------------------------------------------------
 void sign_up_frame_draw(Gnk_Frame *frame) {
-	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+	gnk_Set_Background_Color(H_F3F2F2);
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(H_FFFFFF);
 	gnk_Rectangle(Gnk_Point(395.0f, -170.0f), Gnk_Point(1235.0f, 765.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(30, 30, 30));
+	gnk_Set_Object_Color(C_1A1A1D);
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(465.0f, 640.0f), 40.0f);
 
-	gnk_Set_Object_Color(Gnk_Color(60, 60, 60));
+	gnk_Set_Object_Color(H_404040);
 	gnk_Set_Character_Font("helvetica");
 	gnk_Text("Create new account!", Gnk_Point(465.0f, 580.0f), 24.0f);
 	gnk_Text("Date of birth", Gnk_Point(465.0f, 420.0f), 24.0f);
@@ -315,23 +373,23 @@ Gnk_Frame sign_up(sign_up_frame_draw);
 // ---------------------------------------------------------
 void guest_frame_draw(Gnk_Frame *frame) {
 	frame->disable_all();
-	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+	gnk_Set_Background_Color(H_F3F2F2);
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Object_Color(H_7E7E81);
 	gnk_Set_Line_Width(2.0f);
 	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
+	gnk_Set_Object_Color(H_FFECB8);
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(H_FFFFFF);
 	gnk_Set_Character_Font("helvetica");
 	gnk_Text("Have a great day and enjoy your stay!", Gnk_Point(430.0f, 830.0f), 24.0f);
 
@@ -352,37 +410,37 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["lookup"]->setAppear(true);
 		frame->listObjectList["search_room_list"]->setAppear(true);
 		// Search box
-		gnk_Set_Object_Color(light_yellow2);
-		gnk_Rounded_Rectangle(Gnk_Point(490.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), 30.0f);
+		gnk_Set_Object_Color(H_F7C873);
+		gnk_Rectangle(Gnk_Point(520.0f, 700.0f), Gnk_Point(1510.0f, 760.0f));
 		// Vẽ các textbox
-		gnk_Set_Object_Color(Gnk_Color(26, 26, 29));
+		gnk_Set_Object_Color(C_1A1A1D);
 		frame->textboxList["check_in_textbox"]->display();
 		frame->textboxList["check_out_textbox"]->display();
 		frame->textboxList["number_of_guest_textbox"]->display();
 		frame->buttonList["lookup"]->display();
 		frame->listObjectList["search_room_list"]->draw();
 		// Vẽ cái đường viền
-		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+		gnk_Set_Object_Color(C_1A1A1D);
 		gnk_Set_Line_Width(2.0f);
-		gnk_Rounded_Rectangle(Gnk_Point(490.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), 30.0f, false);
+		gnk_Rectangle(Gnk_Point(520.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), false);
 		gnk_Line(Gnk_Point(825.0f, 700.0f), Gnk_Point(825.0f, 760.0f));
 		gnk_Line(Gnk_Point(1135.0f, 700.0f), Gnk_Point(1135.0f, 760.0f));
 		gnk_Line(Gnk_Point(1445.0f, 700.0f), Gnk_Point(1445.0f, 760.0f));
 		gnk_Line(Gnk_Point(430.0f, 680.0f), Gnk_Point(1600.0f, 680.0f));
 		gnk_Set_Line_Width(1.0f);
 	}
-	else if(option == BOOKING_INFORMATION) {
+	else if(option == HISTORY_INFORMATION) {
 		// Booking information
 		frame->listObjectList["history_list"]->setAppear(true);
 		frame->listObjectList["history_list"]->draw();
 	}
 	else if(option == PROFILE) {
-		gnk_Set_Object_Color(black);
+		gnk_Set_Object_Color(H_000000);
 		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f), false);
-		gnk_Set_Object_Color(light_yellow2);
+		gnk_Set_Object_Color(H_FFECB8);
 		gnk_Rectangle(Gnk_Point(530.0f, 250.0f), Gnk_Point(1500.0f, 700.0f));
 
-		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+		gnk_Set_Object_Color(C_1A1A1D);
 		gnk_Set_Character_Font("helvetica-bold");
 		gnk_Text_Limited("My Profile", Gnk_Point(530.0f, 710.0f), 970.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
 		
@@ -393,9 +451,9 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			gnk_Image(gnk_Image_List["woman_icon"], Gnk_Point(560.0f, 370.0f), Gnk_Point(860.0f, 670.0f));
 		}
 
-		gnk_Set_Object_Color(Gnk_Color(254, 249, 242));
+		gnk_Set_Object_Color(H_F3F2F2);
 		gnk_Rounded_Rectangle(Gnk_Point(560.0f, 280.0f), Gnk_Point(860.0f, 340.0f), 20.0f);
-		gnk_Set_Object_Color(Gnk_Color(64, 64, 64));
+		gnk_Set_Object_Color(H_404040);
 		gnk_Text_Limited(current_guest_profile.username, Gnk_Point(560.0f, 294.0f), 300.0f, 40.0f, 24.0f, GNK_TEXT_CENTER);
 
 		gnk_Text("ID:", Gnk_Point(940.0f, 600.0f), 24.0f);
@@ -420,7 +478,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			frame->buttonList["save_profile_button"]->display();
 		}
 		else {
-			gnk_Set_Object_Color(Gnk_Color(64, 64, 64));
+			gnk_Set_Object_Color(H_404040);
 			gnk_Text(current_guest_profile.name, Gnk_Point(1140.0f, 550.0f), 24.0f);
 			gnk_Text(current_guest_profile.date_of_birth, Gnk_Point(1140.0f, 500.0f), 24.0f);
 			gnk_Text(current_guest_profile.phone_number, Gnk_Point(1140.0f, 450.0f), 24.0f);
@@ -432,17 +490,17 @@ void guest_frame_draw(Gnk_Frame *frame) {
 	else if(option == BOOKING) {
 		// Booking
 		if(index_booking != -1) {
-			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+			gnk_Set_Object_Color(C_1A1A1D);
 			gnk_Set_Character_Font("helvetica-bold");
 			gnk_Text_Limited("Booking infomation", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
 
 			gnk_Set_Character_Font("helvetica");
-			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
-			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
+			gnk_Set_Object_Color(H_7E7E81);
 			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
 			gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
-			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+			gnk_Set_Object_Color(C_1A1A1D);
 			gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 650.0f), 24.0f);
 			gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 			gnk_Text("Loai Giuong: ", Gnk_Point(820.0f, 620.0f), 24.0f);
@@ -458,21 +516,28 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
 			gnk_Text("So Luong: " + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
-			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
-			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
+			gnk_Set_Object_Color(H_FFFFFF);
+			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1000.0f, 380.0f));
 
-			glScissor(480, 150, 1050, 230);
+			glScissor(480, 150, 760, 230);
 			glEnable(GL_SCISSOR_TEST);
 
-			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+			gnk_Set_Object_Color(C_1A1A1D);
 			gnk_Set_Character_Font("helvetica-bold");
 			gnk_Text("Danh sach phong trong:", Gnk_Point(510.0f, 330.0f), 24.0f);
 			
 			gnk_Set_Character_Font("helvetica");
-			gnk_Text_Multi_Line(list_room_available, Gnk_Point(510.0f, 290.0f), 80, 10, 24);
+			gnk_Text_Multi_Line(list_room_available, Gnk_Point(510.0f, 290.0f), 38, 10, 24);
 			
 			glDisable(GL_SCISSOR_TEST);
 
+			gnk_Set_Object_Color(H_FFFFFF);
+			gnk_Rectangle(Gnk_Point(1010.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
+
+			gnk_Set_Object_Color(C_1A1A1D);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("Room choice:", Gnk_Point(1040.0f, 320.0f), 24.0f);
+			
 			frame->buttonList["back_to_search_room_button"]->setAppear(true);
 			frame->buttonList["continue_booking_button"]->setAppear(true);
 			frame->textboxList["room_choice_textbox"]->setAppear(true);
@@ -481,21 +546,20 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			frame->buttonList["continue_booking_button"]->display();
 			frame->textboxList["room_choice_textbox"]->display();
 		}
-		
 	}
 	else if(option == BOOKING_PART_2) {
 		// Booking part 2
-		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+		gnk_Set_Object_Color(C_1A1A1D);
 		gnk_Set_Character_Font("helvetica-bold");
 		gnk_Text_Limited("Booking infomation", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
 
 		gnk_Set_Character_Font("helvetica");
-		gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+		gnk_Set_Object_Color(H_FFFFFF);
 		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
-		gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
+		gnk_Set_Object_Color(H_7E7E81);
 		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
 		gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
-		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+		gnk_Set_Object_Color(C_1A1A1D);
 		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 650.0f), 24.0f);
 		gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 		gnk_Text("Loai Giuong: ", Gnk_Point(820.0f, 620.0f), 24.0f);
@@ -511,10 +575,10 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
 		gnk_Text("So Luong: " + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
-		gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+		gnk_Set_Object_Color(H_FFFFFF);
 		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
 
-		gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+		gnk_Set_Object_Color(C_1A1A1D);
 		gnk_Set_Character_Font("helvetica-bold");
 		gnk_Text("Xac nhan thong tin dat phong:", Gnk_Point(510.0f, 330.0f), 24.0f);
 
@@ -528,7 +592,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Text("Ma phong: ", Gnk_Point(510.0f, 200.0f), 24.0f);
 		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
 		gnk_Text("Tong tien:" , Gnk_Point(510.0f, 170.0f), 24.0f);
-		gnk_Text("0 VND", Gnk_Point(720.0f, 170.0f), 24.0f);
+		gnk_Text(booking_total_price, Gnk_Point(720.0f, 170.0f), 24.0f);
 
 		frame->buttonList["back_to_search_room_button"]->setAppear(true);
 		frame->buttonList["confirm_booking_button"]->setAppear(true);
@@ -573,7 +637,7 @@ void guest_frame_booking_infomation_button_click(Gnk_Button *button) {
 	history_list_enable = true;
 	history_list_init = false;
 	gnk_Current_Frame->listObjectList["history_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["history_list"]->getGroupHeight());
-	option = BOOKING_INFORMATION;
+	option = HISTORY_INFORMATION;
 }
 
 void guest_frame_profile_button_click(Gnk_Button *button) {
@@ -655,12 +719,12 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			Gnk_Point(gnk_Translate_X, gnk_Translate_Y - i * list->toNextObject()),
 			Gnk_Point(gnk_Translate_X + list->object_width, gnk_Translate_Y - i * list->toNextObject() + list->object_height),
 			list->A, list->B);
-			gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
-			gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
+			gnk_Set_Object_Color(H_7E7E81);
 			gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_height, 300.0f - i * list->toNextObject()));
 			gnk_Image(gnk_Image_List[room_list[i].type], Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(300.0f, 300.0f - i * list->toNextObject()));
-			gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+			gnk_Set_Object_Color(C_1A1A1D);
 			gnk_Text("Loai Phong: ", Gnk_Point(340.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_list[i].type, Gnk_Point(500.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Loai Giuong: ", Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
@@ -676,14 +740,14 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
 			gnk_Text("So Luong: " + room_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			if(index_hover_room == i) {
-				gnk_Set_Object_Color(Gnk_Color(0, 0, 0), 0.2f);
+				gnk_Set_Object_Color(H_000000, 0.2f);
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
 				glDisable(GL_BLEND);
 			}
 			if(index_selected_room == i) {
-				gnk_Set_Object_Color(Gnk_Color(0, 0, 0), 0.4f);
+				gnk_Set_Object_Color(H_000000, 0.4f);
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
@@ -776,7 +840,8 @@ void guest_frame_select_type_room_button_click(Gnk_Button *button) {
 		else list_room_available += ", " + room_available;
 		first = false;
 	}
-	gnk_Current_Frame->textboxList["room_choice_textbox"]->text = "";
+	gnk_Current_Frame->clear_Textbox();
+	staff_booking_guest_ID_not_exist = false;
 	option = BOOKING;
 }
 
@@ -791,7 +856,8 @@ void guest_frame_back_to_search_room_button_click(Gnk_Button *button) {
 		option = SEARCH_ROOM;
 	}	
 	else if(option == BOOKING_PART_2) {
-		gnk_Current_Frame->textboxList["room_choice_textbox"]->text = "";
+		gnk_Current_Frame->clear_Textbox();
+		staff_booking_guest_ID_not_exist = false;
 		option = BOOKING;
 	}
 }
@@ -810,11 +876,40 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 			break;
 		}
 	}
-	if(check) {
-		option = BOOKING_PART_2;
+	
+	if(current_Data->getCurrentRole() == KHACHHANG) {
+		if(check) {
+			DatPhong dp("0", 
+			Utils::stringToDate(check_in_date_str), 
+			Utils::stringToDate(check_out_date_str), 
+			Utils::stringToInt(number_of_guest_str), 
+			Utils::getOnlyNumber(room_list[index_booking].price));
+			booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
+
+			option = BOOKING_PART_2;
+		}
+		else {
+			cout << "Invalid room choice" << endl;
+		}
 	}
-	else {
-		cout << "Invalid room choice" << endl;
+	else if(current_Data->getCurrentRole() == NHANVIEN) {
+		if(check) {
+			if(current_Data->GuestExist(gnk_Current_Frame->textboxList["guest_ID_textbox"]->text)) {
+				DatPhong dp("0",
+				Utils::stringToDate(check_in_date_str), 
+				Utils::stringToDate(check_out_date_str), 
+				Utils::stringToInt(number_of_guest_str), 
+				Utils::getOnlyNumber(room_list[index_booking].price));
+				booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
+				option = BOOKING_PART_2;
+			}
+			else {
+				staff_booking_guest_ID_not_exist = true;
+			}
+		}
+		else {
+			cout << "Invalid room choice" << endl;
+		}
 	}
 }
 
@@ -827,11 +922,23 @@ void guest_frame_confirm_booking_button_click(Gnk_Button *button) {
 
 	UI_input_buffer.clear();
 	UI_output_buffer.clear();
-	UI_input_buffer << check_in_date_str << endl;
-	UI_input_buffer << check_out_date_str << endl;
-	UI_input_buffer << number_of_guest_str << endl;
-	UI_input_buffer << room_list[index_booking].type << endl;
-	UI_input_buffer << room_choice << endl;
+	if(current_Data->getCurrentRole() == KHACHHANG) {
+		UI_input_buffer << check_in_date_str << endl;
+		UI_input_buffer << check_out_date_str << endl;
+		UI_input_buffer << number_of_guest_str << endl;
+		UI_input_buffer << room_list[index_booking].type << endl;
+		UI_input_buffer << room_choice << endl;
+	}
+	else if(current_Data->getCurrentRole() == NHANVIEN) {
+		UI_input_buffer << check_in_date_str << endl;
+		UI_input_buffer << check_out_date_str << endl;
+		UI_input_buffer << number_of_guest_str << endl;
+		UI_input_buffer << room_list[index_booking].type << endl;
+		UI_input_buffer << room_choice << endl;
+		UI_input_buffer << "1" << endl;
+		UI_input_buffer << gnk_Current_Frame->textboxList["guest_ID_textbox"]->text << endl;
+	}
+	else return;
 	current_Data->requestHandling(USER_BOOK_ROOM);
 	option = BOOKING_DONE;
 }
@@ -868,12 +975,12 @@ void guest_frame_history_list_process(Gnk_List_Object *list) {
 			list->setGroupHeight(list->toNextObject()*history_booking_list.size());
 			list->numOfObject = history_booking_list.size();
 			for(int i = 0; i < history_booking_list.size(); i++) {
-				gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+				gnk_Set_Object_Color(H_FFFFFF);
 				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_width, 300.0f - i * list->toNextObject()));
-				gnk_Set_Object_Color(Gnk_Color(120, 120, 120));
+				gnk_Set_Object_Color(H_7E7E81);
 				gnk_Rectangle(Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(list->object_height, 300.0f - i * list->toNextObject()));
 				gnk_Image(gnk_Image_List[history_booking_list[i].roomtype], Gnk_Point(0.0f, 0.0f - i * list->toNextObject()), Gnk_Point(300.0f, 300.0f - i * list->toNextObject()));
-				gnk_Set_Object_Color(Gnk_Color(17, 17, 17));
+				gnk_Set_Object_Color(C_1A1A1D);
 				gnk_Text("Ma Dat Phong: ", Gnk_Point(340.0f, 250.0f - i * list->toNextObject()), 24.0f);
 				gnk_Text(history_booking_list[i].ID, Gnk_Point(560.0f, 250.0f - i * list->toNextObject()), 24.0f);
 				gnk_Text("Loai Phong: ", Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
@@ -899,52 +1006,258 @@ Gnk_Frame guest(guest_frame_draw);
 // ---------------------------------------------------------
 void staff_frame_draw(Gnk_Frame *frame) {
 	frame->disable_all();
-	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+	gnk_Set_Background_Color(H_F3F2F2);
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Object_Color(H_7E7E81);
 	gnk_Set_Line_Width(2.0f);
 	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
+	gnk_Set_Object_Color(H_FFECB8);
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(H_FFFFFF);
 	gnk_Set_Character_Font("helvetica");
 	gnk_Text("Welcome, Hotel Del Luna's Staff!", Gnk_Point(430.0f, 830.0f), 24.0f);
 	
 	frame->buttonList["logout_button"]->setAppear(true);
-	frame->buttonList["logout_button"]->display();
+	frame->buttonList["search_room_button"]->setAppear(true);
+	frame->buttonList["booking_infomation_button"]->setAppear(true);
+	frame->buttonList["guest_infomation_button"]->setAppear(true);
+	frame->buttonList["type_room_infomation_button"]->setAppear(true);
+	frame->buttonList["room_information_button"]->setAppear(true);
+	frame->buttonList["create_guest_button"]->setAppear(true);
 
+	frame->buttonList["logout_button"]->display();
+	frame->buttonList["search_room_button"]->display();
+	frame->buttonList["booking_infomation_button"]->display();
+	frame->buttonList["guest_infomation_button"]->display();
+	frame->buttonList["type_room_infomation_button"]->display();
+	frame->buttonList["room_information_button"]->display();
+	frame->buttonList["create_guest_button"]->display();
+
+	if(option == SEARCH_ROOM) {
+		frame->textboxList["check_in_textbox"]->setAppear(true);
+		frame->textboxList["check_out_textbox"]->setAppear(true);
+		frame->textboxList["number_of_guest_textbox"]->setAppear(true);
+		frame->buttonList["lookup"]->setAppear(true);
+		frame->listObjectList["search_room_list"]->setAppear(true);
+		// Search box
+		gnk_Set_Object_Color(H_F7C873);
+		gnk_Rectangle(Gnk_Point(520.0f, 700.0f), Gnk_Point(1510.0f, 760.0f));
+		// Vẽ các textbox
+		gnk_Set_Object_Color(C_1A1A1D);
+		frame->textboxList["check_in_textbox"]->display();
+		frame->textboxList["check_out_textbox"]->display();
+		frame->textboxList["number_of_guest_textbox"]->display();
+		frame->buttonList["lookup"]->display();
+		frame->listObjectList["search_room_list"]->draw();
+		// Vẽ cái đường viền
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Rectangle(Gnk_Point(520.0f, 700.0f), Gnk_Point(1510.0f, 760.0f), false);
+		gnk_Line(Gnk_Point(825.0f, 700.0f), Gnk_Point(825.0f, 760.0f));
+		gnk_Line(Gnk_Point(1135.0f, 700.0f), Gnk_Point(1135.0f, 760.0f));
+		gnk_Line(Gnk_Point(1445.0f, 700.0f), Gnk_Point(1445.0f, 760.0f));
+		gnk_Line(Gnk_Point(430.0f, 680.0f), Gnk_Point(1600.0f, 680.0f));
+		gnk_Set_Line_Width(1.0f);
+	}
+	else if(option == BOOKING) {
+		// Booking
+		if(index_booking != -1) {
+			gnk_Set_Object_Color(C_1A1A1D);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text_Limited("Booking infomation", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+
+			gnk_Set_Character_Font("helvetica");
+			gnk_Set_Object_Color(H_FFFFFF);
+			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
+			gnk_Set_Object_Color(H_7E7E81);
+			gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+			gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+			gnk_Set_Object_Color(C_1A1A1D);
+			gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 650.0f), 24.0f);
+			gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
+			gnk_Text("Loai Giuong: ", Gnk_Point(820.0f, 620.0f), 24.0f);
+			gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
+			gnk_Text("So Nguoi: ", Gnk_Point(820.0f, 590.0f), 24.0f);
+			gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
+			gnk_Text("Dien Tich: ", Gnk_Point(820.0f, 560.0f), 24.0f);
+			gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
+			gnk_Text("Gia: ", Gnk_Point(820.0f, 530.0f), 24.0f);
+			gnk_Text(room_list[index_booking].price, Gnk_Point(980.0f, 530.0f), 24.0f);
+			gnk_Set_Line_Width(2.0f);
+			gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
+			gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
+			gnk_Text("So Luong: " + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+
+			gnk_Set_Object_Color(H_FFFFFF);
+			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1000.0f, 380.0f));
+
+			glScissor(480, 150, 760, 230);
+			glEnable(GL_SCISSOR_TEST);
+
+			gnk_Set_Object_Color(C_1A1A1D);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("Danh sach phong trong:", Gnk_Point(510.0f, 330.0f), 24.0f);
+			
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text_Multi_Line(list_room_available, Gnk_Point(510.0f, 290.0f), 38, 10, 24);
+			
+			glDisable(GL_SCISSOR_TEST);
+
+			gnk_Set_Object_Color(H_FFFFFF);
+			gnk_Rectangle(Gnk_Point(1010.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
+
+			gnk_Set_Object_Color(C_1A1A1D);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("Room choice:", Gnk_Point(1040.0f, 320.0f), 24.0f);
+			gnk_Text("Guest ID:", Gnk_Point(1040.0f, 250.0f), 24.0f);
+			
+			frame->buttonList["back_to_search_room_button"]->setAppear(true);
+			frame->buttonList["continue_booking_button"]->setAppear(true);
+			frame->textboxList["room_choice_textbox"]->setAppear(true);
+			frame->textboxList["guest_ID_textbox"]->setAppear(true);
+
+			frame->buttonList["back_to_search_room_button"]->display();
+			frame->buttonList["continue_booking_button"]->display();
+			frame->textboxList["room_choice_textbox"]->display();
+			frame->textboxList["guest_ID_textbox"]->display();
+
+			if(staff_booking_guest_ID_not_exist) {
+				gnk_Set_Object_Color(H_FF0000);
+				gnk_Text("Guest ID not exist", Gnk_Point(1040.0f, 180.0f), 24.0f);
+			}
+		}
+	}
+	else if(option == BOOKING_PART_2) {
+		// Booking part 2
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Booking infomation", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_7E7E81);
+		gnk_Rectangle(Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List[room_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 650.0f), 24.0f);
+		gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
+		gnk_Text("Loai Giuong: ", Gnk_Point(820.0f, 620.0f), 24.0f);
+		gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
+		gnk_Text("So Nguoi: ", Gnk_Point(820.0f, 590.0f), 24.0f);
+		gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
+		gnk_Text("Dien Tich: ", Gnk_Point(820.0f, 560.0f), 24.0f);
+		gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
+		gnk_Text("Gia: ", Gnk_Point(820.0f, 530.0f), 24.0f);
+		gnk_Text(room_list[index_booking].price, Gnk_Point(980.0f, 530.0f), 24.0f);
+		gnk_Set_Line_Width(2.0f);
+		gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
+		gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
+		gnk_Text("So Luong: " + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
+
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text("Xac nhan thong tin dat phong:", Gnk_Point(510.0f, 330.0f), 24.0f);
+
+		gnk_Set_Character_Font("helvetica");
+		gnk_Text("Ngay nhan phong: ", Gnk_Point(510.0f, 290.0f), 24.0f);
+		gnk_Text(check_in_date_str, Gnk_Point(720.0f, 290.0f), 24.0f);
+		gnk_Text("Ngay tra phong: ", Gnk_Point(510.0f, 260.0f), 24.0f);
+		gnk_Text(check_out_date_str, Gnk_Point(720.0f, 260.0f), 24.0f);
+		gnk_Text("So luong khach: ", Gnk_Point(510.0f, 230.0f), 24.0f);
+		gnk_Text(number_of_guest_str, Gnk_Point(720.0f, 230.0f), 24.0f);
+		gnk_Text("Ma phong: ", Gnk_Point(510.0f, 200.0f), 24.0f);
+		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
+		gnk_Text("Tong tien:" , Gnk_Point(510.0f, 170.0f), 24.0f);
+		gnk_Text(booking_total_price, Gnk_Point(720.0f, 170.0f), 24.0f);
+
+		frame->buttonList["back_to_search_room_button"]->setAppear(true);
+		frame->buttonList["confirm_booking_button"]->setAppear(true);
+		
+		frame->buttonList["back_to_search_room_button"]->display();
+		frame->buttonList["confirm_booking_button"]->display();
+	}
+	else if(option == BOOKING_DONE) {
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("The room has been successfully booked!", Gnk_Point(430.0f, 370.0f), 1170.0f, 60.0f, 48.0f, GNK_TEXT_CENTER);
+	}
+
+
+}
+
+void staff_frame_booking_infomation_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+}
+
+void staff_frame_guest_infomation_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+}
+
+void staff_frame_type_room_infomation_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+}
+
+void staff_frame_room_information_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+}
+
+void staff_frame_create_guest_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
 }
 
 Gnk_Frame staff(staff_frame_draw);
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *frame) {
 	frame->disable_all();
-	gnk_Set_Background_Color(Gnk_Color(243, 242, 242));
+	gnk_Set_Background_Color(H_F3F2F2);
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 800.0f), Gnk_Point(1600.0f, 900.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(34, 40, 49));
+	gnk_Set_Object_Color(H_222831);
 	gnk_Rectangle(Gnk_Point(0.0f, 0.0f), Gnk_Point(430.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(126, 126, 129));
+	gnk_Set_Object_Color(H_7E7E81);
 	gnk_Set_Line_Width(2.0f);
 	gnk_Line(Gnk_Point(20.0f, 800.0f), Gnk_Point(1560.0f, 800.0f));
 
-	gnk_Set_Object_Color(Gnk_Color(255, 236, 200));
+	gnk_Set_Object_Color(H_FFECB8);
 	gnk_Set_Character_Font("helvetica-bold");
 	gnk_Text("HOTEL DEL LUNA", Gnk_Point(40.0f, 830.0f), 40.0f);
 
-	gnk_Set_Object_Color(Gnk_Color(255, 255, 255));
+	gnk_Set_Object_Color(H_FFFFFF);
 	gnk_Set_Character_Font("helvetica");
 	gnk_Text("Welcome, Hotel Del Luna's Admin!", Gnk_Point(430.0f, 830.0f), 24.0f);
 	
@@ -959,15 +1272,15 @@ Gnk_Frame admin(admin_frame_draw);
 void login_frame_init() {
 	Gnk_Textbox *login_frame_username_textbox = new Gnk_Textbox();
 	login_frame_username_textbox->setRange(Gnk_Point(806.0f, 460.0f), Gnk_Point(1190.0f, 520.0f));
-	login_frame_username_textbox->setColor(Gnk_Color(255, 255, 255));
+	login_frame_username_textbox->setColor(H_FFFFFF);
 	login_frame_username_textbox->setBorderRadius(0.0f);
 	login_frame_username_textbox->setTextFont("helvetica");
 	login_frame_username_textbox->setFontSize(24.0f);
-	login_frame_username_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	login_frame_username_textbox->setTextColor(C_1A1A1D);
 	login_frame_username_textbox->setPlaceholder("username");
 	login_frame_username_textbox->setPlaceholderFont("helvetica");
 	login_frame_username_textbox->setPlaceholderFontSize(24.0f);
-	login_frame_username_textbox->setPlaceholderColor(Gnk_Color(85, 85, 85));
+	login_frame_username_textbox->setPlaceholderColor(H_404040);
 	login_frame_username_textbox->setPaddingX(15.0f);
 	login_frame_username_textbox->setPaddingY(10.0f);
 	login_frame_username_textbox->setTextAlign(GNK_TEXT_LEFT);
@@ -980,11 +1293,11 @@ void login_frame_init() {
 
 	Gnk_Button_With_Text *login_frame_login_button = new Gnk_Button_With_Text();
 	login_frame_login_button->setRange(Gnk_Point(1030.0f, 230.0f), Gnk_Point(1190.0f, 290.0f));
-	login_frame_login_button->setColor(Gnk_Color(90, 100, 147));
+	login_frame_login_button->setColor(H_5A6493);
 	login_frame_login_button->setText("Login");
 	login_frame_login_button->setTextFont("helvetica-bold");
 	login_frame_login_button->setFontSize(24.0f);
-	login_frame_login_button->setTextColor(Gnk_Color(255, 255, 255));
+	login_frame_login_button->setTextColor(H_FFFFFF);
 	login_frame_login_button->setTextAlign(GNK_TEXT_CENTER);
 	login_frame_login_button->setPaddingX(15.0f);
 	login_frame_login_button->setPaddingY(10.0f);
@@ -994,11 +1307,11 @@ void login_frame_init() {
 
 	Gnk_Button_With_Text *login_frame_forgotten_password_button = new Gnk_Button_With_Text();
 	login_frame_forgotten_password_button->setRange(Gnk_Point(740.0f, 250.0f), Gnk_Point(990.0f, 284.0f));
-	login_frame_forgotten_password_button->setColor(Gnk_Color(255, 255, 255));
+	login_frame_forgotten_password_button->setColor(H_FFFFFF);
 	login_frame_forgotten_password_button->setText("Forgot your password?");
 	login_frame_forgotten_password_button->setTextFont("helvetica");
 	login_frame_forgotten_password_button->setFontSize(24.0f);
-	login_frame_forgotten_password_button->setTextColor(Gnk_Color(60, 60, 60));
+	login_frame_forgotten_password_button->setTextColor(H_404040);
 	login_frame_forgotten_password_button->setPaddingX(0.0f);
 	login_frame_forgotten_password_button->setPaddingY(0.0f);
 	login_frame_forgotten_password_button->setClickProcess(login_frame_forgotten_password_button_click);
@@ -1019,21 +1332,21 @@ void login_frame_init() {
 void sign_up_frame_init() {
 	Gnk_Textbox *sign_up_frame_first_name_textbox = new Gnk_Textbox();
 	sign_up_frame_first_name_textbox->setRange(Gnk_Point(465.0f, 480.0f), Gnk_Point(785.0f, 540.0f));
-	sign_up_frame_first_name_textbox->setColor(Gnk_Color(255, 255, 255));
+	sign_up_frame_first_name_textbox->setColor(H_FFFFFF);
 	sign_up_frame_first_name_textbox->setBorderRadius(0.0f);
 	sign_up_frame_first_name_textbox->setTextFont("helvetica");
 	sign_up_frame_first_name_textbox->setFontSize(24.0f);
-	sign_up_frame_first_name_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	sign_up_frame_first_name_textbox->setTextColor(C_1A1A1D);
 	sign_up_frame_first_name_textbox->setPlaceholder("First name");
 	sign_up_frame_first_name_textbox->setPlaceholderFont("helvetica");
 	sign_up_frame_first_name_textbox->setPlaceholderFontSize(24.0f);
-	sign_up_frame_first_name_textbox->setPlaceholderColor(Gnk_Color(85, 85, 85));
+	sign_up_frame_first_name_textbox->setPlaceholderColor(H_404040);
 	sign_up_frame_first_name_textbox->setPaddingX(15.0f);
 	sign_up_frame_first_name_textbox->setPaddingY(10.0f);
 	sign_up_frame_first_name_textbox->setTextAlign(GNK_TEXT_LEFT);
 	sign_up_frame_first_name_textbox->setSelectProcess(textbox_select_type2);
 	sign_up_frame_first_name_textbox->setBorder(true);
-	sign_up_frame_first_name_textbox->setBorderColor(Gnk_Color(45, 45, 45));
+	sign_up_frame_first_name_textbox->setBorderColor(H_404040);
 	sign_up_frame_first_name_textbox->setBorderRadius(10.0f);
 	sign_up_frame_first_name_textbox->setMaxLength(50);
 
@@ -1057,19 +1370,19 @@ void sign_up_frame_init() {
 
 	Gnk_Button_Toggle *sign_up_frame_male_toggle = new Gnk_Button_Toggle();
 	sign_up_frame_male_toggle->setRange(Gnk_Point(465.0f, 220.0f), Gnk_Point(785.0f, 280.0f));
-	sign_up_frame_male_toggle->setColor(Gnk_Color(255, 255, 255));
+	sign_up_frame_male_toggle->setColor(H_FFFFFF);
 	sign_up_frame_male_toggle->setText("Male");
 	sign_up_frame_male_toggle->setTextFont("helvetica");
 	sign_up_frame_male_toggle->setFontSize(24.0f);
 	sign_up_frame_male_toggle->setPaddingX(15.0f);
 	sign_up_frame_male_toggle->setPaddingY(10.0f);
-	sign_up_frame_male_toggle->setTextColor(Gnk_Color(17, 17, 17));
+	sign_up_frame_male_toggle->setTextColor(C_1A1A1D);
 	sign_up_frame_male_toggle->setToggleRange(Gnk_Point(745.0f, 240.0f), Gnk_Point(765.0f, 260.0f));
-	sign_up_frame_male_toggle->setToggleColor(Gnk_Color(255, 255, 255));
-	sign_up_frame_male_toggle->setToggleEnableColor(Gnk_Color(250, 177, 47));
+	sign_up_frame_male_toggle->setToggleColor(H_FFFFFF);
+	sign_up_frame_male_toggle->setToggleEnableColor(H_F7C873);
 	sign_up_frame_male_toggle->setToggleRadius(10.0f);
 	sign_up_frame_male_toggle->setBorder(true);
-	sign_up_frame_male_toggle->setBorderColor(Gnk_Color(45, 45, 45));
+	sign_up_frame_male_toggle->setBorderColor(H_404040);
 	sign_up_frame_male_toggle->setRadius(10.0f);
 	sign_up_frame_male_toggle->setClickProcess(sign_up_frame_toggle_click);
 
@@ -1089,11 +1402,11 @@ void sign_up_frame_init() {
 
 	Gnk_Button_With_Text *sign_up_frame_sign_up_button = new Gnk_Button_With_Text();
 	sign_up_frame_sign_up_button->setRange(Gnk_Point(700.0f, -40.0f), Gnk_Point(900.0f, 20.0f));
-	sign_up_frame_sign_up_button->setColor(Gnk_Color(90, 100, 147));
+	sign_up_frame_sign_up_button->setColor(H_5A6493);
 	sign_up_frame_sign_up_button->setText("Sign up");
 	sign_up_frame_sign_up_button->setTextFont("helvetica-bold");
 	sign_up_frame_sign_up_button->setFontSize(24.0f);
-	sign_up_frame_sign_up_button->setTextColor(Gnk_Color(255, 255, 255));
+	sign_up_frame_sign_up_button->setTextColor(H_FFFFFF);
 	sign_up_frame_sign_up_button->setPaddingX(0.0f);
 	sign_up_frame_sign_up_button->setPaddingY(0.0f);
 	sign_up_frame_sign_up_button->setTextAlign(GNK_TEXT_CENTER);
@@ -1103,11 +1416,11 @@ void sign_up_frame_init() {
 
 	Gnk_Button_With_Text *sign_up_frame_to_login_button = new Gnk_Button_With_Text();
 	sign_up_frame_to_login_button->setRange(Gnk_Point(465.0f, -100.0f), Gnk_Point(1135.0f, -60.0f));
-	sign_up_frame_to_login_button->setColor(Gnk_Color(255, 255, 255));
+	sign_up_frame_to_login_button->setColor(H_FFFFFF);
 	sign_up_frame_to_login_button->setText("Already have an account? Login");
 	sign_up_frame_to_login_button->setTextFont("helvetica");
 	sign_up_frame_to_login_button->setFontSize(24.0f);
-	sign_up_frame_to_login_button->setTextColor(Gnk_Color(60, 60, 60));
+	sign_up_frame_to_login_button->setTextColor(H_404040);
 	sign_up_frame_to_login_button->setPaddingX(0.0f);
 	sign_up_frame_to_login_button->setPaddingY(0.0f);
 	sign_up_frame_to_login_button->setTextAlign(GNK_TEXT_CENTER);
@@ -1116,10 +1429,8 @@ void sign_up_frame_init() {
 
 	Gnk_Scrollbar *sign_up_frame_scrollbar = new Gnk_Scrollbar();
 	sign_up_frame_scrollbar->setRange(Gnk_Point(gnk_Width - 20.0f, 0.0f), Gnk_Point(gnk_Width, gnk_Height));
-	sign_up_frame_scrollbar->setColor(Gnk_Color(255, 255, 255));
-	sign_up_frame_scrollbar->setScrollColor(Gnk_Color(200, 200, 200));
-	sign_up_frame_scrollbar->setHoverColor(Gnk_Color(180, 180, 180));
-	sign_up_frame_scrollbar->setClickColor(Gnk_Color(160, 160, 160));
+	sign_up_frame_scrollbar->setColor(H_FFFFFF);
+	sign_up_frame_scrollbar->setScrollColor(H_C8C8C8);
 	sign_up_frame_scrollbar->setMaxHeight(gnk_Height * 1.4);
 	sign_up_frame_scrollbar->setCurrentPos(gnk_Height);
 
@@ -1140,11 +1451,11 @@ void sign_up_frame_init() {
 void guest_frame_init() {
 	Gnk_Button_With_Text *guest_frame_search_room_button = new Gnk_Button_With_Text();
 	guest_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
-	guest_frame_search_room_button->setColor(light_yellow2);
-	guest_frame_search_room_button->setText("Search room");
+	guest_frame_search_room_button->setColor(H_FFECB8);
+	guest_frame_search_room_button->setText("Search Room");
 	guest_frame_search_room_button->setTextFont("helvetica");
 	guest_frame_search_room_button->setFontSize(24.0f);
-	guest_frame_search_room_button->setTextColor(Gnk_Color(26, 26, 29));
+	guest_frame_search_room_button->setTextColor(C_1A1A1D);
 	guest_frame_search_room_button->setHoverProcess(button_hover_type_1);
 	guest_frame_search_room_button->setClickProcess(nullptr);
 	guest_frame_search_room_button->setTextAlign(GNK_TEXT_LEFT);
@@ -1156,7 +1467,7 @@ void guest_frame_init() {
 
 	Gnk_Button_With_Text *guest_frame_booking_infomation_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
 	guest_frame_booking_infomation_button->setRange(Gnk_Point(40.0f, 580.0f), Gnk_Point(400.0f, 660.0f));
-	guest_frame_booking_infomation_button->setText("Booking infomation");
+	guest_frame_booking_infomation_button->setText("History Infomation");
 	guest_frame_booking_infomation_button->setClickProcess(guest_frame_booking_infomation_button_click);
 
 	Gnk_Button_With_Text *guest_frame_profile_button = new Gnk_Button_With_Text(*guest_frame_search_room_button);
@@ -1166,14 +1477,14 @@ void guest_frame_init() {
 
 	Gnk_Textbox_Keep_Placeholder *guest_frame_check_in_textbox = new Gnk_Textbox_Keep_Placeholder();
 	guest_frame_check_in_textbox->setRange(Gnk_Point(520.0f, 700.0f), Gnk_Point(820.0f, 760.0f));
-	guest_frame_check_in_textbox->setColor(light_yellow2);
+	guest_frame_check_in_textbox->setColor(H_F7C873);
 	guest_frame_check_in_textbox->setTextFont("helvetica");
 	guest_frame_check_in_textbox->setFontSize(24.0f);
-	guest_frame_check_in_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	guest_frame_check_in_textbox->setTextColor(C_1A1A1D);
 	guest_frame_check_in_textbox->setPlaceholder("Check in");
 	guest_frame_check_in_textbox->setPlaceholderFont("helvetica");
 	guest_frame_check_in_textbox->setPlaceholderFontSize(24.0f);
-	guest_frame_check_in_textbox->setPlaceholderColor(Gnk_Color(85, 85, 85));
+	guest_frame_check_in_textbox->setPlaceholderColor(H_404040);
 	guest_frame_check_in_textbox->setPaddingX(15.0f);
 	guest_frame_check_in_textbox->setPaddingY(10.0f);
 	guest_frame_check_in_textbox->setTextAlign(GNK_TEXT_LEFT);
@@ -1190,7 +1501,7 @@ void guest_frame_init() {
 
 	Gnk_Button *guest_frame_select_type_room_button = new Gnk_Button();
 	guest_frame_select_type_room_button->setRange(Gnk_Point(0.0f, 0.0f), Gnk_Point(1050.0f, 300.0f));
-	guest_frame_select_type_room_button->setColor(Gnk_Color(255, 255, 255));
+	guest_frame_select_type_room_button->setColor(H_FFFFFF);
 	guest_frame_select_type_room_button->setHoverProcess(button_hover_type_1);
 	guest_frame_select_type_room_button->setClickProcess(guest_frame_select_type_room_button_click);
 
@@ -1216,16 +1527,16 @@ void guest_frame_init() {
 	guest_frame_lookup_button_image->setRange(Gnk_Point(1460.0f, 710.0f), Gnk_Point(1500.0f, 750.0f));
 	guest_frame_lookup_button_image->setImage(&gnk_Image_List["search_icon"]);
 	guest_frame_lookup_button_image->setClickProcess(guest_frame_lookup_button_image_click);
-	guest_frame_lookup_button_image->setColor(light_yellow2);
+	guest_frame_lookup_button_image->setColor(H_F7C873);
 
 	Gnk_Button_With_Text *guest_frame_change_profile_button = new Gnk_Button_With_Text();
 	guest_frame_change_profile_button->setRange(Gnk_Point(1340.0f, 30.0f), Gnk_Point(1560.0f, 100.0f));
-	guest_frame_change_profile_button->setColor(Gnk_Color(26, 26, 29));
-	guest_frame_change_profile_button->setText("Change profile");
+	guest_frame_change_profile_button->setColor(C_1A1A1D);
+	guest_frame_change_profile_button->setText("Change Profile");
 	guest_frame_change_profile_button->setTextFont("helvetica-bold");
 	guest_frame_change_profile_button->setFontSize(24.0f);
 	guest_frame_change_profile_button->setTextAlign(GNK_TEXT_CENTER);
-	guest_frame_change_profile_button->setTextColor(Gnk_Color(255, 255, 255));
+	guest_frame_change_profile_button->setTextColor(H_FFFFFF);
 	guest_frame_change_profile_button->setRadius(20.0f);
 	guest_frame_change_profile_button->setBorder(true);
 	guest_frame_change_profile_button->setHoverProcess(button_hover_type_3);
@@ -1233,16 +1544,16 @@ void guest_frame_init() {
 
 	Gnk_Button_With_Text *guest_frame_save_profile_button = new Gnk_Button_With_Text(*guest_frame_change_profile_button);
 	guest_frame_save_profile_button->setRange(Gnk_Point(1340.0f, 30.0f), Gnk_Point(1560.0f, 100.0f));
-	guest_frame_save_profile_button->setText("Save profile");
+	guest_frame_save_profile_button->setText("Save Profile");
 	guest_frame_save_profile_button->setClickProcess(guest_frame_save_profile_button_click);
 
 	Gnk_Textbox *guest_frame_profile_name_textbox = new Gnk_Textbox();
 	guest_frame_profile_name_textbox->setRange(Gnk_Point(1140.0f, 540.0f), Gnk_Point(1440.0f, 580.0f));
-	guest_frame_profile_name_textbox->setColor(light_yellow2);
+	guest_frame_profile_name_textbox->setColor(H_FFECB8);
 	guest_frame_profile_name_textbox->setBorderRadius(0.0f);
 	guest_frame_profile_name_textbox->setTextFont("helvetica");
 	guest_frame_profile_name_textbox->setFontSize(24.0f);
-	guest_frame_profile_name_textbox->setTextColor(Gnk_Color(17, 17, 17));
+	guest_frame_profile_name_textbox->setTextColor(C_1A1A1D);
 	guest_frame_profile_name_textbox->setPaddingX(0.0f);
 	guest_frame_profile_name_textbox->setPaddingY(0.0f);
 	guest_frame_profile_name_textbox->setTextAlign(GNK_TEXT_LEFT);
@@ -1275,11 +1586,21 @@ void guest_frame_init() {
 	guest_frame_confirm_booking_button->setText("Confirm");
 	guest_frame_confirm_booking_button->setClickProcess(guest_frame_confirm_booking_button_click);
 
-	Gnk_Textbox_Keep_Placeholder *guest_frame_room_choice_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
-	guest_frame_room_choice_textbox->setRange(Gnk_Point(920.0f, 30.0f), Gnk_Point(1300.0f, 100.0f));
-	guest_frame_room_choice_textbox->setColor(Gnk_Color(243, 242, 242));
-	guest_frame_room_choice_textbox->setPlaceholder("Room choice");
+	Gnk_Textbox *guest_frame_room_choice_textbox = new Gnk_Textbox();
+	guest_frame_room_choice_textbox->setRange(Gnk_Point(1220.0f, 300.0f), Gnk_Point(1500.0f, 360.0f));
+	guest_frame_room_choice_textbox->setColor(H_FFFFFF);
+	guest_frame_room_choice_textbox->setPlaceholder("Ex: VIP123");
 	guest_frame_room_choice_textbox->setSelectProcess(textbox_select_type3);
+	guest_frame_room_choice_textbox->setTextFont("helvetica");
+	guest_frame_room_choice_textbox->setFontSize(24.0f);
+	guest_frame_room_choice_textbox->setTextColor(C_1A1A1D);
+	guest_frame_room_choice_textbox->setPlaceholderFont("helvetica");
+	guest_frame_room_choice_textbox->setPlaceholderFontSize(24.0f);
+	guest_frame_room_choice_textbox->setPlaceholderColor(H_404040);
+	guest_frame_room_choice_textbox->setPaddingX(15.0f);
+	guest_frame_room_choice_textbox->setPaddingY(10.0f);
+	guest_frame_room_choice_textbox->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_room_choice_textbox->setMaxLength(8);
 
 	guest.addButton("search_room_button", guest_frame_search_room_button);
 	guest.addButton("booking_infomation_button", guest_frame_booking_infomation_button);
@@ -1303,6 +1624,152 @@ void guest_frame_init() {
 }
 
 void staff_frame_init() {
+	Gnk_Button_With_Text *staff_frame_search_room_button = new Gnk_Button_With_Text();
+	staff_frame_search_room_button->setRange(Gnk_Point(40.0f, 680.0f), Gnk_Point(400.0f, 760.0f));
+	staff_frame_search_room_button->setColor(H_FFECB8);
+	staff_frame_search_room_button->setText("Search Room");
+	staff_frame_search_room_button->setTextFont("helvetica");
+	staff_frame_search_room_button->setFontSize(24.0f);
+	staff_frame_search_room_button->setTextColor(C_1A1A1D);
+	staff_frame_search_room_button->setHoverProcess(button_hover_type_1);
+	staff_frame_search_room_button->setClickProcess(nullptr);
+	staff_frame_search_room_button->setTextAlign(GNK_TEXT_LEFT);
+	staff_frame_search_room_button->setPaddingX(30.0f);
+	staff_frame_search_room_button->setPaddingY(0.0f);
+	staff_frame_search_room_button->setRadius(10.0f);
+	staff_frame_search_room_button->setHoverProcess(button_hover_type_1);
+	staff_frame_search_room_button->setClickProcess(guest_frame_search_room_button_click);
+
+	Gnk_Button_With_Text *staff_frame_booking_infomation_button = new Gnk_Button_With_Text(*staff_frame_search_room_button);
+	staff_frame_booking_infomation_button->setRange(Gnk_Point(40.0f, 580.0f), Gnk_Point(400.0f, 660.0f));
+	staff_frame_booking_infomation_button->setText("Booking Infomation");
+	staff_frame_booking_infomation_button->setClickProcess(staff_frame_booking_infomation_button_click);
+
+	Gnk_Button_With_Text *staff_frame_guest_infomation_button = new Gnk_Button_With_Text(*staff_frame_search_room_button);
+	staff_frame_guest_infomation_button->setRange(Gnk_Point(40.0f, 480.0f), Gnk_Point(400.0f, 560.0f));
+	staff_frame_guest_infomation_button->setText("Guest Infomation");
+	staff_frame_guest_infomation_button->setClickProcess(staff_frame_guest_infomation_button_click);
+
+	Gnk_Button_With_Text *staff_frame_type_room_infomation_button = new Gnk_Button_With_Text(*staff_frame_search_room_button);
+	staff_frame_type_room_infomation_button->setRange(Gnk_Point(40.0f, 380.0f), Gnk_Point(400.0f, 460.0f));
+	staff_frame_type_room_infomation_button->setText("Type Room Infomation");
+	staff_frame_type_room_infomation_button->setClickProcess(staff_frame_type_room_infomation_button_click);
+
+	Gnk_Button_With_Text *staff_frame_room_information_button = new Gnk_Button_With_Text(*staff_frame_search_room_button);
+	staff_frame_room_information_button->setRange(Gnk_Point(40.0f, 280.0f), Gnk_Point(400.0f, 360.0f));
+	staff_frame_room_information_button->setText("Room Infomation");
+	staff_frame_room_information_button->setClickProcess(staff_frame_room_information_button_click);
+
+	Gnk_Button_With_Text *staff_frame_create_guest_button = new Gnk_Button_With_Text(*staff_frame_search_room_button);
+	staff_frame_create_guest_button->setRange(Gnk_Point(40.0f, 180.0f), Gnk_Point(400.0f, 260.0f));
+	staff_frame_create_guest_button->setText("Create Guest");
+	staff_frame_create_guest_button->setClickProcess(staff_frame_create_guest_button_click);
+
+	Gnk_Textbox_Keep_Placeholder *guest_frame_check_in_textbox = new Gnk_Textbox_Keep_Placeholder();
+	guest_frame_check_in_textbox->setRange(Gnk_Point(520.0f, 700.0f), Gnk_Point(820.0f, 760.0f));
+	guest_frame_check_in_textbox->setColor(H_F7C873);
+	guest_frame_check_in_textbox->setTextFont("helvetica");
+	guest_frame_check_in_textbox->setFontSize(24.0f);
+	guest_frame_check_in_textbox->setTextColor(C_1A1A1D);
+	guest_frame_check_in_textbox->setPlaceholder("Check in");
+	guest_frame_check_in_textbox->setPlaceholderFont("helvetica");
+	guest_frame_check_in_textbox->setPlaceholderFontSize(24.0f);
+	guest_frame_check_in_textbox->setPlaceholderColor(H_404040);
+	guest_frame_check_in_textbox->setPaddingX(15.0f);
+	guest_frame_check_in_textbox->setPaddingY(10.0f);
+	guest_frame_check_in_textbox->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_check_in_textbox->setMaxLength(10);
+
+	Gnk_Textbox_Keep_Placeholder *guest_frame_check_out_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
+	guest_frame_check_out_textbox->setRange(Gnk_Point(830.0f, 700.0f), Gnk_Point(1130.0f, 760.0f));
+	guest_frame_check_out_textbox->setPlaceholder("Check out");
+
+	Gnk_Textbox_Keep_Placeholder *guest_frame_number_of_guest_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
+	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1140.0f, 700.0f), Gnk_Point(1440.0f, 760.0f));
+	guest_frame_number_of_guest_textbox->setPlaceholder("Number of guest");
+	guest_frame_number_of_guest_textbox->setMaxLength(1);
+	
+	Gnk_Button_With_Image *guest_frame_lookup_button_image = new Gnk_Button_With_Image();
+	guest_frame_lookup_button_image->setRange(Gnk_Point(1460.0f, 710.0f), Gnk_Point(1500.0f, 750.0f));
+	guest_frame_lookup_button_image->setImage(&gnk_Image_List["search_icon"]);
+	guest_frame_lookup_button_image->setClickProcess(guest_frame_lookup_button_image_click);
+	guest_frame_lookup_button_image->setColor(H_F7C873);
+
+	Gnk_Button *guest_frame_select_type_room_button = new Gnk_Button();
+	guest_frame_select_type_room_button->setRange(Gnk_Point(0.0f, 0.0f), Gnk_Point(1050.0f, 300.0f));
+	guest_frame_select_type_room_button->setColor(H_FFFFFF);
+	guest_frame_select_type_room_button->setHoverProcess(button_hover_type_1);
+	guest_frame_select_type_room_button->setClickProcess(guest_frame_select_type_room_button_click);
+	
+	Gnk_List_Object *guest_frame_search_room_list = new Gnk_List_Object();
+	guest_frame_search_room_list->setRange(Gnk_Point(430.0f, 0.0f), Gnk_Point(1600.0f, 680.0f));
+	guest_frame_search_room_list->setCurrentPos(guest_frame_search_room_list->getGroupHeight());
+	guest_frame_search_room_list->setObjectWidth(1050);
+	guest_frame_search_room_list->setObjectHeight(300);
+	guest_frame_search_room_list->setObjectStartPosition(Gnk_Point(50.0f, 340.0f));
+	guest_frame_search_room_list->setObjectSpace(50);
+	guest_frame_search_room_list->setGroupHeight(680);
+	guest_frame_search_room_list->setDrawProcess(guest_frame_search_room_list_process);
+	guest_frame_search_room_list->addButton(guest_frame_select_type_room_button);
+
+	Gnk_Button_With_Text *guest_frame_back_to_search_room_button = new Gnk_Button_With_Text();
+	guest_frame_back_to_search_room_button->setRange(Gnk_Point(480.0f, 30.0f), Gnk_Point(700.0f, 100.0f));
+	guest_frame_back_to_search_room_button->setColor(C_1A1A1D);
+	guest_frame_back_to_search_room_button->setText("Previous");
+	guest_frame_back_to_search_room_button->setTextFont("helvetica-bold");
+	guest_frame_back_to_search_room_button->setFontSize(24.0f);
+	guest_frame_back_to_search_room_button->setTextAlign(GNK_TEXT_CENTER);
+	guest_frame_back_to_search_room_button->setTextColor(H_FFFFFF);
+	guest_frame_back_to_search_room_button->setRadius(20.0f);
+	guest_frame_back_to_search_room_button->setBorder(true);
+	guest_frame_back_to_search_room_button->setHoverProcess(button_hover_type_3);
+	guest_frame_back_to_search_room_button->setClickProcess(guest_frame_back_to_search_room_button_click);
+
+	Gnk_Button_With_Text *guest_frame_continue_booking_button = new Gnk_Button_With_Text(*guest_frame_back_to_search_room_button);
+	guest_frame_continue_booking_button->setRange(Gnk_Point(1320.0f, 30.0f), Gnk_Point(1530.0f, 100.0f));
+	guest_frame_continue_booking_button->setText("Continue");
+	guest_frame_continue_booking_button->setClickProcess(guest_frame_continue_booking_button_click);
+	
+	Gnk_Button_With_Text *guest_frame_confirm_booking_button = new Gnk_Button_With_Text(*guest_frame_continue_booking_button);
+	guest_frame_confirm_booking_button->setText("Confirm");
+	guest_frame_confirm_booking_button->setClickProcess(guest_frame_confirm_booking_button_click);
+
+	Gnk_Textbox *guest_frame_room_choice_textbox = new Gnk_Textbox();
+	guest_frame_room_choice_textbox->setRange(Gnk_Point(1220.0f, 300.0f), Gnk_Point(1500.0f, 360.0f));
+	guest_frame_room_choice_textbox->setColor(H_FFFFFF);
+	guest_frame_room_choice_textbox->setPlaceholder("Ex: VIP123");
+	guest_frame_room_choice_textbox->setSelectProcess(textbox_select_type3);
+	guest_frame_room_choice_textbox->setTextFont("helvetica");
+	guest_frame_room_choice_textbox->setFontSize(24.0f);
+	guest_frame_room_choice_textbox->setTextColor(C_1A1A1D);
+	guest_frame_room_choice_textbox->setPlaceholderFont("helvetica");
+	guest_frame_room_choice_textbox->setPlaceholderFontSize(24.0f);
+	guest_frame_room_choice_textbox->setPlaceholderColor(H_404040);
+	guest_frame_room_choice_textbox->setPaddingX(15.0f);
+	guest_frame_room_choice_textbox->setTextAlign(GNK_TEXT_LEFT);
+	guest_frame_room_choice_textbox->setMaxLength(8);
+
+	Gnk_Textbox *staff_frame_guest_ID_textbox = new Gnk_Textbox(*guest_frame_room_choice_textbox);
+	staff_frame_guest_ID_textbox->setRange(Gnk_Point(1220.0f, 230.0f), Gnk_Point(1500.0f, 290.0f));
+	staff_frame_guest_ID_textbox->setPlaceholder("Ex: 100051");
+	staff_frame_guest_ID_textbox->setMaxLength(10);
+
+	staff.addButton("search_room_button", staff_frame_search_room_button);
+	staff.addButton("booking_infomation_button", staff_frame_booking_infomation_button);
+	staff.addButton("guest_infomation_button", staff_frame_guest_infomation_button);
+	staff.addButton("type_room_infomation_button", staff_frame_type_room_infomation_button);
+	staff.addButton("room_information_button", staff_frame_room_information_button);
+	staff.addButton("create_guest_button", staff_frame_create_guest_button);
+	staff.addTextbox("check_in_textbox", guest_frame_check_in_textbox);
+	staff.addTextbox("check_out_textbox", guest_frame_check_out_textbox);
+	staff.addTextbox("number_of_guest_textbox", guest_frame_number_of_guest_textbox);
+	staff.addListObject("search_room_list", guest_frame_search_room_list);
+	staff.addButton("lookup", guest_frame_lookup_button_image);
+	staff.addButton("back_to_search_room_button", guest_frame_back_to_search_room_button);
+	staff.addButton("continue_booking_button", guest_frame_continue_booking_button);
+	staff.addButton("confirm_booking_button", guest_frame_confirm_booking_button);
+	staff.addTextbox("room_choice_textbox", guest_frame_room_choice_textbox);
+	staff.addTextbox("guest_ID_textbox", staff_frame_guest_ID_textbox);
 }
 
 void admin_frame_init() {
@@ -1349,11 +1816,11 @@ void UI_init() {
 
 	Gnk_Button_With_Text *guest_frame_logout_button = new Gnk_Button_With_Text();
 	guest_frame_logout_button->setRange(Gnk_Point(1380.0f, 820.0f), Gnk_Point(1540.0f, 880.0f));
-	guest_frame_logout_button->setColor(Gnk_Color(255, 236, 200));
+	guest_frame_logout_button->setColor(H_FFECB8);
 	guest_frame_logout_button->setText("Logout");
 	guest_frame_logout_button->setTextFont("helvetica-bold");
 	guest_frame_logout_button->setFontSize(24.0f);
-	guest_frame_logout_button->setTextColor(Gnk_Color(34, 40, 49));
+	guest_frame_logout_button->setTextColor(H_222831);
 	guest_frame_logout_button->setPaddingX(0.0f);
 	guest_frame_logout_button->setPaddingY(0.0f);
 	guest_frame_logout_button->setTextAlign(GNK_TEXT_CENTER);

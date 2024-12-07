@@ -15,11 +15,17 @@ enum frame_num_value {
 enum option_value {
 	DEFAULT_OPTION,
 	SEARCH_ROOM,
-	BOOKING_INFORMATION,
+	HISTORY_INFORMATION,
 	PROFILE,
 	BOOKING,
 	BOOKING_PART_2,
 	BOOKING_DONE,
+	
+	STAFF_BOOKING_INFO,
+	STAFF_GUEST_INFO,
+	STAFF_TYPE_ROOM_INFO,
+	STAFF_ROOM_INFO,
+	STAFF_CREATE_GUEST,
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;
@@ -66,6 +72,12 @@ extern Gnk_Frame guest;
 // ---------------------------------------------------------
 void staff_frame_draw(Gnk_Frame *);
 extern Gnk_Frame staff;
+void staff_frame_booking_infomation_button_click(Gnk_Button *);
+void staff_frame_guest_infomation_button_click(Gnk_Button *);
+void staff_frame_type_room_infomation_button_click(Gnk_Button *);
+void staff_frame_room_information_button_click(Gnk_Button *);
+void staff_frame_create_guest_button_click(Gnk_Button *);
+
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *);
 extern Gnk_Frame admin;

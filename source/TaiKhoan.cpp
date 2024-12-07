@@ -18,11 +18,6 @@ TaiKhoan::TaiKhoan(const TaiKhoan&other) {
     this->password = other.password;
 }
 
-TaiKhoan::~TaiKhoan() {
-
-}
-
-
 string TaiKhoan::getUsername() const {
     return this->username;
 }
@@ -46,6 +41,11 @@ void TaiKhoan::setPassword(string password) {
 
 void TaiKhoan::setID(string ID) {
     this->ID = ID;
+}
+
+void TaiKhoan::setNguoiDung(NguoiDung* nguoiDung) {
+    this->nguoiDung = nguoiDung;
+    nguoiDung->setTaiKhoan(this);
 }
 
 role_value TaiKhoan::getRole() const {

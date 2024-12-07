@@ -1,51 +1,68 @@
 #include "./header/Phong.h"
 
+/**
+ * @brief Thêm đặt phòng.
+ */
+void Phong::themDatPhong(DatPhong *DP) {
+    this->danhSachDatPhong.add(DP);
+}
+
+/**
+ * @brief Hàm khởi tạo mặc định.
+ */
 Phong::Phong() {
     this->maPhong = "";
-    this->loaiPhong = "";
+    this->loaiPhong = nullptr;
 }
 
-Phong::Phong(string MaPhong, string LoaiPhong){
+/**
+ * @brief Hàm khởi tạo với mã phòng.
+ */
+Phong::Phong(string MaPhong){
     this->maPhong = MaPhong;
-    this->loaiPhong = LoaiPhong;
+    this->loaiPhong = nullptr;
 }
 
+/**
+ * @brief Hàm sao chép cho lớp Phong.
+ */
 Phong::Phong(const Phong& other){
     this->maPhong = other.maPhong;
     this->loaiPhong = other.loaiPhong;
 }
 
-Phong::~Phong() {
-}
-
-// Hàm get
+/**
+ * @brief Lấy mã phòng.
+ */
 string Phong::getMaPhong() const {
     return this->maPhong;
 }
 
-string Phong::getLoaiPhong() const {
+/**
+ * @brief Lấy loại phòng.
+ */
+LoaiPhong *Phong::getLoaiPhong() const {
     return this->loaiPhong;
 }
 
-
+/**
+ * @brief Thiết lập mã phòng.
+ */
 void Phong::setMaPhong(string MP){
     this->maPhong = MP;
 }
 
-void Phong::setLoaiPhong(string LP) {
-    if (!Utils::isRoomType(LP)) {
-        Utils::outputData("Loai phong khong hop le!\n", CONSOLE);
-        return;
-    }
+/**
+ * @brief Thiết lập loại phòng.
+ */
+void Phong::setLoaiPhong(LoaiPhong *LP){
     this->loaiPhong = LP;
+    LP->themPhong(this);
 }
 
-// string Phong::capNhatThongTin(){
-//     cout << "Nhap Loai Phong: ";
-//     string tempStr = (Utils::nhap(5,MAX_MAPHONG+1));
-//     return tempStr;
-// }
-
+/**
+ * @brief In menu sửa thông tin.
+ */
 void Phong::menuSuaThongTin() {
     Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
     Utils::outputData("1. Sua Loai Phong\n", CONSOLE);
@@ -54,6 +71,9 @@ void Phong::menuSuaThongTin() {
     Utils::outputData("--------------------------------------\n", CONSOLE);
 }
 
+/**
+ * @brief Cập nhật thông tin phòng.
+ */
 void Phong::capNhatThongTin(){
     int choice;
     string temp;
@@ -64,7 +84,7 @@ void Phong::capNhatThongTin(){
         switch(choice) {
             case 1:
                 temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
-                this->setLoaiPhong(temp);
+                //this->setLoaiPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
@@ -85,17 +105,15 @@ void Phong::capNhatThongTin(){
     }
 }
 
-void Phong::xuatThongTin() {
-    cout << left << setw(15) << maPhong << loaiPhong << endl;
-    cout << string(25, '-') << endl;
-}
-
+/**
+ * @brief In thông tin phòng.
+ */
 ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData("-----------THONG-TIN-PHONG-----------\n", CONSOLE);
     Utils::outputData("Ma Phong: ", CONSOLE);
     Utils::outputData(P.maPhong + "\n", CONSOLE_OR_UI);
     Utils::outputData("Loai Phong: ", CONSOLE);
-    Utils::outputData(P.loaiPhong + "\n", CONSOLE_OR_UI);
+    Utils::outputData(P.getLoaiPhong()->getLoaiPhong() + "\n", CONSOLE_OR_UI);
     Utils::outputData("-------------------------------------\n", CONSOLE);
     return os;
 }

@@ -2,26 +2,31 @@
 #define PHONG_H
 #include "Utils.h"
 #include "LoaiPhong.h"
+#include "DatPhong.h"
 #define MAX_MAPHONG 7
+class LoaiPhong;
+class DatPhong;
 class Phong {
     string maPhong; 
-    string loaiPhong; 
+    LoaiPhong *loaiPhong;
+    LinkedList<DatPhong *> danhSachDatPhong;
+    void themDatPhong(DatPhong *);
 public:
     Phong();
-    Phong(string, string); // phòng theo data (mã phòng, loại phòng)
+    Phong(string);
     Phong(const Phong&);
-    ~Phong();
 
     string getMaPhong() const;
-    string getLoaiPhong() const;
+    LoaiPhong *getLoaiPhong() const;
 
     void setMaPhong(string);
-    void setLoaiPhong(string);
+    void setLoaiPhong(LoaiPhong *);
 
     void menuSuaThongTin();
     void capNhatThongTin();
-    void xuatThongTin();
     
     friend ostream& operator<<(ostream&, const Phong&);
+    friend LoaiPhong;
+    friend DatPhong;
 };
 #endif

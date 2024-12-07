@@ -1,42 +1,66 @@
 #include "./header/QLKhachHang.h"
-QLKhachHang::QLKhachHang() {
 
-}
-
+/**
+ * @brief Hàm huỷ cho lớp QLKhachHang.
+ */
 QLKhachHang::~QLKhachHang() {
-    
+    Node<KhachHang *> *p = DSKH.begin();
+    while(p != DSKH.end()) {
+        delete p->data;
+        p = p->next;
+    }
 }
 
-
-void QLKhachHang::themKhachHang(KhachHang kh) {
+/**
+ * @brief Thêm khách hàng vào danh sách khách hàng.
+ * 
+ * @param kh Khách hàng cần thêm.
+ * 
+ * @return void
+ */
+void QLKhachHang::themKhachHang(KhachHang *kh) {
     DSKH.add(kh);
 }
 
+/**
+ * @brief Tìm kiếm khách hàng theo ID.
+ * 
+ * @param ID ID của khách hàng cần tìm.
+ * 
+ * @return Con trỏ đến khách hàng nếu tìm thấy, ngược lại trả về nullptr.
+ */
 KhachHang *QLKhachHang::timKiemKhachHang(string ID) {
-    Node<KhachHang> *p = DSKH.getHead()->next;
-    while(p != DSKH.getHead()) {
-        if(p->data.getIDKhachHang() == ID) 
-            return &p->data;
+    Node<KhachHang *> *p = DSKH.end()->next;
+    while(p != DSKH.end()) {
+        if(p->data->getIDKhachHang() == ID) 
+            return p->data;
         p = p->next;
     }
     return nullptr;
 }
 
+/**
+ * @brief Tìm kiếm khách hàng theo số điện thoại.
+ * 
+ * @param SDT Số điện thoại của khách hàng cần tìm.
+ * 
+ * @return Con trỏ đến khách hàng nếu tìm thấy, ngược lại trả về nullptr.
+ */
 KhachHang *QLKhachHang::timKiemKhachHangSDT(string SDT) {
-    Node<KhachHang> *p = DSKH.getHead()->next;
-    while(p != DSKH.getHead()) {
-        if(p->data.getSoDienThoai() == SDT) 
-            return &p->data;
+    Node<KhachHang *> *p = DSKH.begin();
+    while(p != DSKH.end()) {
+        if(p->data->getSoDienThoai() == SDT) 
+            return p->data;
         p = p->next;
     }
     return nullptr;
 }
 
 void QLKhachHang::suaThongTin(string ID) {
-    Node<KhachHang> *p = DSKH.getHead()->next;
-    while(p != DSKH.getHead()) {
-        if(p->data.getIDKhachHang() == ID) {
-            p->data.suaThongTin();
+    Node<KhachHang *> *p = DSKH.end()->next;
+    while(p != DSKH.end()) {
+        if(p->data->getIDKhachHang() == ID) {
+            p->data->suaThongTin();
             return;
         }
         p = p->next;
@@ -46,12 +70,12 @@ void QLKhachHang::suaThongTin(string ID) {
 
 string QLKhachHang::getMaxIDKhachHang() {
     string IDKhachHang = "";
-    Node<KhachHang> *p = DSKH.getHead();
-    if(p->prev == DSKH.getHead()) {
+    Node<KhachHang *> *p = DSKH.begin();
+    if(p->prev == DSKH.end()) {
         IDKhachHang = "100000";    //số đầu tên là chia đối tượng kh, nhân viên,...
     }
     else {
-        IDKhachHang = p->prev->data.getIDKhachHang();
+        IDKhachHang = p->prev->data->getIDKhachHang();
     }
     return IDKhachHang;
 }
@@ -78,9 +102,9 @@ string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách
 }
 
 void QLKhachHang::xoaKhachHang(KhachHang *kh) {
-    Node<KhachHang> *p = DSKH.getHead()->next;
-    while(p != DSKH.getHead()) {
-        if(&p->data == kh) {
+    Node<KhachHang *> *p = DSKH.end()->next;
+    while(p != DSKH.end()) {
+        if(p->data == kh) {
             DSKH.remove(p);
             return;
         }
@@ -112,16 +136,16 @@ KhachHang QLKhachHang::nhapThongTin() {
     return newKH;
 }
 
-LinkedList<KhachHang> &QLKhachHang::getDSKH() {
+LinkedList<KhachHang *> &QLKhachHang::getDSKH() {
     return DSKH;
 }
 
 ostream& operator<<(ostream &os, const QLKhachHang &qlkh) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-KHACH-HANG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach khach hang: \n", CONSOLE);
-    Node<KhachHang> *p = qlkh.DSKH.begin();
+    Node<KhachHang *> *p = qlkh.DSKH.begin();
     while(p != qlkh.DSKH.end()) {
-        os << p->data;
+        os << *p->data;
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }

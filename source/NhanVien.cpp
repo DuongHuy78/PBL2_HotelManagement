@@ -1,32 +1,58 @@
 #include "./header/NhanVien.h"
+
+/**
+ * @brief Thiết lập tài khoản.
+ */
+void NhanVien::setTaiKhoan(TaiKhoan *tk) {
+    this->taiKhoan = tk;
+}
+
+/**
+ * @brief Hàm khởi tạo mặc định.
+ */
 NhanVien::NhanVien() {
-    IDNhanVien = "";
+    this->ID = "";
+    this->taiKhoan = nullptr;
 }
 
-NhanVien::~NhanVien() {
-
-}
-
+/**
+ * @brief Hàm khởi tạo với ID.
+ */
 NhanVien::NhanVien(string ID) {
-    this->IDNhanVien = ID;
+    this->ID = ID;
+    this->taiKhoan = nullptr;
 }
 
+/**
+ * @brief Lấy ID nhân viên.
+ */
 string NhanVien::getIDNhanVien() const {
-    return this->IDNhanVien;
+    return this->ID;
 }
 
+/**
+ * @brief Thiết lập ID nhân viên.
+ */
 void NhanVien::setIDNhanVien(string ID) {
-    this->IDNhanVien = ID;
+    this->ID = ID;
 }
 
+/**
+ * @brief In thông tin nhân viên.
+ */
 ostream& operator<<(ostream& out, const NhanVien& nv) {
     Utils::outputData("-----------THONG-TIN-NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("ID Nhan Vien: ", CONSOLE);
-    Utils::outputData(nv.IDNhanVien + "\n", CONSOLE_OR_UI);
+    Utils::outputData(nv.ID + "\n", CONSOLE_OR_UI);
     Utils::outputData("--------------------------------------\n", CONSOLE);
     return out;
 }
 
+/**
+ * @brief Xử lý chức năng của nhân viên.
+ * 
+ * Hàm này sẽ in ra menu chức năng của nhân viên và xử lý chức năng tương ứng.
+ */
 user_option_value NhanVien::work() {
     system("cls");
     Utils::outputData("-----------NHAN-VIEN---------\n", CONSOLE);

@@ -8,7 +8,7 @@ public:
     Node<T>* next;
     Node<T>* prev;
     Node();
-    Node(T data);
+    Node(const T &data);
     ~Node();
 };
 
@@ -17,7 +17,7 @@ template <class T> Node<T>::Node() {
     this->prev = nullptr;
 }
 
-template <class T> Node<T>::Node(T data) {
+template <class T> Node<T>::Node(const T &data) {
     this->data = data;
     this->next = nullptr;
     this->prev = nullptr;

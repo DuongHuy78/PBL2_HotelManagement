@@ -1,6 +1,8 @@
 #include "./header/LoaiPhong.h"
-#include <bits/stdc++.h>
-LoaiPhong::LoaiPhong(){
+/**
+ * @brief Hàm khởi tạo mặc định cho lớp LoaiPhong.
+ */
+LoaiPhong::LoaiPhong() {
     this->loaiPhong = "";
     this->loaiGiuong = 0;
     this->soLuongKhach = 0;
@@ -9,6 +11,9 @@ LoaiPhong::LoaiPhong(){
     this->moTaPhong = "";
 }
 
+/**
+ * @brief Hàm khởi tạo cho lớp LoaiPhong.
+ */
 LoaiPhong::LoaiPhong(string LoaiPhong, int LoaiGiuong, int SoLuongKhach, int DienTich, int GiaPhong, string MoTaPhong) {
     this->loaiPhong = "";
     this->loaiGiuong = 0;
@@ -25,6 +30,9 @@ LoaiPhong::LoaiPhong(string LoaiPhong, int LoaiGiuong, int SoLuongKhach, int Die
     setMoTaPhong(MoTaPhong);
 }
 
+/**
+ * @brief Hàm sao chép cho lớp LoaiPhong.
+ */
 LoaiPhong::LoaiPhong(const LoaiPhong& other) {
     this->loaiPhong = other.loaiPhong;
     this->loaiGiuong = other.loaiGiuong;
@@ -32,38 +40,54 @@ LoaiPhong::LoaiPhong(const LoaiPhong& other) {
     this->dienTich = other.dienTich;
     this->giaPhong = other.giaPhong;
     this->moTaPhong = other.moTaPhong;
-
+    this->soLuongKhach = other.soLuongKhach;
 }
-LoaiPhong::~LoaiPhong() {}
 
-// Getters
+/**
+ * @brief Lấy mã loại phòng.
+ */
 string LoaiPhong::getLoaiPhong() const {
       return this->loaiPhong;
 }
 
+/**
+ * @brief Lấy loại giường.
+ */
 int LoaiPhong::getLoaiGiuong() const {
     return this->loaiGiuong;
 }
 
+/**
+ * @brief Lấy số lượng khách.
+ */
 int LoaiPhong::getSoLuongKhach() const {
     return this->soLuongKhach;
-
 }
 
+/**
+ * @brief Lấy diện tích.
+ */
 int LoaiPhong::getDienTich() const {
     return this->dienTich;
 }
 
+/**
+ * @brief Lấy giá phòng.
+ */
 int LoaiPhong::getGiaPhong() const {
     return this->giaPhong;
 }
 
+/**
+ * @brief Lấy mô tả phòng.
+ */
 string LoaiPhong::getMoTaPhong() const {
     return this->moTaPhong;
 }
 
-
-// Setters
+/**
+ * @brief Thiết lập loại phòng.
+ */
 bool LoaiPhong::setLoaiPhong(string LP){
     if(Utils::isAlphabetAndNumberOnly(LP)){
         this->loaiPhong = LP;
@@ -74,6 +98,9 @@ bool LoaiPhong::setLoaiPhong(string LP){
     }
 }
 
+/**
+ * @brief Thiết lập loại giường.
+ */
 bool LoaiPhong::setLoaiGiuong(int LG) {
     int s = LG;
         int roomBedTypes[] = {1, 2, 12};
@@ -86,6 +113,9 @@ bool LoaiPhong::setLoaiGiuong(int LG) {
         return false;
 }
 
+/**
+ * @brief Thiết lập số lượng khách.
+ */
 bool LoaiPhong::setSoLuongKhach(int SLK) {
     if(SLK > 0 && SLK < 9){
         this->soLuongKhach = SLK;
@@ -96,6 +126,9 @@ bool LoaiPhong::setSoLuongKhach(int SLK) {
     }
 }
 
+/**
+ * @brief Thiết lập diện tích.
+ */
 bool LoaiPhong::setDienTich(int DT) {
     if(DT > 0 && DT < 1000){
         this->dienTich = DT;
@@ -106,6 +139,9 @@ bool LoaiPhong::setDienTich(int DT) {
     }
 }
 
+/**
+ * @brief Thiết lập giá phòng.
+ */
 bool LoaiPhong::setGiaPhong(int GP) {
     if(GP > 0 && GP < 100000000){
         this->giaPhong = GP;
@@ -116,11 +152,24 @@ bool LoaiPhong::setGiaPhong(int GP) {
     }
 }
 
+/**
+ * @brief Thiết lập mô tả phòng.
+ */
 bool LoaiPhong::setMoTaPhong(string MTP) {
     this->moTaPhong = MTP;
     return true;
 }
 
+/**
+ * @brief Thêm phòng vào danh sách phòng.
+ */
+void LoaiPhong::themPhong(Phong *phong) {
+    this->danhSachPhong.add(phong);
+}
+
+/**
+ * @brief Nhập thông tin loại phòng.
+ */
 LoaiPhong LoaiPhong::nhapThongTin() {
     string temp;
     LoaiPhong tempLoaiPhong;
@@ -144,12 +193,15 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     tempLoaiPhong.setGiaPhong(Utils::stringToInt(temp));
 
     temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
-    setMoTaPhong(temp);
+    tempLoaiPhong.setMoTaPhong(temp);
     Utils::outputData("Tao loai phong thanh cong!\n", CONSOLE);
     Utils::pauseConsole();
     return tempLoaiPhong;
 }
-//MENU
+
+/**
+ * @brief In menu sửa thông tin.
+ */
 void LoaiPhong::menuSuaThongTin(){
     cout << "1. Sua Loai Giuong " << endl;
     cout << "2. Sua So Luong Khach " << endl;
@@ -159,6 +211,9 @@ void LoaiPhong::menuSuaThongTin(){
     cout << "6. Thoat Chinh Sua Loai Phong" << endl;
 }
 
+/**
+ * @brief Cập nhật thông tin.
+ */
 void LoaiPhong::capNhatThongTin(){
     int choice;
     string temp;
@@ -211,18 +266,9 @@ void LoaiPhong::capNhatThongTin(){
     }
 }
 
-// XUAT THONG TIN
-// void LoaiPhong::xuatThongTin() {
-//     string temp;
-//     if(loaiGiuong == 1) temp = "Single";
-//     else if(loaiGiuong == 2) temp = "Double";
-//     else if(loaiGiuong == 12) temp = "SingleDouble";
-//     cout << left << setw(16) << loaiPhong << setw(14) << temp << setw(13) << soLuongKhach
-//     << setw(9) << dienTich << setw(13) << giaPhong; 
-//     Utils::wrapText(moTaPhong, 40, 65);
-//     cout << string(105, '-') << endl;
-// }   
-
+/**
+ * @brief In thông tin loại phòng.
+ */
 ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     string temp;
     if(lp.loaiGiuong == 1) temp = "Single";
@@ -239,7 +285,7 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::outputData("Dien Tich: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.dienTich) + " m2\n", CONSOLE_OR_UI);
     Utils::outputData("Gia: ", CONSOLE);
-    Utils::outputData(Utils::intToString(lp.giaPhong) + " VND\n", CONSOLE_OR_UI);
+    Utils::outputData(Utils::chuanHoaSo(Utils::intToString(lp.giaPhong)) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Mo ta Phong:\n", CONSOLE);
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData(string(40, '-') + "\n", CONSOLE);

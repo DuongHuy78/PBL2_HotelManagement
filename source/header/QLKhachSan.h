@@ -25,7 +25,6 @@ class QLKhachSan {
     NguoiDung *current_user = nullptr;
 public:
     QLKhachSan();
-    ~QLKhachSan();
 
     void inputTaiKhoan(string);
     void inputKhachHang(string);
@@ -53,6 +52,7 @@ public:
     void list_Room_Available();
     void list_all_type_room();
     role_value getCurrentRole();
+    bool GuestExist(string);
 };
 
 #endif

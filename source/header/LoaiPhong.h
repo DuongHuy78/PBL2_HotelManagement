@@ -1,7 +1,9 @@
 #ifndef LOAIPHONG_H
 #define LOAIPHONG_H
 #include "Utils.h"
+#include "Phong.h"
 #define MAX_IDLOAIPHONG 7
+class Phong;
 class LoaiPhong {
     string loaiPhong;   // S, D, D2, T, F, F2
     int loaiGiuong;  // 1, 2
@@ -9,11 +11,12 @@ class LoaiPhong {
     int dienTich;
     int giaPhong;
     string moTaPhong;
+    LinkedList<Phong *> danhSachPhong;
+    void themPhong(Phong *);
 public:
     LoaiPhong();
     LoaiPhong(string, int, int, int, int, string);
     LoaiPhong(const LoaiPhong&);
-    ~LoaiPhong();
     friend ostream& operator<<(ostream& out, const LoaiPhong&);
 
     string getLoaiPhong() const; // mã loại phòng
@@ -30,11 +33,11 @@ public:
     bool setGiaPhong(int);
     bool setMoTaPhong(string);
 
-    LoaiPhong nhapThongTin();
+    static LoaiPhong nhapThongTin();
     void menuSuaThongTin();
     void capNhatThongTin();
-    //void xuatThongTin();
     
     friend ostream& operator<<(ostream& out, const LoaiPhong&);
+    friend Phong;
 };
 #endif

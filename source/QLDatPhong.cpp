@@ -1,39 +1,50 @@
 #include "./header/QLDatPhong.h"
-QLDatPhong::QLDatPhong() {
-    
-}
 
+/**
+ * @brief Hàm hủy cho lớp QLDatPhong.
+ */
 QLDatPhong::~QLDatPhong() {
-    
+    Node<DatPhong *> *p = DSDP.begin();
+    while(p != DSDP.end()) {
+        delete p->data;
+        p = p->next;
+    }
 }
 
-void QLDatPhong::setDSLP(QLLoaiPhong *DSLP) {
-    this->DSLP = DSLP;
-}
+// void QLDatPhong::setDSLP(QLLoaiPhong *DSLP) {
+//     this->DSLP = DSLP;
+// }
 
-void QLDatPhong::setDSP(QLPhong *DSP) {
-    this->DSP = DSP;
-}
+// void QLDatPhong::setDSP(QLPhong *DSP) {
+//     this->DSP = DSP;
+// }
 
-void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
-    this->DSKH = DSKH;
-}
+// void QLDatPhong::setDSKH(QLKhachHang *DSKH) {
+//     this->DSKH = DSKH;
+// }
 
-void QLDatPhong::setcurrentID(string ID) {
-    this->currentID = ID;
-}
+// void QLDatPhong::setcurrentID(string ID) {
+//     this->currentID = ID;
+// }
 
-void QLDatPhong::setRole(role_value role) {
-    this->role = role;
-}
-void QLDatPhong::themDatPhong(DatPhong DP) {
+// void QLDatPhong::setRole(role_value role) {
+//     this->role = role;
+// }
+
+/**
+ * @brief Thêm đặt phòng.
+ */
+void QLDatPhong::themDatPhong(DatPhong *DP) {
     DSDP.add(DP);
 }
 
+/**
+ * @brief Xóa đặt phòng.
+ */
 void QLDatPhong::xoaDatPhong(DatPhong *DP) {
-    Node<DatPhong> *p = DSDP.getHead()->next;
-    while(p != DSDP.getHead()) {
-        if(&p->data == DP) {
+    Node<DatPhong *> *p = DSDP.begin();
+    while(p != DSDP.end()) {
+        if(p->data == DP) {
             DSDP.remove(p);
             return;
         }
@@ -41,11 +52,14 @@ void QLDatPhong::xoaDatPhong(DatPhong *DP) {
     }
 }
 
+/**
+ * @brief Tìm kiếm đặt phòng theo mã đặt phòng.
+ */
 DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
-    Node<DatPhong> *p = DSDP.getHead()->next;
-    while(p != DSDP.getHead()) {
-        if(p->data.getMaDatPhong() == MDP) 
-            return &p->data;
+    Node<DatPhong *> *p = DSDP.begin();
+    while(p != DSDP.end()) {
+        if(p->data->getMaDatPhong() == MDP) 
+            return p->data;
         p = p->next;
     }
     return nullptr;
@@ -57,22 +71,22 @@ DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
  */
 string QLDatPhong::getMaxMaDatPhong() {
     string MDP;
-    Node<DatPhong> *p = DSDP.getHead()->next;
-    if(p == DSDP.getHead()) {
+    Node<DatPhong *> *p = DSDP.begin();
+    if(p == DSDP.end()) {
         MDP = "00000";
     }
     else{
-        MDP = p->prev->prev->data.getMaDatPhong();
+        MDP = p->prev->prev->data->getMaDatPhong();
     }
     return MDP;
 }
+
 /**
  * @brief Tạo mã đặt phòng mới
  * Nêu mã đặt phòng cuối cùng là 99999 thì trả về 000001
  */
 string QLDatPhong::taoMaDatPhong(){
     string MDPNew;
-    Node<DatPhong> *p = DSDP.getHead()->next;
     if (this->getMaxMaDatPhong() == "99999") {
         MDPNew = "000001";
     }
@@ -86,28 +100,22 @@ string QLDatPhong::taoMaDatPhong(){
     return MDPNew;
 }
 
-Node<DatPhong> *QLDatPhong::getHead() {
-    return this->DSDP.getHead();
-}
-
-LinkedList<DatPhong> &QLDatPhong::getDSDP() {
+/**
+ * @brief Lấy danh sách đặt phòng.
+ */
+LinkedList<DatPhong *> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
-int QLDatPhong::tongTien(const DatPhong &DP) {
-    int sum = 0;
-    int soNgay = (DP.getNgayTra() - DP.getNgayNhan())/86400;     //86400 = 24*60*60 là số giây trong 1 ngày
-    Node<DatPhong> *p = DSDP.getHead()->next;
-    sum = (DSLP->timLoaiPhong(DSP->timPhong(DP.getMaPhong())->getLoaiPhong()))->getGiaPhong() * soNgay;
-    return sum;
-}
-
+/**
+ * @brief In thông tin quản lí đặt phòng.
+ */
 ostream &operator<<(ostream &os, const QLDatPhong &ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach dat phong: \n", CONSOLE);
-    Node<DatPhong> *p = ql.DSDP.begin();
+    Node<DatPhong *> *p = ql.DSDP.begin();
     while(p != ql.DSDP.end()) {
-        os << p->data;
+        os << *p->data;
         Utils::outputData("\n", CONSOLE);
         p = p->next;
     }
