@@ -7,11 +7,9 @@ class QLPhong {
     LinkedList<Phong *> DSP; // Danh sach phong
     QLLoaiPhong *QLLP;
 public:
-    QLPhong();
     ~QLPhong();
 
     void themPhong(Phong *);
-    void xemPhong();
     void suaThongTin(const string&);
     void xoaPhong(const string&);
 
@@ -19,7 +17,6 @@ public:
     Phong *timPhong(string);
     void setQLLP(QLLoaiPhong *QLLP);
     LinkedList<Phong *> &getDSP();
-    // Node<Phong> *getHead();
 
     friend ostream& operator<<(ostream&, QLPhong&);
 };

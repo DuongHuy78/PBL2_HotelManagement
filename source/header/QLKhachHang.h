@@ -5,7 +5,6 @@
 class QLKhachHang {
     LinkedList<KhachHang *> DSKH; // Danh sach khach hang
 public:
-    QLKhachHang();
     ~QLKhachHang();
 
     void themKhachHang(KhachHang *);

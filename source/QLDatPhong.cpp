@@ -1,8 +1,8 @@
 #include "./header/QLDatPhong.h"
-QLDatPhong::QLDatPhong() {
-    
-}
 
+/**
+ * @brief Hàm hủy cho lớp QLDatPhong.
+ */
 QLDatPhong::~QLDatPhong() {
     Node<DatPhong *> *p = DSDP.begin();
     while(p != DSDP.end()) {
@@ -30,10 +30,17 @@ QLDatPhong::~QLDatPhong() {
 // void QLDatPhong::setRole(role_value role) {
 //     this->role = role;
 // }
+
+/**
+ * @brief Thêm đặt phòng.
+ */
 void QLDatPhong::themDatPhong(DatPhong *DP) {
     DSDP.add(DP);
 }
 
+/**
+ * @brief Xóa đặt phòng.
+ */
 void QLDatPhong::xoaDatPhong(DatPhong *DP) {
     Node<DatPhong *> *p = DSDP.begin();
     while(p != DSDP.end()) {
@@ -45,6 +52,9 @@ void QLDatPhong::xoaDatPhong(DatPhong *DP) {
     }
 }
 
+/**
+ * @brief Tìm kiếm đặt phòng theo mã đặt phòng.
+ */
 DatPhong *QLDatPhong::timKiemDatPhong(string MDP) {
     Node<DatPhong *> *p = DSDP.begin();
     while(p != DSDP.end()) {
@@ -70,6 +80,7 @@ string QLDatPhong::getMaxMaDatPhong() {
     }
     return MDP;
 }
+
 /**
  * @brief Tạo mã đặt phòng mới
  * Nêu mã đặt phòng cuối cùng là 99999 thì trả về 000001
@@ -89,10 +100,16 @@ string QLDatPhong::taoMaDatPhong(){
     return MDPNew;
 }
 
+/**
+ * @brief Lấy danh sách đặt phòng.
+ */
 LinkedList<DatPhong *> &QLDatPhong::getDSDP() {
     return this->DSDP;
 }
 
+/**
+ * @brief In thông tin quản lí đặt phòng.
+ */
 ostream &operator<<(ostream &os, const QLDatPhong &ql) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-DAT-PHONG-----------------\n", CONSOLE);
     Utils::outputData("Danh sach dat phong: \n", CONSOLE);

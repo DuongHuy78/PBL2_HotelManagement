@@ -13,7 +13,6 @@ class QLDatPhong {
     // string currentID;
     // role_value role;
 public:
-    QLDatPhong();
     ~QLDatPhong();
     // void setDSLP(QLLoaiPhong*);
     // void setDSP(QLPhong*);

@@ -6,7 +6,6 @@
 class QLTaiKhoan {
     LinkedList<TaiKhoan *> DSTK; // Danh sach tai khoan
 public:
-    QLTaiKhoan();
     ~QLTaiKhoan();
 
     void themTaiKhoan(TaiKhoan *tk);

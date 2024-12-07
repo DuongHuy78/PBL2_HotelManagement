@@ -20,7 +20,6 @@ public:
     DatPhong();
     DatPhong(string, time_t, time_t, int, int);
     DatPhong(const DatPhong &);
-    ~DatPhong();
 
     string getMaDatPhong() const; 
     Phong *getPhong() const;

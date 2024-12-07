@@ -17,7 +17,6 @@ public:
     LoaiPhong();
     LoaiPhong(string, int, int, int, int, string);
     LoaiPhong(const LoaiPhong&);
-    ~LoaiPhong();
     friend ostream& operator<<(ostream& out, const LoaiPhong&);
 
     string getLoaiPhong() const; // mã loại phòng

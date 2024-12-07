@@ -54,8 +54,6 @@ DatPhong::DatPhong(const DatPhong &other) {
     this->donGia        = other.donGia;
 }
 
-DatPhong::~DatPhong() {}
-
 /**
  * @brief Lấy mã đặt phòng.
  * 

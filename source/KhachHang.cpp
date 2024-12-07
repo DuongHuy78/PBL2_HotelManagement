@@ -51,8 +51,6 @@ KhachHang::KhachHang(const KhachHang& KhachHang) {
     this->taiKhoan = KhachHang.taiKhoan;
 }
 
-KhachHang::~KhachHang() {}
-
 /**
  * @brief Lấy mã khách hàng.
  */
@@ -248,6 +246,11 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     return out;
 }
 
+/**
+ * @brief Xử lý chức năng của khách hàng.
+ * 
+ * Hàm này sẽ in ra menu chức năng của khách hàng và xử lý chức năng tương ứng.
+ */
 user_option_value KhachHang::work() {
     system("cls");
     Utils::outputData("----------KHACH-HANG---------\n", CONSOLE);

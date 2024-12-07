@@ -12,7 +12,6 @@ public:
     TaiKhoan();
     TaiKhoan(string, string, string);
     TaiKhoan(const TaiKhoan&);
-    ~TaiKhoan();
 
     string getUsername() const;
     string getPassword() const;

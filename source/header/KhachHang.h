@@ -19,7 +19,6 @@ public:
     KhachHang();
     KhachHang(string, string, time_t, string, gender_value);
     KhachHang(const KhachHang&);
-    ~KhachHang();
 
     string getIDKhachHang() const;
     string getHoTen() const;

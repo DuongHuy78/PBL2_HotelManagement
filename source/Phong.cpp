@@ -1,46 +1,68 @@
 #include "./header/Phong.h"
 
+/**
+ * @brief Thêm đặt phòng.
+ */
 void Phong::themDatPhong(DatPhong *DP) {
     this->danhSachDatPhong.add(DP);
 }
 
+/**
+ * @brief Hàm khởi tạo mặc định.
+ */
 Phong::Phong() {
     this->maPhong = "";
     this->loaiPhong = nullptr;
 }
 
+/**
+ * @brief Hàm khởi tạo với mã phòng.
+ */
 Phong::Phong(string MaPhong){
     this->maPhong = MaPhong;
     this->loaiPhong = nullptr;
 }
 
+/**
+ * @brief Hàm sao chép cho lớp Phong.
+ */
 Phong::Phong(const Phong& other){
     this->maPhong = other.maPhong;
     this->loaiPhong = other.loaiPhong;
 }
 
-Phong::~Phong() {
-}
-
-// Hàm get
+/**
+ * @brief Lấy mã phòng.
+ */
 string Phong::getMaPhong() const {
     return this->maPhong;
 }
 
+/**
+ * @brief Lấy loại phòng.
+ */
 LoaiPhong *Phong::getLoaiPhong() const {
     return this->loaiPhong;
 }
 
-
+/**
+ * @brief Thiết lập mã phòng.
+ */
 void Phong::setMaPhong(string MP){
     this->maPhong = MP;
 }
 
+/**
+ * @brief Thiết lập loại phòng.
+ */
 void Phong::setLoaiPhong(LoaiPhong *LP){
     this->loaiPhong = LP;
     LP->themPhong(this);
 }
 
+/**
+ * @brief In menu sửa thông tin.
+ */
 void Phong::menuSuaThongTin() {
     Utils::outputData("-----------MENU-SUA-THONG-TIN---------\n", CONSOLE);
     Utils::outputData("1. Sua Loai Phong\n", CONSOLE);
@@ -49,6 +71,9 @@ void Phong::menuSuaThongTin() {
     Utils::outputData("--------------------------------------\n", CONSOLE);
 }
 
+/**
+ * @brief Cập nhật thông tin phòng.
+ */
 void Phong::capNhatThongTin(){
     int choice;
     string temp;
@@ -80,11 +105,9 @@ void Phong::capNhatThongTin(){
     }
 }
 
-void Phong::xuatThongTin() {
-    cout << left << setw(15) << maPhong << loaiPhong << endl;
-    cout << string(25, '-') << endl;
-}
-
+/**
+ * @brief In thông tin phòng.
+ */
 ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData("-----------THONG-TIN-PHONG-----------\n", CONSOLE);
     Utils::outputData("Ma Phong: ", CONSOLE);

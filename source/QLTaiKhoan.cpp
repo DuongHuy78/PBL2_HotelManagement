@@ -1,9 +1,5 @@
 #include "header/QLTaiKhoan.h"
 
-QLTaiKhoan::QLTaiKhoan() {
-
-}
-
 QLTaiKhoan::~QLTaiKhoan() {
     Node<TaiKhoan *> *p = DSTK.begin();
     while(p != DSTK.end()) {

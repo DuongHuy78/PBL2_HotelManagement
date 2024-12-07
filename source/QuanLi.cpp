@@ -9,10 +9,6 @@ QuanLi::QuanLi() {
     this->taiKhoan = nullptr;
 }
 
-QuanLi::~QuanLi() {
-
-}
-
 string QuanLi::getIDQuanLi() const {
     return this->ID;
 }

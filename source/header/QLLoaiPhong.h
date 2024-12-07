@@ -5,7 +5,6 @@
 class QLLoaiPhong {
     LinkedList<LoaiPhong *> DSLP; 
 public:
-    QLLoaiPhong();
     ~QLLoaiPhong();
 
     void themLoaiPhong(LoaiPhong *); 

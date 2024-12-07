@@ -15,7 +15,6 @@ class QuanLi: public NguoiDung {
     void setTaiKhoan(TaiKhoan *);
 public:
     QuanLi();
-    ~QuanLi();
 
     string getIDQuanLi() const;
     void setIDQuanLi(string);

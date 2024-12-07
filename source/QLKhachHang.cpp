@@ -1,8 +1,8 @@
 #include "./header/QLKhachHang.h"
-QLKhachHang::QLKhachHang() {
 
-}
-
+/**
+ * @brief Hàm huỷ cho lớp QLKhachHang.
+ */
 QLKhachHang::~QLKhachHang() {
     Node<KhachHang *> *p = DSKH.begin();
     while(p != DSKH.end()) {

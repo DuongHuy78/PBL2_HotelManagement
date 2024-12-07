@@ -15,7 +15,6 @@ public:
     Phong();
     Phong(string);
     Phong(const Phong&);
-    ~Phong();
 
     string getMaPhong() const;
     LoaiPhong *getLoaiPhong() const;
@@ -25,7 +24,6 @@ public:
 
     void menuSuaThongTin();
     void capNhatThongTin();
-    void xuatThongTin();
     
     friend ostream& operator<<(ostream&, const Phong&);
     friend LoaiPhong;

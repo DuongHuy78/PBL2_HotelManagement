@@ -11,7 +11,6 @@ class NhanVien: public NguoiDung {
 public:
     NhanVien();
     NhanVien(string);
-    ~NhanVien();
 
     string getIDNhanVien() const;
     void setIDNhanVien(string);

@@ -18,11 +18,6 @@ TaiKhoan::TaiKhoan(const TaiKhoan&other) {
     this->password = other.password;
 }
 
-TaiKhoan::~TaiKhoan() {
-
-}
-
-
 string TaiKhoan::getUsername() const {
     return this->username;
 }

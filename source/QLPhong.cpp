@@ -1,27 +1,11 @@
 #include "./header/QLPhong.h"
 
-QLPhong::QLPhong() {
-
-}
-
 QLPhong::~QLPhong() {
     Node<Phong *> *p = DSP.begin();
     while(p != DSP.end()) {
         delete p->data;
         p = p->next;
     }
-}
-    
-void QLPhong::xemPhong(){
-    cout << "Day la danh sach phong cua Hotel Del Luna: "<< endl;
-    cout << left << setw(12) << "MaPhong" << "LoaiPhong" << endl;
-    cout << string(24, '-') << endl;
-
-    Node<Phong *> *p = DSP.begin();
-      while(p != DSP.end()){
-        p->data->xuatThongTin();
-        p = p -> next;
-      }
 }
 
 //NEW PHÒNG
