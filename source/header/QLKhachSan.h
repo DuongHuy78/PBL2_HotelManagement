@@ -25,7 +25,6 @@ class QLKhachSan {
     NguoiDung *current_user = nullptr;
 public:
     QLKhachSan();
-    ~QLKhachSan();
 
     void inputTaiKhoan(string);
     void inputKhachHang(string);

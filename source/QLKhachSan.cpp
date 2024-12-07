@@ -26,8 +26,6 @@ QLKhachSan::QLKhachSan() {
     }
 }
 
-QLKhachSan::~QLKhachSan() {}
-
 /**
  * @brief Hàm đọc thông tin tài khoản từ file và thêm vào danh sách tài khoản.
  * 
@@ -358,14 +356,6 @@ void QLKhachSan::outputDatPhong(string path) {
 
 void QLKhachSan::work() {
     system("cls");
-    /* TEST RELATIONSHIP*/
-    // cout << QLKH;
-    // cout << QLTK;
-    // cout << QLLP;
-    // cout << QLP;
-    // cout << QLDP;
-    
-
     // quanLi.setDSLP(&QLLP);
     // quanLi.setDSP(&QLP);
     // quanLi.setDSDP(&QLDP);
@@ -380,9 +370,41 @@ void QLKhachSan::work() {
         while(true) {
             system("cls");
             if(role == UNDEFINED_ROLE) {
-                Utils::outputData("---------------DANG-NHAP---------------\n", CONSOLE);
-                while(!dangNhap()) {
-                    Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
+                string choice_str;
+                Utils::outputData("----------------LUA-CHON---------------\n", CONSOLE);
+                Utils::outputData("1. Dang nhap\n", CONSOLE);
+                Utils::outputData("2. Dang ky\n", CONSOLE);
+                Utils::outputData("3. Thoat\n", CONSOLE);
+                Utils::outputData("---------------------------------------\n", CONSOLE);
+                choice_str = Utils::inputWithCondition("Nhap lua chon cua ban: ", 1, 2, NUMBER_ONLY);
+                int choice = Utils::stringToInt(choice_str);
+                if(choice == 1) {
+                    Utils::outputData("---------------DANG-NHAP---------------\n", CONSOLE);
+                    while(!dangNhap()) {
+                        Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
+                    }
+                }
+                else if(choice == 2) {
+                    Utils::outputData("---------------DANG-KY---------------\n", CONSOLE);
+                    string firstName, surname, birthday, gender, username, password;
+                    firstName = Utils::inputWithCondition("Nhap ho: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
+                    surname = Utils::inputWithCondition("Nhap ten: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
+                    birthday = Utils::inputWithCondition("Nhap ngay sinh (dd/mm/yyyy): ", 1, 10, DATE);
+                    gender = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
+                    username = Utils::inputWithCondition("Nhap ten dang nhap: ", 1, 35, ALPHABET_AND_NUMBER_ONLY);
+                    password = Utils::inputWithCondition("Nhap mat khau: ", 1, 35, ALPHABET_AND_NUMBER_ONLY);
+                    sign_up_return_value result = taoTaiKhoan(firstName, surname, birthday, gender, username, password);
+                    if(result == SIGN_UP_USERNAME_EXISTED) {
+                        Utils::outputData("Ten dang nhap da ton tai!\n", CONSOLE);
+                    }
+                    else if(result == SIGN_UP_SUCCESS) {
+                        Utils::outputData("Dang ky thanh cong!\n", CONSOLE);
+                    }
+                }
+                else if(choice == 3) {
+                    Utils::outputData("Cam on ban da su dung dich vu!\n", CONSOLE);
+                    Utils::pauseConsole();
+                    return;
                 }
             }
             else {

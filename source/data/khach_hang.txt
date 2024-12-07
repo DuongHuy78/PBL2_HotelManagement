@@ -52,3 +52,4 @@
 100052;Huy Duong;1/1/2005;;Nam
 100053;Le Duong Huy;7/8/2005;0385102999;Nam
 100054;nguyen nhat king;1/3/2000;;Nam
+100001;nhat king;2/3/2002;;Nam
