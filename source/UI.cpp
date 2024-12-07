@@ -959,6 +959,7 @@ void guest_frame_history_list_process(Gnk_List_Object *list) {
 				history.roomtype = line;
 				getline(UI_output_buffer, line);
 				history.roomID = line;
+				getline(UI_output_buffer, line); // skip ID KhachHang
 				getline(UI_output_buffer, line);
 				history.check_in_date = line;
 				getline(UI_output_buffer, line);

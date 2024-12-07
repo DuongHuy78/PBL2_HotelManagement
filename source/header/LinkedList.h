@@ -12,7 +12,7 @@ public:
     void remove(int index);
     void remove(Node<T>* node);
     // void display();
-    int getSize();
+    int getSize() const;
 
     bool isEmpty();
 
@@ -86,14 +86,6 @@ template <class T> void LinkedList<T>::remove(Node<T>* node) {
     --this->size;
 }
 
-// template <class T> void LinkedList<T>::display() {
-//     Node<T> *temp = this->head->next;
-//     while(temp != this->head) {
-//         cout << temp->data << endl; // nay thi phai dung da nang hoa toan tu nay!!
-//         temp = temp->next;
-//     }
-// }
-
 template <class T> Node<T>* LinkedList<T>::begin() const {
     return head->next; 
 }
@@ -106,7 +98,7 @@ template <class T> Node<T>* LinkedList<T>::last() const {
     return head->prev; 
 }
 
-template <class T> int LinkedList<T>::getSize() {
+template <class T> int LinkedList<T>::getSize() const{
     return this->size;
 }
 
