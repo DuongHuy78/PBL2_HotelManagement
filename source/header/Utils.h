@@ -562,5 +562,41 @@ public:
         }
         return res;
     }
+
+    static bool compareString(const string &str1, const string &str2) {
+        int i,j;
+        string s1, s2;
+        s1 = Utils::toLower(str1);
+        s2 = Utils::toLower(str2);
+        i=0; j=0;
+        while(1){
+            while(j < s1.size()) {          //vòng này để tìm chữ cái đầu s2 trong s1
+                if(s2[0]!=s1[j]){
+                    j++;
+                }
+                else{
+                    break;
+                }
+            }
+			i=0;
+            while(i<s2.size()&& (i+j)<s1.size()) {            //vòng này để so sánh s2 với s1 từ vị trí j(đã tìm được ở trên)
+                if(s1[i+j] != s2[i]){
+                    break;
+                }
+                else{
+                    i++;
+                }
+            }
+            if(j == s1.size()){  //nếu j = s1.size() thì s1 đã được so sánh hết với s2
+                return false;
+            }
+            else{
+                j++;
+            }
+            if(i == s2.size()){  //nếu i = s2.size() thì s2 đã được so sánh hết với s1
+                return true;
+            }
+        }
+    }
 };
 #endif
