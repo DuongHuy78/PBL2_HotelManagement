@@ -531,7 +531,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == PRINT_DSDP_ID) {
-        string ID = Utils::inputWithCondition("Nhap ID dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        string ID = Utils::inputWithCondition("Nhap ma dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
         DatPhong *dp = QLDP.timKiemDatPhong(ID);
         if(dp != nullptr) {
             cout << *dp;
@@ -553,7 +553,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == PRINT_DSP_ID) {
-        string ID = Utils::inputWithCondition("Nhap ID phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        string ID = Utils::inputWithCondition("Nhap ma phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
         Phong *p = QLP.timPhong(ID);
         if(p != nullptr) {
             cout << *p;
@@ -622,10 +622,10 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == UPDATE_PHONG){
-        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        Phong *P = QLP.timPhong(loaiPhong);
+        string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(maPhong);
         if(P == nullptr) {
-            Utils::outputData("Khong tim thay phong" + loaiPhong + "!\n", CONSOLE);
+            Utils::outputData("Khong tim thay phong" + maPhong + "!\n", CONSOLE);
             Utils::pauseConsole();
             return;
         }
@@ -634,15 +634,15 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         }
     }
     else if(choice == DELETE_PHONG){
-        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        Phong *P = QLP.timPhong(loaiPhong);
+        string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(maPhong);
         if(P == nullptr) {
             Utils::outputData("Khong tim thay phong!\n", CONSOLE);
             Utils::pauseConsole();
             return;
         }
         else{
-            QLP.xoaPhong(loaiPhong);
+            QLP.xoaPhong(maPhong);
         }
     }
     else if(choice == ADD_LOAI_PHONG) {
