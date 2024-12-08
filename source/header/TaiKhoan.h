@@ -22,6 +22,7 @@ public:
     void setID(string);
 
     void setNguoiDung(NguoiDung*);
+    NguoiDung *getNguoiDung() const;
 
     role_value getRole() const;
     friend ostream& operator<<(ostream&, const TaiKhoan&);

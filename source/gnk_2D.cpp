@@ -1616,6 +1616,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glScissor(P.x + gnk_Translate_X, P.y + gnk_Translate_Y, width, height);
+	glEnable(GL_SCISSOR_TEST);
 	if (textAlign == GNK_TEXT_CENTER) {
 		gnk_Text(text, P.translate(
 				(width - maxWidth) / 2 - text_overflow,

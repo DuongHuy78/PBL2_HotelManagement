@@ -42,7 +42,16 @@ string Phong::getMaPhong() const {
  * @brief Lấy loại phòng.
  */
 LoaiPhong *Phong::getLoaiPhong() const {
-    return this->loaiPhong;
+    try {
+        if(this->loaiPhong == nullptr) {
+            throw "Phong::getLoaiPhong::LoaiPhong khong ton tai!";
+        }
+        return this->loaiPhong;
+    }
+    catch(const char* msg) {
+        cerr << msg << endl;
+        return nullptr;
+    }
 }
 
 /**

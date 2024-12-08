@@ -231,6 +231,7 @@ void LoaiPhong::capNhatThongTin(){
         system("cls");
         menuSuaThongTin();
         choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
+        cout << "choice: " << choice << endl;   
         switch(choice) {
             case 1:
                 temp = Utils::inputWithCondition("Sua Loai Giuong: ", 6, 12, ROOM_BED_TYPE);
@@ -248,24 +249,26 @@ void LoaiPhong::capNhatThongTin(){
                 Utils::pauseConsole();
                 break;
             case 3:
-                temp = Utils::inputWithCondition("Sua Dien Tich: ", 1, 2, NUMBER_ONLY);
+                temp = Utils::inputWithCondition("Sua Dien Tich: ", 1, 3, NUMBER_ONLY);
                 this->setDienTich(Utils::stringToInt(temp));
                 Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 4:
-                temp = Utils::inputWithCondition("Sua Gia: ", 1, 3, NUMBER_ONLY);
+                temp = Utils::inputWithCondition("Sua Gia: ", 1, 8, NUMBER_ONLY);
                 this->setGiaPhong(Utils::stringToInt(temp));
                 Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 5:
-                temp = Utils::inputWithCondition("Sua Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
+                Utils::outputData("Sua Mo Ta Phong: ", CONSOLE);
+                Utils::inputData(temp, CONSOLE_OR_UI);
                 this->setMoTaPhong(temp);
                 Utils::outputData("Cap nhat thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
                 break;
             case 6:
+                cout << "Done" << endl;
                 Utils::outputData("Thoat khoi chuc nang sua thong tin\n", CONSOLE);
                 return;
             default:
