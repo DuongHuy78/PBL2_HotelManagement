@@ -8,7 +8,6 @@ public:
     ~QLLoaiPhong();
 
     void themLoaiPhong(LoaiPhong *); 
-    //void xemLoaiPhong();
     void suaThongTin(const string&);
     void xoaLoaiPhong(const string& );
 

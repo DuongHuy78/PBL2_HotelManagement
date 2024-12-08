@@ -7,15 +7,9 @@
 #include "LinkedList.h"
 class QLDatPhong {
     LinkedList<DatPhong *> DSDP; // Danh sach dat phong
-    // QLLoaiPhong* DSLP; // Danh sach loai phong
-    // QLPhong* DSP; // Danh sach phong
-    // QLKhachHang* DSKH; // Danh sach khach hang
 public:
     ~QLDatPhong();
-    // void setDSLP(QLLoaiPhong*);
-    // void setDSP(QLPhong*);
-    // void setDSKH(QLKhachHang*);
-
+    
     void themDatPhong(DatPhong *);
     void xoaDatPhong(DatPhong *);
     DatPhong *timKiemDatPhong(string);
