@@ -10,7 +10,7 @@ public:
     ~QLPhong();
 
     void themPhong(Phong *);
-    void suaThongTin(const string&);
+    // void suaThongTin(const string&);
     void xoaPhong(const string&);
 
     Phong nhapThongTin();

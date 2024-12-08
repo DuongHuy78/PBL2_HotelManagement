@@ -619,7 +619,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == UPDATE_PHONG){
-        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        string loaiPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
         Phong *P = QLP.timPhong(loaiPhong);
         if(P == nullptr) {
             Utils::outputData("Khong tim thay phong" + loaiPhong + "!\n", CONSOLE);
@@ -627,7 +627,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             return;
         }
         else{
-            P->capNhatThongTin();
+            capNhatThongTinPhong(P);
         }
     }
     else if(choice == DELETE_PHONG){
@@ -1053,15 +1053,6 @@ int QLKhachSan::thongKe(string t_begin, string t_end) {
     }
     t_end = Utils::intToString(day) + "/" + Utils::intToString(month) + "/" + Utils::intToString(year);
 
-
-
-
-
-
-
-
-
-
     time_t timeBegin = Utils::stringToDate(t_begin);
     time_t timeEnd = Utils::stringToDate(t_end);
     
@@ -1081,3 +1072,33 @@ int QLKhachSan::thongKe(string t_begin, string t_end) {
     return doanhThu;
 }
 
+void QLKhachSan::capNhatThongTinPhong(Phong *phong) {
+    int choice;
+    string temp;
+    while (true) {
+        system("cls");
+        phong->menuSuaThongTin();
+        choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
+        switch(choice) {
+            case 1:
+                temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
+                phong->setLoaiPhong(QLLP.timLoaiPhong(temp));
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::pauseConsole();
+                break;
+            case 2:
+                temp = Utils::inputWithCondition("Sua Ma Phong: ", 1, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+                phong->setMaPhong(temp);
+                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
+                Utils::pauseConsole();
+                break;
+            case 3:
+                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
+                return;
+            default:
+                Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
+                Utils::pauseConsole();
+                break;
+        }  
+    }
+}
