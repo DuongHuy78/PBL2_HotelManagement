@@ -12,8 +12,6 @@ public:
 
     string getIDQuanLi() const;
     void setIDQuanLi(string);
-    // void xemDanhSachLuaChonXemDoanhThu();
-    // void xemDoanhThu();
     user_option_value work();
     friend ostream& operator<<(ostream&, QuanLi&);
     friend TaiKhoan;

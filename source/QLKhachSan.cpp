@@ -379,12 +379,14 @@ void QLKhachSan::work() {
                 choice_str = Utils::inputWithCondition("Nhap lua chon cua ban: ", 1, 2, NUMBER_ONLY);
                 int choice = Utils::stringToInt(choice_str);
                 if(choice == 1) {
+                    system("cls");
                     Utils::outputData("---------------DANG-NHAP---------------\n", CONSOLE);
                     while(!dangNhap()) {
                         Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
                     }
                 }
                 else if(choice == 2) {
+                    system("cls");
                     Utils::outputData("---------------DANG-KY---------------\n", CONSOLE);
                     string firstName, surname, birthday, gender, username, password;
                     firstName = Utils::inputWithCondition("Nhap ho: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
@@ -402,6 +404,7 @@ void QLKhachSan::work() {
                     }
                 }
                 else if(choice == 3) {
+                    system("cls");
                     Utils::outputData("Cam on ban da su dung dich vu!\n", CONSOLE);
                     Utils::pauseConsole();
                     return;
@@ -528,7 +531,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == PRINT_DSDP_ID) {
-        string ID = Utils::inputWithCondition("Nhap ID dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        string ID = Utils::inputWithCondition("Nhap ma dat phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
         DatPhong *dp = QLDP.timKiemDatPhong(ID);
         if(dp != nullptr) {
             cout << *dp;
@@ -550,7 +553,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == PRINT_DSP_ID) {
-        string ID = Utils::inputWithCondition("Nhap ID phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
+        string ID = Utils::inputWithCondition("Nhap ma phong: ", 1, 10, ALPHABET_AND_NUMBER_ONLY);
         Phong *p = QLP.timPhong(ID);
         if(p != nullptr) {
             cout << *p;
@@ -619,10 +622,10 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == UPDATE_PHONG){
-        string loaiPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        Phong *P = QLP.timPhong(loaiPhong);
+        string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(maPhong);
         if(P == nullptr) {
-            Utils::outputData("Khong tim thay phong" + loaiPhong + "!\n", CONSOLE);
+            Utils::outputData("Khong tim thay phong" + maPhong + "!\n", CONSOLE);
             Utils::pauseConsole();
             return;
         }
@@ -631,15 +634,15 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         }
     }
     else if(choice == DELETE_PHONG){
-        string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        Phong *P = QLP.timPhong(loaiPhong);
+        string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        Phong *P = QLP.timPhong(maPhong);
         if(P == nullptr) {
             Utils::outputData("Khong tim thay phong!\n", CONSOLE);
             Utils::pauseConsole();
             return;
         }
         else{
-            QLP.xoaPhong(loaiPhong);
+            QLP.xoaPhong(maPhong);
         }
     }
     else if(choice == ADD_LOAI_PHONG) {
@@ -705,7 +708,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             }
         }
         if(temp == "1"){
-            d_begin = Utils::inputWithCondition("Nhap ngay muon xem (theo dinh dang dd/mm/yyyy): ", 10, 10, DATE);
+            d_begin = Utils::inputWithCondition("Nhap ngay muon xem (theo dinh dang dd/mm/yyyy): ", 1, 10, DATE);
             doanhThu = thongKe(d_begin, d_begin);
             cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
             Utils::pauseConsole();
