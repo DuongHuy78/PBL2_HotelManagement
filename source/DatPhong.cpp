@@ -69,7 +69,16 @@ string DatPhong::getMaDatPhong() const {
  * @return Phong* con trỏ trỏ tới phòng.
  */
 Phong *DatPhong::getPhong() const {
-    return this->phong;
+    try {
+        if(this->phong == nullptr) {
+            throw "DatPhong::getPhong::Phong khong ton tai!";
+        }
+        return this->phong;
+    }
+    catch(const string msg) {
+        cerr << msg << endl;
+    }
+    return nullptr;
 }
 
 /**
@@ -78,7 +87,16 @@ Phong *DatPhong::getPhong() const {
  * @return KhachHang* con trỏ trỏ tới khách hàng.
  */
 KhachHang *DatPhong::getKhachHang() const {
-    return this->khachHang;
+    try {
+        if(this->khachHang == nullptr) {
+            throw "DatPhong::getKhachHang::KhachHang khong ton tai!";
+        }
+        return this->khachHang;
+    }
+    catch(const string msg) {
+        cerr << msg << endl;
+    }
+    return nullptr;
 }
 
 /**

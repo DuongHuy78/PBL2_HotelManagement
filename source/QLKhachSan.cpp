@@ -663,7 +663,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             Utils::pauseConsole();
             return;
         }
-        else{
+        else {
             LP->capNhatThongTin();
             system("cls");
             Utils::outputData("Loai phong da duoc cap nhat!\n", CONSOLE);

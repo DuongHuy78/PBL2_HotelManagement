@@ -27,6 +27,35 @@ enum option_value {
 	STAFF_ROOM_INFO,
 	STAFF_CREATE_GUEST,
 	STAFF_CREATE_GUEST_DONE,
+
+	ADMIN_MAIN,
+	
+	ADMIN_TYPE_ROOM_MANAGEMENT,
+	ADMIN_ROOM_MANAGEMENT,
+	ADMIN_REVENUE_MANAGEMENT,
+
+	ADMIN_TYPE_ROOM_VIEW_AND_EDIT,
+	ADMIN_TYPE_ROOM_EDIT,
+	ADMIN_ADD_TYPE_ROOM,
+	ADMIN_REMOVE_TYPE_ROOM,
+
+	ADMIN_ROOM_VIEW_AND_EDIT,
+	ADMIN_ROOM_EDIT,
+	ADMIN_ADD_ROOM,
+	ADMIN_REMOVE_ROOM,
+
+	ADMIN_DAILY_REVENUE,
+	ADMIN_MONTHLY_REVENUE,
+	ADMIN_YEARLY_REVENUE,
+
+
+	ADMIN_TYPE_ROOM_EDIT_DONE,
+	ADMIN_TYPE_ROOM_ADD_DONE,
+	ADMIN_TYPE_ROOM_REMOVE_DONE,
+
+	ADMIN_ROOM_EDIT_DONE,
+	ADMIN_ROOM_ADD_DONE,
+	ADMIN_ROOM_REMOVE_DONE,
 };
 class QLKhachSan;
 extern QLKhachSan *current_Data;
@@ -86,6 +115,32 @@ void staff_frame_room_info_list_process(Gnk_List_Object *);
 void staff_frame_create_guest_button_click_2(Gnk_Button *);
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *);
+void admin_frame_type_room_button_click(Gnk_Button *);
+void admin_frame_room_button_click(Gnk_Button *);
+void admin_frame_room_revenue_button_click(Gnk_Button *);
+
+void admin_type_room_view_and_edit_button_click(Gnk_Button *);
+void admin_add_type_room_button_click(Gnk_Button *);
+void admin_remove_type_room_button_click(Gnk_Button *);
+
+void admin_room_view_and_edit_button_click(Gnk_Button *);
+void admin_add_room_button_click(Gnk_Button *);
+void admin_remove_room_button_click(Gnk_Button *);
+
+void admin_daily_revenue_button_click(Gnk_Button *);
+void admin_monthly_revenue_button_click(Gnk_Button *);
+void admin_yearly_revenue_button_click(Gnk_Button *);
+
+void admin_frame_back_to_main_button_click(Gnk_Button *);
+
+void admin_frame_select_type_room_button_click(Gnk_Button *);
+void admin_frame_select_room_button_click(Gnk_Button *);
+
+void admin_frame_type_room_list_process(Gnk_List_Object *);
+void admin_frame_room_list_process(Gnk_List_Object *);
+
+void admin_frame_confirm_button_click(Gnk_Button *);
+void admin_frame_previous_button_click(Gnk_Button *);
 extern Gnk_Frame admin;
 // ---------------------------------------------------------
 void login_frame_init();

@@ -48,6 +48,19 @@ void TaiKhoan::setNguoiDung(NguoiDung* nguoiDung) {
     nguoiDung->setTaiKhoan(this);
 }
 
+NguoiDung* TaiKhoan::getNguoiDung() const {
+    try {
+        if(this->nguoiDung == nullptr) {
+            throw "TaiKhoan::getNguoiDung::NguoiDung khong ton tai!";
+        }
+        return this->nguoiDung;
+    }
+    catch(const char* msg) {
+        cerr << msg << endl;
+        return nullptr;
+    }
+}
+
 role_value TaiKhoan::getRole() const {
     if(this->ID[0] == '1') return KHACHHANG;
     if(this->ID[0] == '2') return NHANVIEN;
