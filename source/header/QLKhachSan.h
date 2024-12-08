@@ -55,6 +55,7 @@ public:
     bool GuestExist(string);
     void xemDanhSachLuaChonXemDoanhThu();
     int thongKe(string, string);
+    void capNhatThongTinPhong(Phong *);
 };
 
 #endif

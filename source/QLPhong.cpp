@@ -28,18 +28,18 @@ void QLPhong::xoaPhong(const string& MP){
 }
 
 
-void QLPhong::suaThongTin(const string& MP){
-    Node<Phong *> *p = DSP.begin();
-    while (p != DSP.end()) {
-        if(p->data->getMaPhong() == MP)
-            {
-                p->data->capNhatThongTin();
-                cout << "Da cap nhat thong tin phong voi ID " << MP << " thanh cong!" << endl;
-            }
-        p = p -> next;
-    } 
-    cout << "Khong tim thay Phong!" << endl;
-}
+// void QLPhong::suaThongTin(const string& MP){
+//     Node<Phong *> *p = DSP.begin();
+//     while (p != DSP.end()) {
+//         if(p->data->getMaPhong() == MP)
+// {
+//                 capNhatThonTinPhong(p->data);
+//                 cout << "Da cap nhat thong tin phong voi ID " << MP << " thanh cong!" << endl;
+//             }
+//         p = p -> next;
+//     } 
+//     cout << "Khong tim thay Phong!" << endl;
+// }
 
 void QLPhong::setQLLP(QLLoaiPhong *QLLP) {
     this->QLLP = QLLP;

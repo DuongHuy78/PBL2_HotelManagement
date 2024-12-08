@@ -23,7 +23,6 @@ public:
     void setLoaiPhong(LoaiPhong *);
 
     void menuSuaThongTin();
-    void capNhatThongTin();
     
     friend ostream& operator<<(ostream&, const Phong&);
     friend LoaiPhong;

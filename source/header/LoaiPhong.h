@@ -13,6 +13,7 @@ class LoaiPhong {
     string moTaPhong;
     LinkedList<Phong *> danhSachPhong;
     void themPhong(Phong *);
+    void xoaPhong(Phong *);
 public:
     LoaiPhong();
     LoaiPhong(string, int, int, int, int, string);

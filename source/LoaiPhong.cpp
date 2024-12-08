@@ -178,6 +178,20 @@ void LoaiPhong::themPhong(Phong *phong) {
 }
 
 /**
+ * @brief Xóa phòng khỏi danh sách phòng.
+ */
+void LoaiPhong::xoaPhong(Phong *phong) {
+    Node<Phong *> *p = this->danhSachPhong.begin();
+    while(p != this->danhSachPhong.end()) {
+        if(p->data == phong) {
+            this->danhSachPhong.remove(p);
+            return;
+        }
+        p = p->next;
+    }
+}
+
+/**
  * @brief Nhập thông tin loại phòng.
  */
 LoaiPhong LoaiPhong::nhapThongTin() {
