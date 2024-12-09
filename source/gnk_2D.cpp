@@ -1149,6 +1149,9 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
+	if(this->getGroupHeight() < this->group_height) {
+		scrollbar.process();
+	}
 	
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_SCISSOR_TEST);

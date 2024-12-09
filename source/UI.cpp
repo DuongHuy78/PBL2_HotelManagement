@@ -368,10 +368,10 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 		(sign_up.textboxList["password_textbox"])->text
 	);
 	if(res == SIGN_UP_BLANK_INFO) {
-		cout << "Blank info" << endl;
+		//cout << "Blank info" << endl;
 	}
 	else if(res == SIGN_UP_USERNAME_EXISTED) {
-		cout << "Username existed" << endl;
+		//cout << "Username existed" << endl;
 	}
 	else if(res == SIGN_UP_SUCCESS) {
 		current_frame = LOGIN_FRAME;
@@ -727,6 +727,9 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			room_list_init = true;
 		}
 		list->setGroupHeight(list->toNextObject()*room_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = room_list.size();
 		for(auto &it : list->buttonList) {
 			if(it.button != nullptr) {
@@ -828,7 +831,7 @@ void guest_frame_lookup_button_image_click(Gnk_Button *button) {
 	}
 	else {
 		room_list.clear();
-		cout << "Invalid date" << endl;
+		//cout << "Invalid date" << endl;
 		search_room_list_enable = false;
 	}
 }
@@ -942,7 +945,7 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 			option = BOOKING_PART_2;
 		}
 		else {
-			cout << "Invalid room choice" << endl;
+			//cout << "Invalid room choice" << endl;
 		}
 	}
 	else if(current_Data->getCurrentRole() == NHANVIEN) {
@@ -961,7 +964,7 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 			}
 		}
 		else {
-			cout << "Invalid room choice" << endl;
+			//cout << "Invalid room choice" << endl;
 		}
 	}
 }
@@ -1029,6 +1032,9 @@ void guest_frame_history_list_process(Gnk_List_Object *list) {
 		}
 
 		list->setGroupHeight(list->toNextObject()*history_booking_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = history_booking_list.size();
 		for(int i = 0; i < history_booking_list.size(); i++) {
 			if(list->currentPos < list->object_start_position.y - i * list->toNextObject()) {
@@ -1458,6 +1464,9 @@ void staff_frame_booking_info_list_process(Gnk_List_Object *list) {
 		}
 
 		list->setGroupHeight(list->toNextObject()*booking_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = booking_info_list.size();
 		for(int i = 0; i < booking_info_list.size(); i++) {
 			if(list->currentPos < list->object_start_position.y - i * list->toNextObject()) {
@@ -1520,6 +1529,9 @@ void staff_frame_guest_info_list_process(Gnk_List_Object *list) {
 		}
 
 		list->setGroupHeight(list->toNextObject()*guest_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = guest_info_list.size();
 		for(int i = 0; i < guest_info_list.size(); i++) {
 			if(list->currentPos < list->object_start_position.y - i * list->toNextObject()) {
@@ -1580,6 +1592,9 @@ void staff_frame_type_room_info_list_process(Gnk_List_Object *list) {
 		}
 
 		list->setGroupHeight(list->toNextObject()*type_room_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = type_room_info_list.size();
 		for(int i = 0; i < type_room_info_list.size(); i++) {
 			if(list->currentPos < list->object_start_position.y - i * list->toNextObject()) {
@@ -1641,6 +1656,9 @@ void staff_frame_room_info_list_process(Gnk_List_Object *list) {
 		}
 
 		list->setGroupHeight(list->toNextObject()*room_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = room_info_list.size();
 		for(int i = 0; i < room_info_list.size(); i++) {
 			if(list->currentPos < list->object_start_position.y - i * list->toNextObject()) {
@@ -1778,12 +1796,10 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				+ "Date of birth: " + guest_info_list[i].date_of_birth
 				+ "Phone number: " + guest_info_list[i].phone_number
 				+ "Gender: " + guest_info_list[i].gender;
-				cout << info_cat << endl;
 				if(Utils::compareString(info_cat, search_info)) {
 					new_guest_info_list.push_back(guest_info_list[i]);
 				}
 			}
-			cout << search_info << endl;
 			guest_info_list = new_guest_info_list;
 			staff.listObjectList["guest_info_list"]->setCurrentPos(staff.listObjectList["guest_info_list"]->getGroupHeight());
 		}
@@ -2671,6 +2687,9 @@ void admin_frame_type_room_list_process(Gnk_List_Object *list) {
 			type_room_info_list_init = true;
 		}
 		list->setGroupHeight(list->toNextObject()*type_room_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = type_room_info_list.size();
 		for(auto &it : list->buttonList) {
 			if(it.button != nullptr) {
@@ -2782,6 +2801,9 @@ void admin_frame_room_list_process(Gnk_List_Object *list) {
 			room_info_list_init = true;
 		}
 		list->setGroupHeight(list->toNextObject()*room_info_list.size());
+		if(list->group_height < list->B.y - list->A.y) {
+			list->setGroupHeight(list->B.y - list->A.y);
+		}
 		list->numOfObject = room_info_list.size();
 		for(auto &it : list->buttonList) {
 			if(it.button != nullptr) {
