@@ -237,7 +237,8 @@ void login_frame_draw(Gnk_Frame *frame) {
 	for(auto &textbox : frame->textboxList) {
 		textbox.second->display();
 	}
-
+	
+	frame->buttonList["forgotten_password_button"]->setAppear(false);
 	for(auto &button : frame->buttonList) {
 		button.second->display();
 	}
@@ -4014,7 +4015,7 @@ void admin_frame_init() {
 void UI_init() {
 	// Initialize
 	const float width = 1600.0f, height = 900.0f;
-	gnk_Initialize(width, height, "PBL2 - Hotel Management", "shader/text.vs", "shader/text.fs");
+	gnk_Initialize(width, height, "PBL2 - Hotel Management - Nguyễn Nhật Hoàng - Lê Dương Huy - Huỳnh Trương Thảo Duyên", "shader/text.vs", "shader/text.fs");
 	gnk_Set_Frame_Space(frame_Space);
 
 	gnk_Font_List.addFont("arial", "font/arial.ttf", 48);
