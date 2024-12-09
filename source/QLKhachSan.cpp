@@ -615,8 +615,9 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         }
         Utils::pauseConsole();
     }
-    else if(choice == ADD_PHONG){
-        Phong *newPhong = new Phong(QLP.nhapThongTin());
+    else if(choice == ADD_PHONG) {
+        Phong *newPhong = new Phong();
+        themPhongMoi(newPhong);
         QLP.themPhong(newPhong);
         Utils::outputData("Tao phong " + newPhong->getMaPhong() + " thanh cong!\n", CONSOLE);
         Utils::pauseConsole();
@@ -633,17 +634,9 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             capNhatThongTinPhong(P);
         }
     }
-    else if(choice == DELETE_PHONG){
+    else if(choice == DELETE_PHONG) {
         string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        Phong *P = QLP.timPhong(maPhong);
-        if(P == nullptr) {
-            Utils::outputData("Khong tim thay phong!\n", CONSOLE);
-            Utils::pauseConsole();
-            return;
-        }
-        else{
-            QLP.xoaPhong(maPhong);
-        }
+        QLP.xoaPhong(maPhong);
     }
     else if(choice == ADD_LOAI_PHONG) {
         LoaiPhong *newLP = new LoaiPhong(LoaiPhong::nhapThongTin());
@@ -673,17 +666,9 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             Utils::pauseConsole();
         }
     }
-    else if(choice == DELETE_LOAIPHONG){
+    else if(choice == DELETE_LOAIPHONG) {
         string loaiPhong = Utils::inputWithCondition("Nhap loai phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-        LoaiPhong *LP = QLLP.timLoaiPhong(loaiPhong);
-        if(LP == nullptr) {
-            Utils::outputData("Khong tim thay loai phong!\n", CONSOLE);
-            Utils::pauseConsole();
-            return;
-        }
-        else{
-            QLLP.xoaLoaiPhong(loaiPhong);
-        }
+        QLLP.xoaLoaiPhong(loaiPhong);
     }
     else if(choice == PRINT_KHACHHANG) {
         KhachHang *kh = (KhachHang *)current_user;
@@ -1006,6 +991,15 @@ void QLKhachSan::list_all_type_room() {
     }
 }
 
+void QLKhachSan::list_all_room() {
+    LinkedList<Phong *> &DSP = QLP.getDSP();
+    Node<Phong *> *p = DSP.begin();
+    while(p != DSP.end()) {
+        Utils::outputData(p->data->getMaPhong() + "\n", CONSOLE_OR_UI);
+        p = p->next;
+    }
+}
+
 role_value QLKhachSan::getCurrentRole() {
     return role;
 }
@@ -1104,4 +1098,20 @@ void QLKhachSan::capNhatThongTinPhong(Phong *phong) {
                 break;
         }  
     }
+}
+
+void QLKhachSan::themPhongMoi(Phong *phong) {
+    string temp;
+    temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+    phong->setMaPhong(temp);
+    temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
+    phong->setLoaiPhong(QLLP.timLoaiPhong(temp));
+}
+
+int QLKhachSan::getSoLuongPhong(string loaiPhong) {
+    return QLLP.timLoaiPhong(loaiPhong)->getSoLuongPhong();
+}
+
+int QLKhachSan::getSoLuongDatPhong(string maPhong) {
+    return QLP.timPhong(maPhong)->getSoLuongDatPhong();
 }

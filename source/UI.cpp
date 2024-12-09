@@ -115,6 +115,7 @@ bool edit_profile = false;
 bool staff_booking_guest_ID_not_exist = false;
 bool admin_type_room_not_exist = false;
 bool admin_type_room_was_existed = false;
+bool admin_type_room_was_used = false;
 string booking_total_price = "";
 string staff_booking_guest_ID = "";
 bool staff_create_guest_success = false;
@@ -1771,6 +1772,21 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Set_Character_Font("helvetica");
 		gnk_Set_Object_Color(C_1A1A1D);
 
+		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+		
+		if(admin_type_room_not_exist == true) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The type room does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+		else if(admin_type_room_was_used) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The type room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 	}
@@ -1809,6 +1825,12 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Text("Ma Phong: ", Gnk_Point(820.0f, 532.0f), 24.0f);
 		gnk_Text("Danh sach loai phong: ", Gnk_Point(820.0f, 462.0f), 24.0f);
 		gnk_Text_Multi_Line(list_type_room_available, Gnk_Point(820.0f, 412.0f), 54, 10, 24);
+
+		frame->textboxList["room_ID_textbox"]->setAppear(true);
+		frame->textboxList["room_ID_textbox"]->display();
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 
@@ -1833,6 +1855,22 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 		gnk_Set_Character_Font("helvetica");
 		gnk_Set_Object_Color(C_1A1A1D);
+
+		gnk_Text("Ma Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		frame->textboxList["room_ID_rm_textbox"]->setAppear(true);
+		frame->textboxList["room_ID_rm_textbox"]->display();
+
+		if(admin_type_room_not_exist == true) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The room ID does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+		else if(admin_type_room_was_used) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 	}
@@ -2130,6 +2168,23 @@ void admin_remove_type_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_REMOVE_TYPE_ROOM;
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
+
+	list_type_room_available = "";
+	current_Data->list_all_type_room();
+	list_type_room_choice.clear();
+	string type_room;
+	bool first = true;
+	while(getline(UI_output_buffer, type_room)) {
+		list_type_room_choice.push_back(type_room);
+		if(first)list_type_room_available = type_room;
+		else list_type_room_available += ", " + type_room;
+		first = false;
+	}
+	admin_type_room_not_exist = false;
+	admin_type_room_was_used = false;
+	admin.textboxList["type_room_textbox"]->text = "";
 }
 
 void admin_room_view_and_edit_button_click(Gnk_Button *button) {
@@ -2167,7 +2222,8 @@ void admin_add_room_button_click(Gnk_Button *button) {
 		first = false;
 	}
 	admin_type_room_not_exist = false;
-
+	admin.textboxList["room_ID_textbox"]->text = "";
+	admin.textboxList["type_room_textbox"]->text = "";
 }
 
 void admin_remove_room_button_click(Gnk_Button *button) {
@@ -2177,6 +2233,24 @@ void admin_remove_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_REMOVE_ROOM;
+
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
+
+	list_room_available = "";
+	current_Data->list_all_room();
+	list_room_choice.clear();
+	string room;
+	bool first = true;
+	while(getline(UI_output_buffer, room)) {
+		list_room_choice.push_back(room);
+		if(first)list_room_available = room;
+		else list_room_available += ", " + room;
+		first = false;
+	}
+	admin_type_room_not_exist = false;
+	admin_type_room_was_used = false;
+	admin.textboxList["room_ID_rm_textbox"]->text = "";
 }
 
 void admin_daily_revenue_button_click(Gnk_Button *button) {
@@ -2610,7 +2684,64 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		option = ADMIN_ROOM_ADD_DONE;
 	}
 	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
+		string type_room = admin.textboxList["type_room_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == type_room) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		if(current_Data->getSoLuongPhong(type_room) > 0) {
+			admin_type_room_was_used = true;
+			return;
+		}
+
+		UI_input_buffer << type_room << endl;
+
+		current_Data->requestHandling(DELETE_LOAIPHONG);
+
+		option = ADMIN_TYPE_ROOM_REMOVE_DONE;
 	}
+	else if(option == ADMIN_REMOVE_ROOM) {
+		string room_ID = admin.textboxList["room_ID_rm_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		bool check = false;
+		for(auto &it : list_room_choice) {
+			if(it == room_ID) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		if(current_Data->getSoLuongDatPhong(room_ID) > 0) {
+			admin_type_room_was_used = true;
+			return;
+		}
+
+		UI_input_buffer << room_ID << endl;
+		
+		current_Data->requestHandling(DELETE_PHONG);
+
+		option = ADMIN_ROOM_REMOVE_DONE;
+	}
+
 }
 
 void admin_frame_previous_button_click(Gnk_Button *button) {
@@ -3418,6 +3549,11 @@ void admin_frame_init() {
 	admin_room_ID_textbox->setRange(Gnk_Point(1020.0f, 520.0f), Gnk_Point(1480.0f, 570.0f));
 	admin_room_ID_textbox->setMaxLength(MAX_MAPHONG);
 
+	Gnk_Textbox *admin_room_ID_rm_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_room_ID_rm_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_room_ID_rm_textbox->setMaxLength(MAX_MAPHONG);
+
+
 	admin.addButton("type_room_button", admin_frame_type_room_button);
 	admin.addButton("room_button", admin_room_button);
 	admin.addButton("room_revenue_button", admin_room_revenue_button);
@@ -3449,6 +3585,7 @@ void admin_frame_init() {
 	admin.addTextbox("description_textbox", admin_description_textbox);
 	admin.addTextbox("type_room_textbox", admin_type_room_textbox);
 	admin.addTextbox("room_ID_textbox", admin_room_ID_textbox);
+	admin.addTextbox("room_ID_rm_textbox", admin_room_ID_rm_textbox);
 }
 
 void UI_init() {

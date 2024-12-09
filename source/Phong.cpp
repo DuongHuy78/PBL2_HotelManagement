@@ -55,6 +55,13 @@ LoaiPhong *Phong::getLoaiPhong() const {
 }
 
 /**
+ * @brief Lấy số lượng đặt phòng.
+ */
+int Phong::getSoLuongDatPhong() const {
+    return this->danhSachDatPhong.getSize();
+}
+
+/**
  * @brief Thiết lập mã phòng.
  */
 void Phong::setMaPhong(string MP){
@@ -64,7 +71,7 @@ void Phong::setMaPhong(string MP){
 /**
  * @brief Thiết lập loại phòng.
  */
-void Phong::setLoaiPhong(LoaiPhong *LP){
+void Phong::setLoaiPhong(LoaiPhong *LP) {
     if(LP == nullptr) {
         cerr << "Phong::setLoaiPhong::LoaiPhong khong ton tai!" << endl;
         return;
@@ -74,6 +81,11 @@ void Phong::setLoaiPhong(LoaiPhong *LP){
     }
     this->loaiPhong = LP;
     LP->themPhong(this);
+}
+
+void Phong::clearLoaiPhong() {
+    this->loaiPhong->xoaPhong(this);
+    this->loaiPhong = nullptr;
 }
 
 /**

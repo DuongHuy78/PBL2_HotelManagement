@@ -27,6 +27,7 @@ public:
     int getGiaPhong() const;
     int getDienTich() const;
     string getMoTaPhong() const;
+    int getSoLuongPhong() const;
 
     bool setLoaiPhong(string);
     bool setLoaiGiuong(int);

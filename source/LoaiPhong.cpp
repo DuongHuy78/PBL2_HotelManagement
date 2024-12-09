@@ -95,6 +95,10 @@ string LoaiPhong::getMoTaPhong() const {
     return this->moTaPhong;
 }
 
+int LoaiPhong::getSoLuongPhong() const {
+    return this->danhSachPhong.getSize();
+}
+
 /**
  * @brief Thiết lập loại phòng.
  */

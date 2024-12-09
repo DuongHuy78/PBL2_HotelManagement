@@ -13,7 +13,6 @@ public:
     // void suaThongTin(const string&);
     void xoaPhong(const string&);
 
-    Phong nhapThongTin();
     Phong *timPhong(string);
     void setQLLP(QLLoaiPhong *QLLP);
     LinkedList<Phong *> &getDSP();
