@@ -118,6 +118,7 @@ bool admin_type_room_was_existed = false;
 bool admin_type_room_was_used = false;
 string booking_total_price = "";
 string staff_booking_guest_ID = "";
+string admin_revenue_str = "";
 bool staff_create_guest_success = false;
 // ---------------------------------------------------------
 Gnk_Color C_1A1A1D(26, 26, 29);
@@ -1893,6 +1894,13 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 		gnk_Set_Character_Font("helvetica");
 		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Doanh thu ngay: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["date_textbox"]->setAppear(true);
+		frame->textboxList["date_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_MONTHLY_REVENUE) {
 		frame->buttonList["daily_revenue_button"]->setAppear(true);
@@ -1913,7 +1921,13 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 		gnk_Set_Character_Font("helvetica");
 		gnk_Set_Object_Color(C_1A1A1D);
-
+		gnk_Text("Doanh thu thang: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["month_textbox"]->setAppear(true);
+		frame->textboxList["month_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_YEARLY_REVENUE) {
 		frame->buttonList["daily_revenue_button"]->setAppear(true);
@@ -1934,6 +1948,13 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 		gnk_Set_Character_Font("helvetica");
 		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Doanh thu nam: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["year_textbox"]->setAppear(true);
+		frame->textboxList["year_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_TYPE_ROOM_EDIT) {
 		frame->buttonList["type_room_view_and_edit_button"]->setAppear(true);
@@ -2260,6 +2281,8 @@ void admin_daily_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_DAILY_REVENUE;
+	admin.textboxList["date_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_monthly_revenue_button_click(Gnk_Button *button) {
@@ -2269,6 +2292,8 @@ void admin_monthly_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_MONTHLY_REVENUE;
+	admin.textboxList["month_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_yearly_revenue_button_click(Gnk_Button *button) {
@@ -2278,6 +2303,8 @@ void admin_yearly_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_YEARLY_REVENUE;
+	admin.textboxList["year_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_frame_back_to_main_button_click(Gnk_Button *button) {
@@ -2755,6 +2782,58 @@ void admin_frame_previous_button_click(Gnk_Button *button) {
 	}
 	else if(option == ADMIN_ROOM_EDIT) {
 		option = ADMIN_ROOM_VIEW_AND_EDIT;
+	}
+}
+
+void admin_frame_view_revenue_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+	if(option == ADMIN_DAILY_REVENUE) {
+		string date = admin.textboxList["date_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		if(!Utils::isDate(date)) {
+			admin_revenue_str = "Ngay khong hop le!";
+			return;
+		}
+		UI_input_buffer << 1 << endl;
+		UI_input_buffer << date << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
+	}
+	else if(option == ADMIN_MONTHLY_REVENUE) {
+		string month = admin.textboxList["month_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		if(!Utils::isDate("01/" + month)) {
+			admin_revenue_str = "Thang khong hop le!";
+			return;
+		}
+
+		UI_input_buffer << 2 << endl;
+		UI_input_buffer << month << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
+	}
+	else if(option == ADMIN_YEARLY_REVENUE) {
+		string year = admin.textboxList["year_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		if(!Utils::isDate("01/01/" + year)) {
+			admin_revenue_str = "Nam khong hop le!";
+			return;
+		}
+		UI_input_buffer << 3 << endl;
+		UI_input_buffer << year << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
 	}
 }
 
@@ -3504,6 +3583,10 @@ void admin_frame_init() {
 	admin_frame_confirm_button->setHoverProcess(button_hover_type_3);
 	admin_frame_confirm_button->setClickProcess(admin_frame_confirm_button_click);
 
+	Gnk_Button_With_Text *admin_frame_view_revenue_button = new Gnk_Button_With_Text(*admin_frame_confirm_button);
+	admin_frame_view_revenue_button->setText("View Revenue");
+	admin_frame_view_revenue_button->setClickProcess(admin_frame_view_revenue_button_click);
+
 	Gnk_Button_With_Text *admin_frame_previous_button = new Gnk_Button_With_Text(*admin_frame_confirm_button);
 	admin_frame_previous_button->setRange(Gnk_Point(480.0f, 30.0f), Gnk_Point(700.0f, 100.0f));
 	admin_frame_previous_button->setText("Previous");
@@ -3553,6 +3636,17 @@ void admin_frame_init() {
 	admin_room_ID_rm_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
 	admin_room_ID_rm_textbox->setMaxLength(MAX_MAPHONG);
 
+	Gnk_Textbox *admin_date_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_date_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_date_textbox->setMaxLength(10);
+
+	Gnk_Textbox *admin_month_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_month_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_month_textbox->setMaxLength(7);
+
+	Gnk_Textbox *admin_year_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_year_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_year_textbox->setMaxLength(4);
 
 	admin.addButton("type_room_button", admin_frame_type_room_button);
 	admin.addButton("room_button", admin_room_button);
@@ -3577,6 +3671,7 @@ void admin_frame_init() {
 
 	admin.addButton("confirm_button", admin_frame_confirm_button);
 	admin.addButton("previous_button", admin_frame_previous_button);
+	admin.addButton("view_revenue_button", admin_frame_view_revenue_button);
 
 	admin.addTextbox("bed_type_textbox", admin_bed_type_textbox);
 	admin.addTextbox("number_of_guest_textbox", admin_number_of_guest_textbox);
@@ -3586,6 +3681,9 @@ void admin_frame_init() {
 	admin.addTextbox("type_room_textbox", admin_type_room_textbox);
 	admin.addTextbox("room_ID_textbox", admin_room_ID_textbox);
 	admin.addTextbox("room_ID_rm_textbox", admin_room_ID_rm_textbox);
+	admin.addTextbox("date_textbox", admin_date_textbox);
+	admin.addTextbox("month_textbox", admin_month_textbox);
+	admin.addTextbox("year_textbox", admin_year_textbox);
 }
 
 void UI_init() {

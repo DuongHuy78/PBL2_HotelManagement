@@ -679,76 +679,51 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         kh->suaThongTin();
         Utils::pauseConsole();
     }
-    else if(choice == PRINT_DOANH_THU){
+    else if(choice == PRINT_DOANH_THU) {
         string temp;
         string d_begin, d_end;
         int ktra = 1, doanhThu;
-        while(ktra){
+        while(ktra) {
             ktra = 0;
             xemDanhSachLuaChonXemDoanhThu();
             temp = Utils::inputWithCondition("Nhap lua chon: ", 1, 1, NUMBER_ONLY);
             if(temp != "1" && temp != "2" && temp != "3"){
-                cout<<"Nhap sai, vui long nhap lai!"<<endl;
+                Utils::outputData("Nhap sai, vui long nhap lai!\n", CONSOLE);
                 ktra = 1;
             }
         }
-        if(temp == "1"){
+        if(temp == "1") {
             d_begin = Utils::inputWithCondition("Nhap ngay muon xem (theo dinh dang dd/mm/yyyy): ", 1, 10, DATE);
             doanhThu = thongKe(d_begin, d_begin);
-            cout<<"Doanh thu cua ngay "<<d_begin<<" la: "<<doanhThu<<endl;
+            Utils::outputData("Doanh thu cua ngay " + d_begin + " la: ", CONSOLE);
+            Utils::outputData(to_string(doanhThu) + "\n", CONSOLE_OR_UI);
             Utils::pauseConsole();
         }
-        else if (temp == "2")
-        {
-            int ktra;
-            string month, year, date;
-            ktra = 1;
-            while(ktra){
-                ktra = 0;
-                while(true){
-                    Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
-                    Utils::inputData(date, CONSOLE_OR_UI);
-                    if(date.size() != 8){           //dù có 7 ký tự nhưng đặt là 8 vì có thêm ký tự '\n'
-                        break;
-                    }
-                    cout<<"Nhap sai, vui long nhap lai!"<<endl;
-                }
-                stringstream ss(date);
-                getline(ss, month, '/');
-                getline(ss, year, '/');
-                if(Utils::stringToInt(month) > 12 || Utils::stringToInt(month) < 1){
-                    ktra = 1;
-                }
-                if(ktra){
-                    system("clear");
-                    cout<<"Nhap sai, vui long nhap lai!"<<endl;
-                }
-            }
-            d_begin = "01/" + month + "/" + year;
-            d_end = "31/" + month + "/" + year;
+        else if (temp == "2") {
+            do {
+                Utils::outputData("Nhap thang muon xem (theo dinh dang mm/yyyy): ", CONSOLE);
+                Utils::inputData(temp, CONSOLE_OR_UI);
+            } while(!Utils::isDate("1/" + temp));
+            int index = 0;
+            string month = Utils::getSubstringUntilX(temp, index, '/');
+            string year = Utils::getSubstringUntilX(temp, index, '\0');
+            d_begin = "1/" + month + "/" + year;
+            d_end = Utils::monthDays(Utils::stringToInt(month), Utils::stringToInt(year)) + "/" + month + "/" + year;
             doanhThu = thongKe(d_begin, d_end);
-            cout<<"Doanh thu cua thang "<<month<<"/"<<year<<" la: "<<doanhThu<<endl;
+            Utils::outputData("Doanh thu cua thang " + month + "/" + year + " la: ", CONSOLE);
+            Utils::outputData(to_string(doanhThu) + "\n", CONSOLE_OR_UI);
             Utils::pauseConsole();
         }
-        else if(temp == "3"){
-            int ktra;
-            string year;
-            ktra = 1;
-            while(ktra){
-                ktra = 0;
-                year = Utils::inputWithCondition("Nhap nam muon xem (theo dinh dang yyyy): ", 4, 4, NUMBER_ONLY);
-                if(Utils::stringToInt(year) < 1900){
-                    ktra = 1;
-                }
-                if(ktra){
-                    system("clear");
-                    cout<<"Nhap sai, vui long nhap lai!"<<endl;
-                }
-            }
-            d_begin = "01/01/" + year;
-            d_end = "31/12/" + year;
+        else if(temp == "3") {
+            do {
+                Utils::outputData("Nhap nam muon xem (theo dinh dang yyyy): ", CONSOLE);
+                Utils::inputData(temp, CONSOLE_OR_UI);
+            } while(!Utils::isDate("1/1/" + temp));
+            d_begin = "01/01/" + temp;
+            d_end = "31/12/" + temp;
             doanhThu = thongKe(d_begin, d_end);
-            cout<<"Doanh thu cua nam "<<year<<" la: "<<doanhThu<<endl;
+            Utils::outputData("Doanh thu cua nam " + temp + " la: ", CONSOLE);
+            Utils::outputData(to_string(doanhThu) + "\n", CONSOLE_OR_UI);
             Utils::pauseConsole();
         }
     }
@@ -1008,7 +983,7 @@ bool QLKhachSan::GuestExist(string ID) {
     return this->QLKH.timKiemKhachHang(ID) != nullptr;
 }
 
-void QLKhachSan::xemDanhSachLuaChonXemDoanhThu(){
+void QLKhachSan::xemDanhSachLuaChonXemDoanhThu() {
     Utils::outputData("1. XEM DOANH THU THEO NGAY.\n", CONSOLE);
     Utils::outputData("2. XEM DOANH THU THEO THANG.\n", CONSOLE);
     Utils::outputData("3. XEM DOANH THU THEO NAM.\n", CONSOLE);
