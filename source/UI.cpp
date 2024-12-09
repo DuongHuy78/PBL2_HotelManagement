@@ -3349,7 +3349,7 @@ void guest_frame_init() {
 
 	Gnk_Textbox_Keep_Placeholder *guest_frame_number_of_guest_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
 	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1140.0f, 720.0f), Gnk_Point(1440.0f, 780.0f));
-	guest_frame_number_of_guest_textbox->setPlaceholder("# of guests");
+	guest_frame_number_of_guest_textbox->setPlaceholder("Guests");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
 	Gnk_Textbox_Keep_Placeholder *search_bar_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
@@ -3550,7 +3550,7 @@ void staff_frame_init() {
 
 	Gnk_Textbox_Keep_Placeholder *guest_frame_number_of_guest_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
 	guest_frame_number_of_guest_textbox->setRange(Gnk_Point(1140.0f, 720.0f), Gnk_Point(1440.0f, 780.0f));
-	guest_frame_number_of_guest_textbox->setPlaceholder("# of guests");
+	guest_frame_number_of_guest_textbox->setPlaceholder("Guests");
 	guest_frame_number_of_guest_textbox->setMaxLength(1);
 
 	Gnk_Textbox_Keep_Placeholder *search_bar_textbox = new Gnk_Textbox_Keep_Placeholder(*guest_frame_check_in_textbox);
