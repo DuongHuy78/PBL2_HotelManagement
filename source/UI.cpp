@@ -4039,7 +4039,7 @@ void admin_frame_init() {
 void UI_init() {
 	// Initialize
 	const float width = 1600.0f, height = 900.0f;
-	gnk_Initialize(width, height, "PBL2 - Hotel Management - Nguyễn Nhật Hoàng - Lê Dương Huy - Huỳnh Trương Thảo Duyên", "shader/text.vs", "shader/text.fs");
+	gnk_Initialize(width, height, "PBL2 - Hotel Management - Nguyễn Nhật Hoàng - Lê Dương Huy - Huỳnh Trương Thảo Duyên", "shader/text.txt", "shader/frag_text.txt");
 	gnk_Set_Frame_Space(frame_Space);
 
 	gnk_Font_List.addFont("arial", "font/arial.ttf", 48);
