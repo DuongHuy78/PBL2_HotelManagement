@@ -799,7 +799,7 @@ void Gnk_Textbox_Multi_Line::draw() {
 	gnk_Set_Object_Color(text_color);
 
 	Gnk_Point P(A.x + paddingX, B.y - paddingY - font_size - spacing);
-	gnk_Text_Multi_Line(text, P, maxLine, spacing, font_size, text_align);
+	gnk_Text_Multi_Line(text, P, maxLine, spacing, font_size);
 	std::stringstream ss(text);
 	std::string word;
 	std::string line;
@@ -1149,6 +1149,9 @@ void Gnk_List_Object::draw() {
 	scrollbar.setMaxHeight(group_height);
 	scrollbar.setCurrentPos(currentPos);
 	scrollbar.setAppear(true);
+	if(currentPos < group_height) {
+		scrollbar.setAppear(false);
+	}
 	
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_SCISSOR_TEST);
@@ -1781,7 +1784,7 @@ void gnk_Text_Limited(std::string text, Gnk_Point P, float width, float height, 
 	glPopAttrib();
 }
 
-int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacing, int fontSize, text_align_value textAlign) {
+int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacing, int fontSize) {
 	std::stringstream ss(s);
 	std::string word;
 	std::string line;
@@ -1789,14 +1792,14 @@ int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacin
 	while (ss >> word) {
 		if (line.size() + word.size() + 1 > width) {
 			if(!line.empty()) {
-				gnk_Text_Limited(line, P.translate(0.0f, -line_num * (fontSize + spacing)), gnk_Get_Text_Width(line, fontSize), fontSize + spacing, fontSize, textAlign);
+				gnk_Text(line, P.translate(0.0f, -line_num * (fontSize + spacing)), fontSize);
 				line_num++;
 				line.clear();
 			}
 			else {
 				while (word.size() > width) {
 					std::string temp = word.substr(0, width);
-					gnk_Text_Limited(temp, P.translate(0.0f, -line_num * (fontSize + spacing)), gnk_Get_Text_Width(temp, fontSize), fontSize + spacing, fontSize, textAlign);
+					gnk_Text(temp, P.translate(0.0f, -line_num * (fontSize + spacing)), fontSize);
 					line_num++;
 					word = word.substr(width);
 				}

@@ -417,7 +417,7 @@ void gnk_Set_Character_Font(std::string);
 float gnk_Get_Text_Width(std::string, float);
 void gnk_Text(std::string, Gnk_Point, float);
 void gnk_Text_Limited(std::string, Gnk_Point, float, float, float, text_align_value);
-int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int, text_align_value = GNK_TEXT_LEFT);
+int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int);
 
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);
