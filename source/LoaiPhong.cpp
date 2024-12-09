@@ -298,6 +298,6 @@ ostream& operator<<(ostream& out, const LoaiPhong& lp) {
     Utils::wrapText(lp.moTaPhong, 40, 0);
     Utils::outputData("So luong phong: ", CONSOLE);
     Utils::outputData(Utils::intToString(lp.danhSachPhong.getSize()) + "\n", CONSOLE_OR_UI);
-    Utils::outputData(string(40, '-') + "\n", CONSOLE);
+    Utils::outputData("------NhatHoang-DuongHuy-ThaoDuyen------\n", CONSOLE);
     return out;
 }

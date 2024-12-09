@@ -285,6 +285,6 @@ ostream &operator<<(ostream &out, const DatPhong &dp) {
     Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp.donGia)) + " VND\n", CONSOLE_OR_UI);
     Utils::outputData("Tong Tien: ", CONSOLE);
     Utils::outputData(Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND\n", CONSOLE_OR_UI);
-    Utils::outputData("---------------------------------------\n", CONSOLE);
+    Utils::outputData("-----NhatHoang-DuongHuy-ThaoDuyen-----\n", CONSOLE);
     return out;
 }

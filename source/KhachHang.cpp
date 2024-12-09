@@ -242,7 +242,7 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
     Utils::outputData(kh.soDienThoai + "\n", CONSOLE_OR_UI);
     Utils::outputData("Gioi Tinh: ", CONSOLE);
     Utils::outputData(Utils::genderToString(kh.gioiTinh) + "\n", CONSOLE_OR_UI);
-    Utils::outputData("----------------------------------------\n", CONSOLE);
+    Utils::outputData("------NhatHoang-DuongHuy-ThaoDuyen------\n", CONSOLE);
     return out;
 }
 
@@ -253,13 +253,13 @@ ostream& operator<<(ostream& out, const KhachHang& kh) {
  */
 user_option_value KhachHang::work() {
     system("cls");
-    Utils::outputData("----------KHACH-HANG---------\n", CONSOLE);
+    Utils::outputData("-----------KHACH-HANG----------\n", CONSOLE);
     Utils::outputData("1. Sua thong tin\n", CONSOLE);
     Utils::outputData("2. Xem thong tin\n", CONSOLE);
     Utils::outputData("3. Dat Phong\n", CONSOLE);
     Utils::outputData("4. Lich su dat phong\n", CONSOLE);
     Utils::outputData("5. Dang xuat\n", CONSOLE);
-    Utils::outputData("-----------------------------\n", CONSOLE);
+    Utils::outputData("--NhatHoang-DuongHuy-ThaoDuyen--\n", CONSOLE);
 
     string choice_str;
     Utils::outputData("Hay nhap lua chon: ", CONSOLE);
