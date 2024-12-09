@@ -141,6 +141,7 @@ void admin_frame_room_list_process(Gnk_List_Object *);
 
 void admin_frame_confirm_button_click(Gnk_Button *);
 void admin_frame_previous_button_click(Gnk_Button *);
+void admin_frame_view_revenue_button_click(Gnk_Button *);
 extern Gnk_Frame admin;
 // ---------------------------------------------------------
 void login_frame_init();

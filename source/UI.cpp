@@ -114,8 +114,11 @@ guest_profile current_guest_profile;
 bool edit_profile = false;
 bool staff_booking_guest_ID_not_exist = false;
 bool admin_type_room_not_exist = false;
+bool admin_type_room_was_existed = false;
+bool admin_type_room_was_used = false;
 string booking_total_price = "";
 string staff_booking_guest_ID = "";
+string admin_revenue_str = "";
 bool staff_create_guest_success = false;
 // ---------------------------------------------------------
 Gnk_Color C_1A1A1D(26, 26, 29);
@@ -856,6 +859,7 @@ void guest_frame_select_type_room_button_click(Gnk_Button *button) {
 	UI_input_buffer << number_of_guest_str << endl;
 	UI_input_buffer << room_list[index_booking].type << endl;
 	current_Data->list_Room_Available();
+	list_room_choice.clear();
 	string room_available;
 	bool first = true;
 	while(getline(UI_output_buffer, room_available)) {
@@ -1714,6 +1718,39 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["remove_type_room_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Add new type room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+
+		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Loai Giuong: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text("So Nguoi: ", Gnk_Point(820.0f, 472.0f), 24.0f);
+		gnk_Text("Dien Tich: ", Gnk_Point(820.0f, 412.0f), 24.0f);
+		gnk_Text("Gia: ", Gnk_Point(820.0f, 352.0f), 24.0f);
+		gnk_Text("Mo Ta: ", Gnk_Point(820.0f, 292.0f), 24.0f);
+
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+		frame->textboxList["bed_type_textbox"]->setAppear(true);
+		frame->textboxList["bed_type_textbox"]->display();
+		frame->textboxList["number_of_guest_textbox"]->setAppear(true);
+		frame->textboxList["number_of_guest_textbox"]->display();			
+		frame->textboxList["area_textbox"]->setAppear(true);
+		frame->textboxList["area_textbox"]->display();
+		frame->textboxList["price_textbox"]->setAppear(true);
+		frame->textboxList["price_textbox"]->display();
+		frame->textboxList["description_textbox"]->setAppear(true);
+		frame->textboxList["description_textbox"]->display();	
+
+		frame->buttonList["confirm_button"]->setAppear(true);
+		frame->buttonList["confirm_button"]->display();
 
 	}
 	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
@@ -1725,6 +1762,34 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["remove_type_room_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Remove type room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+
+		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+		
+		if(admin_type_room_not_exist == true) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The type room does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+		else if(admin_type_room_was_used) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The type room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+
+		frame->buttonList["confirm_button"]->setAppear(true);
+		frame->buttonList["confirm_button"]->display();
 	}
 	else if(option == ADMIN_ROOM_VIEW_AND_EDIT) {
 		frame->buttonList["room_view_and_edit_button"]->setAppear(true);
@@ -1747,6 +1812,28 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["remove_room_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Add new room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Loai Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Ma Phong: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text("Danh sach loai phong: ", Gnk_Point(820.0f, 462.0f), 24.0f);
+		gnk_Text_Multi_Line(list_type_room_available, Gnk_Point(820.0f, 412.0f), 54, 10, 24);
+
+		frame->textboxList["room_ID_textbox"]->setAppear(true);
+		frame->textboxList["room_ID_textbox"]->display();
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+
+		frame->buttonList["confirm_button"]->setAppear(true);
+		frame->buttonList["confirm_button"]->display();
 
 	}
 	else if(option == ADMIN_REMOVE_ROOM) {
@@ -1758,6 +1845,35 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["remove_room_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Remove room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+
+		gnk_Text("Ma Phong: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		frame->textboxList["room_ID_rm_textbox"]->setAppear(true);
+		frame->textboxList["room_ID_rm_textbox"]->display();
+
+		if(admin_type_room_not_exist == true) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The room ID does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+		else if(admin_type_room_was_used) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica-bold");
+			gnk_Text("The room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+		}
+
+		frame->buttonList["confirm_button"]->setAppear(true);
+		frame->buttonList["confirm_button"]->display();
 	}
 	else if(option == ADMIN_DAILY_REVENUE) {
 		frame->buttonList["daily_revenue_button"]->setAppear(true);
@@ -1768,6 +1884,23 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["yearly_revenue_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Daily Revenue", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Doanh thu ngay: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["date_textbox"]->setAppear(true);
+		frame->textboxList["date_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_MONTHLY_REVENUE) {
 		frame->buttonList["daily_revenue_button"]->setAppear(true);
@@ -1778,7 +1911,23 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["yearly_revenue_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
-
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Monthly Revenue", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Doanh thu thang: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["month_textbox"]->setAppear(true);
+		frame->textboxList["month_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_YEARLY_REVENUE) {
 		frame->buttonList["daily_revenue_button"]->setAppear(true);
@@ -1789,6 +1938,23 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["yearly_revenue_button"]->display();
 		frame->buttonList["back_to_main_button"]->setAppear(true);
 		frame->buttonList["back_to_main_button"]->display();
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Set_Character_Font("helvetica-bold");
+		gnk_Text_Limited("Yearly Revenue", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+		gnk_Set_Object_Color(H_FFFFFF);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
+		gnk_Set_Object_Color(H_222831);
+		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
+		gnk_Image(gnk_Image_List["money_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
+		gnk_Set_Character_Font("helvetica");
+		gnk_Set_Object_Color(C_1A1A1D);
+		gnk_Text("Doanh thu nam: ", Gnk_Point(820.0f, 592.0f), 24.0f);
+		gnk_Text("Doanh thu: ", Gnk_Point(820.0f, 532.0f), 24.0f);
+		gnk_Text(admin_revenue_str, Gnk_Point(1020.0f, 532.0f), 24.0f);
+		frame->textboxList["year_textbox"]->setAppear(true);
+		frame->textboxList["year_textbox"]->display();
+		frame->buttonList["view_revenue_button"]->setAppear(true);
+		frame->buttonList["view_revenue_button"]->display();
 	}
 	else if(option == ADMIN_TYPE_ROOM_EDIT) {
 		frame->buttonList["type_room_view_and_edit_button"]->setAppear(true);
@@ -1806,10 +1972,9 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 
 			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
-			gnk_Set_Object_Color(H_7E7E81);
+			gnk_Set_Object_Color(H_222831);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
-			gnk_Image(gnk_Image_List[type_room_info_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
-			
+			gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 			gnk_Set_Character_Font("helvetica");
 			gnk_Set_Object_Color(C_1A1A1D);
 
@@ -1850,14 +2015,13 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		if(index_booking != -1) {
 			gnk_Set_Object_Color(C_1A1A1D);
 			gnk_Set_Character_Font("helvetica-bold");
-			gnk_Text_Limited("Edit type room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
+			gnk_Text_Limited("Edit room", Gnk_Point(480.0f, 710.0f), 1030.0f, 60.0f, 40.0f, GNK_TEXT_LEFT);
 
 			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 700.0f));
-			gnk_Set_Object_Color(H_7E7E81);
+			gnk_Set_Object_Color(H_222831);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(780.0f, 700.0f));
-			gnk_Image(gnk_Image_List[room_info_list[index_booking].type], Gnk_Point(480.0f, 400.0f), Gnk_Point(780.0f, 700.0f));
-			
+			gnk_Image(gnk_Image_List["edit_icon"], Gnk_Point(540.0f, 330.0f), Gnk_Point(720.0f, 510.0f));
 			gnk_Set_Character_Font("helvetica");
 			gnk_Set_Object_Color(C_1A1A1D);
 
@@ -2010,6 +2174,12 @@ void admin_add_type_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_ADD_TYPE_ROOM;
+	admin.textboxList["type_room_textbox"]->text = "";
+	admin.textboxList["bed_type_textbox"]->text = "";
+	admin.textboxList["number_of_guest_textbox"]->text = "";
+	admin.textboxList["area_textbox"]->text = "";
+	admin.textboxList["price_textbox"]->text = "";
+	admin.textboxList["description_textbox"]->text = "";
 }
 
 void admin_remove_type_room_button_click(Gnk_Button *button) {
@@ -2019,6 +2189,23 @@ void admin_remove_type_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_REMOVE_TYPE_ROOM;
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
+
+	list_type_room_available = "";
+	current_Data->list_all_type_room();
+	list_type_room_choice.clear();
+	string type_room;
+	bool first = true;
+	while(getline(UI_output_buffer, type_room)) {
+		list_type_room_choice.push_back(type_room);
+		if(first)list_type_room_available = type_room;
+		else list_type_room_available += ", " + type_room;
+		first = false;
+	}
+	admin_type_room_not_exist = false;
+	admin_type_room_was_used = false;
+	admin.textboxList["type_room_textbox"]->text = "";
 }
 
 void admin_room_view_and_edit_button_click(Gnk_Button *button) {
@@ -2040,6 +2227,24 @@ void admin_add_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_ADD_ROOM;
+
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
+
+	list_type_room_available = "";
+	current_Data->list_all_type_room();
+	list_type_room_choice.clear();
+	string type_room;
+	bool first = true;
+	while(getline(UI_output_buffer, type_room)) {
+		list_type_room_choice.push_back(type_room);
+		if(first)list_type_room_available = type_room;
+		else list_type_room_available += ", " + type_room;
+		first = false;
+	}
+	admin_type_room_not_exist = false;
+	admin.textboxList["room_ID_textbox"]->text = "";
+	admin.textboxList["type_room_textbox"]->text = "";
 }
 
 void admin_remove_room_button_click(Gnk_Button *button) {
@@ -2049,6 +2254,24 @@ void admin_remove_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_REMOVE_ROOM;
+
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
+
+	list_room_available = "";
+	current_Data->list_all_room();
+	list_room_choice.clear();
+	string room;
+	bool first = true;
+	while(getline(UI_output_buffer, room)) {
+		list_room_choice.push_back(room);
+		if(first)list_room_available = room;
+		else list_room_available += ", " + room;
+		first = false;
+	}
+	admin_type_room_not_exist = false;
+	admin_type_room_was_used = false;
+	admin.textboxList["room_ID_rm_textbox"]->text = "";
 }
 
 void admin_daily_revenue_button_click(Gnk_Button *button) {
@@ -2058,6 +2281,8 @@ void admin_daily_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_DAILY_REVENUE;
+	admin.textboxList["date_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_monthly_revenue_button_click(Gnk_Button *button) {
@@ -2067,6 +2292,8 @@ void admin_monthly_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_MONTHLY_REVENUE;
+	admin.textboxList["month_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_yearly_revenue_button_click(Gnk_Button *button) {
@@ -2076,6 +2303,8 @@ void admin_yearly_revenue_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_YEARLY_REVENUE;
+	admin.textboxList["year_textbox"]->text = "";
+	admin_revenue_str = "";
 }
 
 void admin_frame_back_to_main_button_click(Gnk_Button *button) {
@@ -2118,6 +2347,7 @@ void admin_frame_select_room_button_click(Gnk_Button *button) {
 
 	list_type_room_available = "";
 	current_Data->list_all_type_room();
+	list_type_room_choice.clear();
 	string type_room;
 	bool first = true;
 	while(getline(UI_output_buffer, type_room)) {
@@ -2419,6 +2649,126 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		current_Data->requestHandling(UPDATE_PHONG);
 		option = ADMIN_ROOM_EDIT_DONE;
 	}
+	else if(option == ADMIN_ADD_TYPE_ROOM) {
+		type_room_info info;
+		info.type = admin.textboxList["type_room_textbox"]->text;
+		info.bed_type = admin.textboxList["bed_type_textbox"]->text;
+		info.number_of_guest = admin.textboxList["number_of_guest_textbox"]->text;
+		info.area = admin.textboxList["area_textbox"]->text;
+		info.price = admin.textboxList["price_textbox"]->text;
+		info.description = admin.textboxList["description_textbox"]->text;
+		
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == info.type) {
+				check = true;
+				break;
+			}
+		}
+		if(check == true) {
+			admin_type_room_was_existed = true;
+			return;
+		}
+
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		UI_input_buffer << info.type << endl;
+		UI_input_buffer << info.bed_type << endl;
+		UI_input_buffer << info.number_of_guest << endl;
+		int area = Utils::getOnlyNumber(info.area);
+		UI_input_buffer << area << endl;
+		int price = Utils::getOnlyNumber(info.price);
+		UI_input_buffer << price << endl;
+		UI_input_buffer << info.description << endl;
+
+		current_Data->requestHandling(ADD_LOAI_PHONG);
+		option = ADMIN_TYPE_ROOM_ADD_DONE;
+	}
+	else if(option == ADMIN_ADD_ROOM) {
+		string ID = admin.textboxList["room_ID_textbox"]->text;
+		string type_room = admin.textboxList["type_room_textbox"]->text;
+		
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == type_room) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		UI_input_buffer << ID << endl;
+		UI_input_buffer << type_room << endl;
+
+		current_Data->requestHandling(ADD_PHONG);
+		option = ADMIN_ROOM_ADD_DONE;
+	}
+	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
+		string type_room = admin.textboxList["type_room_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == type_room) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		if(current_Data->getSoLuongPhong(type_room) > 0) {
+			admin_type_room_was_used = true;
+			return;
+		}
+
+		UI_input_buffer << type_room << endl;
+
+		current_Data->requestHandling(DELETE_LOAIPHONG);
+
+		option = ADMIN_TYPE_ROOM_REMOVE_DONE;
+	}
+	else if(option == ADMIN_REMOVE_ROOM) {
+		string room_ID = admin.textboxList["room_ID_rm_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		bool check = false;
+		for(auto &it : list_room_choice) {
+			if(it == room_ID) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		if(current_Data->getSoLuongDatPhong(room_ID) > 0) {
+			admin_type_room_was_used = true;
+			return;
+		}
+
+		UI_input_buffer << room_ID << endl;
+		
+		current_Data->requestHandling(DELETE_PHONG);
+
+		option = ADMIN_ROOM_REMOVE_DONE;
+	}
+
 }
 
 void admin_frame_previous_button_click(Gnk_Button *button) {
@@ -2432,6 +2782,58 @@ void admin_frame_previous_button_click(Gnk_Button *button) {
 	}
 	else if(option == ADMIN_ROOM_EDIT) {
 		option = ADMIN_ROOM_VIEW_AND_EDIT;
+	}
+}
+
+void admin_frame_view_revenue_button_click(Gnk_Button *button) {
+	Gnk_Button_With_Text *buttonText = (Gnk_Button_With_Text *)button;
+	Gnk_Color color = buttonText->color;
+	buttonText->color = color - Gnk_Color(40, 40, 40);
+	buttonText->draw();
+	buttonText->color = color;
+	if(option == ADMIN_DAILY_REVENUE) {
+		string date = admin.textboxList["date_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		if(!Utils::isDate(date)) {
+			admin_revenue_str = "Ngay khong hop le!";
+			return;
+		}
+		UI_input_buffer << 1 << endl;
+		UI_input_buffer << date << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
+	}
+	else if(option == ADMIN_MONTHLY_REVENUE) {
+		string month = admin.textboxList["month_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		if(!Utils::isDate("01/" + month)) {
+			admin_revenue_str = "Thang khong hop le!";
+			return;
+		}
+
+		UI_input_buffer << 2 << endl;
+		UI_input_buffer << month << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
+	}
+	else if(option == ADMIN_YEARLY_REVENUE) {
+		string year = admin.textboxList["year_textbox"]->text;
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		if(!Utils::isDate("01/01/" + year)) {
+			admin_revenue_str = "Nam khong hop le!";
+			return;
+		}
+		UI_input_buffer << 3 << endl;
+		UI_input_buffer << year << endl;
+		current_Data->requestHandling(PRINT_DOANH_THU);
+		getline(UI_output_buffer, admin_revenue_str);
+		admin_revenue_str = Utils::chuanHoaSo(admin_revenue_str) + " VND";
 	}
 }
 
@@ -3181,6 +3583,10 @@ void admin_frame_init() {
 	admin_frame_confirm_button->setHoverProcess(button_hover_type_3);
 	admin_frame_confirm_button->setClickProcess(admin_frame_confirm_button_click);
 
+	Gnk_Button_With_Text *admin_frame_view_revenue_button = new Gnk_Button_With_Text(*admin_frame_confirm_button);
+	admin_frame_view_revenue_button->setText("View Revenue");
+	admin_frame_view_revenue_button->setClickProcess(admin_frame_view_revenue_button_click);
+
 	Gnk_Button_With_Text *admin_frame_previous_button = new Gnk_Button_With_Text(*admin_frame_confirm_button);
 	admin_frame_previous_button->setRange(Gnk_Point(480.0f, 30.0f), Gnk_Point(700.0f, 100.0f));
 	admin_frame_previous_button->setText("Previous");
@@ -3211,9 +3617,12 @@ void admin_frame_init() {
 	admin_price_textbox->setRange(Gnk_Point(1020.0f, 340.0f), Gnk_Point(1480.0f, 390.0f));
 	admin_price_textbox->setMaxLength(20);
 
-	Gnk_Textbox *admin_description_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
-	admin_description_textbox->setRange(Gnk_Point(1020.0f, 280.0f), Gnk_Point(1480.0f, 330.0f));
-	admin_description_textbox->setMaxLength(200);
+	Gnk_Textbox_Multi_Line *admin_description_textbox = new Gnk_Textbox_Multi_Line(*admin_bed_type_textbox);
+	admin_description_textbox->setRange(Gnk_Point(1020.0f, 160.0f), Gnk_Point(1480.0f, 318.0f));
+	admin_description_textbox->setMaxLength(144);
+	admin_description_textbox->setMaxLine(36);
+	admin_description_textbox->setSpacing(10);
+	admin_description_textbox->setTextAlign(GNK_TEXT_LEFT);
 
 	Gnk_Textbox *admin_type_room_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
 	admin_type_room_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
@@ -3222,6 +3631,22 @@ void admin_frame_init() {
 	Gnk_Textbox *admin_room_ID_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
 	admin_room_ID_textbox->setRange(Gnk_Point(1020.0f, 520.0f), Gnk_Point(1480.0f, 570.0f));
 	admin_room_ID_textbox->setMaxLength(MAX_MAPHONG);
+
+	Gnk_Textbox *admin_room_ID_rm_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_room_ID_rm_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_room_ID_rm_textbox->setMaxLength(MAX_MAPHONG);
+
+	Gnk_Textbox *admin_date_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_date_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_date_textbox->setMaxLength(10);
+
+	Gnk_Textbox *admin_month_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_month_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_month_textbox->setMaxLength(7);
+
+	Gnk_Textbox *admin_year_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
+	admin_year_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
+	admin_year_textbox->setMaxLength(4);
 
 	admin.addButton("type_room_button", admin_frame_type_room_button);
 	admin.addButton("room_button", admin_room_button);
@@ -3246,6 +3671,7 @@ void admin_frame_init() {
 
 	admin.addButton("confirm_button", admin_frame_confirm_button);
 	admin.addButton("previous_button", admin_frame_previous_button);
+	admin.addButton("view_revenue_button", admin_frame_view_revenue_button);
 
 	admin.addTextbox("bed_type_textbox", admin_bed_type_textbox);
 	admin.addTextbox("number_of_guest_textbox", admin_number_of_guest_textbox);
@@ -3254,6 +3680,10 @@ void admin_frame_init() {
 	admin.addTextbox("description_textbox", admin_description_textbox);
 	admin.addTextbox("type_room_textbox", admin_type_room_textbox);
 	admin.addTextbox("room_ID_textbox", admin_room_ID_textbox);
+	admin.addTextbox("room_ID_rm_textbox", admin_room_ID_rm_textbox);
+	admin.addTextbox("date_textbox", admin_date_textbox);
+	admin.addTextbox("month_textbox", admin_month_textbox);
+	admin.addTextbox("year_textbox", admin_year_textbox);
 }
 
 void UI_init() {
@@ -3273,6 +3703,8 @@ void UI_init() {
 	gnk_Image_List.addImage("search_icon", "image/search_icon.png");
 	gnk_Image_List.addImage("man_icon", "image/man_icon.png");
 	gnk_Image_List.addImage("woman_icon", "image/woman_icon.png");
+	gnk_Image_List.addImage("edit_icon", "image/edit.png");
+	gnk_Image_List.addImage("money_icon", "image/money.png");
 
 	UI_input_buffer.str("");UI_input_buffer.clear();
 	UI_output_buffer.str("");UI_output_buffer.clear();

@@ -2,7 +2,7 @@
 #define LOAIPHONG_H
 #include "Utils.h"
 #include "Phong.h"
-#define MAX_IDLOAIPHONG 7
+#define MAX_IDLOAIPHONG 8
 class Phong;
 class LoaiPhong {
     string loaiPhong;   // S, D, D2, T, F, F2
@@ -27,6 +27,7 @@ public:
     int getGiaPhong() const;
     int getDienTich() const;
     string getMoTaPhong() const;
+    int getSoLuongPhong() const;
 
     bool setLoaiPhong(string);
     bool setLoaiGiuong(int);

@@ -33,17 +33,22 @@ void QLLoaiPhong::suaThongTin(const string& IDLoaiPhong){
 
 void QLLoaiPhong::xoaLoaiPhong(const string& IDLoaiPhong){
     Node<LoaiPhong *> *p = DSLP.begin();
-    while( p != DSLP.end())
-    {
-        if(p->data->getLoaiPhong() == IDLoaiPhong)
-            {
-                DSLP.remove(p);
-                cout << "Da xoa Loai Phong voi ID: " << IDLoaiPhong << endl;
+    while( p != DSLP.end()) {
+        if(p->data->getLoaiPhong() == IDLoaiPhong) {
+            if(p->data->getSoLuongPhong() > 0) {
+                Utils::outputData("Khong the xoa Loai Phong vi con phong thuoc loai phong nay!\n", CONSOLE);
                 return;
             }
+            else {
+                delete p->data;
+                DSLP.remove(p);
+                Utils::outputData("Da xoa Loai Phong voi ID " + IDLoaiPhong + " thanh cong!\n", CONSOLE);
+                return;
+            }
+        }
         p = p -> next;
     }
-    cout << "Khong tim thay Loai Phong!" << endl;
+    Utils::outputData("Khong tim thay Loai Phong!\n", CONSOLE);
 }
 
 LoaiPhong *QLLoaiPhong::timLoaiPhong(string IDLoaiPhong){

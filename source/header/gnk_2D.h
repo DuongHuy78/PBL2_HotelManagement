@@ -244,6 +244,19 @@ public:
 	virtual void display();
 };
 
+class Gnk_Textbox_Multi_Line: public Gnk_Textbox {
+public:
+	int maxLine;
+	int spacing;
+	Gnk_Textbox_Multi_Line();
+	Gnk_Textbox_Multi_Line(Gnk_Textbox&);
+	Gnk_Textbox_Multi_Line(Gnk_Textbox_Multi_Line&);
+	void setMaxLine(int);
+	void setSpacing(int);
+	virtual void draw();
+	virtual void display();
+};
+
 class Gnk_Scrollbar {
 public:
 	bool appear = false;

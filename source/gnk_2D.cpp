@@ -743,6 +743,145 @@ void Gnk_Textbox_Keep_Placeholder::display() {
 	}
 }
 
+// Textbox Multi Line Definition
+Gnk_Textbox_Multi_Line::Gnk_Textbox_Multi_Line() 
+	: Gnk_Textbox() {
+	this->maxLine = 1;
+	this->spacing = 0;
+}
+
+Gnk_Textbox_Multi_Line::Gnk_Textbox_Multi_Line(Gnk_Textbox &textbox) 
+	: Gnk_Textbox(textbox) {
+	this->maxLine = 1;
+	this->spacing = 0;
+}
+
+Gnk_Textbox_Multi_Line::Gnk_Textbox_Multi_Line(Gnk_Textbox_Multi_Line &textbox) {
+	this->appear = textbox.appear;
+	this->A = textbox.A;
+	this->B = textbox.B;
+	this->color = textbox.color;
+	this->border_radius = textbox.border_radius;
+	this->text = textbox.text;
+	this->text_font = textbox.text_font;
+	this->font_size = textbox.font_size;
+	this->text_color = textbox.text_color;
+	this->placeholder = textbox.placeholder;
+	this->placeholder_font = textbox.placeholder_font;
+	this->placeholder_font_size = textbox.placeholder_font_size;
+	this->placeholder_color = textbox.placeholder_color;
+	this->paddingX = textbox.paddingX;
+	this->paddingY = textbox.paddingY;
+	this->text_align = textbox.text_align;
+	this->on_select = textbox.on_select;
+	this->select_process = textbox.select_process;
+	this->maxLength = textbox.maxLength;
+	this->maxLine = textbox.maxLine;
+	this->spacing = textbox.spacing;
+}
+
+void Gnk_Textbox_Multi_Line::setMaxLine(int maxLine) {
+	this->maxLine = maxLine;
+}
+void Gnk_Textbox_Multi_Line::setSpacing(int spacing) {
+	this->spacing = spacing;
+}
+
+void Gnk_Textbox_Multi_Line::draw() {
+	if(!appear) return;
+
+	if(text.size() > maxLength) {
+		text = text.substr(0, maxLength);
+	}
+
+	gnk_Set_Character_Font(text_font);
+	float scale = font_size / gnk_Current_Font->size;
+	gnk_Set_Object_Color(text_color);
+
+	Gnk_Point P(A.x + paddingX, B.y - paddingY - font_size - spacing);
+	gnk_Text_Multi_Line(text, P, maxLine, spacing, font_size, text_align);
+	std::stringstream ss(text);
+	std::string word;
+	std::string line;
+	std::vector<std::string> lines;
+	lines.clear();
+	while (ss >> word) {
+		if (line.size() + word.size() + 1 > maxLine) {
+			if(!line.empty()) {
+				lines.push_back(line);
+				line.clear();
+			}
+			else {
+				while(word.size() > maxLine) {
+					lines.push_back(word.substr(0, maxLine));
+					word = word.substr(maxLine);
+				}
+			}
+		}
+		line += (line.empty() ? "" : " ") + word;
+	}
+	if (!line.empty()) {
+		lines.push_back(line);
+	}
+	if (lines.size() == 0) {
+		lines.push_back("");
+	}
+	std::string output = lines[lines.size() - 1];
+	for(int i = text.size() - 1; i >= 0; --i) {
+		if(text[i] != ' ') break;
+		output += ' ';
+	}
+
+	float maxWidth = gnk_Get_Text_Width(output, font_size);
+	float maxHeight = gnk_Current_Font->getMaxHeight() * scale;
+
+	if (maxWidth > getWidth() - 2 * paddingX) {
+		maxWidth = getWidth() - 2 * paddingX;
+	}
+		
+	if (maxHeight > getHeight() - 2 * paddingY)
+		maxHeight = getHeight() - 2 * paddingY;
+
+	float cpX = 0, cpY = 0;
+	if (text_align == GNK_TEXT_CENTER) {
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) / 2 + maxWidth;
+		cpY = P.y - A.y - (lines.size() - 1) * (font_size + spacing) + maxHeight;
+	}
+	else if (text_align == GNK_TEXT_LEFT) {
+		cpX = paddingX + maxWidth;
+		cpY = P.y - A.y - (lines.size() - 1) * (font_size + spacing) + maxHeight;
+	}
+	else if (text_align == GNK_TEXT_RIGHT) {
+		cpX = paddingX + (getWidth() - 2 * paddingX - maxWidth) + maxWidth;
+		cpY = P.y - A.y - (lines.size() - 1) * (font_size + spacing) + maxHeight;
+	}
+	
+	if (on_select) {
+		if (glfwGetTime() - gnk_Text_Cursor_Last_Time > 0.5f) {
+			gnk_Text_Cursor_Appear = !gnk_Text_Cursor_Appear;
+			gnk_Text_Cursor_Last_Time = glfwGetTime();
+		}
+		if (gnk_Text_Cursor_Appear) {
+			gnk_Set_Line_Width(2.0f);
+			gnk_Set_Object_Color(Gnk_Color(0, 0, 0));
+			gnk_Line(Gnk_Point(A.x + cpX, A.y + cpY - maxHeight),
+				Gnk_Point(A.x + cpX, A.y + cpY));
+			gnk_Set_Line_Width(1.0f);
+		}
+	}
+
+}
+
+void Gnk_Textbox_Multi_Line::display() {
+	if(!appear) return;
+	if(on_select && select_process != nullptr) {
+		select_effect();
+	}
+	else {
+		draw();
+	}
+}
+
 // Frame Definition
 Gnk_Frame::Gnk_Frame() {
 	this->process = nullptr;
@@ -1649,9 +1788,19 @@ int gnk_Text_Multi_Line(const std::string &s, Gnk_Point P, int width, int spacin
 	int line_num = 0;
 	while (ss >> word) {
 		if (line.size() + word.size() + 1 > width) {
-			gnk_Text(line, P.translate(0.0f, -line_num * (fontSize + spacing)), fontSize);
-			line_num++;
-			line.clear();
+			if(!line.empty()) {
+				gnk_Text_Limited(line, P.translate(0.0f, -line_num * (fontSize + spacing)), gnk_Get_Text_Width(line, fontSize), fontSize + spacing, fontSize, textAlign);
+				line_num++;
+				line.clear();
+			}
+			else {
+				while (word.size() > width) {
+					std::string temp = word.substr(0, width);
+					gnk_Text_Limited(temp, P.translate(0.0f, -line_num * (fontSize + spacing)), gnk_Get_Text_Width(temp, fontSize), fontSize + spacing, fontSize, textAlign);
+					line_num++;
+					word = word.substr(width);
+				}
+			}
 		}
 		line += (line.empty() ? "" : " ") + word;
 	}

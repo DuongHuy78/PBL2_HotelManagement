@@ -51,11 +51,15 @@ public:
     void list_Type_Room_Available();
     void list_Room_Available();
     void list_all_type_room();
+    void list_all_room();
     role_value getCurrentRole();
     bool GuestExist(string);
     void xemDanhSachLuaChonXemDoanhThu();
     int thongKe(string, string);
     void capNhatThongTinPhong(Phong *);
+    void themPhongMoi(Phong *);
+    int getSoLuongPhong(string);
+    int getSoLuongDatPhong(string);
 };
 
 #endif
