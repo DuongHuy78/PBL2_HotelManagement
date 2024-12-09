@@ -237,7 +237,7 @@ void login_frame_draw(Gnk_Frame *frame) {
 	for(auto &textbox : frame->textboxList) {
 		textbox.second->display();
 	}
-	
+
 	frame->buttonList["forgotten_password_button"]->setAppear(false);
 	for(auto &button : frame->buttonList) {
 		button.second->display();
@@ -546,7 +546,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(820.0f, 620.0f), 24.0f);
 			gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
 			gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(820.0f, 560.0f), 24.0f);
 			gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
@@ -555,7 +555,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			gnk_Set_Line_Width(2.0f);
 			gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
 			gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
-			gnk_Text("# of Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+			gnk_Text("Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
 			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1000.0f, 380.0f));
@@ -605,7 +605,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 		gnk_Text("Bed type: ", Gnk_Point(820.0f, 620.0f), 24.0f);
 		gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
-		gnk_Text("# of guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
+		gnk_Text("Guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
 		gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
 		gnk_Text("Area: ", Gnk_Point(820.0f, 560.0f), 24.0f);
 		gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
@@ -614,7 +614,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Set_Line_Width(2.0f);
 		gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
 		gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
-		gnk_Text("# of Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+		gnk_Text("Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
 		gnk_Set_Object_Color(H_FFFFFF);
 		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
@@ -628,7 +628,7 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Text(check_in_date_str, Gnk_Point(720.0f, 290.0f), 24.0f);
 		gnk_Text("Check out date: ", Gnk_Point(510.0f, 260.0f), 24.0f);
 		gnk_Text(check_out_date_str, Gnk_Point(720.0f, 260.0f), 24.0f);
-		gnk_Text("# of guests:", Gnk_Point(510.0f, 230.0f), 24.0f);
+		gnk_Text("Guests:", Gnk_Point(510.0f, 230.0f), 24.0f);
 		gnk_Text(number_of_guest_str, Gnk_Point(720.0f, 230.0f), 24.0f);
 		gnk_Text("Room code: ", Gnk_Point(510.0f, 200.0f), 24.0f);
 		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
@@ -779,7 +779,7 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Text(room_list[i].type, Gnk_Point(500.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_list[i].bed_type, Gnk_Point(500.0f, 220.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_list[i].number_of_guest, Gnk_Point(500.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_list[i].area, Gnk_Point(500.0f, 160.0f - i * list->toNextObject()), 24.0f);
@@ -788,7 +788,7 @@ void guest_frame_search_room_list_process(Gnk_List_Object *list) {
 			gnk_Set_Line_Width(2.0f);
 			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(1030.0f, 120.0f - i * list->toNextObject()));
 			gnk_Text_Multi_Line(room_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
-			gnk_Text("# of Rooms:" + room_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Rooms:" + room_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			if(index_hover_room == i) {
 				gnk_Set_Object_Color(H_000000, 0.2f);
 				glEnable(GL_BLEND);
@@ -1053,7 +1053,7 @@ void guest_frame_history_list_process(Gnk_List_Object *list) {
 			gnk_Text(history_booking_list[i].check_in_date, Gnk_Point(560.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Check out date: ", Gnk_Point(340.0f, 130.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(history_booking_list[i].check_out_date, Gnk_Point(560.0f, 130.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 100.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 100.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(history_booking_list[i].number_of_guest, Gnk_Point(560.0f, 100.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Room rate: ", Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(history_booking_list[i].price_per_night, Gnk_Point(560.0f, 70.0f - i * list->toNextObject()), 24.0f);
@@ -1243,7 +1243,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 			gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(820.0f, 620.0f), 24.0f);
 			gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
 			gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(820.0f, 560.0f), 24.0f);
 			gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
@@ -1252,7 +1252,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 			gnk_Set_Line_Width(2.0f);
 			gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
 			gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
-			gnk_Text("# of Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+			gnk_Text("Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
 			gnk_Set_Object_Color(H_FFFFFF);
 			gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1000.0f, 380.0f));
@@ -1310,7 +1310,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		gnk_Text(room_list[index_booking].type, Gnk_Point(980.0f, 650.0f), 24.0f);
 		gnk_Text("Bed type: ", Gnk_Point(820.0f, 620.0f), 24.0f);
 		gnk_Text(room_list[index_booking].bed_type, Gnk_Point(980.0f, 620.0f), 24.0f);
-		gnk_Text("# of guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
+		gnk_Text("Guests:", Gnk_Point(820.0f, 590.0f), 24.0f);
 		gnk_Text(room_list[index_booking].number_of_guest, Gnk_Point(980.0f, 590.0f), 24.0f);
 		gnk_Text("Area: ", Gnk_Point(820.0f, 560.0f), 24.0f);
 		gnk_Text(room_list[index_booking].area, Gnk_Point(980.0f, 560.0f), 24.0f);
@@ -1319,7 +1319,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		gnk_Set_Line_Width(2.0f);
 		gnk_Line(Gnk_Point(820.0f, 520.0f), Gnk_Point(1510.0f, 520.0f));
 		gnk_Text_Multi_Line(room_list[index_booking].description, Gnk_Point(820.0f, 490.0f), 64, 10, 24);
-		gnk_Text("# of Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
+		gnk_Text("Rooms:" + room_list[index_booking].amount, Gnk_Point(1360.0f, 650.0f), 24.0f);
 
 		gnk_Set_Object_Color(H_FFFFFF);
 		gnk_Rectangle(Gnk_Point(480.0f, 140.0f), Gnk_Point(1530.0f, 380.0f));
@@ -1333,7 +1333,7 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		gnk_Text(check_in_date_str, Gnk_Point(720.0f, 290.0f), 24.0f);
 		gnk_Text("Check out date: ", Gnk_Point(510.0f, 260.0f), 24.0f);
 		gnk_Text(check_out_date_str, Gnk_Point(720.0f, 260.0f), 24.0f);
-		gnk_Text("# of guests:", Gnk_Point(510.0f, 230.0f), 24.0f);
+		gnk_Text("Guests:", Gnk_Point(510.0f, 230.0f), 24.0f);
 		gnk_Text(number_of_guest_str, Gnk_Point(720.0f, 230.0f), 24.0f);
 		gnk_Text("Room code: ", Gnk_Point(510.0f, 200.0f), 24.0f);
 		gnk_Text(room_choice, Gnk_Point(720.0f, 200.0f), 24.0f);
@@ -1484,7 +1484,7 @@ void staff_frame_booking_info_list_process(Gnk_List_Object *list) {
 			gnk_Text(booking_info_list[i].check_in_date, Gnk_Point(560.0f, 130.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Check out date: ", Gnk_Point(340.0f, 100.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(booking_info_list[i].check_out_date, Gnk_Point(560.0f, 100.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 70.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(booking_info_list[i].number_of_guest, Gnk_Point(560.0f, 70.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Room rate: ", Gnk_Point(340.0f, 40.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(booking_info_list[i].price_per_night, Gnk_Point(560.0f, 40.0f - i * list->toNextObject()), 24.0f);
@@ -1598,7 +1598,7 @@ void staff_frame_type_room_info_list_process(Gnk_List_Object *list) {
 			gnk_Text(type_room_info_list[i].type, Gnk_Point(560.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].bed_type, Gnk_Point(560.0f, 220.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].number_of_guest, Gnk_Point(560.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].area, Gnk_Point(560.0f, 160.0f - i * list->toNextObject()), 24.0f);
@@ -1608,7 +1608,7 @@ void staff_frame_type_room_info_list_process(Gnk_List_Object *list) {
 			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(1030.0f, 120.0f - i * list->toNextObject()));
 			gnk_Text_Multi_Line(type_room_info_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
 			gnk_Set_Line_Width(1.0f);
-			gnk_Text("# of Rooms:" + type_room_info_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Rooms:" + type_room_info_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
 		}
 	}
 }
@@ -1661,7 +1661,7 @@ void staff_frame_room_info_list_process(Gnk_List_Object *list) {
 			gnk_Text(room_info_list[i].type, Gnk_Point(560.0f, 220.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].bed_type, Gnk_Point(560.0f, 190.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].number_of_guest, Gnk_Point(560.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(340.0f, 130.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].area, Gnk_Point(560.0f, 130.0f - i * list->toNextObject()), 24.0f);
@@ -1727,7 +1727,7 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				+ "Room code: " + history_booking_list[i].roomID
 				+ "Check in date: " + history_booking_list[i].check_in_date
 				+ "Check out date: " + history_booking_list[i].check_out_date
-				+ "# of guests: " + history_booking_list[i].number_of_guest
+				+ "Guests: " + history_booking_list[i].number_of_guest
 				+ "Room rate: " + history_booking_list[i].price_per_night
 				+ "Total cost: " + history_booking_list[i].total_price;
 				if(Utils::compareString(info_cat, search_info)) {
@@ -1753,7 +1753,7 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				+ "Guest ID: " + booking_info_list[i].guestID
 				+ "Check in date: " + booking_info_list[i].check_in_date
 				+ "Check out date: " + booking_info_list[i].check_out_date
-				+ "# of guests: " + booking_info_list[i].number_of_guest
+				+ "Guests: " + booking_info_list[i].number_of_guest
 				+ "Room rate: " + booking_info_list[i].price_per_night
 				+ "Total cost: " + booking_info_list[i].total_price;
 				if(Utils::compareString(info_cat, search_info)) {
@@ -1778,10 +1778,12 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				+ "Date of birth: " + guest_info_list[i].date_of_birth
 				+ "Phone number: " + guest_info_list[i].phone_number
 				+ "Gender: " + guest_info_list[i].gender;
+				cout << info_cat << endl;
 				if(Utils::compareString(info_cat, search_info)) {
 					new_guest_info_list.push_back(guest_info_list[i]);
 				}
 			}
+			cout << search_info << endl;
 			guest_info_list = new_guest_info_list;
 			staff.listObjectList["guest_info_list"]->setCurrentPos(staff.listObjectList["guest_info_list"]->getGroupHeight());
 		}
@@ -1797,11 +1799,11 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				string info_cat = 
 				"Room type: " + type_room_info_list[i].type
 				+ "Bed type: " + type_room_info_list[i].bed_type
-				+ "# of guests: " + type_room_info_list[i].number_of_guest
+				+ "Guests: " + type_room_info_list[i].number_of_guest
 				+ "Area: " + type_room_info_list[i].area
 				+ "Room rate: " + type_room_info_list[i].price
 				+ "Description: " + type_room_info_list[i].description
-				+ "# of Rooms: " + type_room_info_list[i].amount;
+				+ "Rooms: " + type_room_info_list[i].amount;
 				if(Utils::compareString(info_cat, search_info)) {
 					new_type_room_info_list.push_back(type_room_info_list[i]);
 				}
@@ -1822,7 +1824,7 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				"Room code: " + room_info_list[i].ID
 				+ "Room type: " + room_info_list[i].type
 				+ "Bed type: " + room_info_list[i].bed_type
-				+ "# of guests: " + room_info_list[i].number_of_guest
+				+ "Guests: " + room_info_list[i].number_of_guest
 				+ "Area: " + room_info_list[i].area
 				+ "Room rate: " + room_info_list[i].price;
 				if(Utils::compareString(info_cat, search_info)) {
@@ -1844,11 +1846,11 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				string info_cat = 
 				"Room type: " + type_room_info_list[i].type
 				+ "Bed type: " + type_room_info_list[i].bed_type
-				+ "# of guests: " + type_room_info_list[i].number_of_guest
+				+ "Guests: " + type_room_info_list[i].number_of_guest
 				+ "Area: " + type_room_info_list[i].area
 				+ "Room rate: " + type_room_info_list[i].price
 				+ "Description: " + type_room_info_list[i].description
-				+ "# of Rooms: " + type_room_info_list[i].amount;
+				+ "Rooms: " + type_room_info_list[i].amount;
 				if(Utils::compareString(info_cat, search_info)) {
 					new_type_room_info_list.push_back(type_room_info_list[i]);
 				}
@@ -1869,7 +1871,7 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				"Room code: " + room_info_list[i].ID
 				+ "Room type: " + room_info_list[i].type
 				+ "Bed type: " + room_info_list[i].bed_type
-				+ "# of guests: " + room_info_list[i].number_of_guest
+				+ "Guests: " + room_info_list[i].number_of_guest
 				+ "Area: " + room_info_list[i].area
 				+ "Room rate: " + room_info_list[i].price;
 				if(Utils::compareString(info_cat, search_info)) {
@@ -1996,7 +1998,7 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 
 		gnk_Text("Room type:  ", Gnk_Point(820.0f, 592.0f), 24.0f);
 		gnk_Text("Bed type: ", Gnk_Point(820.0f, 532.0f), 24.0f);
-		gnk_Text("# of guests:", Gnk_Point(820.0f, 472.0f), 24.0f);
+		gnk_Text("Guests:", Gnk_Point(820.0f, 472.0f), 24.0f);
 		gnk_Text("Area: ", Gnk_Point(820.0f, 412.0f), 24.0f);
 		gnk_Text("Room rate: ", Gnk_Point(820.0f, 352.0f), 24.0f);
 		gnk_Text("Description: ", Gnk_Point(820.0f, 292.0f), 24.0f);
@@ -2259,7 +2261,7 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 			gnk_Text("Room type:  ", Gnk_Point(820.0f, 592.0f), 24.0f);
 			gnk_Text(type_room_info_list[index_booking].type, Gnk_Point(1020.0f, 592.0f), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(820.0f, 532.0f), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(820.0f, 472.0f), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(820.0f, 472.0f), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(820.0f, 412.0f), 24.0f);
 			gnk_Text("Room rate: ", Gnk_Point(820.0f, 352.0f), 24.0f);
 			gnk_Text("Description: ", Gnk_Point(820.0f, 292.0f), 24.0f);
@@ -2721,7 +2723,7 @@ void admin_frame_type_room_list_process(Gnk_List_Object *list) {
 			gnk_Text(type_room_info_list[i].type, Gnk_Point(560.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(340.0f, 220.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].bed_type, Gnk_Point(560.0f, 220.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].number_of_guest, Gnk_Point(560.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(type_room_info_list[i].area, Gnk_Point(560.0f, 160.0f - i * list->toNextObject()), 24.0f);
@@ -2731,7 +2733,7 @@ void admin_frame_type_room_list_process(Gnk_List_Object *list) {
 			gnk_Line(Gnk_Point(340.0f, 120.0f - i * list->toNextObject()), Gnk_Point(1030.0f, 120.0f - i * list->toNextObject()));
 			gnk_Text_Multi_Line(type_room_info_list[i].description, Gnk_Point(340.0f, 90.0f - i * list->toNextObject()), 64, 10, 24);
 			gnk_Set_Line_Width(1.0f);
-			gnk_Text("# of Rooms:" + type_room_info_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Rooms:" + type_room_info_list[i].amount, Gnk_Point(880.0f, 250.0f - i * list->toNextObject()), 24.0f);
 			if(index_hover_room == i) {
 				gnk_Set_Object_Color(H_000000, 0.2f);
 				glEnable(GL_BLEND);
@@ -2834,7 +2836,7 @@ void admin_frame_room_list_process(Gnk_List_Object *list) {
 			gnk_Text(room_info_list[i].type, Gnk_Point(560.0f, 220.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Bed type: ", Gnk_Point(340.0f, 190.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].bed_type, Gnk_Point(560.0f, 190.0f - i * list->toNextObject()), 24.0f);
-			gnk_Text("# of guests:", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
+			gnk_Text("Guests:", Gnk_Point(340.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].number_of_guest, Gnk_Point(560.0f, 160.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text("Area: ", Gnk_Point(340.0f, 130.0f - i * list->toNextObject()), 24.0f);
 			gnk_Text(room_info_list[i].area, Gnk_Point(560.0f, 130.0f - i * list->toNextObject()), 24.0f);
