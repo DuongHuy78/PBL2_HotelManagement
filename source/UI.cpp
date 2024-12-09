@@ -237,7 +237,8 @@ void login_frame_draw(Gnk_Frame *frame) {
 	for(auto &textbox : frame->textboxList) {
 		textbox.second->display();
 	}
-
+	
+	frame->buttonList["forgotten_password_button"]->setAppear(false);
 	for(auto &button : frame->buttonList) {
 		button.second->display();
 	}
