@@ -216,7 +216,7 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 7, NUMBER_ONLY);
     tempLoaiPhong.setGiaPhong(Utils::stringToInt(temp));
 
-    temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
+    Utils::inputData(temp, CONSOLE_OR_UI);
     tempLoaiPhong.setMoTaPhong(temp);
     Utils::outputData("Tao loai phong thanh cong!\n", CONSOLE);
     Utils::pauseConsole();

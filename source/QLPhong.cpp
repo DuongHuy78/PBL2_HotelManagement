@@ -62,7 +62,6 @@ Phong QLPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
     tempPhong.setMaPhong(temp);
     temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
-    //tempPhong.setLoaiPhong(temp);
     return tempPhong;
 }
 

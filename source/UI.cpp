@@ -114,6 +114,7 @@ guest_profile current_guest_profile;
 bool edit_profile = false;
 bool staff_booking_guest_ID_not_exist = false;
 bool admin_type_room_not_exist = false;
+bool admin_type_room_was_existed = false;
 string booking_total_price = "";
 string staff_booking_guest_ID = "";
 bool staff_create_guest_success = false;
@@ -1732,6 +1733,20 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		gnk_Text("Dien Tich: ", Gnk_Point(820.0f, 412.0f), 24.0f);
 		gnk_Text("Gia: ", Gnk_Point(820.0f, 352.0f), 24.0f);
 		gnk_Text("Mo Ta: ", Gnk_Point(820.0f, 292.0f), 24.0f);
+
+		frame->textboxList["type_room_textbox"]->setAppear(true);
+		frame->textboxList["type_room_textbox"]->display();
+		frame->textboxList["bed_type_textbox"]->setAppear(true);
+		frame->textboxList["bed_type_textbox"]->display();
+		frame->textboxList["number_of_guest_textbox"]->setAppear(true);
+		frame->textboxList["number_of_guest_textbox"]->display();			
+		frame->textboxList["area_textbox"]->setAppear(true);
+		frame->textboxList["area_textbox"]->display();
+		frame->textboxList["price_textbox"]->setAppear(true);
+		frame->textboxList["price_textbox"]->display();
+		frame->textboxList["description_textbox"]->setAppear(true);
+		frame->textboxList["description_textbox"]->display();	
+
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 
@@ -2100,6 +2115,12 @@ void admin_add_type_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_ADD_TYPE_ROOM;
+	admin.textboxList["type_room_textbox"]->text = "";
+	admin.textboxList["bed_type_textbox"]->text = "";
+	admin.textboxList["number_of_guest_textbox"]->text = "";
+	admin.textboxList["area_textbox"]->text = "";
+	admin.textboxList["price_textbox"]->text = "";
+	admin.textboxList["description_textbox"]->text = "";
 }
 
 void admin_remove_type_room_button_click(Gnk_Button *button) {
@@ -2130,6 +2151,9 @@ void admin_add_room_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = ADMIN_ADD_ROOM;
+
+	UI_input_buffer.str("");UI_input_buffer.clear();
+	UI_output_buffer.str("");UI_output_buffer.clear();
 
 	list_type_room_available = "";
 	current_Data->list_all_type_room();
@@ -2523,6 +2547,69 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 
 		current_Data->requestHandling(UPDATE_PHONG);
 		option = ADMIN_ROOM_EDIT_DONE;
+	}
+	else if(option == ADMIN_ADD_TYPE_ROOM) {
+		type_room_info info;
+		info.type = admin.textboxList["type_room_textbox"]->text;
+		info.bed_type = admin.textboxList["bed_type_textbox"]->text;
+		info.number_of_guest = admin.textboxList["number_of_guest_textbox"]->text;
+		info.area = admin.textboxList["area_textbox"]->text;
+		info.price = admin.textboxList["price_textbox"]->text;
+		info.description = admin.textboxList["description_textbox"]->text;
+		
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == info.type) {
+				check = true;
+				break;
+			}
+		}
+		if(check == true) {
+			admin_type_room_was_existed = true;
+			return;
+		}
+
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+		UI_input_buffer << info.type << endl;
+		UI_input_buffer << info.bed_type << endl;
+		UI_input_buffer << info.number_of_guest << endl;
+		int area = Utils::getOnlyNumber(info.area);
+		UI_input_buffer << area << endl;
+		int price = Utils::getOnlyNumber(info.price);
+		UI_input_buffer << price << endl;
+		UI_input_buffer << info.description << endl;
+
+		current_Data->requestHandling(ADD_LOAI_PHONG);
+		option = ADMIN_TYPE_ROOM_ADD_DONE;
+	}
+	else if(option == ADMIN_ADD_ROOM) {
+		string ID = admin.textboxList["room_ID_textbox"]->text;
+		string type_room = admin.textboxList["type_room_textbox"]->text;
+		
+		bool check = false;
+		for(auto &it : list_type_room_choice) {
+			if(it == type_room) {
+				check = true;
+				break;
+			}
+		}
+
+		if(check == false) {
+			admin_type_room_not_exist = true;
+			return;
+		}
+
+		UI_input_buffer.str("");UI_input_buffer.clear();
+		UI_output_buffer.str("");UI_output_buffer.clear();
+
+		UI_input_buffer << ID << endl;
+		UI_input_buffer << type_room << endl;
+
+		current_Data->requestHandling(ADD_PHONG);
+		option = ADMIN_ROOM_ADD_DONE;
+	}
+	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
 	}
 }
 
@@ -3316,9 +3403,12 @@ void admin_frame_init() {
 	admin_price_textbox->setRange(Gnk_Point(1020.0f, 340.0f), Gnk_Point(1480.0f, 390.0f));
 	admin_price_textbox->setMaxLength(20);
 
-	Gnk_Textbox *admin_description_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
-	admin_description_textbox->setRange(Gnk_Point(1020.0f, 280.0f), Gnk_Point(1480.0f, 330.0f));
-	admin_description_textbox->setMaxLength(200);
+	Gnk_Textbox_Multi_Line *admin_description_textbox = new Gnk_Textbox_Multi_Line(*admin_bed_type_textbox);
+	admin_description_textbox->setRange(Gnk_Point(1020.0f, 160.0f), Gnk_Point(1480.0f, 318.0f));
+	admin_description_textbox->setMaxLength(144);
+	admin_description_textbox->setMaxLine(36);
+	admin_description_textbox->setSpacing(10);
+	admin_description_textbox->setTextAlign(GNK_TEXT_LEFT);
 
 	Gnk_Textbox *admin_type_room_textbox = new Gnk_Textbox(*admin_bed_type_textbox);
 	admin_type_room_textbox->setRange(Gnk_Point(1020.0f, 580.0f), Gnk_Point(1480.0f, 630.0f));
