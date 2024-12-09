@@ -8,37 +8,31 @@ QLPhong::~QLPhong() {
     }
 }
 
-//NEW PHÒNG
 void QLPhong::themPhong(Phong *newPhong) {
     this->DSP.add(newPhong);
 }
 
 void QLPhong::xoaPhong(const string& MP){
     Node<Phong *> *p = DSP.begin();
-    while( p != DSP.end()) {
+    while(p != DSP.end()) {
         if(p->data->getMaPhong() == MP) {
-                DSP.remove(p);
-                cout << "Da xoa Phong voi ID: " << MP << endl;
+            if(p->data->getSoLuongDatPhong() > 0) {
+                Utils::outputData("Phong " + MP + " da duoc su dung!\n", CONSOLE);
                 Utils::pauseConsole();
                 return;
             }
+            else {
+                p->data->clearLoaiPhong();
+                delete p->data;
+                DSP.remove(p);
+                Utils::outputData("Da xoa Phong voi ID: " + MP + "\n", CONSOLE);
+                Utils::pauseConsole();
+                return;
+            }
+        }
         p = p -> next;
     }
-    cout << "Khong tim thay Phong!" << endl;
-}
-
-
-void QLPhong::suaThongTin(const string& MP){
-    Node<Phong *> *p = DSP.begin();
-    while (p != DSP.end()) {
-        if(p->data->getMaPhong() == MP)
-            {
-                p->data->capNhatThongTin();
-                cout << "Da cap nhat thong tin phong voi ID " << MP << " thanh cong!" << endl;
-            }
-        p = p -> next;
-    } 
-    cout << "Khong tim thay Phong!" << endl;
+    Utils::outputData("Khong tim thay phong: " + MP + "\n", CONSOLE);
 }
 
 void QLPhong::setQLLP(QLLoaiPhong *QLLP) {
@@ -56,23 +50,9 @@ Phong *QLPhong::timPhong(string MP){
     return nullptr;
 }
 
-Phong QLPhong::nhapThongTin() {
-    string temp;
-    Phong tempPhong;
-    temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-    tempPhong.setMaPhong(temp);
-    temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
-    //tempPhong.setLoaiPhong(temp);
-    return tempPhong;
-}
-
 LinkedList<Phong *> &QLPhong::getDSP() {
     return this->DSP;
 }
-
-// Node<Phong> *QLPhong::getHead() {
-//     return this->DSP.getHead();
-// }
 
 ostream &operator<<(ostream &os, QLPhong &qlPhong) {
     Utils::outputData("-----------------THONG-TIN-QUAN-LI-PHONG-----------------\n", CONSOLE);

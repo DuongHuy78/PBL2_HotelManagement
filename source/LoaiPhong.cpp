@@ -95,6 +95,10 @@ string LoaiPhong::getMoTaPhong() const {
     return this->moTaPhong;
 }
 
+int LoaiPhong::getSoLuongPhong() const {
+    return this->danhSachPhong.getSize();
+}
+
 /**
  * @brief Thiết lập loại phòng.
  */
@@ -178,6 +182,20 @@ void LoaiPhong::themPhong(Phong *phong) {
 }
 
 /**
+ * @brief Xóa phòng khỏi danh sách phòng.
+ */
+void LoaiPhong::xoaPhong(Phong *phong) {
+    Node<Phong *> *p = this->danhSachPhong.begin();
+    while(p != this->danhSachPhong.end()) {
+        if(p->data == phong) {
+            this->danhSachPhong.remove(p);
+            return;
+        }
+        p = p->next;
+    }
+}
+
+/**
  * @brief Nhập thông tin loại phòng.
  */
 LoaiPhong LoaiPhong::nhapThongTin() {
@@ -202,7 +220,7 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 7, NUMBER_ONLY);
     tempLoaiPhong.setGiaPhong(Utils::stringToInt(temp));
 
-    temp = Utils::inputWithCondition("Nhap Mo Ta Phong: ", 3, 150, ALPHABET_AND_NUMBER_AND_SPACE_ONLY);
+    Utils::inputData(temp, CONSOLE_OR_UI);
     tempLoaiPhong.setMoTaPhong(temp);
     Utils::outputData("Tao loai phong thanh cong!\n", CONSOLE);
     Utils::pauseConsole();

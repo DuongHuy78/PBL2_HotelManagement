@@ -244,6 +244,19 @@ public:
 	virtual void display();
 };
 
+class Gnk_Textbox_Multi_Line: public Gnk_Textbox {
+public:
+	int maxLine;
+	int spacing;
+	Gnk_Textbox_Multi_Line();
+	Gnk_Textbox_Multi_Line(Gnk_Textbox&);
+	Gnk_Textbox_Multi_Line(Gnk_Textbox_Multi_Line&);
+	void setMaxLine(int);
+	void setSpacing(int);
+	virtual void draw();
+	virtual void display();
+};
+
 class Gnk_Scrollbar {
 public:
 	bool appear = false;
@@ -404,7 +417,7 @@ void gnk_Set_Character_Font(std::string);
 float gnk_Get_Text_Width(std::string, float);
 void gnk_Text(std::string, Gnk_Point, float);
 void gnk_Text_Limited(std::string, Gnk_Point, float, float, float, text_align_value);
-int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int, text_align_value = GNK_TEXT_LEFT);
+int gnk_Text_Multi_Line(const std::string &, Gnk_Point, int, int, int);
 
 void gnk_Load_Image(Gnk_Image&, std::string);
 void gnk_Image(Gnk_Image&, Gnk_Point, Gnk_Point);

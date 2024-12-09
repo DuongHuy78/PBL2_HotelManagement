@@ -18,12 +18,13 @@ public:
 
     string getMaPhong() const;
     LoaiPhong *getLoaiPhong() const;
+    int getSoLuongDatPhong() const;
 
     void setMaPhong(string);
     void setLoaiPhong(LoaiPhong *);
+    void clearLoaiPhong();
 
     void menuSuaThongTin();
-    void capNhatThongTin();
     
     friend ostream& operator<<(ostream&, const Phong&);
     friend LoaiPhong;

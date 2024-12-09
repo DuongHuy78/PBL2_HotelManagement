@@ -101,7 +101,6 @@ void guest_frame_history_list_process(Gnk_List_Object *);
 extern Gnk_Frame guest;
 // ---------------------------------------------------------
 void staff_frame_draw(Gnk_Frame *);
-extern Gnk_Frame staff;
 void staff_frame_booking_infomation_button_click(Gnk_Button *);
 void staff_frame_guest_infomation_button_click(Gnk_Button *);
 void staff_frame_type_room_infomation_button_click(Gnk_Button *);
@@ -113,6 +112,8 @@ void staff_frame_guest_info_list_process(Gnk_List_Object *);
 void staff_frame_type_room_info_list_process(Gnk_List_Object *);
 void staff_frame_room_info_list_process(Gnk_List_Object *);
 void staff_frame_create_guest_button_click_2(Gnk_Button *);
+void search_lookup_image_button_click(Gnk_Button *);
+extern Gnk_Frame staff;
 // ---------------------------------------------------------
 void admin_frame_draw(Gnk_Frame *);
 void admin_frame_type_room_button_click(Gnk_Button *);
@@ -141,6 +142,7 @@ void admin_frame_room_list_process(Gnk_List_Object *);
 
 void admin_frame_confirm_button_click(Gnk_Button *);
 void admin_frame_previous_button_click(Gnk_Button *);
+void admin_frame_view_revenue_button_click(Gnk_Button *);
 extern Gnk_Frame admin;
 // ---------------------------------------------------------
 void login_frame_init();

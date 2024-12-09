@@ -10,10 +10,9 @@ public:
     ~QLPhong();
 
     void themPhong(Phong *);
-    void suaThongTin(const string&);
+    // void suaThongTin(const string&);
     void xoaPhong(const string&);
 
-    Phong nhapThongTin();
     Phong *timPhong(string);
     void setQLLP(QLLoaiPhong *QLLP);
     LinkedList<Phong *> &getDSP();

@@ -55,6 +55,13 @@ LoaiPhong *Phong::getLoaiPhong() const {
 }
 
 /**
+ * @brief Lấy số lượng đặt phòng.
+ */
+int Phong::getSoLuongDatPhong() const {
+    return this->danhSachDatPhong.getSize();
+}
+
+/**
  * @brief Thiết lập mã phòng.
  */
 void Phong::setMaPhong(string MP){
@@ -64,9 +71,21 @@ void Phong::setMaPhong(string MP){
 /**
  * @brief Thiết lập loại phòng.
  */
-void Phong::setLoaiPhong(LoaiPhong *LP){
+void Phong::setLoaiPhong(LoaiPhong *LP) {
+    if(LP == nullptr) {
+        cerr << "Phong::setLoaiPhong::LoaiPhong khong ton tai!" << endl;
+        return;
+    }
+    if(this->loaiPhong != nullptr) {
+        this->loaiPhong->xoaPhong(this);
+    }
     this->loaiPhong = LP;
     LP->themPhong(this);
+}
+
+void Phong::clearLoaiPhong() {
+    this->loaiPhong->xoaPhong(this);
+    this->loaiPhong = nullptr;
 }
 
 /**
@@ -78,40 +97,6 @@ void Phong::menuSuaThongTin() {
     Utils::outputData("2. Sua Ma Phong\n", CONSOLE);
     Utils::outputData("3. Thoat\n", CONSOLE);
     Utils::outputData("-----NhatHoang-DuongHuy-ThaoDuyen-----\n", CONSOLE);
-}
-
-/**
- * @brief Cập nhật thông tin phòng.
- */
-void Phong::capNhatThongTin(){
-    int choice;
-    string temp;
-    while (true) {
-        system("cls");
-        menuSuaThongTin();
-        choice = Utils::stringToInt(Utils::inputWithCondition("Hay nhap lua chon: ", 1, 1, NUMBER_ONLY));
-        switch(choice) {
-            case 1:
-                temp = Utils::inputWithCondition("Sua Loai Phong: ", 1, MAX_IDLOAIPHONG, ALPHABET_AND_NUMBER_ONLY);
-                //this->setLoaiPhong(temp);
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                Utils::pauseConsole();
-                break;
-            case 2:
-                temp = Utils::inputWithCondition("Sua Ma Phong: ", 1, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-                this->setMaPhong(temp);
-                Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
-                Utils::pauseConsole();
-                break;
-            case 3:
-                Utils::outputData("Thoat khoi chuc nang sua thong tin!\n", CONSOLE);
-                return;
-            default:
-                Utils::outputData("Lua chon khong hop le. Vui long thu lai\n", CONSOLE);
-                Utils::pauseConsole();
-                break;
-        }  
-    }
 }
 
 /**
