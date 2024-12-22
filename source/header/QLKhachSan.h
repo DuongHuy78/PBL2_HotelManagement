@@ -57,7 +57,6 @@ public:
     void xemDanhSachLuaChonXemDoanhThu();
     int thongKe(string, string);
     void capNhatThongTinPhong(Phong *);
-    void themPhongMoi(Phong *);
     int getSoLuongPhong(string);
     int getSoLuongDatPhong(string);
 };

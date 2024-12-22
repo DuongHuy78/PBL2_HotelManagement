@@ -7,33 +7,15 @@ bool UI_enable = false;
 
 /**
  * @brief Hàm khởi tạo của lớp QLKhachSan.
- * 
- * Hàm này khởi tạo đối tượng QLKhachSan, gọi hàm UI_init() để khởi tạo giao diện người dùng
- * và gán con trỏ current_Data trỏ đến đối tượng hiện tại.
  */
 QLKhachSan::QLKhachSan() {
-    cout << "Ban co muon su dung giao dien do hoa khong? (Y/N): ";
-    string choice;
-    cin >> choice;
-    cin.ignore();
-    if(choice == "Y") {
-        UI_enable = true;
-        current_mode = UI_STREAM;
-        current_Data = this;
-    }
-    else {
-        current_mode = CONSOLE;
-    }
+    UI_enable = true;
+    current_mode = UI_STREAM;
+    current_Data = this;
 }
 
 /**
  * @brief Hàm đọc thông tin tài khoản từ file và thêm vào danh sách tài khoản.
- * 
- * Hàm này sẽ mở file tại đường dẫn được cung cấp, đọc từng dòng trong file và 
- * tách thông tin tài khoản (tên đăng nhập, mật khẩu, ID) từ mỗi dòng. Sau đó, 
- * tạo đối tượng TaiKhoan mới và thêm vào danh sách tài khoản. Nếu tài khoản 
- * có vai trò là nhân viên hoặc quản lý, hàm sẽ thiết lập ID tương ứng cho 
- * đối tượng nhân viên hoặc quản lý.
  * 
  * @param path Đường dẫn tới file chứa thông tin tài khoản.
  */
@@ -81,10 +63,6 @@ void QLKhachSan::inputTaiKhoan(string path) {
 /**
  * @brief Hàm đọc thông tin khách hàng từ file và thêm vào danh sách khách hàng.
  * 
- * Hàm này sẽ mở file tại đường dẫn được cung cấp, đọc từng dòng trong file và 
- * tách thông tin khách hàng (ID, tên, ngày sinh, số điện thoại, giới tính) từ mỗi dòng. 
- * Sau đó, tạo đối tượng KhachHang mới và thêm vào danh sách khách hàng.
- * 
  * @param path Đường dẫn tới file chứa thông tin khách hàng.
  */
 void QLKhachSan::inputKhachHang(string path) {
@@ -114,11 +92,6 @@ void QLKhachSan::inputKhachHang(string path) {
 
 /**
  * @brief Hàm đọc thông tin loại phòng từ file và thêm vào danh sách loại phòng.
- * 
- * Hàm này sẽ mở file tại đường dẫn được cung cấp, đọc từng dòng trong file và 
- * tách thông tin loại phòng (mã loại phòng, loại giường, số lượng khách, diện tích,
- * giá phòng, mô tả phòng) từ mỗi dòng. 
- * Sau đó, tạo đối tượng LoaiPhong mới và thêm vào danh sách loại phòng.
  * 
  * @param path Đường dẫn tới file chứa thông tin loại phòng.
  */
@@ -156,10 +129,6 @@ void QLKhachSan::inputLoaiPhong(string path) {
 /**
  * @brief Hàm đọc thông tin phòng từ file và thêm vào danh sách phòng.
  * 
- * Hàm này sẽ mở file tại đường dẫn được cung cấp, đọc từng dòng trong file và 
- * tách thông tin phòng (mã phòng, mã loại phòng) từ mỗi dòng. 
- * Sau đó, tạo đối tượng Phong mới và thêm vào danh sách phòng.
- * 
  * @param path Đường dẫn tới file chứa thông tin phòng.
  */
 void QLKhachSan::inputPhong(string path) {
@@ -194,11 +163,6 @@ void QLKhachSan::inputPhong(string path) {
 
 /**
  * @brief Hàm đọc thông tin đặt phòng từ file và thêm vào danh sách đặt phòng.
- * 
- * Hàm này sẽ mở file tại đường dẫn được cung cấp, đọc từng dòng trong file và 
- * tách thông tin đặt phòng (mã đặt phòng, mã phòng, ID khách hàng, ngày nhận, 
- * ngày trả, số lượng khách, đơn giá) từ mỗi dòng. 
- * Sau đó, tạo đối tượng DatPhong mới và thêm vào danh sách đặt phòng.
  * 
  * @param path Đường dẫn tới file chứa thông tin đặt phòng.
  */
@@ -252,6 +216,9 @@ void QLKhachSan::inputDatPhong(string path) {
     cout << "Da nhap du lieu cua " << count << " dat phong tu file: " << path << endl;
 }
 
+/**
+ * @brief Hàm xuất thông tin tài khoản ra file.
+ */
 void QLKhachSan::outputTaiKhoan(string path) {
     ofstream fo(path);
     if(!fo.is_open()) {
@@ -270,6 +237,9 @@ void QLKhachSan::outputTaiKhoan(string path) {
     cout << "Da xuat du lieu cua " << count << " tai khoan ra file: " << path << endl;
 }
 
+/**
+ * @brief Hàm xuất thông tin khách hàng ra file.
+ */
 void QLKhachSan::outputKhachHang(string path) {
     ofstream fo(path);
     if(!fo.is_open()) {
@@ -291,6 +261,9 @@ void QLKhachSan::outputKhachHang(string path) {
     cout << "Da xuat du lieu cua " << count << " khach hang ra file: " << path << endl;
 }
 
+/**
+ * @brief Hàm xuất thông tin loại phòng ra file.
+ */
 void QLKhachSan::outputLoaiPhong(string path) {
     ofstream fo(path);
     if(!fo.is_open()) {
@@ -313,6 +286,9 @@ void QLKhachSan::outputLoaiPhong(string path) {
     cout << "Da xuat du lieu cua " << count << " loai phong ra file: " << path << endl;
 }
 
+/**
+ * @brief Hàm xuất thông tin phòng ra file.
+ */
 void QLKhachSan::outputPhong(string path) {
     ofstream fo(path);
     if(!fo.is_open()) {
@@ -331,6 +307,9 @@ void QLKhachSan::outputPhong(string path) {
     cout << "Da xuat du lieu cua " << count << " phong ra file: " << path << endl;
 }
 
+/**
+ * @brief Hàm xuất thông tin đặt phòng ra file.
+ */
 void QLKhachSan::outputDatPhong(string path) {
     ofstream fo(path);
     if(!fo.is_open()) {
@@ -356,66 +335,7 @@ void QLKhachSan::outputDatPhong(string path) {
 
 void QLKhachSan::work() {
     system("cls");
-    // quanLi.setDSLP(&QLLP);
-    // quanLi.setDSP(&QLP);
-    // quanLi.setDSDP(&QLDP);
-    // QLDP.setDSKH(&QLKH);
-    // QLDP.setDSLP(&QLLP);
-    // QLDP.setDSP(&QLP);
-    // QLP.setQLLP(&QLLP);
-    if(UI_enable) {
-        gnk_Window_Loop();
-    }
-    else {
-        while(true) {
-            system("cls");
-            if(role == UNDEFINED_ROLE) {
-                string choice_str;
-                Utils::outputData("----------------LUA-CHON---------------\n", CONSOLE);
-                Utils::outputData("1. Dang nhap\n", CONSOLE);
-                Utils::outputData("2. Dang ky\n", CONSOLE);
-                Utils::outputData("3. Thoat\n", CONSOLE);
-                Utils::outputData("---------------------------------------\n", CONSOLE);
-                choice_str = Utils::inputWithCondition("Nhap lua chon cua ban: ", 1, 2, NUMBER_ONLY);
-                int choice = Utils::stringToInt(choice_str);
-                if(choice == 1) {
-                    system("cls");
-                    Utils::outputData("---------------DANG-NHAP---------------\n", CONSOLE);
-                    while(!dangNhap()) {
-                        Utils::outputData("Dang nhap that bai. Vui long thu lai.\n", CONSOLE);           
-                    }
-                }
-                else if(choice == 2) {
-                    system("cls");
-                    Utils::outputData("---------------DANG-KY---------------\n", CONSOLE);
-                    string firstName, surname, birthday, gender, username, password;
-                    firstName = Utils::inputWithCondition("Nhap ho: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
-                    surname = Utils::inputWithCondition("Nhap ten: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
-                    birthday = Utils::inputWithCondition("Nhap ngay sinh (dd/mm/yyyy): ", 1, 10, DATE);
-                    gender = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
-                    username = Utils::inputWithCondition("Nhap ten dang nhap: ", 1, 35, ALPHABET_AND_NUMBER_ONLY);
-                    password = Utils::inputWithCondition("Nhap mat khau: ", 1, 35, ALPHABET_AND_NUMBER_ONLY);
-                    sign_up_return_value result = taoTaiKhoan(firstName, surname, birthday, gender, username, password);
-                    if(result == SIGN_UP_USERNAME_EXISTED) {
-                        Utils::outputData("Ten dang nhap da ton tai!\n", CONSOLE);
-                    }
-                    else if(result == SIGN_UP_SUCCESS) {
-                        Utils::outputData("Dang ky thanh cong!\n", CONSOLE);
-                    }
-                }
-                else if(choice == 3) {
-                    system("cls");
-                    Utils::outputData("Cam on ban da su dung dich vu!\n", CONSOLE);
-                    Utils::pauseConsole();
-                    return;
-                }
-            }
-            else {
-                user_option_value choice = current_user->work();
-                requestHandling(choice);
-            }
-        }
-    }
+    gnk_Window_Loop();
 }
 
 
@@ -465,6 +385,11 @@ void QLKhachSan::dangXuat() {
     current_user = nullptr;
 }
 
+/**
+ * @brief Tạo tài khoản mới.
+ * 
+ * Hàm này tạo một tài khoản mới cho khách hàng.
+ */
 sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, string birthday, string gender, string username, string password) {
     if(firstName == "" || surname == "" || birthday == "" || gender == "" || username == "" || password == "") {
         return SIGN_UP_BLANK_INFO;
@@ -486,6 +411,9 @@ sign_up_return_value QLKhachSan::taoTaiKhoan(string firstName, string surname, s
     return SIGN_UP_SUCCESS;
 }
 
+/**
+ * @brief Xử lý yêu cầu của người dùng.
+ */
 void QLKhachSan::requestHandling(user_option_value choice) {
     if(choice == CONTINUE) {
         return;
@@ -616,13 +544,22 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         Utils::pauseConsole();
     }
     else if(choice == ADD_PHONG) {
-        Phong *newPhong = new Phong();
-        themPhongMoi(newPhong);
+        string temp;
+        temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+        if(QLP.timPhong(temp) != nullptr) {
+            Utils::outputData("Phong da ton tai!\n", CONSOLE);
+            Utils::outputData("RoomExist\n", CONSOLE_OR_UI);
+            Utils::pauseConsole();
+            return;
+        }
+        Phong *newPhong = new Phong(temp);
+        temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
+        newPhong->setLoaiPhong(QLLP.timLoaiPhong(temp));
         QLP.themPhong(newPhong);
         Utils::outputData("Tao phong " + newPhong->getMaPhong() + " thanh cong!\n", CONSOLE);
         Utils::pauseConsole();
     }
-    else if(choice == UPDATE_PHONG){
+    else if(choice == UPDATE_PHONG) {
         string maPhong = Utils::inputWithCondition("Nhap ma phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
         Phong *P = QLP.timPhong(maPhong);
         if(P == nullptr) {
@@ -644,6 +581,7 @@ void QLKhachSan::requestHandling(user_option_value choice) {
         while(p != QLLP.getDSLP().end()) {
             if(p->data->getLoaiPhong() == newLP->getLoaiPhong()) {
                 Utils::outputData("Loai phong da ton tai!\n", CONSOLE);
+                Utils::outputData("RoomExist\n", CONSOLE_OR_UI);
                 Utils::pauseConsole();
                 return;
             }
@@ -770,6 +708,9 @@ void QLKhachSan::roomAvailability(time_t checkInDate, time_t checkOutDate, int s
     }
 }
 
+/**
+ * @brief Tìm kiếm loại phòng phù hợp với yêu cầu của khách hàng.
+ */
 void QLKhachSan::searchTypeRoom(string &ngayNhan, string &ngayTra, string &soLuongKhach, LinkedList<Phong *> &phongTrong, LinkedList<loaiPhongAvailable> &listlpa) {
     while(true) {
         ngayNhan = Utils::inputWithCondition("Nhap ngay nhan(dd/mm/yyyy): ", 1, 10, DATE);
@@ -809,6 +750,9 @@ void QLKhachSan::searchTypeRoom(string &ngayNhan, string &ngayTra, string &soLuo
     }
 }
 
+/**
+ * @brief Đặt phòng.
+ */
 void QLKhachSan::bookingRoom(const string &ngayNhan, const string &ngayTra, const string &soLuongKhach, LinkedList<Phong *> &phongTrong, LinkedList<loaiPhongAvailable> &listlpa) {
     string maPhong;
     string loaiPhong;
@@ -983,6 +927,9 @@ bool QLKhachSan::GuestExist(string ID) {
     return this->QLKH.timKiemKhachHang(ID) != nullptr;
 }
 
+/**
+ * @brief Hàm này để xem danh sách các lựa chọn để xem doanh thu.
+ */
 void QLKhachSan::xemDanhSachLuaChonXemDoanhThu() {
     Utils::outputData("1. XEM DOANH THU THEO NGAY.\n", CONSOLE);
     Utils::outputData("2. XEM DOANH THU THEO THANG.\n", CONSOLE);
@@ -1060,6 +1007,12 @@ void QLKhachSan::capNhatThongTinPhong(Phong *phong) {
                 break;
             case 2:
                 temp = Utils::inputWithCondition("Sua Ma Phong: ", 1, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
+                if(QLP.timPhong(temp) != nullptr && temp != phong->getMaPhong()) {
+                    Utils::outputData("Phong da ton tai!\n", CONSOLE);
+                    Utils::outputData("RoomExist\n", CONSOLE_OR_UI);
+                    Utils::pauseConsole();
+                    break;
+                }
                 phong->setMaPhong(temp);
                 Utils::outputData("Chinh sua thong tin thanh cong!\n", CONSOLE);
                 Utils::pauseConsole();
@@ -1073,14 +1026,6 @@ void QLKhachSan::capNhatThongTinPhong(Phong *phong) {
                 break;
         }  
     }
-}
-
-void QLKhachSan::themPhongMoi(Phong *phong) {
-    string temp;
-    temp = Utils::inputWithCondition("Nhap Ma Phong: ", 3, MAX_MAPHONG, ALPHABET_AND_NUMBER_ONLY);
-    phong->setMaPhong(temp);
-    temp = Utils::inputWithCondition("Nhap Loai Phong: ",3, MAX_IDLOAIPHONG, ROOM_TYPE);
-    phong->setLoaiPhong(QLLP.timLoaiPhong(temp));
 }
 
 int QLKhachSan::getSoLuongPhong(string loaiPhong) {

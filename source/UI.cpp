@@ -3,9 +3,6 @@ frame_num_value current_frame = LOGIN_FRAME;
 frame_num_value previous_frame = DEFAULT_FRAME;
 option_value option = DEFAULT_OPTION;
 QLKhachSan *current_Data = nullptr;
-bool login_failed = false;
-bool blank_info = false;
-bool username_existed = false;
 bool male_toggle_enable = false;
 bool female_toggle_enable = false;
 
@@ -112,14 +109,12 @@ struct guest_profile {
 };
 guest_profile current_guest_profile;
 bool edit_profile = false;
-bool staff_booking_guest_ID_not_exist = false;
-bool admin_type_room_not_exist = false;
-bool admin_type_room_was_existed = false;
-bool admin_type_room_was_used = false;
 string booking_total_price = "";
 string staff_booking_guest_ID = "";
 string admin_revenue_str = "";
-bool staff_create_guest_success = false;
+
+bool error_message_enable = false;
+string error_message = "";
 // ---------------------------------------------------------
 Gnk_Color H_1A1A1D(26, 26, 29);
 Gnk_Color H_000000(0, 0, 0);
@@ -243,10 +238,10 @@ void login_frame_draw(Gnk_Frame *frame) {
 		button.second->display();
 	}
 
-	if(login_failed) {
+	if(error_message_enable) {
 		gnk_Set_Object_Color(H_FF0000);
 		gnk_Set_Character_Font("helvetica");
-		gnk_Text("Username or password is incorrect !!", Gnk_Point(740.0f, 310.0f), 24.0f);
+		gnk_Text(error_message, Gnk_Point(740.0f, 310.0f), 24.0f);
 	}
 }
 
@@ -285,7 +280,8 @@ void login_frame_login_button_click(Gnk_Button *button) {
 		}
 	}
 	else {
-		login_failed = true;
+		error_message_enable = true;
+		error_message = "Invalid username or password!";
 	}
 }
 
@@ -295,7 +291,6 @@ void login_frame_forgotten_password_button_click(Gnk_Button *button) {
 	buttonText->text_color = H_46507F;
 	buttonText->draw();
 	buttonText->text_color = color;
-	//current_frame = FORGOT_PASSWORD_FRAME;
 }
 
 void login_frame_sign_up_button_click(Gnk_Button *button) {
@@ -333,6 +328,11 @@ void sign_up_frame_draw(Gnk_Frame *frame) {
 	}
 	frame->scrollbar->setAppear(true);
 	frame->scrollbar->display();
+	if(error_message_enable) {
+		gnk_Set_Object_Color(H_FF0000);
+		gnk_Set_Character_Font("helvetica");
+		gnk_Text(error_message, Gnk_Point(465.0f, 0.0f), 24.0f);
+	}
 }
 
 void sign_up_frame_to_login_button_click(Gnk_Button *button) {
@@ -357,6 +357,25 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 	if(((Gnk_Button_Toggle *)sign_up.buttonList["female_toggle"])->toggle) {
 		gender = "Nu";
 	}
+
+	if(Utils::isAlphabetAndSpaceOnly((sign_up.textboxList["first_name_textbox"])->text) == false) {
+		error_message_enable = true;
+		error_message = "First name must contain only alphabet and space!";
+		return;
+	}
+	if(Utils::isAlphabetAndSpaceOnly((sign_up.textboxList["surname_textbox"])->text) == false) {
+		error_message_enable = true;
+		error_message = "Surname must contain only alphabet and space!";
+		return;
+	}
+	if(Utils::isDate((sign_up.textboxList["date_textbox"])->text + "/" + 
+		(sign_up.textboxList["month_textbox"])->text + "/" + 
+		(sign_up.textboxList["year_textbox"])->text) == false) {
+		error_message_enable = true;
+		error_message = "Invalid date of birth!";
+		return;
+	}
+
 	sign_up_return_value res = current_Data->taoTaiKhoan(
 		(sign_up.textboxList["first_name_textbox"])->text,
 		(sign_up.textboxList["surname_textbox"])->text,
@@ -368,10 +387,12 @@ void sign_up_frame_sign_up_button_click(Gnk_Button *button) {
 		(sign_up.textboxList["password_textbox"])->text
 	);
 	if(res == SIGN_UP_BLANK_INFO) {
-		//cout << "Blank info" << endl;
+		error_message_enable = true;
+		error_message = "Please fill in all the information!";
 	}
 	else if(res == SIGN_UP_USERNAME_EXISTED) {
-		//cout << "Username existed" << endl;
+		error_message_enable = true;
+		error_message = "Username already existed!";
 	}
 	else if(res == SIGN_UP_SUCCESS) {
 		current_frame = LOGIN_FRAME;
@@ -457,6 +478,11 @@ void guest_frame_draw(Gnk_Frame *frame) {
 		gnk_Line(Gnk_Point(1450.0f, 720.0f), Gnk_Point(1450.0f, 780.0f));
 		gnk_Line(Gnk_Point(430.0f, 700.0f), Gnk_Point(1600.0f, 700.0f));
 		gnk_Set_Line_Width(1.0f);
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(520.0f, 640.0f), 24.0f);
+		}
 	}
 	else if(option == HISTORY_INFORMATION) {
 		// Booking information
@@ -527,6 +553,11 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			frame->buttonList["change_profile_button"]->setAppear(true);
 			frame->buttonList["change_profile_button"]->display();
 		}
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(940.0f, 350.0f), 24.0f);
+		}
 	}
 	else if(option == BOOKING) {
 		// Booking
@@ -586,6 +617,12 @@ void guest_frame_draw(Gnk_Frame *frame) {
 			frame->buttonList["back_to_search_room_button"]->display();
 			frame->buttonList["continue_booking_button"]->display();
 			frame->textboxList["room_choice_textbox"]->display();
+
+			if(error_message_enable) {
+				gnk_Set_Object_Color(H_FF0000);
+				gnk_Set_Character_Font("helvetica");
+				gnk_Text(error_message, Gnk_Point(1040.0f, 240.0f), 24.0f);
+			}
 		}
 	}
 	else if(option == BOOKING_PART_2) {
@@ -668,6 +705,8 @@ void guest_frame_search_room_button_click(Gnk_Button *button) {
 	search_room_list_enable = false;
 	room_list_init = false;
 	option = SEARCH_ROOM;
+	error_message_enable = false;
+	error_message = "";
 }
 
 void guest_frame_booking_infomation_button_click(Gnk_Button *button) {
@@ -681,6 +720,8 @@ void guest_frame_booking_infomation_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->listObjectList["history_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["history_list"]->getGroupHeight());
 	option = HISTORY_INFORMATION;
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void guest_frame_profile_button_click(Gnk_Button *button) {
@@ -690,6 +731,9 @@ void guest_frame_profile_button_click(Gnk_Button *button) {
 	buttonText->draw();
 	buttonText->color = color;
 	option = PROFILE;
+	edit_profile = false;
+	error_message_enable = false;
+	error_message = "";
 }
 
 void guest_frame_search_room_list_process(Gnk_List_Object *list) {
@@ -828,10 +872,13 @@ void guest_frame_lookup_button_image_click(Gnk_Button *button) {
 	&& Utils::stringToDate(check_in_date_str) < Utils::stringToDate(check_out_date_str) && Utils::stringToDate(check_in_date_str) > time(0)) {
 		search_room_list_enable = true;
 		room_list_init = false;
+		error_message_enable = false;
+		error_message = "";
 	}
 	else {
 		room_list.clear();
-		//cout << "Invalid date" << endl;
+		error_message_enable = true;
+		error_message = "Invalid date or number of guest!";
 		search_room_list_enable = false;
 	}
 }
@@ -847,6 +894,8 @@ void guest_frame_change_frofile_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->textboxList["profile_date_of_birth_textbox"]->text = current_guest_profile.date_of_birth;
 	gnk_Current_Frame->textboxList["profile_phone_number_textbox"]->text = current_guest_profile.phone_number;
 	gnk_Current_Frame->textboxList["profile_gender_textbox"]->text = Utils::genderToString(current_guest_profile.gender);
+	error_message_enable = false;
+	error_message = "";
 }
 
 void guest_frame_save_profile_button_click(Gnk_Button *button) {
@@ -855,6 +904,29 @@ void guest_frame_save_profile_button_click(Gnk_Button *button) {
 	buttonText->color = color + Gnk_Color(40, 40, 40);
 	buttonText->draw();
 	buttonText->color = color;
+
+	if(!(Utils::isAlphabetAndSpaceOnly(gnk_Current_Frame->textboxList["profile_name_textbox"]->text) 
+	&& gnk_Current_Frame->textboxList["profile_name_textbox"]->text.size() >= 1 
+	&& gnk_Current_Frame->textboxList["profile_name_textbox"]->text.size() <= MAX_NAME)) {
+		error_message_enable = true;
+		error_message = "Invalid name!";
+		return;
+	}
+	if(!Utils::isDate(gnk_Current_Frame->textboxList["profile_date_of_birth_textbox"]->text)) {
+		error_message_enable = true;
+		error_message = "Invalid date of birth!";
+		return;
+	}
+	if(!Utils::isVietNamPhoneNumber(gnk_Current_Frame->textboxList["profile_phone_number_textbox"]->text)) {
+		error_message_enable = true;
+		error_message = "Invalid phone number!";
+		return;
+	}
+	if(!Utils::isGender(gnk_Current_Frame->textboxList["profile_gender_textbox"]->text)) {
+		error_message_enable = true;
+		error_message = "Invalid gender! Gender must be 'Nam' or 'Nu'";
+		return;
+	}
 	edit_profile = false;
 	current_guest_profile.name = gnk_Current_Frame->textboxList["profile_name_textbox"]->text;
 	current_guest_profile.date_of_birth = gnk_Current_Frame->textboxList["profile_date_of_birth_textbox"]->text;
@@ -873,6 +945,8 @@ void guest_frame_save_profile_button_click(Gnk_Button *button) {
 	UI_input_buffer << Utils::genderToString(current_guest_profile.gender) << endl;
 	UI_input_buffer << 5 << endl;
 	current_Data->requestHandling(CHANGE_PROFILE);
+	error_message_enable = false;
+	error_message = "";
 }
 
 void guest_frame_select_type_room_button_click(Gnk_Button *button) {
@@ -897,7 +971,8 @@ void guest_frame_select_type_room_button_click(Gnk_Button *button) {
 		first = false;
 	}
 	gnk_Current_Frame->clear_Textbox();
-	staff_booking_guest_ID_not_exist = false;
+	error_message_enable = false;
+	error_message = "";
 	option = BOOKING;
 }
 
@@ -913,7 +988,8 @@ void guest_frame_back_to_search_room_button_click(Gnk_Button *button) {
 	}	
 	else if(option == BOOKING_PART_2) {
 		gnk_Current_Frame->clear_Textbox();
-		staff_booking_guest_ID_not_exist = false;
+		error_message_enable = false;
+		error_message = "";
 		option = BOOKING;
 	}
 }
@@ -941,11 +1017,13 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 			Utils::stringToInt(number_of_guest_str), 
 			Utils::getOnlyNumber(room_list[index_booking].price));
 			booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
-
 			option = BOOKING_PART_2;
+			error_message_enable = false;
+			error_message = "";
 		}
 		else {
-			//cout << "Invalid room choice" << endl;
+			error_message_enable = true;
+			error_message = "Invalid room choice!";
 		}
 	}
 	else if(current_Data->getCurrentRole() == NHANVIEN) {
@@ -958,13 +1036,17 @@ void guest_frame_continue_booking_button_click(Gnk_Button *button) {
 				Utils::getOnlyNumber(room_list[index_booking].price));
 				booking_total_price = Utils::chuanHoaSo(Utils::intToString(dp.tongTien())) + " VND";
 				option = BOOKING_PART_2;
+				error_message_enable = false;
+				error_message = "";
 			}
 			else {
-				staff_booking_guest_ID_not_exist = true;
+				error_message_enable = true;
+				error_message = "Guest ID not exist!";
 			}
 		}
 		else {
-			//cout << "Invalid room choice" << endl;
+			error_message_enable = true;
+			error_message = "Invalid room choice!";
 		}
 	}
 }
@@ -1134,6 +1216,11 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		gnk_Line(Gnk_Point(1450.0f, 720.0f), Gnk_Point(1450.0f, 780.0f));
 		gnk_Line(Gnk_Point(430.0f, 700.0f), Gnk_Point(1600.0f, 700.0f));
 		gnk_Set_Line_Width(1.0f);
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(520.0f, 640.0f), 24.0f);
+		}
 	}
 	else if(option == STAFF_BOOKING_INFO) {
 		gnk_Set_Object_Color(H_F7C873);
@@ -1230,6 +1317,12 @@ void staff_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["male_toggle"]->display();
 		frame->buttonList["female_toggle"]->display();
 		frame->buttonList["create_guess_button"]->display();
+
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(630.0f, 160.0f), 24.0f);
+		}	
 	}
 	else if(option == BOOKING) {
 		// Booking
@@ -1293,9 +1386,10 @@ void staff_frame_draw(Gnk_Frame *frame) {
 			frame->textboxList["room_choice_textbox"]->display();
 			frame->textboxList["guest_ID_textbox"]->display();
 
-			if(staff_booking_guest_ID_not_exist) {
+			if(error_message_enable) {
 				gnk_Set_Object_Color(H_FF0000);
-				gnk_Text("Guest ID not exist", Gnk_Point(1040.0f, 180.0f), 24.0f);
+				gnk_Set_Character_Font("helvetica");
+				gnk_Text(error_message, Gnk_Point(1040.0f, 180.0f), 24.0f);
 			}
 		}
 	}
@@ -1376,6 +1470,8 @@ void staff_frame_booking_infomation_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->listObjectList["booking_info_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["booking_info_list"]->getGroupHeight());
 	option = STAFF_BOOKING_INFO;
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void staff_frame_guest_infomation_button_click(Gnk_Button *button) {
@@ -1389,6 +1485,8 @@ void staff_frame_guest_infomation_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->listObjectList["guest_info_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["guest_info_list"]->getGroupHeight());
 	option = STAFF_GUEST_INFO;
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void staff_frame_type_room_infomation_button_click(Gnk_Button *button) {
@@ -1402,6 +1500,8 @@ void staff_frame_type_room_infomation_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->listObjectList["type_room_info_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["type_room_info_list"]->getGroupHeight());
 	option = STAFF_TYPE_ROOM_INFO;
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void staff_frame_room_information_button_click(Gnk_Button *button) {
@@ -1415,6 +1515,8 @@ void staff_frame_room_information_button_click(Gnk_Button *button) {
 	gnk_Current_Frame->listObjectList["room_info_list"]->setCurrentPos(gnk_Current_Frame->listObjectList["room_info_list"]->getGroupHeight());
 	option = STAFF_ROOM_INFO;
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void staff_frame_create_guest_button_click(Gnk_Button *button) {
@@ -1427,7 +1529,8 @@ void staff_frame_create_guest_button_click(Gnk_Button *button) {
 	((Gnk_Button_Toggle *)staff.buttonList["male_toggle"])->toggle = false;
 	((Gnk_Button_Toggle *)staff.buttonList["female_toggle"])->toggle = false;
 	option = STAFF_CREATE_GUEST;
-	staff_create_guest_success = true;
+	error_message_enable = false;
+	error_message = "";
 }
 
 void staff_frame_booking_info_list_process(Gnk_List_Object *list) {
@@ -1711,16 +1814,44 @@ void staff_frame_create_guest_button_click_2(Gnk_Button *button) {
 		gender = "Nu";
 	}
 	string phone_number = gnk_Current_Frame->textboxList["phone_number_textbox"]->text;
-	if(Utils::isAlphabetAndSpaceOnly(name) && Utils::isVietNamPhoneNumber(phone_number) && Utils::isDate(date_of_birth)) {
-		UI_input_buffer << name << endl;
-		UI_input_buffer << date_of_birth << endl;
-		UI_input_buffer << phone_number << endl;
-		UI_input_buffer << gender << endl;
-		current_Data->requestHandling(ADD_KHACHHANG);
-		staff_create_guest_success = true;
-		option = STAFF_CREATE_GUEST_DONE;
+
+	if(!(Utils::isAlphabetAndSpaceOnly(gnk_Current_Frame->textboxList["first_name_textbox"]->text) 
+	&& gnk_Current_Frame->textboxList["first_name_textbox"]->text.size() >= 1 
+	&& gnk_Current_Frame->textboxList["first_name_textbox"]->text.size() <= MAX_NAME)) {
+		error_message_enable = true;
+		error_message = "Invalid first name!";
+		return;
 	}
-	else staff_create_guest_success = false;
+	if(!(Utils::isAlphabetAndSpaceOnly(gnk_Current_Frame->textboxList["surname_textbox"]->text)
+	&& gnk_Current_Frame->textboxList["surname_textbox"]->text.size() >= 1 
+	&& gnk_Current_Frame->textboxList["surname_textbox"]->text.size() <= MAX_NAME)) {
+		error_message_enable = true;
+		error_message = "Invalid surname!";
+		return;
+	}
+	if(!(Utils::isDate(date_of_birth))) {
+		error_message_enable = true;
+		error_message = "Invalid date of birth!";
+		return;
+	}
+	if(!(Utils::isGender(gender))) {
+		error_message_enable = true;
+		error_message = "Invalid gender!";
+		return;
+	}
+	if(!(Utils::isVietNamPhoneNumber(phone_number))) {
+		error_message_enable = true;
+		error_message = "Invalid phone number!";
+		return;
+	}
+	UI_input_buffer << name << endl;
+	UI_input_buffer << date_of_birth << endl;
+	UI_input_buffer << phone_number << endl;
+	UI_input_buffer << gender << endl;
+	current_Data->requestHandling(ADD_KHACHHANG);
+	option = STAFF_CREATE_GUEST_DONE;
+	error_message_enable = false;
+	error_message = "";
 }
 
 void search_lookup_image_button_click(Gnk_Button *button) {
@@ -1753,7 +1884,7 @@ void search_lookup_image_button_click(Gnk_Button *button) {
 				}
 			}
 			history_booking_list = new_history_booking_list;
-			guest.listObjectList["history_booking_list"]->setCurrentPos(guest.listObjectList["history_booking_list"]->getGroupHeight());
+			guest.listObjectList["history_list"]->setCurrentPos(guest.listObjectList["history_list"]->getGroupHeight());
 		}
 	}
 	else if(option == STAFF_BOOKING_INFO) {
@@ -2035,6 +2166,11 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
+		}
 	}
 	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
 		frame->buttonList["type_room_view_and_edit_button"]->setAppear(true);
@@ -2060,15 +2196,10 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->textboxList["type_room_textbox"]->setAppear(true);
 		frame->textboxList["type_room_textbox"]->display();
 		
-		if(admin_type_room_not_exist == true) {
+		if(error_message_enable) {
 			gnk_Set_Object_Color(H_FF0000);
-			gnk_Set_Character_Font("helvetica-bold");
-			gnk_Text("The type room does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
-		}
-		else if(admin_type_room_was_used) {
-			gnk_Set_Object_Color(H_FF0000);
-			gnk_Set_Character_Font("helvetica-bold");
-			gnk_Text("The type room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
 		}
 
 		frame->buttonList["confirm_button"]->setAppear(true);
@@ -2131,6 +2262,11 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->buttonList["confirm_button"]->setAppear(true);
 		frame->buttonList["confirm_button"]->display();
 
+		if(error_message_enable) {
+			gnk_Set_Object_Color(H_FF0000);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
+		}
 	}
 	else if(option == ADMIN_REMOVE_ROOM) {
 		frame->buttonList["room_view_and_edit_button"]->setAppear(true);
@@ -2157,15 +2293,10 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 		frame->textboxList["room_ID_rm_textbox"]->setAppear(true);
 		frame->textboxList["room_ID_rm_textbox"]->display();
 
-		if(admin_type_room_not_exist == true) {
+		if(error_message_enable) {
 			gnk_Set_Object_Color(H_FF0000);
-			gnk_Set_Character_Font("helvetica-bold");
-			gnk_Text("The room ID does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
-		}
-		else if(admin_type_room_was_used) {
-			gnk_Set_Object_Color(H_FF0000);
-			gnk_Set_Character_Font("helvetica-bold");
-			gnk_Text("The room was used!", Gnk_Point(820.0f, 180.0f), 24.0f);
+			gnk_Set_Character_Font("helvetica");
+			gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
 		}
 
 		frame->buttonList["confirm_button"]->setAppear(true);
@@ -2297,6 +2428,12 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 			
 			frame->buttonList["confirm_button"]->setAppear(true);
 			frame->buttonList["confirm_button"]->display();
+
+			if(error_message_enable) {
+				gnk_Set_Object_Color(H_FF0000);
+				gnk_Set_Character_Font("helvetica");
+				gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
+			}
 		}		
 	}
 	else if(option == ADMIN_ROOM_EDIT) {
@@ -2336,10 +2473,10 @@ void  admin_frame_draw(Gnk_Frame *frame) {
 			
 			frame->buttonList["confirm_button"]->setAppear(true);
 			frame->buttonList["confirm_button"]->display();
-			if(admin_type_room_not_exist) {
+			if(error_message_enable) {
 				gnk_Set_Object_Color(H_FF0000);
-				gnk_Set_Character_Font("helvetica-bold");
-				gnk_Text("The type room does not exist!", Gnk_Point(820.0f, 180.0f), 24.0f);
+				gnk_Set_Character_Font("helvetica");
+				gnk_Text(error_message, Gnk_Point(820.0f, 650.0f), 24.0f);
 			}
 		}		
 	}
@@ -2462,6 +2599,8 @@ void admin_type_room_view_and_edit_button_click(Gnk_Button *button) {
 	type_room_info_list_init = false;
 	admin.listObjectList["type_room_list"]->setCurrentPos(admin.listObjectList["type_room_list"]->getGroupHeight());
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_add_type_room_button_click(Gnk_Button *button) {
@@ -2477,6 +2616,8 @@ void admin_add_type_room_button_click(Gnk_Button *button) {
 	admin.textboxList["area_textbox"]->text = "";
 	admin.textboxList["price_textbox"]->text = "";
 	admin.textboxList["description_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_remove_type_room_button_click(Gnk_Button *button) {
@@ -2500,9 +2641,11 @@ void admin_remove_type_room_button_click(Gnk_Button *button) {
 		else list_type_room_available += ", " + type_room;
 		first = false;
 	}
-	admin_type_room_not_exist = false;
-	admin_type_room_was_used = false;
+	error_message_enable = false;
+	error_message = "";
 	admin.textboxList["type_room_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_room_view_and_edit_button_click(Gnk_Button *button) {
@@ -2516,6 +2659,8 @@ void admin_room_view_and_edit_button_click(Gnk_Button *button) {
 	room_info_list_init = false;
 	admin.listObjectList["room_list"]->setCurrentPos(admin.listObjectList["room_list"]->getGroupHeight());
 	gnk_Current_Frame->textboxList["search_bar_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_add_room_button_click(Gnk_Button *button) {
@@ -2540,9 +2685,12 @@ void admin_add_room_button_click(Gnk_Button *button) {
 		else list_type_room_available += ", " + type_room;
 		first = false;
 	}
-	admin_type_room_not_exist = false;
+	error_message_enable = false;
+	error_message = "";
 	admin.textboxList["room_ID_textbox"]->text = "";
 	admin.textboxList["type_room_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_remove_room_button_click(Gnk_Button *button) {
@@ -2567,9 +2715,11 @@ void admin_remove_room_button_click(Gnk_Button *button) {
 		else list_room_available += ", " + room;
 		first = false;
 	}
-	admin_type_room_not_exist = false;
-	admin_type_room_was_used = false;
+	error_message_enable = false;
+	error_message = "";
 	admin.textboxList["room_ID_rm_textbox"]->text = "";
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_daily_revenue_button_click(Gnk_Button *button) {
@@ -2627,6 +2777,8 @@ void admin_frame_select_type_room_button_click(Gnk_Button *button) {
 	admin.textboxList["area_textbox"]->text = Utils::intToString(Utils::getOnlyNumber(type_room_info_list[index_selected_room].area.substr(0, type_room_info_list[index_selected_room].area.size() - 3)));
 	admin.textboxList["price_textbox"]->text = Utils::intToString(Utils::getOnlyNumber(type_room_info_list[index_selected_room].price));
 	admin.textboxList["description_textbox"]->text = type_room_info_list[index_selected_room].description;
+	error_message_enable = false;
+	error_message = "";
 }
 
 void admin_frame_select_room_button_click(Gnk_Button *button) {
@@ -2654,7 +2806,8 @@ void admin_frame_select_room_button_click(Gnk_Button *button) {
 		else list_type_room_available += ", " + type_room;
 		first = false;
 	}
-	admin_type_room_not_exist = false;
+	error_message_enable = false;
+	error_message = "";
 }
 
 
@@ -2895,11 +3048,38 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 	if(option == ADMIN_TYPE_ROOM_EDIT) {
 		type_room_info info;
 		info.type = type_room_info_list[index_booking].type;
-		info.bed_type = admin.textboxList["bed_type_textbox"]->text;
+		info.bed_type = Utils::chuanHoaTen(admin.textboxList["bed_type_textbox"]->text);
 		info.number_of_guest = admin.textboxList["number_of_guest_textbox"]->text;
 		info.area = admin.textboxList["area_textbox"]->text;
 		info.price = admin.textboxList["price_textbox"]->text;
 		info.description = admin.textboxList["description_textbox"]->text;
+		if(info.bed_type == "Singledouble")info.bed_type = "SingleDouble";
+
+		if(info.bed_type == "" || info.number_of_guest == "" || info.area == "" || info.price == "" || info.description == "") {
+			error_message_enable = true;
+			error_message = "Please fill all the fields!";
+			return;
+		}
+		if(info.bed_type != "Single" && info.bed_type != "Double" && info.bed_type != "SingleDouble") {
+			error_message_enable = true;
+			error_message = "Bed type is invalid! (Single, Double, SingleDouble)";
+			return;
+		}
+		if(!(info.number_of_guest.size() >= 1 && info.number_of_guest.size() <= 2 && Utils::isNumberOnly(info.number_of_guest))) {
+			error_message_enable = true;
+			error_message = "Number of guests is invalid!";
+			return;
+		}
+		if(!(info.area.size() >= 1 && info.area.size() <= 3 && Utils::isNumberOnly(info.area))) {
+			error_message_enable = true;
+			error_message = "Area is invalid!";
+			return;
+		}
+		if(!(info.price.size() >= 1 && info.price.size() <= 8 && Utils::isNumberOnly(info.price))) {
+			error_message_enable = true;
+			error_message = "Price is invalid!";
+			return;
+		}
 		
 		UI_input_buffer.str("");UI_input_buffer.clear();
 		UI_output_buffer.str("");UI_output_buffer.clear();
@@ -2918,14 +3098,31 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		UI_input_buffer << info.description << endl;
 		UI_input_buffer << 6 << endl;
 
-		// Ở đây thêm cái check điều kiện nữa
 		current_Data->requestHandling(UPDATE_LOAIPHONG);
 		option = ADMIN_TYPE_ROOM_EDIT_DONE;
+		error_message_enable = false;
+		error_message = "";
 	}
 	else if(option == ADMIN_ROOM_EDIT) {
 		string ID = room_info_list[index_booking].ID;
 		string newID = admin.textboxList["room_ID_textbox"]->text;
 		string type_room = admin.textboxList["type_room_textbox"]->text;
+
+		if(newID == "" || type_room == "") {
+			error_message_enable = true;
+			error_message = "Please fill all the fields!";
+			return;
+		}
+		if(!(newID.size() >= 3 && newID.size() <= MAX_MAPHONG && Utils::isAlphabetAndNumberOnly(newID))) {
+			error_message_enable = true;
+			error_message = "Room code is invalid!";
+			return;
+		}
+		if(!(type_room.size() >= 3 && type_room.size() <= MAX_IDLOAIPHONG && Utils::isAlphabetAndNumberOnly(type_room))) {
+			error_message_enable = true;
+			error_message = "Type room is invalid!";
+			return;
+		}
 		
 		bool check = false;
 		for(auto &it : list_type_room_choice) {
@@ -2936,7 +3133,8 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		}
 
 		if(check == false) {
-			admin_type_room_not_exist = true;
+			error_message_enable = true;
+			error_message = "Type room does not exist!";
 			return;
 		}
 
@@ -2951,17 +3149,59 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		UI_input_buffer << 3 << endl;
 
 		current_Data->requestHandling(UPDATE_PHONG);
+		string result;
+		getline(UI_output_buffer, result);
+		if(result == "RoomExist") {
+			error_message_enable = true;
+			error_message = "Room code was existed!";
+			return;
+		}
 		option = ADMIN_ROOM_EDIT_DONE;
+		error_message_enable = false;
+		error_message = "";
 	}
 	else if(option == ADMIN_ADD_TYPE_ROOM) {
 		type_room_info info;
 		info.type = admin.textboxList["type_room_textbox"]->text;
-		info.bed_type = admin.textboxList["bed_type_textbox"]->text;
+		info.bed_type = Utils::chuanHoaTen(admin.textboxList["bed_type_textbox"]->text);
 		info.number_of_guest = admin.textboxList["number_of_guest_textbox"]->text;
 		info.area = admin.textboxList["area_textbox"]->text;
 		info.price = admin.textboxList["price_textbox"]->text;
 		info.description = admin.textboxList["description_textbox"]->text;
-		
+		if(info.bed_type == "Singledouble")info.bed_type = "SingleDouble";
+
+		if(info.type == "" || info.bed_type == "" || info.number_of_guest == "" || info.area == "" || info.price == "" || info.description == "") {
+			error_message_enable = true;
+			error_message = "Please fill all the fields!";
+			return;
+		}
+		if(!(info.type.size() >= 4 && info.type.size() <= MAX_IDLOAIPHONG 
+		&& Utils::isAlphabetAndNumberOnly(info.type))) {
+			error_message_enable = true;
+			error_message = "Type room is invalid!";
+			return;
+		}
+		if(info.bed_type != "Single" && info.bed_type != "Double" && info.bed_type != "SingleDouble") {
+			error_message_enable = true;
+			error_message = "Bed type is invalid! (Single, Double, SingleDouble)";
+			return;
+		}
+		if(!(info.number_of_guest.size() >= 1 && info.number_of_guest.size() <= 2 && Utils::isNumberOnly(info.number_of_guest))) {
+			error_message_enable = true;
+			error_message = "Number of guests is invalid!";
+			return;
+		}
+		if(!(info.area.size() >= 1 && info.area.size() <= 3 && Utils::isNumberOnly(info.area))) {
+			error_message_enable = true;
+			error_message = "Area is invalid!";
+			return;
+		}
+		if(!(info.price.size() >= 1 && info.price.size() <= 8 && Utils::isNumberOnly(info.price))) {
+			error_message_enable = true;
+			error_message = "Price is invalid!";
+			return;
+		}
+
 		bool check = false;
 		for(auto &it : list_type_room_choice) {
 			if(it == info.type) {
@@ -2970,7 +3210,8 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 			}
 		}
 		if(check == true) {
-			admin_type_room_was_existed = true;
+			error_message_enable = true;
+			error_message = "Type room was existed!";
 			return;
 		}
 
@@ -2986,11 +3227,34 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		UI_input_buffer << info.description << endl;
 
 		current_Data->requestHandling(ADD_LOAI_PHONG);
+		string result;
+		getline(UI_output_buffer, result);
+		if(result == "RoomExist") {
+			error_message_enable = true;
+			error_message = "Type room was existed!";
+			return;
+		}
 		option = ADMIN_TYPE_ROOM_ADD_DONE;
 	}
 	else if(option == ADMIN_ADD_ROOM) {
 		string ID = admin.textboxList["room_ID_textbox"]->text;
 		string type_room = admin.textboxList["type_room_textbox"]->text;
+
+		if(ID == "" || type_room == "") {
+			error_message_enable = true;
+			error_message = "Please fill all the fields!";
+			return;
+		}
+		if(!(ID.size() >= 3 && ID.size() <= MAX_MAPHONG && Utils::isAlphabetAndNumberOnly(ID))) {
+			error_message_enable = true;
+			error_message = "Room code is invalid!";
+			return;
+		}
+		if(!(type_room.size() >= 3 && type_room.size() <= MAX_IDLOAIPHONG && Utils::isAlphabetAndNumberOnly(type_room))) {
+			error_message_enable = true;
+			error_message = "Type room is invalid!";
+			return;
+		}
 		
 		bool check = false;
 		for(auto &it : list_type_room_choice) {
@@ -3001,7 +3265,8 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		}
 
 		if(check == false) {
-			admin_type_room_not_exist = true;
+			error_message_enable = true;
+			error_message = "Type room does not exist!";
 			return;
 		}
 
@@ -3012,7 +3277,16 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		UI_input_buffer << type_room << endl;
 
 		current_Data->requestHandling(ADD_PHONG);
+		string result;
+		getline(UI_output_buffer, result);
+		if(result == "RoomExist") {
+			error_message_enable = true;
+			error_message = "Room code was existed!";
+			return;
+		}
 		option = ADMIN_ROOM_ADD_DONE;
+		error_message_enable = false;
+		error_message = "";
 	}
 	else if(option == ADMIN_REMOVE_TYPE_ROOM) {
 		string type_room = admin.textboxList["type_room_textbox"]->text;
@@ -3028,12 +3302,14 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		}
 
 		if(check == false) {
-			admin_type_room_not_exist = true;
+			error_message_enable = true;
+			error_message = "Type room does not exist!";
 			return;
 		}
 
 		if(current_Data->getSoLuongPhong(type_room) > 0) {
-			admin_type_room_was_used = true;
+			error_message_enable = true;
+			error_message = "Type room was used!";
 			return;
 		}
 
@@ -3057,12 +3333,14 @@ void admin_frame_confirm_button_click(Gnk_Button *button) {
 		}
 
 		if(check == false) {
-			admin_type_room_not_exist = true;
+			error_message_enable = true;
+			error_message = "Room does not exist!";
 			return;
 		}
 
 		if(current_Data->getSoLuongDatPhong(room_ID) > 0) {
-			admin_type_room_was_used = true;
+			error_message_enable = true;
+			error_message = "Room was used!";
 			return;
 		}
 
@@ -3100,7 +3378,7 @@ void admin_frame_view_revenue_button_click(Gnk_Button *button) {
 		UI_input_buffer.str("");UI_input_buffer.clear();
 		UI_output_buffer.str("");UI_output_buffer.clear();
 		if(!Utils::isDate(date)) {
-			admin_revenue_str = "Ngay khong hop le!";
+			admin_revenue_str = "Invalid date!";
 			return;
 		}
 		UI_input_buffer << 1 << endl;
@@ -3115,7 +3393,7 @@ void admin_frame_view_revenue_button_click(Gnk_Button *button) {
 		UI_output_buffer.str("");UI_output_buffer.clear();
 
 		if(!Utils::isDate("01/" + month)) {
-			admin_revenue_str = "Thang khong hop le!";
+			admin_revenue_str = "Invalid month!";
 			return;
 		}
 
@@ -3130,7 +3408,7 @@ void admin_frame_view_revenue_button_click(Gnk_Button *button) {
 		UI_input_buffer.str("");UI_input_buffer.clear();
 		UI_output_buffer.str("");UI_output_buffer.clear();
 		if(!Utils::isDate("01/01/" + year)) {
-			admin_revenue_str = "Nam khong hop le!";
+			admin_revenue_str = "Invalid year!";
 			return;
 		}
 		UI_input_buffer << 3 << endl;
@@ -3167,7 +3445,7 @@ void login_frame_init() {
 	login_frame_password_textbox->setPlaceholder("password");
 
 	Gnk_Button_With_Text *login_frame_login_button = new Gnk_Button_With_Text();
-	login_frame_login_button->setRange(Gnk_Point(1030.0f, 230.0f), Gnk_Point(1190.0f, 290.0f));
+	login_frame_login_button->setRange(Gnk_Point(880.0f, 230.0f), Gnk_Point(1050.0f, 290.0f));
 	login_frame_login_button->setColor(H_5A6493);
 	login_frame_login_button->setText("Login");
 	login_frame_login_button->setTextFont("helvetica-bold");
@@ -3276,7 +3554,7 @@ void sign_up_frame_init() {
 	sign_up_frame_password_textbox->setPlaceholder("Password");
 
 	Gnk_Button_With_Text *sign_up_frame_sign_up_button = new Gnk_Button_With_Text();
-	sign_up_frame_sign_up_button->setRange(Gnk_Point(700.0f, -40.0f), Gnk_Point(900.0f, 20.0f));
+	sign_up_frame_sign_up_button->setRange(Gnk_Point(700.0f, -90.0f), Gnk_Point(900.0f, -30.0f));
 	sign_up_frame_sign_up_button->setColor(H_5A6493);
 	sign_up_frame_sign_up_button->setText("Sign up");
 	sign_up_frame_sign_up_button->setTextFont("helvetica-bold");
@@ -3290,7 +3568,7 @@ void sign_up_frame_init() {
 	sign_up_frame_sign_up_button->setClickProcess(sign_up_frame_sign_up_button_click);
 
 	Gnk_Button_With_Text *sign_up_frame_to_login_button = new Gnk_Button_With_Text();
-	sign_up_frame_to_login_button->setRange(Gnk_Point(465.0f, -100.0f), Gnk_Point(1135.0f, -60.0f));
+	sign_up_frame_to_login_button->setRange(Gnk_Point(465.0f, -140.0f), Gnk_Point(1135.0f, -100.0f));
 	sign_up_frame_to_login_button->setColor(H_FFFFFF);
 	sign_up_frame_to_login_button->setText("Already have an account? Login");
 	sign_up_frame_to_login_button->setTextFont("helvetica");
@@ -3442,7 +3720,7 @@ void guest_frame_init() {
 	guest_frame_profile_name_textbox->setPaddingY(0.0f);
 	guest_frame_profile_name_textbox->setTextAlign(GNK_TEXT_LEFT);
 	guest_frame_profile_name_textbox->setSelectProcess(textbox_select_type3);
-	guest_frame_profile_name_textbox->setMaxLength(50);
+	guest_frame_profile_name_textbox->setMaxLength(MAX_NAME);
 
 	Gnk_Textbox *guest_frame_profile_date_of_birth_textbox = new Gnk_Textbox(*guest_frame_profile_name_textbox);
 	guest_frame_profile_date_of_birth_textbox->setRange(Gnk_Point(1140.0f, 490.0f), Gnk_Point(1440.0f, 530.0f));
@@ -3733,7 +4011,7 @@ void staff_frame_init() {
 	sign_up_frame_female_toggle->setToggleRange(Gnk_Point(1260.0f, 340.0f), Gnk_Point(1280.0f, 360.0f));
 	
 	Gnk_Button_With_Text *staff_frame_create_guess_button = new Gnk_Button_With_Text();
-	staff_frame_create_guess_button->setRange(Gnk_Point(865.0f, 100.0f), Gnk_Point(1065.0f, 160.0f));
+	staff_frame_create_guess_button->setRange(Gnk_Point(865.0f, 80.0f), Gnk_Point(1065.0f, 140.0f));
 	staff_frame_create_guess_button->setColor(H_F7C873);
 	staff_frame_create_guess_button->setText("Create guest");
 	staff_frame_create_guess_button->setTextFont("helvetica-bold");
@@ -4103,7 +4381,8 @@ void frame_Space() {
 		return;
 	}
 	if(current_frame == LOGIN_FRAME) {
-		login_failed = false;
+		error_message_enable = false;
+		error_message = "";
 		login.clear_Textbox();
 	}
 	else if(current_frame == SIGN_UP_FRAME) {

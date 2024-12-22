@@ -217,7 +217,7 @@ LoaiPhong LoaiPhong::nhapThongTin() {
     temp = Utils::inputWithCondition("Nhap Dien Tich: ", 1, 3, NUMBER_ONLY);
     tempLoaiPhong.setDienTich(Utils::stringToInt(temp));
 
-    temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 7, NUMBER_ONLY);
+    temp = Utils::inputWithCondition("Nhap Gia Phong: ", 1, 8, NUMBER_ONLY);
     tempLoaiPhong.setGiaPhong(Utils::stringToInt(temp));
 
     Utils::inputData(temp, CONSOLE_OR_UI);
@@ -231,12 +231,12 @@ LoaiPhong LoaiPhong::nhapThongTin() {
  * @brief In menu sửa thông tin.
  */
 void LoaiPhong::menuSuaThongTin(){
-    cout << "1. Sua Loai Giuong " << endl;
-    cout << "2. Sua So Luong Khach " << endl;
-    cout << "3. Sua Dien Tich: " << endl;
-    cout << "4. Sua Gia " << endl;
-    cout << "5. Sua Mo Ta Phong " << endl;
-    cout << "6. Thoat Chinh Sua Loai Phong" << endl;
+    Utils::outputData("1. Sua Loai Giuong\n", CONSOLE);
+    Utils::outputData("2. Sua So Luong Khach\n", CONSOLE);
+    Utils::outputData("3. Sua Dien Tich\n", CONSOLE);
+    Utils::outputData("4. Sua Gia\n", CONSOLE);
+    Utils::outputData("5. Sua Mo Ta Phong\n", CONSOLE);
+    Utils::outputData("6. Thoat\n", CONSOLE);
 }
 
 /**
