@@ -15,8 +15,6 @@ QLKhachHang::~QLKhachHang() {
  * @brief Thêm khách hàng vào danh sách khách hàng.
  * 
  * @param kh Khách hàng cần thêm.
- * 
- * @return void
  */
 void QLKhachHang::themKhachHang(KhachHang *kh) {
     DSKH.add(kh);
@@ -92,9 +90,8 @@ string QLKhachHang::taoIDKhachHang() {      //tạo ID khách hàng bằng cách
         string tail = maxID.substr(1);      //lấy số sau
         int num = stoi(tail) + 1;
         tail = Utils::intToString(num);
-        while(tail.size() < i-1) {      //điền số 0 vào đầu chuỗi
+        while(tail.size() < i - 1) {      //điền số 0 vào đầu chuỗi
             tail = "0" + tail;
-            cout<<tail<<endl;
         }
         IDKhachHang = head + tail;
     }
@@ -122,16 +119,12 @@ KhachHang QLKhachHang::nhapThongTin() {
     Utils::outputData("Nhap thong tin khach hang: \n", CONSOLE);
     temp = Utils::inputWithCondition("Nhap ho ten: ", 1, MAX_NAME, ALPHABET_AND_SPACE_ONLY);
     newKH.setHoTen(Utils::chuanHoaTen(temp));
-    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap ngay sinh (dd/mm/yyyy): ", 1, 10, DATE);
     newKH.setNgaySinh(Utils::stringToDate(temp));
-    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap So dien thoai: ", 1, 10, VIETNAM_PHONE_NUMBER);
     newKH.setSoDienThoai(temp);
-    cout << temp << endl;
     temp = Utils::inputWithCondition("Nhap gioi tinh (Nam/Nu): ", 1, 3, GENDER);
     newKH.setGioiTinh(Utils::stringToGender(temp));
-    cout << temp << endl;
     Utils::outputData("Nhap du lieu khach hang thanh cong!\n", CONSOLE);
     return newKH;
 }

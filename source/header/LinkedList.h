@@ -11,22 +11,13 @@ public:
     void add(const T &data);
     void remove(int index);
     void remove(Node<T>* node);
-    // void display();
     int getSize() const;
-
     bool isEmpty();
-
-    // Trả về phần tử ở vị trí index
     T &elementAt(int);
-
     bool contains(T data);
     bool contains(Node<T>* node);
-
-    // Trả về head->next
     Node<T>* begin() const;   
-    // Trả về head
     Node<T>* end() const;   
-    // Trả về head->prev
     Node<T>* last() const;
 };
 
