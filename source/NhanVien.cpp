@@ -44,7 +44,7 @@ ostream& operator<<(ostream& out, const NhanVien& nv) {
     Utils::outputData("-----------THONG-TIN-NHAN-VIEN---------\n", CONSOLE);
     Utils::outputData("ID Nhan Vien: ", CONSOLE);
     Utils::outputData(nv.ID + "\n", CONSOLE_OR_UI);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("-----NhatHoang-DuongHuy-ThaoDuyen-----\n", CONSOLE);
     return out;
 }
 
@@ -55,7 +55,7 @@ ostream& operator<<(ostream& out, const NhanVien& nv) {
  */
 user_option_value NhanVien::work() {
     system("cls");
-    Utils::outputData("-----------NHAN-VIEN---------\n", CONSOLE);
+    Utils::outputData("-------------NHAN-VIEN-----------\n", CONSOLE);
     Utils::outputData("1. Them khach hang\n", CONSOLE);
     Utils::outputData("2. Them dat phong\n", CONSOLE);
     Utils::outputData("3. Danh sach khach hang\n", CONSOLE);
@@ -69,7 +69,7 @@ user_option_value NhanVien::work() {
     Utils::outputData("10. Xem thong tin phong (ID)\n", CONSOLE); 
     Utils::outputData("11. Xem thong tin phong (loaiPhong)\n", CONSOLE);
     Utils::outputData("12. Dang xuat\n", CONSOLE);
-    Utils::outputData("-----------------------------\n", CONSOLE);
+    Utils::outputData("--NhatHoang-DuongHuy-ThaoDuyen--\n", CONSOLE);
 
     string choice_str;
     Utils::outputData("Hay nhap lua chon: ", CONSOLE);

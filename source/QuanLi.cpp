@@ -21,13 +21,13 @@ ostream &operator<<(ostream &out, QuanLi &ql) {
     Utils::outputData("-----------THONG-TIN-QUAN-LI-----------\n", CONSOLE);
     Utils::outputData("ID quan li: ", CONSOLE);
     Utils::outputData(ql.ID + "\n", CONSOLE_OR_UI);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("-----NhatHoang-DuongHuy-ThaoDuyen-----\n", CONSOLE);
     return out;
 }
 
 user_option_value QuanLi::work() {
     system("cls");
-    Utils::outputData("-----------QUAN-LI-----------\n", CONSOLE);
+    Utils::outputData("-------------QUAN-LI------------\n", CONSOLE);
     Utils::outputData("1. Tao loai phong\n", CONSOLE);
     Utils::outputData("2. Xem danh sach loai phong\n", CONSOLE);
     Utils::outputData("3. Sua loai phong\n", CONSOLE);
@@ -38,7 +38,7 @@ user_option_value QuanLi::work() {
     Utils::outputData("8. Xoa phong\n", CONSOLE);
     Utils::outputData("9. Xem doanh thu\n", CONSOLE);
     Utils::outputData("10. Dang xuat\n", CONSOLE);
-    Utils::outputData("-----------------------------\n", CONSOLE);
+    Utils::outputData("--NhatHoang-DuongHuy-ThaoDuyen--\n", CONSOLE);
 
     string choice_str;
     Utils::outputData("Hay nhap lua chon: ", CONSOLE);

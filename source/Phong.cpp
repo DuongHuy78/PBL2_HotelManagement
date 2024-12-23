@@ -96,7 +96,7 @@ void Phong::menuSuaThongTin() {
     Utils::outputData("1. Sua Loai Phong\n", CONSOLE);
     Utils::outputData("2. Sua Ma Phong\n", CONSOLE);
     Utils::outputData("3. Thoat\n", CONSOLE);
-    Utils::outputData("--------------------------------------\n", CONSOLE);
+    Utils::outputData("-----NhatHoang-DuongHuy-ThaoDuyen-----\n", CONSOLE);
 }
 
 /**
@@ -116,7 +116,7 @@ ostream& operator<<(ostream& os, const Phong& P) {
     Utils::outputData(Utils::intToString(P.getLoaiPhong()->getDienTich()) + " m2\n", CONSOLE_OR_UI);
     Utils::outputData("Don gia: ", CONSOLE);
     Utils::outputData(Utils::chuanHoaSo(Utils::intToString(P.getLoaiPhong()->getGiaPhong())) + " VND\n", CONSOLE_OR_UI);
-    Utils::outputData("-------------------------------------\n", CONSOLE);
+    Utils::outputData("----NhatHoang-DuongHuy-ThaoDuyen----\n", CONSOLE);
     return os;
 }
 
