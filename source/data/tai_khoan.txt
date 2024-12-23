@@ -54,6 +54,4 @@ nguyennhatking;123;100051
 HUYDuong;123;100052
 HUYHUY;123;100053
 nk;123;100054
-nhatking;123;100001
-nguyennhatkin;123;100001
-nguyennhatking2;123;100001
+HUYDUONG;123;100055

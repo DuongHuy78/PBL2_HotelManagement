@@ -73,7 +73,7 @@ string QLDatPhong::taoMaDatPhong(){
     else{
         MDPNew = Utils::intToString(Utils::stringToInt(getMaxMaDatPhong()) + 1);
         int size = MDPNew.size();
-        for(int i=0; i<(5-size); i++){
+        for(int i=0; i<(SIZE_ID_DP-size); i++){
             MDPNew="0"+MDPNew;
         }
     }

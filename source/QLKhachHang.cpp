@@ -69,12 +69,10 @@ void QLKhachHang::suaThongTin(string ID) {
 string QLKhachHang::getMaxIDKhachHang() {
     string IDKhachHang = "";
     Node<KhachHang *> *p = DSKH.begin();
-    if(p->prev == DSKH.end()) {
-        IDKhachHang = "100000";    //số đầu tên là chia đối tượng kh, nhân viên,...
-    }
-    else {
-        IDKhachHang = p->prev->data->getIDKhachHang();
-    }
+    if(DSKH.isEmpty())
+        IDKhachHang = "100000";
+    else
+        IDKhachHang = p->prev->prev->data->getIDKhachHang();
     return IDKhachHang;
 }
 
