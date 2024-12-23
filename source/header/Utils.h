@@ -545,6 +545,9 @@ public:
                 res.insert(i, ".");
             }
         }
+        if(res == "") {
+            res = "0";
+        }
         return res;
     }
 
