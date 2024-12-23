@@ -412,7 +412,7 @@ public:
             string dstr = "", mstr = "", ystr = "";
             dstr = getSubstringUntilX(s, st, '/');
             mstr = getSubstringUntilX(s, st, '/');
-            ystr = getSubstringUntilX(s, st, '\n');
+            ystr = getSubstringUntilX(s, st, '\0');
 
             if(!isNumberOnly(dstr) || !isNumberOnly(mstr) || !isNumberOnly(ystr)) {
                 throw runtime_error("Loi: sai dinh dang ngay thang.");
@@ -578,7 +578,7 @@ public:
                     break;
                 }
             }
-			i=0;
+			i = 0;  
             while(i<s2.size()&& (i+j)<s1.size()) {            //vòng này để so sánh s2 với s1 từ vị trí j(đã tìm được ở trên)
                 if(s1[i+j] != s2[i]){
                     break;
@@ -587,13 +587,13 @@ public:
                     i++;
                 }
             }
-            if(j == s1.size()){  //nếu j = s1.size() thì s1 đã được so sánh hết với s2
+            if(j == s1.size()) {  //nếu j = s1.size() thì s1 đã được so sánh hết với s2
                 return false;
             }
-            else{
+            else {
                 j++;
             }
-            if(i == s2.size()){  //nếu i = s2.size() thì s2 đã được so sánh hết với s1
+            if(i == s2.size()) {  //nếu i = s2.size() thì s2 đã được so sánh hết với s1
                 return true;
             }
         }

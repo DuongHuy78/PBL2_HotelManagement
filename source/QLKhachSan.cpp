@@ -941,39 +941,9 @@ void QLKhachSan::xemDanhSachLuaChonXemDoanhThu() {
  */
 int QLKhachSan::thongKe(string t_begin, string t_end) {
     int doanhThu = 0;
-
-    int day, month, year;
-    int maxDaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    stringstream ss(t_end);
-    string temp_day, temp_month, temp_year;
-
-    getline(ss, temp_day, '/');
-    getline(ss, temp_month, '/');
-    getline(ss, temp_year, '/');
-
-    // Chuyển chuỗi sang số nguyên
-    day = Utils::stringToInt(temp_day.c_str());
-    month = Utils::stringToInt(temp_month.c_str());
-    year = Utils::stringToInt(temp_year.c_str());
-
-    if(year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-        maxDaysInMonth[1] = 29;
-    }
-
-    day++;
-    if(day > maxDaysInMonth[month - 1]) {
-        day = 1;
-        month++;
-        if(month > 12) {
-            month = 1;
-            year++;
-        }
-    }
-    t_end = Utils::intToString(day) + "/" + Utils::intToString(month) + "/" + Utils::intToString(year);
-
     time_t timeBegin = Utils::stringToDate(t_begin);
     time_t timeEnd = Utils::stringToDate(t_end);
+    timeEnd += 24 * 60 * 60;    // Tang len 1 ngay
     
     Node<DatPhong*>* curr = QLDP.getDSDP().begin();
     while(curr != QLDP.getDSDP().end()) {

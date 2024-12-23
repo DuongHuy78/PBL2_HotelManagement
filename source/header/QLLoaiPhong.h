@@ -3,7 +3,7 @@
 #include "LoaiPhong.h"
 #include "LinkedList.h"
 class QLLoaiPhong {
-    LinkedList<LoaiPhong *> DSLP; 
+    LinkedList<LoaiPhong *> DSLP; // Danh sach loai phong
 public:
     ~QLLoaiPhong();
 
