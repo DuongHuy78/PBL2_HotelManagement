@@ -949,11 +949,10 @@ int QLKhachSan::thongKe(string t_begin, string t_end) {
     Node<DatPhong*>* curr = QLDP.getDSDP().begin();
     while(curr != QLDP.getDSDP().end()) {
         time_t ngayNhan = curr->data->getNgayNhan();
-        time_t ngayTra = curr->data->getNgayTra();
         
         // Kiểm tra nếu thời gian đặt phòng nằm trong khoảng cần thống kê
-        if(!(ngayTra < timeBegin || ngayNhan > timeEnd)) {
-            doanhThu += curr->data->getDonGia();
+        if(ngayNhan >= timeBegin && ngayNhan < timeEnd) {
+            doanhThu += curr->data->tongTien();
         }
         
         curr = curr->next;

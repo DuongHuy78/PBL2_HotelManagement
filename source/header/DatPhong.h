@@ -14,7 +14,7 @@ class DatPhong {
     time_t ngayNhan;
     time_t ngayTra;
     int soLuongKhach;
-    int donGia;
+    int donGia;         // Giá tiền của 1 ngày thuê phòng
     
 public:
     DatPhong();
