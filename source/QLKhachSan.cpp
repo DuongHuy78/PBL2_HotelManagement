@@ -646,7 +646,8 @@ void QLKhachSan::requestHandling(user_option_value choice) {
             string month = Utils::getSubstringUntilX(temp, index, '/');
             string year = Utils::getSubstringUntilX(temp, index, '\0');
             d_begin = "1/" + month + "/" + year;
-            d_end = Utils::monthDays(Utils::stringToInt(month), Utils::stringToInt(year)) + "/" + month + "/" + year;
+            d_end = Utils::intToString(Utils::monthDays(Utils::stringToInt(month), Utils::stringToInt(year))) + "/" + month + "/" + year;
+            
             doanhThu = thongKe(d_begin, d_end);
             Utils::outputData("Doanh thu cua thang " + month + "/" + year + " la: ", CONSOLE);
             Utils::outputData(to_string(doanhThu) + "\n", CONSOLE_OR_UI);
@@ -943,7 +944,7 @@ int QLKhachSan::thongKe(string t_begin, string t_end) {
     int doanhThu = 0;
     time_t timeBegin = Utils::stringToDate(t_begin);
     time_t timeEnd = Utils::stringToDate(t_end);
-    timeEnd += 24 * 60 * 60;    // Tang len 1 ngay
+    timeEnd += 86400; // 24 * 60 * 60 = 86400: so giay trong 1 ngay
     
     Node<DatPhong*>* curr = QLDP.getDSDP().begin();
     while(curr != QLDP.getDSDP().end()) {

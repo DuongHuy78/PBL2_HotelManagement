@@ -490,12 +490,6 @@ public:
     
     template<typename T>
     static void inputData(T &data, IO_MODE mode) {
-        if(cin.rdbuf()->in_avail()) {
-            if(cin.peek() == '\n') cin.ignore();
-        }
-        if(UI_input_buffer.rdbuf()->in_avail()) {
-            if(UI_input_buffer.peek() == '\n') UI_input_buffer.ignore();
-        }
         try {
             if(current_mode == CONSOLE) {
                 if(mode == CONSOLE || mode == CONSOLE_OR_UI) {
@@ -531,7 +525,8 @@ public:
     static void pauseConsole() {
         if(current_mode == CONSOLE) {
             cout << "Nhan phim bat ky de tiep tuc...";
-            cin.get();
+            flush(cout);
+            _getch();
         }
     }
 

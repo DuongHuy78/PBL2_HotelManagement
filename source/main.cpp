@@ -9,7 +9,8 @@ int main() {
     db.inputPhong("data/phong.txt");
     db.inputDatPhong("data/dat_phong.txt");
     cout << "Nhan phim bat ky de tiep tuc...";
-    cin.get();
+    flush(cout);
+    _getch();
     if(current_mode == UI_STREAM) {
         UI_init();
     }
