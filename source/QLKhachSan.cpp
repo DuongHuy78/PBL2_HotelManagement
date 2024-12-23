@@ -953,7 +953,7 @@ int QLKhachSan::thongKe(string t_begin, string t_end) {
         
         // Kiểm tra nếu thời gian đặt phòng nằm trong khoảng cần thống kê
         if(!(ngayTra < timeBegin || ngayNhan > timeEnd)) {
-            doanhThu += curr->data->getDonGia();
+            doanhThu += curr->data->tongTien();
         }
         
         curr = curr->next;
