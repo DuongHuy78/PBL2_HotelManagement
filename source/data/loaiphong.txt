@@ -10,4 +10,3 @@ STD2;1;2;40;400000;2 giuong don tieu chuan, phong rong va thoang mat, yen tinh v
 STT;12;3;50;600000;2 giuong don va 1 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, noi that don gian va tien nghi
 STF;2;4;50;700000;2 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, thoai mai va am cung, noi that don gian va tien nghi
 STF2;12;4;50;700000;2 giuong don va 1 giuong doi tieu chuan, phong rong va thoang mat, yen tinh va binh yen, thoai mai va am cung, noi that don gian va tien nghi
-VIPV;2;2;20;20000;noo
