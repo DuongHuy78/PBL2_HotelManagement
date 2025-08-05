@@ -75,5 +75,5 @@ For detailed instructions on installing these libraries, please refer to the [PB
 
 <img width="616" height="359" alt="image" src="https://github.com/user-attachments/assets/e3e991ce-28e2-4f77-a472-37d8723cc093" />
 
-dddddddddđ
+
 10. Daily sales statistics.
