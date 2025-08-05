@@ -1,7 +1,5 @@
 # PBL2 Hotel Management
 
-# PBL2 Hotel Management
-
 ## Objective
 The goal of this project is to build a comprehensive hotel management system that helps administrators efficiently manage hotel operations, bookings, rooms, and customer information.
 
