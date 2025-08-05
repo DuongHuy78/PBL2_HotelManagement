@@ -31,6 +31,7 @@ For detailed instructions on installing these libraries, please refer to the [PB
 ## Program Demo
 <img width="617" height="347" alt="image" src="https://github.com/user-attachments/assets/463970e9-e925-48d1-ba47-dd9c45b79746" />
 
+
 1. Login Page
 
 <img width="445" height="457" alt="image" src="https://github.com/user-attachments/assets/1203146c-736a-4331-a441-e26eb5d58ff3" />
@@ -40,6 +41,7 @@ For detailed instructions on installing these libraries, please refer to the [PB
 
 <img width="616" height="356" alt="image" src="https://github.com/user-attachments/assets/073596aa-5b1c-4faa-a9f3-f0312408f976" />
 
+
 3. Select room type
 
 <img width="612" height="357" alt="image" src="https://github.com/user-attachments/assets/92508b47-196c-404d-ad5a-1624e4275a6d" />
@@ -48,24 +50,30 @@ For detailed instructions on installing these libraries, please refer to the [PB
 
 <img width="612" height="356" alt="image" src="https://github.com/user-attachments/assets/dcbd5e58-6f84-4b60-9370-28a36239602d" />
 
+
 5. Booking history
 
 <img width="615" height="357" alt="image" src="https://github.com/user-attachments/assets/474725ff-b9bd-481b-bf43-0ffec23454d8" />
+
 
 6. View personal information.
 
 <img width="615" height="360" alt="image" src="https://github.com/user-attachments/assets/1f058061-58a6-469a-b059-ceb4b5dea813" />
 
+
 7. View customer list.
 
 <img width="616" height="357" alt="image" src="https://github.com/user-attachments/assets/92f94906-2730-43ae-8507-8b6f36e96118" />
+
 
 8. Create new customers.
 
 <img width="616" height="356" alt="image" src="https://github.com/user-attachments/assets/ff1fa29b-1208-4763-9246-29f070adbb00" />
 
+
 9. Add new room type.
 
 <img width="616" height="359" alt="image" src="https://github.com/user-attachments/assets/e3e991ce-28e2-4f77-a472-37d8723cc093" />
 
+dddddddddđ
 10. Daily sales statistics.
